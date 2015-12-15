@@ -1,0 +1,5 @@
+C:\Users\Lois\Desktop\MC1_5\MC1_5_PSOC5.cydsn\MC1_5_PSOC5.cyprj|62998d56-872c-4f9d-b2af-92518b2e5647
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|529f3bf4-45ce-4621-a66e-542e1eb3b851
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|ac32f4fc-c2ea-4e68-9746-da967da3ac57
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|d492ed8c-3be6-4d9b-8a07-ee931c17eca5
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|972c3d0b-7843-4fa5-9015-548b77dcc595

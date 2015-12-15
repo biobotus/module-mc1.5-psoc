@@ -1,0 +1,2378 @@
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"cymetadata.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	cy_meta_configecc
+  19              		.section	.cyconfigecc,"a",%progbits
+  20              		.align	2
+  21              		.type	cy_meta_configecc, %object
+  22              		.size	cy_meta_configecc, 1776
+  23              	cy_meta_configecc:
+  24 0000 01       		.byte	1
+  25 0001 45       		.byte	69
+  26 0002 00       		.byte	0
+  27 0003 40       		.byte	64
+  28 0004 09       		.byte	9
+  29 0005 52       		.byte	82
+  30 0006 00       		.byte	0
+  31 0007 40       		.byte	64
+  32 0008 05       		.byte	5
+  33 0009 64       		.byte	100
+  34 000a 00       		.byte	0
+  35 000b 40       		.byte	64
+  36 000c 02       		.byte	2
+  37 000d 65       		.byte	101
+  38 000e 00       		.byte	0
+  39 000f 40       		.byte	64
+  40 0010 53       		.byte	83
+  41 0011 00       		.byte	0
+  42 0012 01       		.byte	1
+  43 0013 40       		.byte	64
+  44 0014 2D       		.byte	45
+  45 0015 01       		.byte	1
+  46 0016 01       		.byte	1
+  47 0017 40       		.byte	64
+  48 0018 02       		.byte	2
+  49 0019 03       		.byte	3
+  50 001a 01       		.byte	1
+  51 001b 40       		.byte	64
+  52 001c 4A       		.byte	74
+  53 001d 04       		.byte	4
+  54 001e 01       		.byte	1
+  55 001f 40       		.byte	64
+  56 0020 28       		.byte	40
+  57 0021 05       		.byte	5
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 2
+
+
+  58 0022 01       		.byte	1
+  59 0023 40       		.byte	64
+  60 0024 48       		.byte	72
+  61 0025 06       		.byte	6
+  62 0026 01       		.byte	1
+  63 0027 40       		.byte	64
+  64 0028 27       		.byte	39
+  65 0029 07       		.byte	7
+  66 002a 01       		.byte	1
+  67 002b 40       		.byte	64
+  68 002c 46       		.byte	70
+  69 002d 08       		.byte	8
+  70 002e 01       		.byte	1
+  71 002f 40       		.byte	64
+  72 0030 25       		.byte	37
+  73 0031 09       		.byte	9
+  74 0032 01       		.byte	1
+  75 0033 40       		.byte	64
+  76 0034 02       		.byte	2
+  77 0035 0B       		.byte	11
+  78 0036 01       		.byte	1
+  79 0037 40       		.byte	64
+  80 0038 01       		.byte	1
+  81 0039 0F       		.byte	15
+  82 003a 01       		.byte	1
+  83 003b 40       		.byte	64
+  84 003c 2B       		.byte	43
+  85 003d 14       		.byte	20
+  86 003e 01       		.byte	1
+  87 003f 40       		.byte	64
+  88 0040 0E       		.byte	14
+  89 0041 15       		.byte	21
+  90 0042 01       		.byte	1
+  91 0043 40       		.byte	64
+  92 0044 4A       		.byte	74
+  93 0045 16       		.byte	22
+  94 0046 01       		.byte	1
+  95 0047 40       		.byte	64
+  96 0048 2D       		.byte	45
+  97 0049 17       		.byte	23
+  98 004a 01       		.byte	1
+  99 004b 40       		.byte	64
+ 100 004c 03       		.byte	3
+ 101 004d 19       		.byte	25
+ 102 004e 01       		.byte	1
+ 103 004f 40       		.byte	64
+ 104 0050 02       		.byte	2
+ 105 0051 1B       		.byte	27
+ 106 0052 01       		.byte	1
+ 107 0053 40       		.byte	64
+ 108 0054 12       		.byte	18
+ 109 0055 40       		.byte	64
+ 110 0056 01       		.byte	1
+ 111 0057 40       		.byte	64
+ 112 0058 0E       		.byte	14
+ 113 0059 41       		.byte	65
+ 114 005a 01       		.byte	1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 3
+
+
+ 115 005b 40       		.byte	64
+ 116 005c 0C       		.byte	12
+ 117 005d 42       		.byte	66
+ 118 005e 01       		.byte	1
+ 119 005f 40       		.byte	64
+ 120 0060 08       		.byte	8
+ 121 0061 43       		.byte	67
+ 122 0062 01       		.byte	1
+ 123 0063 40       		.byte	64
+ 124 0064 08       		.byte	8
+ 125 0065 44       		.byte	68
+ 126 0066 01       		.byte	1
+ 127 0067 40       		.byte	64
+ 128 0068 02       		.byte	2
+ 129 0069 45       		.byte	69
+ 130 006a 01       		.byte	1
+ 131 006b 40       		.byte	64
+ 132 006c 04       		.byte	4
+ 133 006d 46       		.byte	70
+ 134 006e 01       		.byte	1
+ 135 006f 40       		.byte	64
+ 136 0070 06       		.byte	6
+ 137 0071 47       		.byte	71
+ 138 0072 01       		.byte	1
+ 139 0073 40       		.byte	64
+ 140 0074 0D       		.byte	13
+ 141 0075 48       		.byte	72
+ 142 0076 01       		.byte	1
+ 143 0077 40       		.byte	64
+ 144 0078 03       		.byte	3
+ 145 0079 49       		.byte	73
+ 146 007a 01       		.byte	1
+ 147 007b 40       		.byte	64
+ 148 007c 08       		.byte	8
+ 149 007d 4C       		.byte	76
+ 150 007e 01       		.byte	1
+ 151 007f 40       		.byte	64
+ 152 0080 0D       		.byte	13
+ 153 0081 4D       		.byte	77
+ 154 0082 01       		.byte	1
+ 155 0083 40       		.byte	64
+ 156 0084 09       		.byte	9
+ 157 0085 50       		.byte	80
+ 158 0086 01       		.byte	1
+ 159 0087 40       		.byte	64
+ 160 0088 02       		.byte	2
+ 161 0089 51       		.byte	81
+ 162 008a 01       		.byte	1
+ 163 008b 40       		.byte	64
+ 164 008c 7E       		.byte	126
+ 165 008d 02       		.byte	2
+ 166 008e 00       		.byte	0
+ 167 008f 84       		.byte	-124
+ 168 0090 01       		.byte	1
+ 169 0091 D4       		.byte	-44
+ 170 0092 08       		.byte	8
+ 171 0093 04       		.byte	4
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 4
+
+
+ 172 0094 20       		.byte	32
+ 173 0095 34       		.byte	52
+ 174 0096 21       		.byte	33
+ 175 0097 5C       		.byte	92
+ 176 0098 31       		.byte	49
+ 177 0099 02       		.byte	2
+ 178 009a 60       		.byte	96
+ 179 009b 20       		.byte	32
+ 180 009c 61       		.byte	97
+ 181 009d 24       		.byte	36
+ 182 009e 7C       		.byte	124
+ 183 009f 40       		.byte	64
+ 184 00a0 80       		.byte	-128
+ 185 00a1 0D       		.byte	13
+ 186 00a2 81       		.byte	-127
+ 187 00a3 0D       		.byte	13
+ 188 00a4 85       		.byte	-123
+ 189 00a5 0D       		.byte	13
+ 190 00a6 86       		.byte	-122
+ 191 00a7 0D       		.byte	13
+ 192 00a8 89       		.byte	-119
+ 193 00a9 0D       		.byte	13
+ 194 00aa 86       		.byte	-122
+ 195 00ab 0D       		.byte	13
+ 196 00ac 87       		.byte	-121
+ 197 00ad 0D       		.byte	13
+ 198 00ae 12       		.byte	18
+ 199 00af 02       		.byte	2
+ 200 00b0 16       		.byte	22
+ 201 00b1 05       		.byte	5
+ 202 00b2 17       		.byte	23
+ 203 00b3 01       		.byte	1
+ 204 00b4 26       		.byte	38
+ 205 00b5 04       		.byte	4
+ 206 00b6 29       		.byte	41
+ 207 00b7 01       		.byte	1
+ 208 00b8 2A       		.byte	42
+ 209 00b9 09       		.byte	9
+ 210 00ba 30       		.byte	48
+ 211 00bb 04       		.byte	4
+ 212 00bc 32       		.byte	50
+ 213 00bd 02       		.byte	2
+ 214 00be 34       		.byte	52
+ 215 00bf 08       		.byte	8
+ 216 00c0 36       		.byte	54
+ 217 00c1 01       		.byte	1
+ 218 00c2 37       		.byte	55
+ 219 00c3 01       		.byte	1
+ 220 00c4 3E       		.byte	62
+ 221 00c5 01       		.byte	1
+ 222 00c6 40       		.byte	64
+ 223 00c7 30       		.byte	48
+ 224 00c8 41       		.byte	65
+ 225 00c9 02       		.byte	2
+ 226 00ca 45       		.byte	69
+ 227 00cb D2       		.byte	-46
+ 228 00cc 47       		.byte	71
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 5
+
+
+ 229 00cd 01       		.byte	1
+ 230 00ce 48       		.byte	72
+ 231 00cf 13       		.byte	19
+ 232 00d0 49       		.byte	73
+ 233 00d1 FF       		.byte	-1
+ 234 00d2 4A       		.byte	74
+ 235 00d3 FF       		.byte	-1
+ 236 00d4 4B       		.byte	75
+ 237 00d5 FF       		.byte	-1
+ 238 00d6 4D       		.byte	77
+ 239 00d7 A0       		.byte	-96
+ 240 00d8 4F       		.byte	79
+ 241 00d9 04       		.byte	4
+ 242 00da 50       		.byte	80
+ 243 00db 18       		.byte	24
+ 244 00dc 52       		.byte	82
+ 245 00dd 80       		.byte	-128
+ 246 00de 54       		.byte	84
+ 247 00df 05       		.byte	5
+ 248 00e0 58       		.byte	88
+ 249 00e1 04       		.byte	4
+ 250 00e2 59       		.byte	89
+ 251 00e3 04       		.byte	4
+ 252 00e4 5A       		.byte	90
+ 253 00e5 04       		.byte	4
+ 254 00e6 5B       		.byte	91
+ 255 00e7 04       		.byte	4
+ 256 00e8 5C       		.byte	92
+ 257 00e9 11       		.byte	17
+ 258 00ea 5D       		.byte	93
+ 259 00eb 11       		.byte	17
+ 260 00ec 5F       		.byte	95
+ 261 00ed 01       		.byte	1
+ 262 00ee 60       		.byte	96
+ 263 00ef 40       		.byte	64
+ 264 00f0 62       		.byte	98
+ 265 00f1 C0       		.byte	-64
+ 266 00f2 64       		.byte	100
+ 267 00f3 40       		.byte	64
+ 268 00f4 65       		.byte	101
+ 269 00f5 40       		.byte	64
+ 270 00f6 66       		.byte	102
+ 271 00f7 C0       		.byte	-64
+ 272 00f8 68       		.byte	104
+ 273 00f9 C0       		.byte	-64
+ 274 00fa 6A       		.byte	106
+ 275 00fb C0       		.byte	-64
+ 276 00fc 6C       		.byte	108
+ 277 00fd C0       		.byte	-64
+ 278 00fe 6E       		.byte	110
+ 279 00ff C0       		.byte	-64
+ 280 0100 83       		.byte	-125
+ 281 0101 01       		.byte	1
+ 282 0102 92       		.byte	-110
+ 283 0103 05       		.byte	5
+ 284 0104 96       		.byte	-106
+ 285 0105 04       		.byte	4
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 6
+
+
+ 286 0106 9E       		.byte	-98
+ 287 0107 09       		.byte	9
+ 288 0108 A2       		.byte	-94
+ 289 0109 02       		.byte	2
+ 290 010a A9       		.byte	-87
+ 291 010b 01       		.byte	1
+ 292 010c B0       		.byte	-80
+ 293 010d 02       		.byte	2
+ 294 010e B1       		.byte	-79
+ 295 010f 01       		.byte	1
+ 296 0110 B2       		.byte	-78
+ 297 0111 08       		.byte	8
+ 298 0112 B4       		.byte	-76
+ 299 0113 04       		.byte	4
+ 300 0114 B6       		.byte	-74
+ 301 0115 01       		.byte	1
+ 302 0116 BE       		.byte	-66
+ 303 0117 10       		.byte	16
+ 304 0118 C0       		.byte	-64
+ 305 0119 40       		.byte	64
+ 306 011a C1       		.byte	-63
+ 307 011b 06       		.byte	6
+ 308 011c C5       		.byte	-59
+ 309 011d D0       		.byte	-48
+ 310 011e C6       		.byte	-58
+ 311 011f 20       		.byte	32
+ 312 0120 C7       		.byte	-57
+ 313 0121 10       		.byte	16
+ 314 0122 C8       		.byte	-56
+ 315 0123 2A       		.byte	42
+ 316 0124 C9       		.byte	-55
+ 317 0125 FF       		.byte	-1
+ 318 0126 CA       		.byte	-54
+ 319 0127 FF       		.byte	-1
+ 320 0128 CB       		.byte	-53
+ 321 0129 FF       		.byte	-1
+ 322 012a CD       		.byte	-51
+ 323 012b A0       		.byte	-96
+ 324 012c CF       		.byte	-49
+ 325 012d 04       		.byte	4
+ 326 012e D0       		.byte	-48
+ 327 012f 18       		.byte	24
+ 328 0130 D2       		.byte	-46
+ 329 0131 80       		.byte	-128
+ 330 0132 D4       		.byte	-44
+ 331 0133 05       		.byte	5
+ 332 0134 D8       		.byte	-40
+ 333 0135 04       		.byte	4
+ 334 0136 D9       		.byte	-39
+ 335 0137 04       		.byte	4
+ 336 0138 DA       		.byte	-38
+ 337 0139 04       		.byte	4
+ 338 013a DB       		.byte	-37
+ 339 013b 04       		.byte	4
+ 340 013c DC       		.byte	-36
+ 341 013d 11       		.byte	17
+ 342 013e DD       		.byte	-35
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 7
+
+
+ 343 013f 11       		.byte	17
+ 344 0140 DF       		.byte	-33
+ 345 0141 01       		.byte	1
+ 346 0142 E0       		.byte	-32
+ 347 0143 40       		.byte	64
+ 348 0144 E2       		.byte	-30
+ 349 0145 C0       		.byte	-64
+ 350 0146 E4       		.byte	-28
+ 351 0147 40       		.byte	64
+ 352 0148 E5       		.byte	-27
+ 353 0149 40       		.byte	64
+ 354 014a E6       		.byte	-26
+ 355 014b C0       		.byte	-64
+ 356 014c E8       		.byte	-24
+ 357 014d C0       		.byte	-64
+ 358 014e EA       		.byte	-22
+ 359 014f C0       		.byte	-64
+ 360 0150 EC       		.byte	-20
+ 361 0151 C0       		.byte	-64
+ 362 0152 EE       		.byte	-18
+ 363 0153 C0       		.byte	-64
+ 364 0154 0A       		.byte	10
+ 365 0155 10       		.byte	16
+ 366 0156 0B       		.byte	11
+ 367 0157 40       		.byte	64
+ 368 0158 0D       		.byte	13
+ 369 0159 02       		.byte	2
+ 370 015a 0F       		.byte	15
+ 371 015b 22       		.byte	34
+ 372 015c 10       		.byte	16
+ 373 015d 28       		.byte	40
+ 374 015e 16       		.byte	22
+ 375 015f 80       		.byte	-128
+ 376 0160 18       		.byte	24
+ 377 0161 40       		.byte	64
+ 378 0162 19       		.byte	25
+ 379 0163 50       		.byte	80
+ 380 0164 1A       		.byte	26
+ 381 0165 10       		.byte	16
+ 382 0166 1D       		.byte	29
+ 383 0167 82       		.byte	-126
+ 384 0168 1E       		.byte	30
+ 385 0169 08       		.byte	8
+ 386 016a 1F       		.byte	31
+ 387 016b 08       		.byte	8
+ 388 016c 22       		.byte	34
+ 389 016d 40       		.byte	64
+ 390 016e 27       		.byte	39
+ 391 016f 80       		.byte	-128
+ 392 0170 29       		.byte	41
+ 393 0171 10       		.byte	16
+ 394 0172 2F       		.byte	47
+ 395 0173 08       		.byte	8
+ 396 0174 30       		.byte	48
+ 397 0175 28       		.byte	40
+ 398 0176 31       		.byte	49
+ 399 0177 20       		.byte	32
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 8
+
+
+ 400 0178 3F       		.byte	63
+ 401 0179 02       		.byte	2
+ 402 017a 41       		.byte	65
+ 403 017b 20       		.byte	32
+ 404 017c 42       		.byte	66
+ 405 017d 10       		.byte	16
+ 406 017e 45       		.byte	69
+ 407 017f 02       		.byte	2
+ 408 0180 48       		.byte	72
+ 409 0181 20       		.byte	32
+ 410 0182 49       		.byte	73
+ 411 0183 01       		.byte	1
+ 412 0184 4F       		.byte	79
+ 413 0185 21       		.byte	33
+ 414 0186 50       		.byte	80
+ 415 0187 08       		.byte	8
+ 416 0188 57       		.byte	87
+ 417 0189 11       		.byte	17
+ 418 018a 58       		.byte	88
+ 419 018b 08       		.byte	8
+ 420 018c 59       		.byte	89
+ 421 018d 01       		.byte	1
+ 422 018e 5A       		.byte	90
+ 423 018f 80       		.byte	-128
+ 424 0190 5E       		.byte	94
+ 425 0191 08       		.byte	8
+ 426 0192 5F       		.byte	95
+ 427 0193 81       		.byte	-127
+ 428 0194 73       		.byte	115
+ 429 0195 40       		.byte	64
+ 430 0196 76       		.byte	118
+ 431 0197 80       		.byte	-128
+ 432 0198 80       		.byte	-128
+ 433 0199 48       		.byte	72
+ 434 019a 81       		.byte	-127
+ 435 019b 80       		.byte	-128
+ 436 019c 89       		.byte	-119
+ 437 019d 40       		.byte	64
+ 438 019e C2       		.byte	-62
+ 439 019f BC       		.byte	-68
+ 440 01a0 C4       		.byte	-60
+ 441 01a1 16       		.byte	22
+ 442 01a2 CA       		.byte	-54
+ 443 01a3 24       		.byte	36
+ 444 01a4 CC       		.byte	-52
+ 445 01a5 02       		.byte	2
+ 446 01a6 CE       		.byte	-50
+ 447 01a7 80       		.byte	-128
+ 448 01a8 D0       		.byte	-48
+ 449 01a9 86       		.byte	-122
+ 450 01aa D2       		.byte	-46
+ 451 01ab 20       		.byte	32
+ 452 01ac D6       		.byte	-42
+ 453 01ad DB       		.byte	-37
+ 454 01ae 8E       		.byte	-114
+ 455 01af 10       		.byte	16
+ 456 01b0 E6       		.byte	-26
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 9
+
+
+ 457 01b1 10       		.byte	16
+ 458 01b2 03       		.byte	3
+ 459 01b3 01       		.byte	1
+ 460 01b4 33       		.byte	51
+ 461 01b5 01       		.byte	1
+ 462 01b6 35       		.byte	53
+ 463 01b7 01       		.byte	1
+ 464 01b8 37       		.byte	55
+ 465 01b9 01       		.byte	1
+ 466 01ba 40       		.byte	64
+ 467 01bb 10       		.byte	16
+ 468 01bc 41       		.byte	65
+ 469 01bd 02       		.byte	2
+ 470 01be 49       		.byte	73
+ 471 01bf FF       		.byte	-1
+ 472 01c0 4A       		.byte	74
+ 473 01c1 FF       		.byte	-1
+ 474 01c2 4B       		.byte	75
+ 475 01c3 FF       		.byte	-1
+ 476 01c4 4D       		.byte	77
+ 477 01c5 A0       		.byte	-96
+ 478 01c6 4F       		.byte	79
+ 479 01c7 04       		.byte	4
+ 480 01c8 50       		.byte	80
+ 481 01c9 18       		.byte	24
+ 482 01ca 52       		.byte	82
+ 483 01cb 80       		.byte	-128
+ 484 01cc 59       		.byte	89
+ 485 01cd 04       		.byte	4
+ 486 01ce 5A       		.byte	90
+ 487 01cf 04       		.byte	4
+ 488 01d0 5B       		.byte	91
+ 489 01d1 04       		.byte	4
+ 490 01d2 5C       		.byte	92
+ 491 01d3 90       		.byte	-112
+ 492 01d4 5D       		.byte	93
+ 493 01d5 99       		.byte	-103
+ 494 01d6 5F       		.byte	95
+ 495 01d7 01       		.byte	1
+ 496 01d8 60       		.byte	96
+ 497 01d9 40       		.byte	64
+ 498 01da 62       		.byte	98
+ 499 01db C0       		.byte	-64
+ 500 01dc 64       		.byte	100
+ 501 01dd 40       		.byte	64
+ 502 01de 65       		.byte	101
+ 503 01df 40       		.byte	64
+ 504 01e0 66       		.byte	102
+ 505 01e1 C0       		.byte	-64
+ 506 01e2 68       		.byte	104
+ 507 01e3 C0       		.byte	-64
+ 508 01e4 6A       		.byte	106
+ 509 01e5 C0       		.byte	-64
+ 510 01e6 6C       		.byte	108
+ 511 01e7 C0       		.byte	-64
+ 512 01e8 6E       		.byte	110
+ 513 01e9 C0       		.byte	-64
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 10
+
+
+ 514 01ea 83       		.byte	-125
+ 515 01eb 01       		.byte	1
+ 516 01ec 87       		.byte	-121
+ 517 01ed 0E       		.byte	14
+ 518 01ee 93       		.byte	-109
+ 519 01ef 01       		.byte	1
+ 520 01f0 95       		.byte	-107
+ 521 01f1 04       		.byte	4
+ 522 01f2 9A       		.byte	-102
+ 523 01f3 01       		.byte	1
+ 524 01f4 9B       		.byte	-101
+ 525 01f5 08       		.byte	8
+ 526 01f6 9E       		.byte	-98
+ 527 01f7 02       		.byte	2
+ 528 01f8 A0       		.byte	-96
+ 529 01f9 02       		.byte	2
+ 530 01fa A6       		.byte	-90
+ 531 01fb 01       		.byte	1
+ 532 01fc B1       		.byte	-79
+ 533 01fd 08       		.byte	8
+ 534 01fe B2       		.byte	-78
+ 535 01ff 02       		.byte	2
+ 536 0200 B3       		.byte	-77
+ 537 0201 04       		.byte	4
+ 538 0202 B4       		.byte	-76
+ 539 0203 01       		.byte	1
+ 540 0204 B5       		.byte	-75
+ 541 0205 02       		.byte	2
+ 542 0206 B7       		.byte	-73
+ 543 0207 01       		.byte	1
+ 544 0208 BE       		.byte	-66
+ 545 0209 14       		.byte	20
+ 546 020a BF       		.byte	-65
+ 547 020b 40       		.byte	64
+ 548 020c C0       		.byte	-64
+ 549 020d 10       		.byte	16
+ 550 020e C1       		.byte	-63
+ 551 020f 02       		.byte	2
+ 552 0210 C5       		.byte	-59
+ 553 0211 D1       		.byte	-47
+ 554 0212 C6       		.byte	-58
+ 555 0213 20       		.byte	32
+ 556 0214 C8       		.byte	-56
+ 557 0215 0B       		.byte	11
+ 558 0216 C9       		.byte	-55
+ 559 0217 FF       		.byte	-1
+ 560 0218 CA       		.byte	-54
+ 561 0219 FF       		.byte	-1
+ 562 021a CB       		.byte	-53
+ 563 021b FF       		.byte	-1
+ 564 021c CD       		.byte	-51
+ 565 021d AF       		.byte	-81
+ 566 021e CE       		.byte	-50
+ 567 021f 0F       		.byte	15
+ 568 0220 CF       		.byte	-49
+ 569 0221 04       		.byte	4
+ 570 0222 D0       		.byte	-48
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 11
+
+
+ 571 0223 18       		.byte	24
+ 572 0224 D4       		.byte	-44
+ 573 0225 05       		.byte	5
+ 574 0226 D8       		.byte	-40
+ 575 0227 04       		.byte	4
+ 576 0228 D9       		.byte	-39
+ 577 0229 04       		.byte	4
+ 578 022a DA       		.byte	-38
+ 579 022b 04       		.byte	4
+ 580 022c DB       		.byte	-37
+ 581 022d 04       		.byte	4
+ 582 022e DC       		.byte	-36
+ 583 022f 90       		.byte	-112
+ 584 0230 DD       		.byte	-35
+ 585 0231 99       		.byte	-103
+ 586 0232 DF       		.byte	-33
+ 587 0233 01       		.byte	1
+ 588 0234 E0       		.byte	-32
+ 589 0235 40       		.byte	64
+ 590 0236 E2       		.byte	-30
+ 591 0237 C0       		.byte	-64
+ 592 0238 E4       		.byte	-28
+ 593 0239 40       		.byte	64
+ 594 023a E5       		.byte	-27
+ 595 023b 40       		.byte	64
+ 596 023c E6       		.byte	-26
+ 597 023d C0       		.byte	-64
+ 598 023e E8       		.byte	-24
+ 599 023f C0       		.byte	-64
+ 600 0240 EA       		.byte	-22
+ 601 0241 C0       		.byte	-64
+ 602 0242 EC       		.byte	-20
+ 603 0243 C0       		.byte	-64
+ 604 0244 EE       		.byte	-18
+ 605 0245 C0       		.byte	-64
+ 606 0246 0D       		.byte	13
+ 607 0247 20       		.byte	32
+ 608 0248 0E       		.byte	14
+ 609 0249 02       		.byte	2
+ 610 024a 15       		.byte	21
+ 611 024b 08       		.byte	8
+ 612 024c 17       		.byte	23
+ 613 024d 01       		.byte	1
+ 614 024e 1E       		.byte	30
+ 615 024f 18       		.byte	24
+ 616 0250 20       		.byte	32
+ 617 0251 01       		.byte	1
+ 618 0252 21       		.byte	33
+ 619 0253 84       		.byte	-124
+ 620 0254 22       		.byte	34
+ 621 0255 20       		.byte	32
+ 622 0256 25       		.byte	37
+ 623 0257 05       		.byte	5
+ 624 0258 26       		.byte	38
+ 625 0259 01       		.byte	1
+ 626 025a 27       		.byte	39
+ 627 025b 0A       		.byte	10
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 12
+
+
+ 628 025c 36       		.byte	54
+ 629 025d 20       		.byte	32
+ 630 025e 37       		.byte	55
+ 631 025f 09       		.byte	9
+ 632 0260 38       		.byte	56
+ 633 0261 02       		.byte	2
+ 634 0262 3D       		.byte	61
+ 635 0263 02       		.byte	2
+ 636 0264 3F       		.byte	63
+ 637 0265 08       		.byte	8
+ 638 0266 40       		.byte	64
+ 639 0267 01       		.byte	1
+ 640 0268 41       		.byte	65
+ 641 0269 20       		.byte	32
+ 642 026a 45       		.byte	69
+ 643 026b A0       		.byte	-96
+ 644 026c 4F       		.byte	79
+ 645 026d 09       		.byte	9
+ 646 026e 55       		.byte	85
+ 647 026f 20       		.byte	32
+ 648 0270 5D       		.byte	93
+ 649 0271 80       		.byte	-128
+ 650 0272 5E       		.byte	94
+ 651 0273 08       		.byte	8
+ 652 0274 5F       		.byte	95
+ 653 0275 01       		.byte	1
+ 654 0276 6C       		.byte	108
+ 655 0277 02       		.byte	2
+ 656 0278 6F       		.byte	111
+ 657 0279 08       		.byte	8
+ 658 027a 70       		.byte	112
+ 659 027b 01       		.byte	1
+ 660 027c 8C       		.byte	-116
+ 661 027d 02       		.byte	2
+ 662 027e 8F       		.byte	-113
+ 663 027f 02       		.byte	2
+ 664 0280 96       		.byte	-106
+ 665 0281 10       		.byte	16
+ 666 0282 A7       		.byte	-89
+ 667 0283 08       		.byte	8
+ 668 0284 AB       		.byte	-85
+ 669 0285 08       		.byte	8
+ 670 0286 C2       		.byte	-62
+ 671 0287 C0       		.byte	-64
+ 672 0288 C4       		.byte	-60
+ 673 0289 30       		.byte	48
+ 674 028a CC       		.byte	-52
+ 675 028b E0       		.byte	-32
+ 676 028c CE       		.byte	-50
+ 677 028d C1       		.byte	-63
+ 678 028e D0       		.byte	-48
+ 679 028f 3C       		.byte	60
+ 680 0290 D6       		.byte	-42
+ 681 0291 D0       		.byte	-48
+ 682 0292 E2       		.byte	-30
+ 683 0293 50       		.byte	80
+ 684 0294 E6       		.byte	-26
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 13
+
+
+ 685 0295 40       		.byte	64
+ 686 0296 06       		.byte	6
+ 687 0297 04       		.byte	4
+ 688 0298 0E       		.byte	14
+ 689 0299 03       		.byte	3
+ 690 029a 10       		.byte	16
+ 691 029b 04       		.byte	4
+ 692 029c 17       		.byte	23
+ 693 029d 06       		.byte	6
+ 694 029e 19       		.byte	25
+ 695 029f 04       		.byte	4
+ 696 02a0 22       		.byte	34
+ 697 02a1 01       		.byte	1
+ 698 02a2 2A       		.byte	42
+ 699 02a3 02       		.byte	2
+ 700 02a4 2B       		.byte	43
+ 701 02a5 01       		.byte	1
+ 702 02a6 2F       		.byte	47
+ 703 02a7 01       		.byte	1
+ 704 02a8 32       		.byte	50
+ 705 02a9 02       		.byte	2
+ 706 02aa 33       		.byte	51
+ 707 02ab 02       		.byte	2
+ 708 02ac 34       		.byte	52
+ 709 02ad 01       		.byte	1
+ 710 02ae 35       		.byte	53
+ 711 02af 01       		.byte	1
+ 712 02b0 36       		.byte	54
+ 713 02b1 04       		.byte	4
+ 714 02b2 37       		.byte	55
+ 715 02b3 04       		.byte	4
+ 716 02b4 3E       		.byte	62
+ 717 02b5 50       		.byte	80
+ 718 02b6 3F       		.byte	63
+ 719 02b7 10       		.byte	16
+ 720 02b8 40       		.byte	64
+ 721 02b9 40       		.byte	64
+ 722 02ba 41       		.byte	65
+ 723 02bb 05       		.byte	5
+ 724 02bc 49       		.byte	73
+ 725 02bd FF       		.byte	-1
+ 726 02be 4A       		.byte	74
+ 727 02bf FF       		.byte	-1
+ 728 02c0 4B       		.byte	75
+ 729 02c1 FF       		.byte	-1
+ 730 02c2 4D       		.byte	77
+ 731 02c3 A0       		.byte	-96
+ 732 02c4 4F       		.byte	79
+ 733 02c5 04       		.byte	4
+ 734 02c6 50       		.byte	80
+ 735 02c7 18       		.byte	24
+ 736 02c8 54       		.byte	84
+ 737 02c9 05       		.byte	5
+ 738 02ca 58       		.byte	88
+ 739 02cb 04       		.byte	4
+ 740 02cc 59       		.byte	89
+ 741 02cd 04       		.byte	4
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 14
+
+
+ 742 02ce 5A       		.byte	90
+ 743 02cf 04       		.byte	4
+ 744 02d0 5B       		.byte	91
+ 745 02d1 04       		.byte	4
+ 746 02d2 5C       		.byte	92
+ 747 02d3 99       		.byte	-103
+ 748 02d4 5D       		.byte	93
+ 749 02d5 99       		.byte	-103
+ 750 02d6 5F       		.byte	95
+ 751 02d7 01       		.byte	1
+ 752 02d8 60       		.byte	96
+ 753 02d9 40       		.byte	64
+ 754 02da 62       		.byte	98
+ 755 02db C0       		.byte	-64
+ 756 02dc 64       		.byte	100
+ 757 02dd 40       		.byte	64
+ 758 02de 65       		.byte	101
+ 759 02df 40       		.byte	64
+ 760 02e0 66       		.byte	102
+ 761 02e1 C0       		.byte	-64
+ 762 02e2 68       		.byte	104
+ 763 02e3 C0       		.byte	-64
+ 764 02e4 6A       		.byte	106
+ 765 02e5 C0       		.byte	-64
+ 766 02e6 6C       		.byte	108
+ 767 02e7 C0       		.byte	-64
+ 768 02e8 6E       		.byte	110
+ 769 02e9 C0       		.byte	-64
+ 770 02ea 93       		.byte	-109
+ 771 02eb 01       		.byte	1
+ 772 02ec B1       		.byte	-79
+ 773 02ed 01       		.byte	1
+ 774 02ee C0       		.byte	-64
+ 775 02ef 40       		.byte	64
+ 776 02f0 C1       		.byte	-63
+ 777 02f1 05       		.byte	5
+ 778 02f2 C5       		.byte	-59
+ 779 02f3 D0       		.byte	-48
+ 780 02f4 C7       		.byte	-57
+ 781 02f5 21       		.byte	33
+ 782 02f6 C8       		.byte	-56
+ 783 02f7 32       		.byte	50
+ 784 02f8 C9       		.byte	-55
+ 785 02f9 FF       		.byte	-1
+ 786 02fa CA       		.byte	-54
+ 787 02fb FF       		.byte	-1
+ 788 02fc CB       		.byte	-53
+ 789 02fd FF       		.byte	-1
+ 790 02fe CD       		.byte	-51
+ 791 02ff AF       		.byte	-81
+ 792 0300 CE       		.byte	-50
+ 793 0301 0F       		.byte	15
+ 794 0302 CF       		.byte	-49
+ 795 0303 04       		.byte	4
+ 796 0304 D0       		.byte	-48
+ 797 0305 18       		.byte	24
+ 798 0306 D2       		.byte	-46
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 15
+
+
+ 799 0307 80       		.byte	-128
+ 800 0308 D9       		.byte	-39
+ 801 0309 04       		.byte	4
+ 802 030a DA       		.byte	-38
+ 803 030b 04       		.byte	4
+ 804 030c DB       		.byte	-37
+ 805 030d 04       		.byte	4
+ 806 030e DC       		.byte	-36
+ 807 030f 90       		.byte	-112
+ 808 0310 DD       		.byte	-35
+ 809 0311 99       		.byte	-103
+ 810 0312 DF       		.byte	-33
+ 811 0313 01       		.byte	1
+ 812 0314 E0       		.byte	-32
+ 813 0315 40       		.byte	64
+ 814 0316 E2       		.byte	-30
+ 815 0317 C0       		.byte	-64
+ 816 0318 E4       		.byte	-28
+ 817 0319 40       		.byte	64
+ 818 031a E5       		.byte	-27
+ 819 031b 40       		.byte	64
+ 820 031c E6       		.byte	-26
+ 821 031d C0       		.byte	-64
+ 822 031e E8       		.byte	-24
+ 823 031f C0       		.byte	-64
+ 824 0320 EA       		.byte	-22
+ 825 0321 C0       		.byte	-64
+ 826 0322 EC       		.byte	-20
+ 827 0323 C0       		.byte	-64
+ 828 0324 EE       		.byte	-18
+ 829 0325 C0       		.byte	-64
+ 830 0326 04       		.byte	4
+ 831 0327 40       		.byte	64
+ 832 0328 05       		.byte	5
+ 833 0329 04       		.byte	4
+ 834 032a 0E       		.byte	14
+ 835 032b 40       		.byte	64
+ 836 032c 15       		.byte	21
+ 837 032d 02       		.byte	2
+ 838 032e 16       		.byte	22
+ 839 032f 04       		.byte	4
+ 840 0330 1D       		.byte	29
+ 841 0331 04       		.byte	4
+ 842 0332 1E       		.byte	30
+ 843 0333 08       		.byte	8
+ 844 0334 1F       		.byte	31
+ 845 0335 88       		.byte	-120
+ 846 0336 20       		.byte	32
+ 847 0337 40       		.byte	64
+ 848 0338 21       		.byte	33
+ 849 0339 02       		.byte	2
+ 850 033a 26       		.byte	38
+ 851 033b 50       		.byte	80
+ 852 033c 27       		.byte	39
+ 853 033d 20       		.byte	32
+ 854 033e 2E       		.byte	46
+ 855 033f 40       		.byte	64
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 16
+
+
+ 856 0340 2F       		.byte	47
+ 857 0341 08       		.byte	8
+ 858 0342 30       		.byte	48
+ 859 0343 02       		.byte	2
+ 860 0344 36       		.byte	54
+ 861 0345 08       		.byte	8
+ 862 0346 37       		.byte	55
+ 863 0347 20       		.byte	32
+ 864 0348 40       		.byte	64
+ 865 0349 40       		.byte	64
+ 866 034a 45       		.byte	69
+ 867 034b 02       		.byte	2
+ 868 034c 49       		.byte	73
+ 869 034d 02       		.byte	2
+ 870 034e 4A       		.byte	74
+ 871 034f 02       		.byte	2
+ 872 0350 4E       		.byte	78
+ 873 0351 02       		.byte	2
+ 874 0352 51       		.byte	81
+ 875 0353 01       		.byte	1
+ 876 0354 52       		.byte	82
+ 877 0355 0E       		.byte	14
+ 878 0356 5D       		.byte	93
+ 879 0357 02       		.byte	2
+ 880 0358 5E       		.byte	94
+ 881 0359 88       		.byte	-120
+ 882 035a 6E       		.byte	110
+ 883 035b 40       		.byte	64
+ 884 035c 70       		.byte	112
+ 885 035d 02       		.byte	2
+ 886 035e 86       		.byte	-122
+ 887 035f 10       		.byte	16
+ 888 0360 9F       		.byte	-97
+ 889 0361 01       		.byte	1
+ 890 0362 A9       		.byte	-87
+ 891 0363 84       		.byte	-124
+ 892 0364 C0       		.byte	-64
+ 893 0365 A0       		.byte	-96
+ 894 0366 C2       		.byte	-62
+ 895 0367 10       		.byte	16
+ 896 0368 C4       		.byte	-60
+ 897 0369 50       		.byte	80
+ 898 036a CA       		.byte	-54
+ 899 036b 30       		.byte	48
+ 900 036c CC       		.byte	-52
+ 901 036d 61       		.byte	97
+ 902 036e D0       		.byte	-48
+ 903 036f 81       		.byte	-127
+ 904 0370 D2       		.byte	-46
+ 905 0371 18       		.byte	24
+ 906 0372 D6       		.byte	-42
+ 907 0373 D0       		.byte	-48
+ 908 0374 0F       		.byte	15
+ 909 0375 01       		.byte	1
+ 910 0376 12       		.byte	18
+ 911 0377 01       		.byte	1
+ 912 0378 2B       		.byte	43
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 17
+
+
+ 913 0379 01       		.byte	1
+ 914 037a 2E       		.byte	46
+ 915 037b 01       		.byte	1
+ 916 037c 30       		.byte	48
+ 917 037d 01       		.byte	1
+ 918 037e 35       		.byte	53
+ 919 037f 01       		.byte	1
+ 920 0380 40       		.byte	64
+ 921 0381 50       		.byte	80
+ 922 0382 41       		.byte	65
+ 923 0383 02       		.byte	2
+ 924 0384 49       		.byte	73
+ 925 0385 FF       		.byte	-1
+ 926 0386 4A       		.byte	74
+ 927 0387 FF       		.byte	-1
+ 928 0388 4B       		.byte	75
+ 929 0389 FF       		.byte	-1
+ 930 038a 4D       		.byte	77
+ 931 038b A0       		.byte	-96
+ 932 038c 4F       		.byte	79
+ 933 038d 04       		.byte	4
+ 934 038e 50       		.byte	80
+ 935 038f 18       		.byte	24
+ 936 0390 58       		.byte	88
+ 937 0391 04       		.byte	4
+ 938 0392 59       		.byte	89
+ 939 0393 04       		.byte	4
+ 940 0394 5A       		.byte	90
+ 941 0395 04       		.byte	4
+ 942 0396 5C       		.byte	92
+ 943 0397 11       		.byte	17
+ 944 0398 5D       		.byte	93
+ 945 0399 01       		.byte	1
+ 946 039a 5F       		.byte	95
+ 947 039b 01       		.byte	1
+ 948 039c 60       		.byte	96
+ 949 039d 40       		.byte	64
+ 950 039e 62       		.byte	98
+ 951 039f C0       		.byte	-64
+ 952 03a0 64       		.byte	100
+ 953 03a1 40       		.byte	64
+ 954 03a2 65       		.byte	101
+ 955 03a3 40       		.byte	64
+ 956 03a4 66       		.byte	102
+ 957 03a5 C0       		.byte	-64
+ 958 03a6 68       		.byte	104
+ 959 03a7 C0       		.byte	-64
+ 960 03a8 6A       		.byte	106
+ 961 03a9 C0       		.byte	-64
+ 962 03aa 6C       		.byte	108
+ 963 03ab C0       		.byte	-64
+ 964 03ac 6E       		.byte	110
+ 965 03ad C0       		.byte	-64
+ 966 03ae 82       		.byte	-126
+ 967 03af 02       		.byte	2
+ 968 03b0 8F       		.byte	-113
+ 969 03b1 03       		.byte	3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 18
+
+
+ 970 03b2 91       		.byte	-111
+ 971 03b3 02       		.byte	2
+ 972 03b4 92       		.byte	-110
+ 973 03b5 01       		.byte	1
+ 974 03b6 AA       		.byte	-86
+ 975 03b7 02       		.byte	2
+ 976 03b8 B1       		.byte	-79
+ 977 03b9 01       		.byte	1
+ 978 03ba B4       		.byte	-76
+ 979 03bb 02       		.byte	2
+ 980 03bc B6       		.byte	-74
+ 981 03bd 01       		.byte	1
+ 982 03be B7       		.byte	-73
+ 983 03bf 02       		.byte	2
+ 984 03c0 BE       		.byte	-66
+ 985 03c1 10       		.byte	16
+ 986 03c2 C0       		.byte	-64
+ 987 03c3 10       		.byte	16
+ 988 03c4 C1       		.byte	-63
+ 989 03c5 06       		.byte	6
+ 990 03c6 C5       		.byte	-59
+ 991 03c7 D0       		.byte	-48
+ 992 03c8 C6       		.byte	-58
+ 993 03c9 01       		.byte	1
+ 994 03ca C7       		.byte	-57
+ 995 03cb 02       		.byte	2
+ 996 03cc C8       		.byte	-56
+ 997 03cd 16       		.byte	22
+ 998 03ce C9       		.byte	-55
+ 999 03cf FF       		.byte	-1
+ 1000 03d0 CA       		.byte	-54
+ 1001 03d1 FF       		.byte	-1
+ 1002 03d2 CB       		.byte	-53
+ 1003 03d3 FF       		.byte	-1
+ 1004 03d4 CD       		.byte	-51
+ 1005 03d5 AF       		.byte	-81
+ 1006 03d6 CE       		.byte	-50
+ 1007 03d7 0F       		.byte	15
+ 1008 03d8 CF       		.byte	-49
+ 1009 03d9 04       		.byte	4
+ 1010 03da D0       		.byte	-48
+ 1011 03db 18       		.byte	24
+ 1012 03dc D2       		.byte	-46
+ 1013 03dd 80       		.byte	-128
+ 1014 03de D4       		.byte	-44
+ 1015 03df 05       		.byte	5
+ 1016 03e0 D8       		.byte	-40
+ 1017 03e1 04       		.byte	4
+ 1018 03e2 D9       		.byte	-39
+ 1019 03e3 04       		.byte	4
+ 1020 03e4 DA       		.byte	-38
+ 1021 03e5 04       		.byte	4
+ 1022 03e6 DB       		.byte	-37
+ 1023 03e7 04       		.byte	4
+ 1024 03e8 DC       		.byte	-36
+ 1025 03e9 11       		.byte	17
+ 1026 03ea DD       		.byte	-35
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 19
+
+
+ 1027 03eb 11       		.byte	17
+ 1028 03ec DF       		.byte	-33
+ 1029 03ed 01       		.byte	1
+ 1030 03ee E0       		.byte	-32
+ 1031 03ef 40       		.byte	64
+ 1032 03f0 E2       		.byte	-30
+ 1033 03f1 C0       		.byte	-64
+ 1034 03f2 E4       		.byte	-28
+ 1035 03f3 40       		.byte	64
+ 1036 03f4 E5       		.byte	-27
+ 1037 03f5 40       		.byte	64
+ 1038 03f6 E6       		.byte	-26
+ 1039 03f7 C0       		.byte	-64
+ 1040 03f8 E8       		.byte	-24
+ 1041 03f9 C0       		.byte	-64
+ 1042 03fa EA       		.byte	-22
+ 1043 03fb C0       		.byte	-64
+ 1044 03fc EC       		.byte	-20
+ 1045 03fd C0       		.byte	-64
+ 1046 03fe EE       		.byte	-18
+ 1047 03ff C0       		.byte	-64
+ 1048 0400 00       		.byte	0
+ 1049 0401 01       		.byte	1
+ 1050 0402 0A       		.byte	10
+ 1051 0403 40       		.byte	64
+ 1052 0404 0F       		.byte	15
+ 1053 0405 80       		.byte	-128
+ 1054 0406 12       		.byte	18
+ 1055 0407 04       		.byte	4
+ 1056 0408 15       		.byte	21
+ 1057 0409 80       		.byte	-128
+ 1058 040a 18       		.byte	24
+ 1059 040b 01       		.byte	1
+ 1060 040c 1A       		.byte	26
+ 1061 040d 04       		.byte	4
+ 1062 040e 1B       		.byte	27
+ 1063 040f 40       		.byte	64
+ 1064 0410 1C       		.byte	28
+ 1065 0411 40       		.byte	64
+ 1066 0412 21       		.byte	33
+ 1067 0413 02       		.byte	2
+ 1068 0414 22       		.byte	34
+ 1069 0415 40       		.byte	64
+ 1070 0416 27       		.byte	39
+ 1071 0417 08       		.byte	8
+ 1072 0418 2C       		.byte	44
+ 1073 0419 08       		.byte	8
+ 1074 041a 31       		.byte	49
+ 1075 041b 02       		.byte	2
+ 1076 041c 39       		.byte	57
+ 1077 041d 80       		.byte	-128
+ 1078 041e 3F       		.byte	63
+ 1079 041f 80       		.byte	-128
+ 1080 0420 40       		.byte	64
+ 1081 0421 01       		.byte	1
+ 1082 0422 46       		.byte	70
+ 1083 0423 04       		.byte	4
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 20
+
+
+ 1084 0424 48       		.byte	72
+ 1085 0425 08       		.byte	8
+ 1086 0426 49       		.byte	73
+ 1087 0427 01       		.byte	1
+ 1088 0428 4F       		.byte	79
+ 1089 0429 80       		.byte	-128
+ 1090 042a 50       		.byte	80
+ 1091 042b 08       		.byte	8
+ 1092 042c 51       		.byte	81
+ 1093 042d 40       		.byte	64
+ 1094 042e 52       		.byte	82
+ 1095 042f 04       		.byte	4
+ 1096 0430 59       		.byte	89
+ 1097 0431 01       		.byte	1
+ 1098 0432 5A       		.byte	90
+ 1099 0433 84       		.byte	-124
+ 1100 0434 72       		.byte	114
+ 1101 0435 40       		.byte	64
+ 1102 0436 94       		.byte	-108
+ 1103 0437 40       		.byte	64
+ 1104 0438 C0       		.byte	-64
+ 1105 0439 08       		.byte	8
+ 1106 043a C2       		.byte	-62
+ 1107 043b 18       		.byte	24
+ 1108 043c C4       		.byte	-60
+ 1109 043d 82       		.byte	-126
+ 1110 043e CA       		.byte	-54
+ 1111 043f 20       		.byte	32
+ 1112 0440 CC       		.byte	-52
+ 1113 0441 01       		.byte	1
+ 1114 0442 CE       		.byte	-50
+ 1115 0443 18       		.byte	24
+ 1116 0444 D0       		.byte	-48
+ 1117 0445 28       		.byte	40
+ 1118 0446 D2       		.byte	-46
+ 1119 0447 14       		.byte	20
+ 1120 0448 D6       		.byte	-42
+ 1121 0449 0B       		.byte	11
+ 1122 044a 8C       		.byte	-116
+ 1123 044b 40       		.byte	64
+ 1124 044c E2       		.byte	-30
+ 1125 044d 40       		.byte	64
+ 1126 044e E0       		.byte	-32
+ 1127 044f 80       		.byte	-128
+ 1128 0450 39       		.byte	57
+ 1129 0451 80       		.byte	-128
+ 1130 0452 3F       		.byte	63
+ 1131 0453 40       		.byte	64
+ 1132 0454 40       		.byte	64
+ 1133 0455 54       		.byte	84
+ 1134 0456 49       		.byte	73
+ 1135 0457 FF       		.byte	-1
+ 1136 0458 4A       		.byte	74
+ 1137 0459 FF       		.byte	-1
+ 1138 045a 4B       		.byte	75
+ 1139 045b FF       		.byte	-1
+ 1140 045c 4F       		.byte	79
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 21
+
+
+ 1141 045d 01       		.byte	1
+ 1142 045e 50       		.byte	80
+ 1143 045f 18       		.byte	24
+ 1144 0460 52       		.byte	82
+ 1145 0461 80       		.byte	-128
+ 1146 0462 59       		.byte	89
+ 1147 0463 04       		.byte	4
+ 1148 0464 5A       		.byte	90
+ 1149 0465 04       		.byte	4
+ 1150 0466 5B       		.byte	91
+ 1151 0467 04       		.byte	4
+ 1152 0468 5D       		.byte	93
+ 1153 0469 99       		.byte	-103
+ 1154 046a 5F       		.byte	95
+ 1155 046b 01       		.byte	1
+ 1156 046c 60       		.byte	96
+ 1157 046d 40       		.byte	64
+ 1158 046e 62       		.byte	98
+ 1159 046f 40       		.byte	64
+ 1160 0470 64       		.byte	100
+ 1161 0471 40       		.byte	64
+ 1162 0472 65       		.byte	101
+ 1163 0473 40       		.byte	64
+ 1164 0474 66       		.byte	102
+ 1165 0475 80       		.byte	-128
+ 1166 0476 68       		.byte	104
+ 1167 0477 80       		.byte	-128
+ 1168 0478 6A       		.byte	106
+ 1169 0479 80       		.byte	-128
+ 1170 047a 6C       		.byte	108
+ 1171 047b 80       		.byte	-128
+ 1172 047c 6E       		.byte	110
+ 1173 047d 80       		.byte	-128
+ 1174 047e C0       		.byte	-64
+ 1175 047f 54       		.byte	84
+ 1176 0480 C9       		.byte	-55
+ 1177 0481 FF       		.byte	-1
+ 1178 0482 CA       		.byte	-54
+ 1179 0483 FF       		.byte	-1
+ 1180 0484 CB       		.byte	-53
+ 1181 0485 FF       		.byte	-1
+ 1182 0486 CD       		.byte	-51
+ 1183 0487 83       		.byte	-125
+ 1184 0488 CE       		.byte	-50
+ 1185 0489 03       		.byte	3
+ 1186 048a CF       		.byte	-49
+ 1187 048b 01       		.byte	1
+ 1188 048c D0       		.byte	-48
+ 1189 048d 18       		.byte	24
+ 1190 048e DA       		.byte	-38
+ 1191 048f 04       		.byte	4
+ 1192 0490 DD       		.byte	-35
+ 1193 0491 09       		.byte	9
+ 1194 0492 DF       		.byte	-33
+ 1195 0493 01       		.byte	1
+ 1196 0494 E0       		.byte	-32
+ 1197 0495 40       		.byte	64
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 22
+
+
+ 1198 0496 E2       		.byte	-30
+ 1199 0497 40       		.byte	64
+ 1200 0498 E4       		.byte	-28
+ 1201 0499 40       		.byte	64
+ 1202 049a E5       		.byte	-27
+ 1203 049b 40       		.byte	64
+ 1204 049c E6       		.byte	-26
+ 1205 049d 80       		.byte	-128
+ 1206 049e E8       		.byte	-24
+ 1207 049f 80       		.byte	-128
+ 1208 04a0 EA       		.byte	-22
+ 1209 04a1 80       		.byte	-128
+ 1210 04a2 EC       		.byte	-20
+ 1211 04a3 80       		.byte	-128
+ 1212 04a4 EE       		.byte	-18
+ 1213 04a5 80       		.byte	-128
+ 1214 04a6 20       		.byte	32
+ 1215 04a7 01       		.byte	1
+ 1216 04a8 42       		.byte	66
+ 1217 04a9 80       		.byte	-128
+ 1218 04aa 46       		.byte	70
+ 1219 04ab 80       		.byte	-128
+ 1220 04ac 48       		.byte	72
+ 1221 04ad 02       		.byte	2
+ 1222 04ae 4C       		.byte	76
+ 1223 04af 02       		.byte	2
+ 1224 04b0 70       		.byte	112
+ 1225 04b1 02       		.byte	2
+ 1226 04b2 73       		.byte	115
+ 1227 04b3 40       		.byte	64
+ 1228 04b4 8C       		.byte	-116
+ 1229 04b5 01       		.byte	1
+ 1230 04b6 97       		.byte	-105
+ 1231 04b7 40       		.byte	64
+ 1232 04b8 9A       		.byte	-102
+ 1233 04b9 80       		.byte	-128
+ 1234 04ba AF       		.byte	-81
+ 1235 04bb 80       		.byte	-128
+ 1236 04bc D0       		.byte	-48
+ 1237 04bd 81       		.byte	-127
+ 1238 04be D2       		.byte	-46
+ 1239 04bf 18       		.byte	24
+ 1240 04c0 EC       		.byte	-20
+ 1241 04c1 10       		.byte	16
+ 1242 04c2 12       		.byte	18
+ 1243 04c3 01       		.byte	1
+ 1244 04c4 22       		.byte	34
+ 1245 04c5 01       		.byte	1
+ 1246 04c6 30       		.byte	48
+ 1247 04c7 01       		.byte	1
+ 1248 04c8 36       		.byte	54
+ 1249 04c9 01       		.byte	1
+ 1250 04ca 3E       		.byte	62
+ 1251 04cb 01       		.byte	1
+ 1252 04cc 40       		.byte	64
+ 1253 04cd 54       		.byte	84
+ 1254 04ce 45       		.byte	69
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 23
+
+
+ 1255 04cf EC       		.byte	-20
+ 1256 04d0 46       		.byte	70
+ 1257 04d1 02       		.byte	2
+ 1258 04d2 48       		.byte	72
+ 1259 04d3 07       		.byte	7
+ 1260 04d4 49       		.byte	73
+ 1261 04d5 FF       		.byte	-1
+ 1262 04d6 4A       		.byte	74
+ 1263 04d7 FF       		.byte	-1
+ 1264 04d8 4B       		.byte	75
+ 1265 04d9 FF       		.byte	-1
+ 1266 04da 4D       		.byte	77
+ 1267 04db 83       		.byte	-125
+ 1268 04dc 4E       		.byte	78
+ 1269 04dd 03       		.byte	3
+ 1270 04de 4F       		.byte	79
+ 1271 04df 01       		.byte	1
+ 1272 04e0 50       		.byte	80
+ 1273 04e1 18       		.byte	24
+ 1274 04e2 54       		.byte	84
+ 1275 04e3 01       		.byte	1
+ 1276 04e4 58       		.byte	88
+ 1277 04e5 04       		.byte	4
+ 1278 04e6 5A       		.byte	90
+ 1279 04e7 04       		.byte	4
+ 1280 04e8 5B       		.byte	91
+ 1281 04e9 04       		.byte	4
+ 1282 04ea 5C       		.byte	92
+ 1283 04eb 09       		.byte	9
+ 1284 04ec 5D       		.byte	93
+ 1285 04ed 99       		.byte	-103
+ 1286 04ee 5F       		.byte	95
+ 1287 04ef 01       		.byte	1
+ 1288 04f0 60       		.byte	96
+ 1289 04f1 40       		.byte	64
+ 1290 04f2 62       		.byte	98
+ 1291 04f3 40       		.byte	64
+ 1292 04f4 64       		.byte	100
+ 1293 04f5 40       		.byte	64
+ 1294 04f6 65       		.byte	101
+ 1295 04f7 40       		.byte	64
+ 1296 04f8 66       		.byte	102
+ 1297 04f9 80       		.byte	-128
+ 1298 04fa 68       		.byte	104
+ 1299 04fb 80       		.byte	-128
+ 1300 04fc 6A       		.byte	106
+ 1301 04fd 80       		.byte	-128
+ 1302 04fe 6C       		.byte	108
+ 1303 04ff 80       		.byte	-128
+ 1304 0500 6E       		.byte	110
+ 1305 0501 80       		.byte	-128
+ 1306 0502 85       		.byte	-123
+ 1307 0503 02       		.byte	2
+ 1308 0504 92       		.byte	-110
+ 1309 0505 02       		.byte	2
+ 1310 0506 9B       		.byte	-101
+ 1311 0507 03       		.byte	3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 24
+
+
+ 1312 0508 9E       		.byte	-98
+ 1313 0509 05       		.byte	5
+ 1314 050a A6       		.byte	-90
+ 1315 050b 04       		.byte	4
+ 1316 050c AA       		.byte	-86
+ 1317 050d 01       		.byte	1
+ 1318 050e B0       		.byte	-80
+ 1319 050f 04       		.byte	4
+ 1320 0510 B2       		.byte	-78
+ 1321 0511 01       		.byte	1
+ 1322 0512 B4       		.byte	-76
+ 1323 0513 01       		.byte	1
+ 1324 0514 B5       		.byte	-75
+ 1325 0515 01       		.byte	1
+ 1326 0516 B6       		.byte	-74
+ 1327 0517 02       		.byte	2
+ 1328 0518 B7       		.byte	-73
+ 1329 0519 02       		.byte	2
+ 1330 051a BE       		.byte	-66
+ 1331 051b 10       		.byte	16
+ 1332 051c C0       		.byte	-64
+ 1333 051d 10       		.byte	16
+ 1334 051e C1       		.byte	-63
+ 1335 051f 06       		.byte	6
+ 1336 0520 C5       		.byte	-59
+ 1337 0521 D1       		.byte	-47
+ 1338 0522 C7       		.byte	-57
+ 1339 0523 02       		.byte	2
+ 1340 0524 C8       		.byte	-56
+ 1341 0525 13       		.byte	19
+ 1342 0526 C9       		.byte	-55
+ 1343 0527 FF       		.byte	-1
+ 1344 0528 CA       		.byte	-54
+ 1345 0529 FF       		.byte	-1
+ 1346 052a CB       		.byte	-53
+ 1347 052b FF       		.byte	-1
+ 1348 052c CD       		.byte	-51
+ 1349 052d A0       		.byte	-96
+ 1350 052e CF       		.byte	-49
+ 1351 052f 04       		.byte	4
+ 1352 0530 D0       		.byte	-48
+ 1353 0531 18       		.byte	24
+ 1354 0532 D2       		.byte	-46
+ 1355 0533 80       		.byte	-128
+ 1356 0534 D4       		.byte	-44
+ 1357 0535 05       		.byte	5
+ 1358 0536 D8       		.byte	-40
+ 1359 0537 04       		.byte	4
+ 1360 0538 D9       		.byte	-39
+ 1361 0539 04       		.byte	4
+ 1362 053a DA       		.byte	-38
+ 1363 053b 04       		.byte	4
+ 1364 053c DB       		.byte	-37
+ 1365 053d 04       		.byte	4
+ 1366 053e DC       		.byte	-36
+ 1367 053f 11       		.byte	17
+ 1368 0540 DD       		.byte	-35
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 25
+
+
+ 1369 0541 11       		.byte	17
+ 1370 0542 DF       		.byte	-33
+ 1371 0543 01       		.byte	1
+ 1372 0544 E0       		.byte	-32
+ 1373 0545 40       		.byte	64
+ 1374 0546 E2       		.byte	-30
+ 1375 0547 C0       		.byte	-64
+ 1376 0548 E4       		.byte	-28
+ 1377 0549 40       		.byte	64
+ 1378 054a E5       		.byte	-27
+ 1379 054b 40       		.byte	64
+ 1380 054c E6       		.byte	-26
+ 1381 054d C0       		.byte	-64
+ 1382 054e E8       		.byte	-24
+ 1383 054f C0       		.byte	-64
+ 1384 0550 EA       		.byte	-22
+ 1385 0551 C0       		.byte	-64
+ 1386 0552 EC       		.byte	-20
+ 1387 0553 C0       		.byte	-64
+ 1388 0554 EE       		.byte	-18
+ 1389 0555 C0       		.byte	-64
+ 1390 0556 09       		.byte	9
+ 1391 0557 02       		.byte	2
+ 1392 0558 0A       		.byte	10
+ 1393 0559 01       		.byte	1
+ 1394 055a 0F       		.byte	15
+ 1395 055b 40       		.byte	64
+ 1396 055c 10       		.byte	16
+ 1397 055d 28       		.byte	40
+ 1398 055e 16       		.byte	22
+ 1399 055f 80       		.byte	-128
+ 1400 0560 18       		.byte	24
+ 1401 0561 80       		.byte	-128
+ 1402 0562 19       		.byte	25
+ 1403 0563 08       		.byte	8
+ 1404 0564 1A       		.byte	26
+ 1405 0565 05       		.byte	5
+ 1406 0566 1E       		.byte	30
+ 1407 0567 40       		.byte	64
+ 1408 0568 1F       		.byte	31
+ 1409 0569 80       		.byte	-128
+ 1410 056a 20       		.byte	32
+ 1411 056b 04       		.byte	4
+ 1412 056c 21       		.byte	33
+ 1413 056d 80       		.byte	-128
+ 1414 056e 30       		.byte	48
+ 1415 056f 20       		.byte	32
+ 1416 0570 38       		.byte	56
+ 1417 0571 04       		.byte	4
+ 1418 0572 42       		.byte	66
+ 1419 0573 01       		.byte	1
+ 1420 0574 46       		.byte	70
+ 1421 0575 80       		.byte	-128
+ 1422 0576 48       		.byte	72
+ 1423 0577 28       		.byte	40
+ 1424 0578 49       		.byte	73
+ 1425 0579 01       		.byte	1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 26
+
+
+ 1426 057a 4D       		.byte	77
+ 1427 057b 04       		.byte	4
+ 1428 057c 4F       		.byte	79
+ 1429 057d 41       		.byte	65
+ 1430 057e 50       		.byte	80
+ 1431 057f 08       		.byte	8
+ 1432 0580 56       		.byte	86
+ 1433 0581 80       		.byte	-128
+ 1434 0582 59       		.byte	89
+ 1435 0583 41       		.byte	65
+ 1436 0584 5A       		.byte	90
+ 1437 0585 04       		.byte	4
+ 1438 0586 5D       		.byte	93
+ 1439 0587 04       		.byte	4
+ 1440 0588 5E       		.byte	94
+ 1441 0589 40       		.byte	64
+ 1442 058a 5F       		.byte	95
+ 1443 058b 01       		.byte	1
+ 1444 058c 61       		.byte	97
+ 1445 058d C0       		.byte	-64
+ 1446 058e 6F       		.byte	111
+ 1447 058f 01       		.byte	1
+ 1448 0590 71       		.byte	113
+ 1449 0591 02       		.byte	2
+ 1450 0592 8C       		.byte	-116
+ 1451 0593 40       		.byte	64
+ 1452 0594 8D       		.byte	-115
+ 1453 0595 08       		.byte	8
+ 1454 0596 9F       		.byte	-97
+ 1455 0597 01       		.byte	1
+ 1456 0598 B7       		.byte	-73
+ 1457 0599 80       		.byte	-128
+ 1458 059a C2       		.byte	-62
+ 1459 059b 19       		.byte	25
+ 1460 059c C4       		.byte	-60
+ 1461 059d 16       		.byte	22
+ 1462 059e CC       		.byte	-52
+ 1463 059f 04       		.byte	4
+ 1464 05a0 CE       		.byte	-50
+ 1465 05a1 02       		.byte	2
+ 1466 05a2 D0       		.byte	-48
+ 1467 05a3 88       		.byte	-120
+ 1468 05a4 D2       		.byte	-46
+ 1469 05a5 14       		.byte	20
+ 1470 05a6 D6       		.byte	-42
+ 1471 05a7 DB       		.byte	-37
+ 1472 05a8 E2       		.byte	-30
+ 1473 05a9 40       		.byte	64
+ 1474 05aa E6       		.byte	-26
+ 1475 05ab 10       		.byte	16
+ 1476 05ac EA       		.byte	-22
+ 1477 05ad 6A       		.byte	106
+ 1478 05ae EE       		.byte	-18
+ 1479 05af 02       		.byte	2
+ 1480 05b0 AF       		.byte	-81
+ 1481 05b1 08       		.byte	8
+ 1482 05b2 EA       		.byte	-22
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 27
+
+
+ 1483 05b3 22       		.byte	34
+ 1484 05b4 EE       		.byte	-18
+ 1485 05b5 02       		.byte	2
+ 1486 05b6 E4       		.byte	-28
+ 1487 05b7 10       		.byte	16
+ 1488 05b8 EC       		.byte	-20
+ 1489 05b9 10       		.byte	16
+ 1490 05ba 30       		.byte	48
+ 1491 05bb 10       		.byte	16
+ 1492 05bc 33       		.byte	51
+ 1493 05bd 01       		.byte	1
+ 1494 05be 34       		.byte	52
+ 1495 05bf 08       		.byte	8
+ 1496 05c0 36       		.byte	54
+ 1497 05c1 40       		.byte	64
+ 1498 05c2 3B       		.byte	59
+ 1499 05c3 80       		.byte	-128
+ 1500 05c4 55       		.byte	85
+ 1501 05c5 01       		.byte	1
+ 1502 05c6 56       		.byte	86
+ 1503 05c7 01       		.byte	1
+ 1504 05c8 5B       		.byte	91
+ 1505 05c9 40       		.byte	64
+ 1506 05ca 5F       		.byte	95
+ 1507 05cb 01       		.byte	1
+ 1508 05cc 63       		.byte	99
+ 1509 05cd 20       		.byte	32
+ 1510 05ce 66       		.byte	102
+ 1511 05cf 01       		.byte	1
+ 1512 05d0 83       		.byte	-125
+ 1513 05d1 10       		.byte	16
+ 1514 05d2 CC       		.byte	-52
+ 1515 05d3 F0       		.byte	-16
+ 1516 05d4 CE       		.byte	-50
+ 1517 05d5 10       		.byte	16
+ 1518 05d6 D4       		.byte	-44
+ 1519 05d7 80       		.byte	-128
+ 1520 05d8 D6       		.byte	-42
+ 1521 05d9 A0       		.byte	-96
+ 1522 05da D8       		.byte	-40
+ 1523 05db C0       		.byte	-64
+ 1524 05dc E6       		.byte	-26
+ 1525 05dd 80       		.byte	-128
+ 1526 05de 33       		.byte	51
+ 1527 05df 20       		.byte	32
+ 1528 05e0 5F       		.byte	95
+ 1529 05e1 80       		.byte	-128
+ 1530 05e2 62       		.byte	98
+ 1531 05e3 08       		.byte	8
+ 1532 05e4 63       		.byte	99
+ 1533 05e5 02       		.byte	2
+ 1534 05e6 65       		.byte	101
+ 1535 05e7 10       		.byte	16
+ 1536 05e8 8F       		.byte	-113
+ 1537 05e9 01       		.byte	1
+ 1538 05ea 97       		.byte	-105
+ 1539 05eb 81       		.byte	-127
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 28
+
+
+ 1540 05ec 9C       		.byte	-100
+ 1541 05ed 18       		.byte	24
+ 1542 05ee 9F       		.byte	-97
+ 1543 05ef 41       		.byte	65
+ 1544 05f0 A5       		.byte	-91
+ 1545 05f1 01       		.byte	1
+ 1546 05f2 A6       		.byte	-90
+ 1547 05f3 40       		.byte	64
+ 1548 05f4 CC       		.byte	-52
+ 1549 05f5 10       		.byte	16
+ 1550 05f6 D6       		.byte	-42
+ 1551 05f7 60       		.byte	96
+ 1552 05f8 D8       		.byte	-40
+ 1553 05f9 C0       		.byte	-64
+ 1554 05fa 52       		.byte	82
+ 1555 05fb 80       		.byte	-128
+ 1556 05fc 8E       		.byte	-114
+ 1557 05fd 88       		.byte	-120
+ 1558 05fe 8F       		.byte	-113
+ 1559 05ff 40       		.byte	64
+ 1560 0600 97       		.byte	-105
+ 1561 0601 80       		.byte	-128
+ 1562 0602 9C       		.byte	-100
+ 1563 0603 18       		.byte	24
+ 1564 0604 9D       		.byte	-99
+ 1565 0605 10       		.byte	16
+ 1566 0606 9F       		.byte	-97
+ 1567 0607 C1       		.byte	-63
+ 1568 0608 A6       		.byte	-90
+ 1569 0609 48       		.byte	72
+ 1570 060a A7       		.byte	-89
+ 1571 060b 21       		.byte	33
+ 1572 060c A9       		.byte	-87
+ 1573 060d 01       		.byte	1
+ 1574 060e D4       		.byte	-44
+ 1575 060f 20       		.byte	32
+ 1576 0610 EE       		.byte	-18
+ 1577 0611 80       		.byte	-128
+ 1578 0612 87       		.byte	-121
+ 1579 0613 01       		.byte	1
+ 1580 0614 97       		.byte	-105
+ 1581 0615 80       		.byte	-128
+ 1582 0616 9C       		.byte	-100
+ 1583 0617 18       		.byte	24
+ 1584 0618 9D       		.byte	-99
+ 1585 0619 10       		.byte	16
+ 1586 061a 9F       		.byte	-97
+ 1587 061b 81       		.byte	-127
+ 1588 061c A6       		.byte	-90
+ 1589 061d 40       		.byte	64
+ 1590 061e A7       		.byte	-89
+ 1591 061f 21       		.byte	33
+ 1592 0620 E6       		.byte	-26
+ 1593 0621 10       		.byte	16
+ 1594 0622 10       		.byte	16
+ 1595 0623 10       		.byte	16
+ 1596 0624 59       		.byte	89
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 29
+
+
+ 1597 0625 40       		.byte	64
+ 1598 0626 7C       		.byte	124
+ 1599 0627 01       		.byte	1
+ 1600 0628 89       		.byte	-119
+ 1601 0629 40       		.byte	64
+ 1602 062a C4       		.byte	-60
+ 1603 062b 08       		.byte	8
+ 1604 062c D4       		.byte	-44
+ 1605 062d 01       		.byte	1
+ 1606 062e DE       		.byte	-34
+ 1607 062f 01       		.byte	1
+ 1608 0630 E0       		.byte	-32
+ 1609 0631 01       		.byte	1
+ 1610 0632 94       		.byte	-108
+ 1611 0633 01       		.byte	1
+ 1612 0634 98       		.byte	-104
+ 1613 0635 10       		.byte	16
+ 1614 0636 45       		.byte	69
+ 1615 0637 08       		.byte	8
+ 1616 0638 94       		.byte	-108
+ 1617 0639 01       		.byte	1
+ 1618 063a 98       		.byte	-104
+ 1619 063b 10       		.byte	16
+ 1620 063c D0       		.byte	-48
+ 1621 063d 01       		.byte	1
+ 1622 063e 0B       		.byte	11
+ 1623 063f 24       		.byte	36
+ 1624 0640 0F       		.byte	15
+ 1625 0641 40       		.byte	64
+ 1626 0642 94       		.byte	-108
+ 1627 0643 01       		.byte	1
+ 1628 0644 98       		.byte	-104
+ 1629 0645 10       		.byte	16
+ 1630 0646 A5       		.byte	-91
+ 1631 0647 08       		.byte	8
+ 1632 0648 C2       		.byte	-62
+ 1633 0649 0E       		.byte	14
+ 1634 064a 25       		.byte	37
+ 1635 064b 10       		.byte	16
+ 1636 064c 8C       		.byte	-116
+ 1637 064d 08       		.byte	8
+ 1638 064e 8F       		.byte	-113
+ 1639 064f 80       		.byte	-128
+ 1640 0650 9C       		.byte	-100
+ 1641 0651 08       		.byte	8
+ 1642 0652 9F       		.byte	-97
+ 1643 0653 80       		.byte	-128
+ 1644 0654 A7       		.byte	-89
+ 1645 0655 20       		.byte	32
+ 1646 0656 AE       		.byte	-82
+ 1647 0657 40       		.byte	64
+ 1648 0658 AF       		.byte	-81
+ 1649 0659 41       		.byte	65
+ 1650 065a B0       		.byte	-80
+ 1651 065b 10       		.byte	16
+ 1652 065c B5       		.byte	-75
+ 1653 065d 10       		.byte	16
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 30
+
+
+ 1654 065e C8       		.byte	-56
+ 1655 065f 20       		.byte	32
+ 1656 0660 EA       		.byte	-22
+ 1657 0661 50       		.byte	80
+ 1658 0662 EE       		.byte	-18
+ 1659 0663 40       		.byte	64
+ 1660 0664 AF       		.byte	-81
+ 1661 0665 20       		.byte	32
+ 1662 0666 B5       		.byte	-75
+ 1663 0667 10       		.byte	16
+ 1664 0668 EE       		.byte	-18
+ 1665 0669 10       		.byte	16
+ 1666 066a 54       		.byte	84
+ 1667 066b 10       		.byte	16
+ 1668 066c 94       		.byte	-108
+ 1669 066d 01       		.byte	1
+ 1670 066e 98       		.byte	-104
+ 1671 066f 10       		.byte	16
+ 1672 0670 A5       		.byte	-91
+ 1673 0671 08       		.byte	8
+ 1674 0672 AF       		.byte	-81
+ 1675 0673 44       		.byte	68
+ 1676 0674 B3       		.byte	-77
+ 1677 0675 10       		.byte	16
+ 1678 0676 D4       		.byte	-44
+ 1679 0677 02       		.byte	2
+ 1680 0678 EA       		.byte	-22
+ 1681 0679 04       		.byte	4
+ 1682 067a 18       		.byte	24
+ 1683 067b 40       		.byte	64
+ 1684 067c 1C       		.byte	28
+ 1685 067d 20       		.byte	32
+ 1686 067e 78       		.byte	120
+ 1687 067f 10       		.byte	16
+ 1688 0680 7C       		.byte	124
+ 1689 0681 40       		.byte	64
+ 1690 0682 8C       		.byte	-116
+ 1691 0683 01       		.byte	1
+ 1692 0684 94       		.byte	-108
+ 1693 0685 01       		.byte	1
+ 1694 0686 98       		.byte	-104
+ 1695 0687 10       		.byte	16
+ 1696 0688 A4       		.byte	-92
+ 1697 0689 10       		.byte	16
+ 1698 068a B5       		.byte	-75
+ 1699 068b 08       		.byte	8
+ 1700 068c C6       		.byte	-58
+ 1701 068d 0C       		.byte	12
+ 1702 068e DE       		.byte	-34
+ 1703 068f 06       		.byte	6
+ 1704 0690 E4       		.byte	-28
+ 1705 0691 08       		.byte	8
+ 1706 0692 EC       		.byte	-20
+ 1707 0693 08       		.byte	8
+ 1708 0694 00       		.byte	0
+ 1709 0695 02       		.byte	2
+ 1710 0696 01       		.byte	1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 31
+
+
+ 1711 0697 01       		.byte	1
+ 1712 0698 08       		.byte	8
+ 1713 0699 02       		.byte	2
+ 1714 069a 0B       		.byte	11
+ 1715 069b 01       		.byte	1
+ 1716 069c 0C       		.byte	12
+ 1717 069d 02       		.byte	2
+ 1718 069e 10       		.byte	16
+ 1719 069f 02       		.byte	2
+ 1720 06a0 11       		.byte	17
+ 1721 06a1 01       		.byte	1
+ 1722 06a2 1A       		.byte	26
+ 1723 06a3 02       		.byte	2
+ 1724 06a4 1B       		.byte	27
+ 1725 06a5 01       		.byte	1
+ 1726 06a6 00       		.byte	0
+ 1727 06a7 EA       		.byte	-22
+ 1728 06a8 01       		.byte	1
+ 1729 06a9 0F       		.byte	15
+ 1730 06aa 00       		.byte	0
+ 1731 06ab 00       		.byte	0
+ 1732 06ac 00       		.byte	0
+ 1733 06ad FD       		.byte	-3
+ 1734 06ae FD       		.byte	-3
+ 1735 06af 00       		.byte	0
+ 1736 06b0 F4       		.byte	-12
+ 1737 06b1 00       		.byte	0
+ 1738 06b2 00       		.byte	0
+ 1739 06b3 00       		.byte	0
+ 1740 06b4 13       		.byte	19
+ 1741 06b5 2C       		.byte	44
+ 1742 06b6 2F       		.byte	47
+ 1743 06b7 00       		.byte	0
+ 1744 06b8 24       		.byte	36
+ 1745 06b9 00       		.byte	0
+ 1746 06ba 00       		.byte	0
+ 1747 06bb 00       		.byte	0
+ 1748 06bc 00       		.byte	0
+ 1749 06bd 00       		.byte	0
+ 1750 06be 00       		.byte	0
+ 1751 06bf 04       		.byte	4
+ 1752 06c0 04       		.byte	4
+ 1753 06c1 00       		.byte	0
+ 1754 06c2 00       		.byte	0
+ 1755 06c3 00       		.byte	0
+ 1756 06c4 C0       		.byte	-64
+ 1757 06c5 00       		.byte	0
+ 1758 06c6 00       		.byte	0
+ 1759 06c7 00       		.byte	0
+ 1760 06c8 04       		.byte	4
+ 1761 06c9 00       		.byte	0
+ 1762 06ca 00       		.byte	0
+ 1763 06cb 04       		.byte	4
+ 1764 06cc 04       		.byte	4
+ 1765 06cd 00       		.byte	0
+ 1766 06ce 04       		.byte	4
+ 1767 06cf 00       		.byte	0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 32
+
+
+ 1768 06d0 00       		.byte	0
+ 1769 06d1 00       		.byte	0
+ 1770 06d2 00       		.byte	0
+ 1771 06d3 00       		.byte	0
+ 1772 06d4 00       		.byte	0
+ 1773 06d5 00       		.byte	0
+ 1774 06d6 00       		.byte	0
+ 1775 06d7 00       		.byte	0
+ 1776 06d8 00       		.byte	0
+ 1777 06d9 00       		.byte	0
+ 1778 06da 20       		.byte	32
+ 1779 06db 00       		.byte	0
+ 1780 06dc 03       		.byte	3
+ 1781 06dd FC       		.byte	-4
+ 1782 06de FF       		.byte	-1
+ 1783 06df 00       		.byte	0
+ 1784 06e0 7C       		.byte	124
+ 1785 06e1 00       		.byte	0
+ 1786 06e2 00       		.byte	0
+ 1787 06e3 00       		.byte	0
+ 1788 06e4 00       		.byte	0
+ 1789 06e5 13       		.byte	19
+ 1790 06e6 13       		.byte	19
+ 1791 06e7 00       		.byte	0
+ 1792 06e8 02       		.byte	2
+ 1793 06e9 00       		.byte	0
+ 1794 06ea 00       		.byte	0
+ 1795 06eb 00       		.byte	0
+ 1796 06ec 08       		.byte	8
+ 1797 06ed 00       		.byte	0
+ 1798 06ee 18       		.byte	24
+ 1799 06ef 01       		.byte	1
+ 1800              		.global	cy_meta_custnvl
+ 1801              		.section	.cycustnvl,"a",%progbits
+ 1802              		.align	2
+ 1803              		.type	cy_meta_custnvl, %object
+ 1804              		.size	cy_meta_custnvl, 4
+ 1805              	cy_meta_custnvl:
+ 1806 0000 00       		.byte	0
+ 1807 0001 00       		.byte	0
+ 1808 0002 40       		.byte	64
+ 1809 0003 05       		.byte	5
+ 1810              		.global	cy_meta_wonvl
+ 1811              		.section	.cywolatch,"a",%progbits
+ 1812              		.align	2
+ 1813              		.type	cy_meta_wonvl, %object
+ 1814              		.size	cy_meta_wonvl, 4
+ 1815              	cy_meta_wonvl:
+ 1816 0000 BC       		.byte	-68
+ 1817 0001 90       		.byte	-112
+ 1818 0002 AC       		.byte	-84
+ 1819 0003 AF       		.byte	-81
+ 1820              		.global	cy_meta_flashprotect
+ 1821              		.section	.cyflashprotect,"a",%progbits
+ 1822              		.align	2
+ 1823              		.type	cy_meta_flashprotect, %object
+ 1824              		.size	cy_meta_flashprotect, 256
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 33
+
+
+ 1825              	cy_meta_flashprotect:
+ 1826 0000 00000000 		.space	256
+ 1826      00000000 
+ 1826      00000000 
+ 1826      00000000 
+ 1826      00000000 
+ 1827              		.global	cy_metadata
+ 1828              		.section	.cymeta,"a",%progbits
+ 1829              		.align	2
+ 1830              		.type	cy_metadata, %object
+ 1831              		.size	cy_metadata, 12
+ 1832              	cy_metadata:
+ 1833 0000 00       		.byte	0
+ 1834 0001 01       		.byte	1
+ 1835 0002 2E       		.byte	46
+ 1836 0003 12       		.byte	18
+ 1837 0004 30       		.byte	48
+ 1838 0005 69       		.byte	105
+ 1839 0006 00       		.byte	0
+ 1840 0007 01       		.byte	1
+ 1841 0008 00       		.byte	0
+ 1842 0009 00       		.byte	0
+ 1843 000a 00       		.byte	0
+ 1844 000b 00       		.byte	0
+ 1845              		.text
+ 1846              	.Letext0:
+ 1847              		.file 1 ".\\Generated_Source\\PSoC5\\cymetadata.c"
+ 1848              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 1849              		.section	.debug_info,"",%progbits
+ 1850              	.Ldebug_info0:
+ 1851 0000 3A010000 		.4byte	0x13a
+ 1852 0004 0400     		.2byte	0x4
+ 1853 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1854 000a 04       		.byte	0x4
+ 1855 000b 01       		.uleb128 0x1
+ 1856 000c 00000000 		.4byte	.LASF18
+ 1857 0010 01       		.byte	0x1
+ 1858 0011 8E000000 		.4byte	.LASF19
+ 1859 0015 C0000000 		.4byte	.LASF20
+ 1860 0019 00000000 		.4byte	.Ldebug_line0
+ 1861 001d 02       		.uleb128 0x2
+ 1862 001e 01       		.byte	0x1
+ 1863 001f 06       		.byte	0x6
+ 1864 0020 CC010000 		.4byte	.LASF0
+ 1865 0024 02       		.uleb128 0x2
+ 1866 0025 01       		.byte	0x1
+ 1867 0026 08       		.byte	0x8
+ 1868 0027 F4000000 		.4byte	.LASF1
+ 1869 002b 02       		.uleb128 0x2
+ 1870 002c 02       		.byte	0x2
+ 1871 002d 05       		.byte	0x5
+ 1872 002e B3010000 		.4byte	.LASF2
+ 1873 0032 02       		.uleb128 0x2
+ 1874 0033 02       		.byte	0x2
+ 1875 0034 07       		.byte	0x7
+ 1876 0035 14010000 		.4byte	.LASF3
+ 1877 0039 02       		.uleb128 0x2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 34
+
+
+ 1878 003a 04       		.byte	0x4
+ 1879 003b 05       		.byte	0x5
+ 1880 003c C3010000 		.4byte	.LASF4
+ 1881 0040 02       		.uleb128 0x2
+ 1882 0041 04       		.byte	0x4
+ 1883 0042 07       		.byte	0x7
+ 1884 0043 02010000 		.4byte	.LASF5
+ 1885 0047 02       		.uleb128 0x2
+ 1886 0048 08       		.byte	0x8
+ 1887 0049 05       		.byte	0x5
+ 1888 004a A0010000 		.4byte	.LASF6
+ 1889 004e 02       		.uleb128 0x2
+ 1890 004f 08       		.byte	0x8
+ 1891 0050 07       		.byte	0x7
+ 1892 0051 5D010000 		.4byte	.LASF7
+ 1893 0055 03       		.uleb128 0x3
+ 1894 0056 04       		.byte	0x4
+ 1895 0057 05       		.byte	0x5
+ 1896 0058 696E7400 		.ascii	"int\000"
+ 1897 005c 02       		.uleb128 0x2
+ 1898 005d 04       		.byte	0x4
+ 1899 005e 07       		.byte	0x7
+ 1900 005f 50010000 		.4byte	.LASF8
+ 1901 0063 04       		.uleb128 0x4
+ 1902 0064 BD010000 		.4byte	.LASF21
+ 1903 0068 02       		.byte	0x2
+ 1904 0069 A1       		.byte	0xa1
+ 1905 006a 24000000 		.4byte	0x24
+ 1906 006e 02       		.uleb128 0x2
+ 1907 006f 04       		.byte	0x4
+ 1908 0070 04       		.byte	0x4
+ 1909 0071 EE000000 		.4byte	.LASF9
+ 1910 0075 02       		.uleb128 0x2
+ 1911 0076 08       		.byte	0x8
+ 1912 0077 04       		.byte	0x4
+ 1913 0078 27010000 		.4byte	.LASF10
+ 1914 007c 02       		.uleb128 0x2
+ 1915 007d 01       		.byte	0x1
+ 1916 007e 08       		.byte	0x8
+ 1917 007f AE010000 		.4byte	.LASF11
+ 1918 0083 05       		.uleb128 0x5
+ 1919 0084 63000000 		.4byte	0x63
+ 1920 0088 94000000 		.4byte	0x94
+ 1921 008c 06       		.uleb128 0x6
+ 1922 008d 94000000 		.4byte	0x94
+ 1923 0091 EF06     		.2byte	0x6ef
+ 1924 0093 00       		.byte	0
+ 1925 0094 02       		.uleb128 0x2
+ 1926 0095 04       		.byte	0x4
+ 1927 0096 07       		.byte	0x7
+ 1928 0097 97010000 		.4byte	.LASF12
+ 1929 009b 07       		.uleb128 0x7
+ 1930 009c 3E010000 		.4byte	.LASF13
+ 1931 00a0 01       		.byte	0x1
+ 1932 00a1 1C       		.byte	0x1c
+ 1933 00a2 AC000000 		.4byte	0xac
+ 1934 00a6 05       		.uleb128 0x5
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 35
+
+
+ 1935 00a7 03       		.byte	0x3
+ 1936 00a8 00000000 		.4byte	cy_meta_configecc
+ 1937 00ac 08       		.uleb128 0x8
+ 1938 00ad 83000000 		.4byte	0x83
+ 1939 00b1 05       		.uleb128 0x5
+ 1940 00b2 63000000 		.4byte	0x63
+ 1941 00b6 C1000000 		.4byte	0xc1
+ 1942 00ba 09       		.uleb128 0x9
+ 1943 00bb 94000000 		.4byte	0x94
+ 1944 00bf 03       		.byte	0x3
+ 1945 00c0 00       		.byte	0
+ 1946 00c1 0A       		.uleb128 0xa
+ 1947 00c2 2E010000 		.4byte	.LASF14
+ 1948 00c6 01       		.byte	0x1
+ 1949 00c7 0401     		.2byte	0x104
+ 1950 00c9 D3000000 		.4byte	0xd3
+ 1951 00cd 05       		.uleb128 0x5
+ 1952 00ce 03       		.byte	0x3
+ 1953 00cf 00000000 		.4byte	cy_meta_custnvl
+ 1954 00d3 08       		.uleb128 0x8
+ 1955 00d4 B1000000 		.4byte	0xb1
+ 1956 00d8 0A       		.uleb128 0xa
+ 1957 00d9 89010000 		.4byte	.LASF15
+ 1958 00dd 01       		.byte	0x1
+ 1959 00de 0F01     		.2byte	0x10f
+ 1960 00e0 EA000000 		.4byte	0xea
+ 1961 00e4 05       		.uleb128 0x5
+ 1962 00e5 03       		.byte	0x3
+ 1963 00e6 00000000 		.4byte	cy_meta_wonvl
+ 1964 00ea 08       		.uleb128 0x8
+ 1965 00eb B1000000 		.4byte	0xb1
+ 1966 00ef 05       		.uleb128 0x5
+ 1967 00f0 63000000 		.4byte	0x63
+ 1968 00f4 FF000000 		.4byte	0xff
+ 1969 00f8 09       		.uleb128 0x9
+ 1970 00f9 94000000 		.4byte	0x94
+ 1971 00fd FF       		.byte	0xff
+ 1972 00fe 00       		.byte	0
+ 1973 00ff 0A       		.uleb128 0xa
+ 1974 0100 74010000 		.4byte	.LASF16
+ 1975 0104 01       		.byte	0x1
+ 1976 0105 1A01     		.2byte	0x11a
+ 1977 0107 11010000 		.4byte	0x111
+ 1978 010b 05       		.uleb128 0x5
+ 1979 010c 03       		.byte	0x3
+ 1980 010d 00000000 		.4byte	cy_meta_flashprotect
+ 1981 0111 08       		.uleb128 0x8
+ 1982 0112 EF000000 		.4byte	0xef
+ 1983 0116 05       		.uleb128 0x5
+ 1984 0117 63000000 		.4byte	0x63
+ 1985 011b 26010000 		.4byte	0x126
+ 1986 011f 09       		.uleb128 0x9
+ 1987 0120 94000000 		.4byte	0x94
+ 1988 0124 0B       		.byte	0xb
+ 1989 0125 00       		.byte	0
+ 1990 0126 0A       		.uleb128 0xa
+ 1991 0127 B4000000 		.4byte	.LASF17
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 36
+
+
+ 1992 012b 01       		.byte	0x1
+ 1993 012c 4401     		.2byte	0x144
+ 1994 012e 38010000 		.4byte	0x138
+ 1995 0132 05       		.uleb128 0x5
+ 1996 0133 03       		.byte	0x3
+ 1997 0134 00000000 		.4byte	cy_metadata
+ 1998 0138 08       		.uleb128 0x8
+ 1999 0139 16010000 		.4byte	0x116
+ 2000 013d 00       		.byte	0
+ 2001              		.section	.debug_abbrev,"",%progbits
+ 2002              	.Ldebug_abbrev0:
+ 2003 0000 01       		.uleb128 0x1
+ 2004 0001 11       		.uleb128 0x11
+ 2005 0002 01       		.byte	0x1
+ 2006 0003 25       		.uleb128 0x25
+ 2007 0004 0E       		.uleb128 0xe
+ 2008 0005 13       		.uleb128 0x13
+ 2009 0006 0B       		.uleb128 0xb
+ 2010 0007 03       		.uleb128 0x3
+ 2011 0008 0E       		.uleb128 0xe
+ 2012 0009 1B       		.uleb128 0x1b
+ 2013 000a 0E       		.uleb128 0xe
+ 2014 000b 10       		.uleb128 0x10
+ 2015 000c 17       		.uleb128 0x17
+ 2016 000d 00       		.byte	0
+ 2017 000e 00       		.byte	0
+ 2018 000f 02       		.uleb128 0x2
+ 2019 0010 24       		.uleb128 0x24
+ 2020 0011 00       		.byte	0
+ 2021 0012 0B       		.uleb128 0xb
+ 2022 0013 0B       		.uleb128 0xb
+ 2023 0014 3E       		.uleb128 0x3e
+ 2024 0015 0B       		.uleb128 0xb
+ 2025 0016 03       		.uleb128 0x3
+ 2026 0017 0E       		.uleb128 0xe
+ 2027 0018 00       		.byte	0
+ 2028 0019 00       		.byte	0
+ 2029 001a 03       		.uleb128 0x3
+ 2030 001b 24       		.uleb128 0x24
+ 2031 001c 00       		.byte	0
+ 2032 001d 0B       		.uleb128 0xb
+ 2033 001e 0B       		.uleb128 0xb
+ 2034 001f 3E       		.uleb128 0x3e
+ 2035 0020 0B       		.uleb128 0xb
+ 2036 0021 03       		.uleb128 0x3
+ 2037 0022 08       		.uleb128 0x8
+ 2038 0023 00       		.byte	0
+ 2039 0024 00       		.byte	0
+ 2040 0025 04       		.uleb128 0x4
+ 2041 0026 16       		.uleb128 0x16
+ 2042 0027 00       		.byte	0
+ 2043 0028 03       		.uleb128 0x3
+ 2044 0029 0E       		.uleb128 0xe
+ 2045 002a 3A       		.uleb128 0x3a
+ 2046 002b 0B       		.uleb128 0xb
+ 2047 002c 3B       		.uleb128 0x3b
+ 2048 002d 0B       		.uleb128 0xb
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 37
+
+
+ 2049 002e 49       		.uleb128 0x49
+ 2050 002f 13       		.uleb128 0x13
+ 2051 0030 00       		.byte	0
+ 2052 0031 00       		.byte	0
+ 2053 0032 05       		.uleb128 0x5
+ 2054 0033 01       		.uleb128 0x1
+ 2055 0034 01       		.byte	0x1
+ 2056 0035 49       		.uleb128 0x49
+ 2057 0036 13       		.uleb128 0x13
+ 2058 0037 01       		.uleb128 0x1
+ 2059 0038 13       		.uleb128 0x13
+ 2060 0039 00       		.byte	0
+ 2061 003a 00       		.byte	0
+ 2062 003b 06       		.uleb128 0x6
+ 2063 003c 21       		.uleb128 0x21
+ 2064 003d 00       		.byte	0
+ 2065 003e 49       		.uleb128 0x49
+ 2066 003f 13       		.uleb128 0x13
+ 2067 0040 2F       		.uleb128 0x2f
+ 2068 0041 05       		.uleb128 0x5
+ 2069 0042 00       		.byte	0
+ 2070 0043 00       		.byte	0
+ 2071 0044 07       		.uleb128 0x7
+ 2072 0045 34       		.uleb128 0x34
+ 2073 0046 00       		.byte	0
+ 2074 0047 03       		.uleb128 0x3
+ 2075 0048 0E       		.uleb128 0xe
+ 2076 0049 3A       		.uleb128 0x3a
+ 2077 004a 0B       		.uleb128 0xb
+ 2078 004b 3B       		.uleb128 0x3b
+ 2079 004c 0B       		.uleb128 0xb
+ 2080 004d 49       		.uleb128 0x49
+ 2081 004e 13       		.uleb128 0x13
+ 2082 004f 3F       		.uleb128 0x3f
+ 2083 0050 19       		.uleb128 0x19
+ 2084 0051 02       		.uleb128 0x2
+ 2085 0052 18       		.uleb128 0x18
+ 2086 0053 00       		.byte	0
+ 2087 0054 00       		.byte	0
+ 2088 0055 08       		.uleb128 0x8
+ 2089 0056 26       		.uleb128 0x26
+ 2090 0057 00       		.byte	0
+ 2091 0058 49       		.uleb128 0x49
+ 2092 0059 13       		.uleb128 0x13
+ 2093 005a 00       		.byte	0
+ 2094 005b 00       		.byte	0
+ 2095 005c 09       		.uleb128 0x9
+ 2096 005d 21       		.uleb128 0x21
+ 2097 005e 00       		.byte	0
+ 2098 005f 49       		.uleb128 0x49
+ 2099 0060 13       		.uleb128 0x13
+ 2100 0061 2F       		.uleb128 0x2f
+ 2101 0062 0B       		.uleb128 0xb
+ 2102 0063 00       		.byte	0
+ 2103 0064 00       		.byte	0
+ 2104 0065 0A       		.uleb128 0xa
+ 2105 0066 34       		.uleb128 0x34
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 38
+
+
+ 2106 0067 00       		.byte	0
+ 2107 0068 03       		.uleb128 0x3
+ 2108 0069 0E       		.uleb128 0xe
+ 2109 006a 3A       		.uleb128 0x3a
+ 2110 006b 0B       		.uleb128 0xb
+ 2111 006c 3B       		.uleb128 0x3b
+ 2112 006d 05       		.uleb128 0x5
+ 2113 006e 49       		.uleb128 0x49
+ 2114 006f 13       		.uleb128 0x13
+ 2115 0070 3F       		.uleb128 0x3f
+ 2116 0071 19       		.uleb128 0x19
+ 2117 0072 02       		.uleb128 0x2
+ 2118 0073 18       		.uleb128 0x18
+ 2119 0074 00       		.byte	0
+ 2120 0075 00       		.byte	0
+ 2121 0076 00       		.byte	0
+ 2122              		.section	.debug_aranges,"",%progbits
+ 2123 0000 14000000 		.4byte	0x14
+ 2124 0004 0200     		.2byte	0x2
+ 2125 0006 00000000 		.4byte	.Ldebug_info0
+ 2126 000a 04       		.byte	0x4
+ 2127 000b 00       		.byte	0
+ 2128 000c 0000     		.2byte	0
+ 2129 000e 0000     		.2byte	0
+ 2130 0010 00000000 		.4byte	0
+ 2131 0014 00000000 		.4byte	0
+ 2132              		.section	.debug_line,"",%progbits
+ 2133              	.Ldebug_line0:
+ 2134 0000 4F000000 		.section	.debug_str,"MS",%progbits,1
+ 2134      02004900 
+ 2134      00000201 
+ 2134      FB0E0D00 
+ 2134      01010101 
+ 2135              	.LASF18:
+ 2136 0000 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2136      4320342E 
+ 2136      392E3320 
+ 2136      32303135 
+ 2136      30333033 
+ 2137 0033 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2137      20726576 
+ 2137      6973696F 
+ 2137      6E203232 
+ 2137      31323230 
+ 2138 0066 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 2138      66756E63 
+ 2138      74696F6E 
+ 2138      2D736563 
+ 2138      74696F6E 
+ 2139              	.LASF19:
+ 2140 008e 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\cymetadata.c\000"
+ 2140      6E657261 
+ 2140      7465645F 
+ 2140      536F7572 
+ 2140      63655C50 
+ 2141              	.LASF17:
+ 2142 00b4 63795F6D 		.ascii	"cy_metadata\000"
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 39
+
+
+ 2142      65746164 
+ 2142      61746100 
+ 2143              	.LASF20:
+ 2144 00c0 433A5C55 		.ascii	"C:\\Users\\Lois\\Desktop\\MC1_5\\MC1_5_PSOC5.cydsn\000"
+ 2144      73657273 
+ 2144      5C4C6F69 
+ 2144      735C4465 
+ 2144      736B746F 
+ 2145              	.LASF9:
+ 2146 00ee 666C6F61 		.ascii	"float\000"
+ 2146      7400
+ 2147              	.LASF1:
+ 2148 00f4 756E7369 		.ascii	"unsigned char\000"
+ 2148      676E6564 
+ 2148      20636861 
+ 2148      7200
+ 2149              	.LASF5:
+ 2150 0102 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2150      20756E73 
+ 2150      69676E65 
+ 2150      6420696E 
+ 2150      7400
+ 2151              	.LASF3:
+ 2152 0114 73686F72 		.ascii	"short unsigned int\000"
+ 2152      7420756E 
+ 2152      7369676E 
+ 2152      65642069 
+ 2152      6E7400
+ 2153              	.LASF10:
+ 2154 0127 646F7562 		.ascii	"double\000"
+ 2154      6C6500
+ 2155              	.LASF14:
+ 2156 012e 63795F6D 		.ascii	"cy_meta_custnvl\000"
+ 2156      6574615F 
+ 2156      63757374 
+ 2156      6E766C00 
+ 2157              	.LASF13:
+ 2158 013e 63795F6D 		.ascii	"cy_meta_configecc\000"
+ 2158      6574615F 
+ 2158      636F6E66 
+ 2158      69676563 
+ 2158      6300
+ 2159              	.LASF8:
+ 2160 0150 756E7369 		.ascii	"unsigned int\000"
+ 2160      676E6564 
+ 2160      20696E74 
+ 2160      00
+ 2161              	.LASF7:
+ 2162 015d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2162      206C6F6E 
+ 2162      6720756E 
+ 2162      7369676E 
+ 2162      65642069 
+ 2163              	.LASF16:
+ 2164 0174 63795F6D 		.ascii	"cy_meta_flashprotect\000"
+ 2164      6574615F 
+ 2164      666C6173 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccR9Ukvi.s 			page 40
+
+
+ 2164      6870726F 
+ 2164      74656374 
+ 2165              	.LASF15:
+ 2166 0189 63795F6D 		.ascii	"cy_meta_wonvl\000"
+ 2166      6574615F 
+ 2166      776F6E76 
+ 2166      6C00
+ 2167              	.LASF12:
+ 2168 0197 73697A65 		.ascii	"sizetype\000"
+ 2168      74797065 
+ 2168      00
+ 2169              	.LASF6:
+ 2170 01a0 6C6F6E67 		.ascii	"long long int\000"
+ 2170      206C6F6E 
+ 2170      6720696E 
+ 2170      7400
+ 2171              	.LASF11:
+ 2172 01ae 63686172 		.ascii	"char\000"
+ 2172      00
+ 2173              	.LASF2:
+ 2174 01b3 73686F72 		.ascii	"short int\000"
+ 2174      7420696E 
+ 2174      7400
+ 2175              	.LASF21:
+ 2176 01bd 75696E74 		.ascii	"uint8\000"
+ 2176      3800
+ 2177              	.LASF4:
+ 2178 01c3 6C6F6E67 		.ascii	"long int\000"
+ 2178      20696E74 
+ 2178      00
+ 2179              	.LASF0:
+ 2180 01cc 7369676E 		.ascii	"signed char\000"
+ 2180      65642063 
+ 2180      68617200 
+ 2181              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

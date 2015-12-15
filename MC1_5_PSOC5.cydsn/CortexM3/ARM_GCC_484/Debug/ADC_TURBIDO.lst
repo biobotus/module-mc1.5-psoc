@@ -1,0 +1,3441 @@
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"ADC_TURBIDO.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	ADC_TURBIDO_initVar
+  19              		.bss
+  20              		.type	ADC_TURBIDO_initVar, %object
+  21              		.size	ADC_TURBIDO_initVar, 1
+  22              	ADC_TURBIDO_initVar:
+  23 0000 00       		.space	1
+  24              		.comm	ADC_TURBIDO_offset,2,2
+  25              		.comm	ADC_TURBIDO_countsPerVolt,2,2
+  26              		.comm	ADC_TURBIDO_countsPer10Volt,4,4
+  27              		.comm	ADC_TURBIDO_shift,2,2
+  28              		.section	.text.ADC_TURBIDO_Start,"ax",%progbits
+  29              		.align	2
+  30              		.global	ADC_TURBIDO_Start
+  31              		.thumb
+  32              		.thumb_func
+  33              		.type	ADC_TURBIDO_Start, %function
+  34              	ADC_TURBIDO_Start:
+  35              	.LFB0:
+  36              		.file 1 ".\\Generated_Source\\PSoC5\\ADC_TURBIDO.c"
+   1:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * File Name: ADC_TURBIDO.c
+   3:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Version 2.10
+   4:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+   5:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Description:
+   6:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  This file provides the source code to the API for the Successive
+   7:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  approximation ADC Component.
+   8:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+   9:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Note:
+  10:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  11:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+  12:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
+  13:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * You may use this file only in accordance with the license, terms, conditions,
+  14:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  15:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * the software package with which this file was provided.
+  16:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+  17:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  18:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** #include "CyLib.h"
+  19:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** #include "ADC_TURBIDO.h"
+  20:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  21:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** #if(ADC_TURBIDO_DEFAULT_INTERNAL_CLK)
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 2
+
+
+  22:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #include "ADC_TURBIDO_theACLK.h"
+  23:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** #endif /* End ADC_TURBIDO_DEFAULT_INTERNAL_CLK */
+  24:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  25:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  26:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /***************************************
+  27:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Forward function references
+  28:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ***************************************/
+  29:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** static void ADC_TURBIDO_CalcGain(uint8 resolution);
+  30:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  31:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  32:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /***************************************
+  33:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global data allocation
+  34:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ***************************************/
+  35:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** uint8 ADC_TURBIDO_initVar = 0u;
+  36:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** volatile int16 ADC_TURBIDO_offset;
+  37:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** volatile int16 ADC_TURBIDO_countsPerVolt;     /* Obsolete Gain compensation */
+  38:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** volatile int32 ADC_TURBIDO_countsPer10Volt;   /* Gain compensation */
+  39:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** volatile int16 ADC_TURBIDO_shift;
+  40:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  41:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  42:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+  43:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_Start
+  44:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+  45:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  46:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+  47:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  This is the preferred method to begin component operation.
+  48:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Start() sets the initVar variable, calls the
+  49:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Init() function, and then calls the
+  50:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Enable() function.
+  51:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  52:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+  53:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+  54:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  55:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+  56:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+  57:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  58:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global variables:
+  59:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  The ADC_TURBIDO_initVar variable is used to indicate when/if initial
+  60:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  configuration of this component has happened. The variable is initialized to
+  61:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  zero and set to 1 the first time ADC_Start() is called. This allows for
+  62:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  component Re-Start without re-initialization in all subsequent calls to the
+  63:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Start() routine.
+  64:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  If re-initialization of the component is required the variable should be set
+  65:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  to zero before call of ADC_TURBIDO_Start() routine, or the user may call
+  66:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Init() and ADC_TURBIDO_Enable() as done in the
+  67:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Start() routine.
+  68:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  69:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Side Effect:
+  70:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  If the initVar variable is already set, this function only calls the
+  71:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Enable() function.
+  72:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  73:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+  74:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_Start(void)
+  75:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+  37              		.loc 1 75 0
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 3
+
+
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 80B5     		push	{r7, lr}
+  42              		.cfi_def_cfa_offset 8
+  43              		.cfi_offset 7, -8
+  44              		.cfi_offset 14, -4
+  45 0002 00AF     		add	r7, sp, #0
+  46              		.cfi_def_cfa_register 7
+  76:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  77:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* If not Initialized then initialize all required hardware and software */
+  78:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     if(ADC_TURBIDO_initVar == 0u)
+  47              		.loc 1 78 0
+  48 0004 054B     		ldr	r3, .L3
+  49 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  50 0008 002B     		cmp	r3, #0
+  51 000a 04D1     		bne	.L2
+  79:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+  80:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_Init();
+  52              		.loc 1 80 0
+  53 000c FFF7FEFF 		bl	ADC_TURBIDO_Init
+  81:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_initVar = 1u;
+  54              		.loc 1 81 0
+  55 0010 024B     		ldr	r3, .L3
+  56 0012 0122     		movs	r2, #1
+  57 0014 1A70     		strb	r2, [r3]
+  58              	.L2:
+  82:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+  83:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_Enable();
+  59              		.loc 1 83 0
+  60 0016 FFF7FEFF 		bl	ADC_TURBIDO_Enable
+  84:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+  61              		.loc 1 84 0
+  62 001a 80BD     		pop	{r7, pc}
+  63              	.L4:
+  64              		.align	2
+  65              	.L3:
+  66 001c 00000000 		.word	ADC_TURBIDO_initVar
+  67              		.cfi_endproc
+  68              	.LFE0:
+  69              		.size	ADC_TURBIDO_Start, .-ADC_TURBIDO_Start
+  70              		.section	.text.ADC_TURBIDO_Init,"ax",%progbits
+  71              		.align	2
+  72              		.global	ADC_TURBIDO_Init
+  73              		.thumb
+  74              		.thumb_func
+  75              		.type	ADC_TURBIDO_Init, %function
+  76              	ADC_TURBIDO_Init:
+  77              	.LFB1:
+  85:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  86:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+  87:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+  88:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_Init
+  89:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+  90:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  91:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+  92:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Initialize component's parameters to the parameters set by user in the
+  93:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  customizer of the component placed onto schematic. Usually called in
+  94:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_Start().
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 4
+
+
+  95:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  96:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+  97:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+  98:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+  99:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 100:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 101:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 102:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global variables:
+ 103:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  The ADC_TURBIDO_offset variable is initialized to 0.
+ 104:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 105:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 106:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_Init(void)
+ 107:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+  78              		.loc 1 107 0
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 1, uses_anonymous_args = 0
+  82 0000 80B5     		push	{r7, lr}
+  83              		.cfi_def_cfa_offset 8
+  84              		.cfi_offset 7, -8
+  85              		.cfi_offset 14, -4
+  86 0002 00AF     		add	r7, sp, #0
+  87              		.cfi_def_cfa_register 7
+ 108:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 109:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* This is only valid if there is an internal clock */
+ 110:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_DEFAULT_INTERNAL_CLK)
+ 111:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_theACLK_SetMode(CYCLK_DUTY);
+  88              		.loc 1 111 0
+  89 0004 1020     		movs	r0, #16
+  90 0006 FFF7FEFF 		bl	ADC_TURBIDO_theACLK_SetModeRegister
+ 112:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* End ADC_TURBIDO_DEFAULT_INTERNAL_CLK */
+ 113:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 114:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_IRQ_REMOVE == 0u)
+ 115:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         /* Start and set interrupt vector */
+ 116:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         CyIntSetPriority(ADC_TURBIDO_INTC_NUMBER, ADC_TURBIDO_INTC_PRIOR_NUMBER);
+  91              		.loc 1 116 0
+  92 000a 0220     		movs	r0, #2
+  93 000c 0721     		movs	r1, #7
+  94 000e FFF7FEFF 		bl	CyIntSetPriority
+ 117:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         (void)CyIntSetVector(ADC_TURBIDO_INTC_NUMBER, &ADC_TURBIDO_ISR);
+  95              		.loc 1 117 0
+  96 0012 0220     		movs	r0, #2
+  97 0014 0849     		ldr	r1, .L6
+  98 0016 FFF7FEFF 		bl	CyIntSetVector
+ 118:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif   /* End ADC_TURBIDO_IRQ_REMOVE */
+ 119:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 120:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Enable IRQ mode*/
+ 121:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CSR1_REG |= ADC_TURBIDO_SAR_IRQ_MASK_EN | ADC_TURBIDO_SAR_IRQ_MODE_EDGE;
+  99              		.loc 1 121 0
+ 100 001a 084B     		ldr	r3, .L6+4
+ 101 001c 074A     		ldr	r2, .L6+4
+ 102 001e 1278     		ldrb	r2, [r2]
+ 103 0020 D2B2     		uxtb	r2, r2
+ 104 0022 42F00602 		orr	r2, r2, #6
+ 105 0026 D2B2     		uxtb	r2, r2
+ 106 0028 1A70     		strb	r2, [r3]
+ 122:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 5
+
+
+ 123:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /*Set SAR ADC resolution ADC */
+ 124:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SetResolution(ADC_TURBIDO_DEFAULT_RESOLUTION);
+ 107              		.loc 1 124 0
+ 108 002a 0C20     		movs	r0, #12
+ 109 002c FFF7FEFF 		bl	ADC_TURBIDO_SetResolution
+ 125:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_offset = 0;
+ 110              		.loc 1 125 0
+ 111 0030 034B     		ldr	r3, .L6+8
+ 112 0032 0022     		movs	r2, #0
+ 113 0034 1A80     		strh	r2, [r3]	@ movhi
+ 126:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 114              		.loc 1 126 0
+ 115 0036 80BD     		pop	{r7, pc}
+ 116              	.L7:
+ 117              		.align	2
+ 118              	.L6:
+ 119 0038 00000000 		.word	ADC_TURBIDO_ISR
+ 120 003c 01590040 		.word	1073764609
+ 121 0040 00000000 		.word	ADC_TURBIDO_offset
+ 122              		.cfi_endproc
+ 123              	.LFE1:
+ 124              		.size	ADC_TURBIDO_Init, .-ADC_TURBIDO_Init
+ 125              		.section	.text.ADC_TURBIDO_Enable,"ax",%progbits
+ 126              		.align	2
+ 127              		.global	ADC_TURBIDO_Enable
+ 128              		.thumb
+ 129              		.thumb_func
+ 130              		.type	ADC_TURBIDO_Enable, %function
+ 131              	ADC_TURBIDO_Enable:
+ 132              	.LFB2:
+ 127:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 128:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 129:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 130:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_Enable
+ 131:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 132:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 133:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 134:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Enables the reference, clock and power for SAR ADC.
+ 135:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 136:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 137:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 138:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 139:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 140:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 141:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 142:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 143:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_Enable(void)
+ 144:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 133              		.loc 1 144 0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 8
+ 136              		@ frame_needed = 1, uses_anonymous_args = 0
+ 137 0000 80B5     		push	{r7, lr}
+ 138              		.cfi_def_cfa_offset 8
+ 139              		.cfi_offset 7, -8
+ 140              		.cfi_offset 14, -4
+ 141 0002 82B0     		sub	sp, sp, #8
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 6
+
+
+ 142              		.cfi_def_cfa_offset 16
+ 143 0004 00AF     		add	r7, sp, #0
+ 144              		.cfi_def_cfa_register 7
+ 145:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint8 tmpReg;
+ 146:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint8 enableInterrupts;
+ 147:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     enableInterrupts = CyEnterCriticalSection();
+ 145              		.loc 1 147 0
+ 146 0006 FFF7FEFF 		bl	CyEnterCriticalSection
+ 147 000a 0346     		mov	r3, r0
+ 148 000c FB71     		strb	r3, [r7, #7]
+ 148:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 149:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Enable the SAR ADC block in Active Power Mode */
+ 150:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_PWRMGR_SAR_REG |= ADC_TURBIDO_ACT_PWR_SAR_EN;
+ 149              		.loc 1 150 0
+ 150 000e 2E4B     		ldr	r3, .L9
+ 151 0010 2D4A     		ldr	r2, .L9
+ 152 0012 1278     		ldrb	r2, [r2]
+ 153 0014 D2B2     		uxtb	r2, r2
+ 154 0016 42F00102 		orr	r2, r2, #1
+ 155 001a D2B2     		uxtb	r2, r2
+ 156 001c 1A70     		strb	r2, [r3]
+ 151:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 152:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****      /* Enable the SAR ADC in Standby Power Mode*/
+ 153:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_STBY_PWRMGR_SAR_REG |= ADC_TURBIDO_STBY_PWR_SAR_EN;
+ 157              		.loc 1 153 0
+ 158 001e 2B4B     		ldr	r3, .L9+4
+ 159 0020 2A4A     		ldr	r2, .L9+4
+ 160 0022 1278     		ldrb	r2, [r2]
+ 161 0024 D2B2     		uxtb	r2, r2
+ 162 0026 42F00102 		orr	r2, r2, #1
+ 163 002a D2B2     		uxtb	r2, r2
+ 164 002c 1A70     		strb	r2, [r3]
+ 154:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 155:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* This is only valid if there is an internal clock */
+ 156:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_DEFAULT_INTERNAL_CLK)
+ 157:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_PWRMGR_CLK_REG |= ADC_TURBIDO_ACT_PWR_CLK_EN;
+ 165              		.loc 1 157 0
+ 166 002e 284B     		ldr	r3, .L9+8
+ 167 0030 274A     		ldr	r2, .L9+8
+ 168 0032 1278     		ldrb	r2, [r2]
+ 169 0034 D2B2     		uxtb	r2, r2
+ 170 0036 42F00102 		orr	r2, r2, #1
+ 171 003a D2B2     		uxtb	r2, r2
+ 172 003c 1A70     		strb	r2, [r3]
+ 158:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_STBY_PWRMGR_CLK_REG |= ADC_TURBIDO_STBY_PWR_CLK_EN;
+ 173              		.loc 1 158 0
+ 174 003e 254B     		ldr	r3, .L9+12
+ 175 0040 244A     		ldr	r2, .L9+12
+ 176 0042 1278     		ldrb	r2, [r2]
+ 177 0044 D2B2     		uxtb	r2, r2
+ 178 0046 42F00102 		orr	r2, r2, #1
+ 179 004a D2B2     		uxtb	r2, r2
+ 180 004c 1A70     		strb	r2, [r3]
+ 159:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* End ADC_TURBIDO_DEFAULT_INTERNAL_CLK */
+ 160:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 161:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Enable VCM buffer and Enable Int Ref Amp */
+ 162:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     tmpReg = ADC_TURBIDO_SAR_CSR3_REG;
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 7
+
+
+ 181              		.loc 1 162 0
+ 182 004e 224B     		ldr	r3, .L9+16
+ 183 0050 1B78     		ldrb	r3, [r3]
+ 184 0052 BB71     		strb	r3, [r7, #6]
+ 163:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     tmpReg |= ADC_TURBIDO_SAR_EN_BUF_VCM_EN;
+ 185              		.loc 1 163 0
+ 186 0054 BB79     		ldrb	r3, [r7, #6]
+ 187 0056 43F00203 		orr	r3, r3, #2
+ 188 005a BB71     		strb	r3, [r7, #6]
+ 164:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* PD_BUF_VREF is OFF in External reference or Vdda reference mode */
+ 165:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if((ADC_TURBIDO_DEFAULT_REFERENCE == ADC_TURBIDO__EXT_REF) || \
+ 166:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VNEG_VDDA_DIFF))
+ 167:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         tmpReg &= (uint8)~ADC_TURBIDO_SAR_EN_BUF_VREF_EN;
+ 168:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #else /* In INTREF or INTREF Bypassed this buffer is ON */
+ 169:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         tmpReg |= ADC_TURBIDO_SAR_EN_BUF_VREF_EN;
+ 189              		.loc 1 169 0
+ 190 005c BB79     		ldrb	r3, [r7, #6]
+ 191 005e 43F00103 		orr	r3, r3, #1
+ 192 0062 BB71     		strb	r3, [r7, #6]
+ 170:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* ADC_TURBIDO_DEFAULT_REFERENCE == ADC_TURBIDO__EXT_REF */
+ 171:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CSR3_REG = tmpReg;
+ 193              		.loc 1 171 0
+ 194 0064 1C4B     		ldr	r3, .L9+16
+ 195 0066 BA79     		ldrb	r2, [r7, #6]
+ 196 0068 1A70     		strb	r2, [r3]
+ 172:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 173:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Set reference for ADC */
+ 174:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VNEG_VDDA_DIFF)
+ 175:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #if(ADC_TURBIDO_DEFAULT_REFERENCE == ADC_TURBIDO__EXT_REF)
+ 176:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             ADC_TURBIDO_SAR_CSR6_REG = ADC_TURBIDO_INT_BYPASS_EXT_VREF; /* S2 */
+ 177:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #else /* Internal Vdda reference or obsolete bypass mode */
+ 178:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             ADC_TURBIDO_SAR_CSR6_REG = ADC_TURBIDO_VDDA_VREF;           /* S7 */
+ 179:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #endif /* ADC_TURBIDO_DEFAULT_REFERENCE == ADC_TURBIDO__EXT_REF */
+ 180:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #else  /* Reference goes through internal buffer */
+ 181:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #if(ADC_TURBIDO_DEFAULT_REFERENCE == ADC_TURBIDO__INT_REF_NOT_BYPASSED)
+ 182:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             ADC_TURBIDO_SAR_CSR6_REG = ADC_TURBIDO_INT_VREF;            /* S3 + S4 */
+ 197              		.loc 1 182 0
+ 198 006a 1C4B     		ldr	r3, .L9+20
+ 199 006c 1822     		movs	r2, #24
+ 200 006e 1A70     		strb	r2, [r3]
+ 183:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #else /* INTREF Bypassed of External */
+ 184:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             ADC_TURBIDO_SAR_CSR6_REG = ADC_TURBIDO_INT_BYPASS_EXT_VREF; /* S2 */
+ 185:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #endif /* ADC_TURBIDO_DEFAULT_REFERENCE == ADC_TURBIDO__INT_REF_NOT_BYPASSED */
+ 186:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* VNEG_VDDA_DIFF */
+ 187:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 188:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Low non-overlap delay for sampling clock signals (for 1MSPS) */
+ 189:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_HIGH_POWER_PULSE == 0u) /* MinPulseWidth <= 50 ns */
+ 190:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_SAR_CSR5_REG &= (uint8)~ADC_TURBIDO_SAR_DLY_INC;
+ 191:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #else /* Set High non-overlap delay for sampling clock signals (for <500KSPS)*/
+ 192:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_SAR_CSR5_REG |= ADC_TURBIDO_SAR_DLY_INC;
+ 201              		.loc 1 192 0
+ 202 0070 1B4B     		ldr	r3, .L9+24
+ 203 0072 1B4A     		ldr	r2, .L9+24
+ 204 0074 1278     		ldrb	r2, [r2]
+ 205 0076 D2B2     		uxtb	r2, r2
+ 206 0078 42F04002 		orr	r2, r2, #64
+ 207 007c D2B2     		uxtb	r2, r2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 8
+
+
+ 208 007e 1A70     		strb	r2, [r3]
+ 193:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* ADC_TURBIDO_CLOCK_FREQUENCY > (ADC_TURBIDO_MAX_FREQUENCY / 2) */
+ 194:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 195:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****      /* Delay control for comparator latch enable, low delay, (Default for 1MSPS) */
+ 196:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_HIGH_POWER_PULSE == 0u) /* MinPulseWidth <= 50 ns */
+ 197:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_SAR_CSR5_REG |= ADC_TURBIDO_SAR_DCEN;
+ 198:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #else /* Delay control for comparator latch enable, high delay (for <500ksps)*/
+ 199:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_SAR_CSR5_REG &= (uint8)~ADC_TURBIDO_SAR_DCEN;
+ 209              		.loc 1 199 0
+ 210 0080 174B     		ldr	r3, .L9+24
+ 211 0082 174A     		ldr	r2, .L9+24
+ 212 0084 1278     		ldrb	r2, [r2]
+ 213 0086 D2B2     		uxtb	r2, r2
+ 214 0088 22F02002 		bic	r2, r2, #32
+ 215 008c D2B2     		uxtb	r2, r2
+ 216 008e 1A70     		strb	r2, [r3]
+ 200:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* ADC_TURBIDO_CLOCK_FREQUENCY > (ADC_TURBIDO_MAX_FREQUENCY / 2) */
+ 201:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 202:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Set default power and other configurations for control register 0 in multiple lines */
+ 203:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CSR0_REG = (uint8)((uint8)ADC_TURBIDO_DEFAULT_POWER << ADC_TURBIDO_SAR_POWER_SH
+ 217              		.loc 1 203 0
+ 218 0090 144B     		ldr	r3, .L9+28
+ 219 0092 CE22     		movs	r2, #206
+ 220 0094 1A70     		strb	r2, [r3]
+ 204:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* SAR_HIZ_CLEAR:   Should not be used for LP */
+ 205:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if ((CY_PSOC5LP) || (ADC_TURBIDO_DEFAULT_REFERENCE != ADC_TURBIDO__EXT_REF))
+ 206:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         | ADC_TURBIDO_SAR_HIZ_CLEAR
+ 207:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* SAR_HIZ_CLEAR */
+ 208:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /*Set Convertion mode */
+ 209:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__FREE_RUNNING)      /* If triggered mode */
+ 210:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         | ADC_TURBIDO_SAR_MX_SOF_UDB           /* source: UDB */
+ 211:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         | ADC_TURBIDO_SAR_SOF_MODE_EDGE        /* Set edge-sensitive sof source */
+ 212:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* ADC_TURBIDO_DEFAULT_CONV_MODE */
+ 213:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ; /* end of multiple line initialization */
+ 214:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 215:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_TR0_REG = ADC_TURBIDO_SAR_CAP_TRIM_2;
+ 221              		.loc 1 215 0
+ 222 0096 144B     		ldr	r3, .L9+32
+ 223 0098 0222     		movs	r2, #2
+ 224 009a 1A70     		strb	r2, [r3]
+ 216:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 217:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Enable clock for SAR ADC*/
+ 218:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CLK_REG |= ADC_TURBIDO_SAR_MX_CLK_EN;
+ 225              		.loc 1 218 0
+ 226 009c 134B     		ldr	r3, .L9+36
+ 227 009e 134A     		ldr	r2, .L9+36
+ 228 00a0 1278     		ldrb	r2, [r2]
+ 229 00a2 D2B2     		uxtb	r2, r2
+ 230 00a4 42F00802 		orr	r2, r2, #8
+ 231 00a8 D2B2     		uxtb	r2, r2
+ 232 00aa 1A70     		strb	r2, [r3]
+ 219:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 220:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     CyDelayUs(10u); /* The block is ready to use 10 us after the enable signal is set high. */
+ 233              		.loc 1 220 0
+ 234 00ac 0A20     		movs	r0, #10
+ 235 00ae FFF7FEFF 		bl	CyDelayUs
+ 221:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 9
+
+
+ 222:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_IRQ_REMOVE == 0u)
+ 223:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         /* Clear a pending interrupt */
+ 224:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         CyIntClearPending(ADC_TURBIDO_INTC_NUMBER);
+ 236              		.loc 1 224 0
+ 237 00b2 0F4B     		ldr	r3, .L9+40
+ 238 00b4 0422     		movs	r2, #4
+ 239 00b6 1A60     		str	r2, [r3]
+ 225:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif   /* End ADC_TURBIDO_IRQ_REMOVE */
+ 226:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 227:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     CyExitCriticalSection(enableInterrupts);
+ 240              		.loc 1 227 0
+ 241 00b8 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 242 00ba 1846     		mov	r0, r3
+ 243 00bc FFF7FEFF 		bl	CyExitCriticalSection
+ 228:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 244              		.loc 1 228 0
+ 245 00c0 0837     		adds	r7, r7, #8
+ 246 00c2 BD46     		mov	sp, r7
+ 247              		@ sp needed
+ 248 00c4 80BD     		pop	{r7, pc}
+ 249              	.L10:
+ 250 00c6 00BF     		.align	2
+ 251              	.L9:
+ 252 00c8 AB430040 		.word	1073759147
+ 253 00cc BB430040 		.word	1073759163
+ 254 00d0 A1430040 		.word	1073759137
+ 255 00d4 B1430040 		.word	1073759153
+ 256 00d8 03590040 		.word	1073764611
+ 257 00dc 06590040 		.word	1073764614
+ 258 00e0 05590040 		.word	1073764613
+ 259 00e4 00590040 		.word	1073764608
+ 260 00e8 14460040 		.word	1073759764
+ 261 00ec 275B0040 		.word	1073765159
+ 262 00f0 80E200E0 		.word	-536812928
+ 263              		.cfi_endproc
+ 264              	.LFE2:
+ 265              		.size	ADC_TURBIDO_Enable, .-ADC_TURBIDO_Enable
+ 266              		.section	.text.ADC_TURBIDO_Stop,"ax",%progbits
+ 267              		.align	2
+ 268              		.global	ADC_TURBIDO_Stop
+ 269              		.thumb
+ 270              		.thumb_func
+ 271              		.type	ADC_TURBIDO_Stop, %function
+ 272              	ADC_TURBIDO_Stop:
+ 273              	.LFB3:
+ 229:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 230:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 231:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 232:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_Stop
+ 233:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 234:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 235:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 236:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Stops ADC conversions and puts the ADC into its lowest power mode.
+ 237:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 238:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 239:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 240:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 10
+
+
+ 241:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 242:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 243:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 244:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 245:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_Stop(void)
+ 246:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 274              		.loc 1 246 0
+ 275              		.cfi_startproc
+ 276              		@ args = 0, pretend = 0, frame = 8
+ 277              		@ frame_needed = 1, uses_anonymous_args = 0
+ 278 0000 80B5     		push	{r7, lr}
+ 279              		.cfi_def_cfa_offset 8
+ 280              		.cfi_offset 7, -8
+ 281              		.cfi_offset 14, -4
+ 282 0002 82B0     		sub	sp, sp, #8
+ 283              		.cfi_def_cfa_offset 16
+ 284 0004 00AF     		add	r7, sp, #0
+ 285              		.cfi_def_cfa_register 7
+ 247:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint8 enableInterrupts;
+ 248:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     enableInterrupts = CyEnterCriticalSection();
+ 286              		.loc 1 248 0
+ 287 0006 FFF7FEFF 		bl	CyEnterCriticalSection
+ 288 000a 0346     		mov	r3, r0
+ 289 000c FB71     		strb	r3, [r7, #7]
+ 249:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 250:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Stop all conversions */
+ 251:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CSR0_REG &= (uint8)~ADC_TURBIDO_SAR_SOF_START_CONV;
+ 290              		.loc 1 251 0
+ 291 000e 174B     		ldr	r3, .L12
+ 292 0010 164A     		ldr	r2, .L12
+ 293 0012 1278     		ldrb	r2, [r2]
+ 294 0014 D2B2     		uxtb	r2, r2
+ 295 0016 22F00102 		bic	r2, r2, #1
+ 296 001a D2B2     		uxtb	r2, r2
+ 297 001c 1A70     		strb	r2, [r3]
+ 252:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Disable the SAR ADC block in Active Power Mode */
+ 253:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_PWRMGR_SAR_REG &= (uint8)~ADC_TURBIDO_ACT_PWR_SAR_EN;
+ 298              		.loc 1 253 0
+ 299 001e 144B     		ldr	r3, .L12+4
+ 300 0020 134A     		ldr	r2, .L12+4
+ 301 0022 1278     		ldrb	r2, [r2]
+ 302 0024 D2B2     		uxtb	r2, r2
+ 303 0026 22F00102 		bic	r2, r2, #1
+ 304 002a D2B2     		uxtb	r2, r2
+ 305 002c 1A70     		strb	r2, [r3]
+ 254:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Disable the SAR ADC in Standby Power Mode */
+ 255:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_STBY_PWRMGR_SAR_REG &= (uint8)~ADC_TURBIDO_STBY_PWR_SAR_EN;
+ 306              		.loc 1 255 0
+ 307 002e 114B     		ldr	r3, .L12+8
+ 308 0030 104A     		ldr	r2, .L12+8
+ 309 0032 1278     		ldrb	r2, [r2]
+ 310 0034 D2B2     		uxtb	r2, r2
+ 311 0036 22F00102 		bic	r2, r2, #1
+ 312 003a D2B2     		uxtb	r2, r2
+ 313 003c 1A70     		strb	r2, [r3]
+ 256:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 257:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* This is only valid if there is an internal clock */
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 11
+
+
+ 258:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(ADC_TURBIDO_DEFAULT_INTERNAL_CLK)
+ 259:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_PWRMGR_CLK_REG &= (uint8)~ADC_TURBIDO_ACT_PWR_CLK_EN;
+ 314              		.loc 1 259 0
+ 315 003e 0E4B     		ldr	r3, .L12+12
+ 316 0040 0D4A     		ldr	r2, .L12+12
+ 317 0042 1278     		ldrb	r2, [r2]
+ 318 0044 D2B2     		uxtb	r2, r2
+ 319 0046 22F00102 		bic	r2, r2, #1
+ 320 004a D2B2     		uxtb	r2, r2
+ 321 004c 1A70     		strb	r2, [r3]
+ 260:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_STBY_PWRMGR_CLK_REG &= (uint8)~ADC_TURBIDO_STBY_PWR_CLK_EN;
+ 322              		.loc 1 260 0
+ 323 004e 0B4B     		ldr	r3, .L12+16
+ 324 0050 0A4A     		ldr	r2, .L12+16
+ 325 0052 1278     		ldrb	r2, [r2]
+ 326 0054 D2B2     		uxtb	r2, r2
+ 327 0056 22F00102 		bic	r2, r2, #1
+ 328 005a D2B2     		uxtb	r2, r2
+ 329 005c 1A70     		strb	r2, [r3]
+ 261:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* End ADC_TURBIDO_DEFAULT_INTERNAL_CLK */
+ 262:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 263:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     CyExitCriticalSection(enableInterrupts);
+ 330              		.loc 1 263 0
+ 331 005e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 332 0060 1846     		mov	r0, r3
+ 333 0062 FFF7FEFF 		bl	CyExitCriticalSection
+ 264:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 265:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 334              		.loc 1 265 0
+ 335 0066 0837     		adds	r7, r7, #8
+ 336 0068 BD46     		mov	sp, r7
+ 337              		@ sp needed
+ 338 006a 80BD     		pop	{r7, pc}
+ 339              	.L13:
+ 340              		.align	2
+ 341              	.L12:
+ 342 006c 00590040 		.word	1073764608
+ 343 0070 AB430040 		.word	1073759147
+ 344 0074 BB430040 		.word	1073759163
+ 345 0078 A1430040 		.word	1073759137
+ 346 007c B1430040 		.word	1073759153
+ 347              		.cfi_endproc
+ 348              	.LFE3:
+ 349              		.size	ADC_TURBIDO_Stop, .-ADC_TURBIDO_Stop
+ 350              		.section	.text.ADC_TURBIDO_SetPower,"ax",%progbits
+ 351              		.align	2
+ 352              		.global	ADC_TURBIDO_SetPower
+ 353              		.thumb
+ 354              		.thumb_func
+ 355              		.type	ADC_TURBIDO_SetPower, %function
+ 356              	ADC_TURBIDO_SetPower:
+ 357              	.LFB4:
+ 266:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 267:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 268:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 269:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_SetPower
+ 270:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 12
+
+
+ 271:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 272:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 273:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Sets the operational power of the ADC. You should use the higher power
+ 274:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  settings with faster clock speeds.
+ 275:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 276:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 277:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  power:  Power setting for ADC
+ 278:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  0 ->    Normal
+ 279:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  1 ->    Medium power
+ 280:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  2 ->    1.25 power
+ 281:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  3 ->    Minimum power.
+ 282:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 283:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 284:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 285:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 286:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 287:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_SetPower(uint8 power)
+ 288:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 358              		.loc 1 288 0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 16
+ 361              		@ frame_needed = 1, uses_anonymous_args = 0
+ 362              		@ link register save eliminated.
+ 363 0000 80B4     		push	{r7}
+ 364              		.cfi_def_cfa_offset 4
+ 365              		.cfi_offset 7, -4
+ 366 0002 85B0     		sub	sp, sp, #20
+ 367              		.cfi_def_cfa_offset 24
+ 368 0004 00AF     		add	r7, sp, #0
+ 369              		.cfi_def_cfa_register 7
+ 370 0006 0346     		mov	r3, r0
+ 371 0008 FB71     		strb	r3, [r7, #7]
+ 289:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint8 tmpReg;
+ 290:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 291:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* mask off invalid power settings */
+ 292:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     power &= ADC_TURBIDO_SAR_API_POWER_MASK;
+ 372              		.loc 1 292 0
+ 373 000a FB79     		ldrb	r3, [r7, #7]
+ 374 000c 03F00303 		and	r3, r3, #3
+ 375 0010 FB71     		strb	r3, [r7, #7]
+ 293:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 294:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Set Power parameter  */
+ 295:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     tmpReg = ADC_TURBIDO_SAR_CSR0_REG & (uint8)~ADC_TURBIDO_SAR_POWER_MASK;
+ 376              		.loc 1 295 0
+ 377 0012 0A4B     		ldr	r3, .L15
+ 378 0014 1B78     		ldrb	r3, [r3]
+ 379 0016 DBB2     		uxtb	r3, r3
+ 380 0018 03F03F03 		and	r3, r3, #63
+ 381 001c FB73     		strb	r3, [r7, #15]
+ 296:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     tmpReg |= (uint8)(power << ADC_TURBIDO_SAR_POWER_SHIFT);
+ 382              		.loc 1 296 0
+ 383 001e FB79     		ldrb	r3, [r7, #7]
+ 384 0020 9B01     		lsls	r3, r3, #6
+ 385 0022 DAB2     		uxtb	r2, r3
+ 386 0024 FB7B     		ldrb	r3, [r7, #15]
+ 387 0026 1343     		orrs	r3, r3, r2
+ 388 0028 FB73     		strb	r3, [r7, #15]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 13
+
+
+ 297:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CSR0_REG = tmpReg;
+ 389              		.loc 1 297 0
+ 390 002a 044B     		ldr	r3, .L15
+ 391 002c FA7B     		ldrb	r2, [r7, #15]
+ 392 002e 1A70     		strb	r2, [r3]
+ 298:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 393              		.loc 1 298 0
+ 394 0030 1437     		adds	r7, r7, #20
+ 395 0032 BD46     		mov	sp, r7
+ 396              		@ sp needed
+ 397 0034 5DF8047B 		ldr	r7, [sp], #4
+ 398 0038 7047     		bx	lr
+ 399              	.L16:
+ 400 003a 00BF     		.align	2
+ 401              	.L15:
+ 402 003c 00590040 		.word	1073764608
+ 403              		.cfi_endproc
+ 404              	.LFE4:
+ 405              		.size	ADC_TURBIDO_SetPower, .-ADC_TURBIDO_SetPower
+ 406              		.section	.text.ADC_TURBIDO_SetResolution,"ax",%progbits
+ 407              		.align	2
+ 408              		.global	ADC_TURBIDO_SetResolution
+ 409              		.thumb
+ 410              		.thumb_func
+ 411              		.type	ADC_TURBIDO_SetResolution, %function
+ 412              	ADC_TURBIDO_SetResolution:
+ 413              	.LFB5:
+ 299:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 300:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 301:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 302:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_SetResolution
+ 303:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 304:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 305:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 306:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Sets the Relution of the SAR.
+ 307:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 308:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 309:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  resolution:
+ 310:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  12 ->    RES12
+ 311:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  10 ->    RES10
+ 312:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  8  ->    RES8
+ 313:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 314:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 315:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 316:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 317:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Side Effects:
+ 318:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  The ADC resolution cannot be changed during a conversion cycle. The
+ 319:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  recommended best practice is to stop conversions with
+ 320:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_StopConvert(), change the resolution, then restart the
+ 321:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  conversions with ADC_StartConvert().
+ 322:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  If you decide not to stop conversions before calling this API, you
+ 323:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  should use ADC_IsEndConversion() to wait until conversion is complete
+ 324:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  before changing the resolution.
+ 325:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  If you call ADC_SetResolution() during a conversion, the resolution will
+ 326:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  not be changed until the current conversion is complete. Data will not be
+ 327:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  available in the new resolution for another 6 + "New Resolution(in bits)"
+ 328:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  clock cycles.
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 14
+
+
+ 329:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  You may need add a delay of this number of clock cycles after
+ 330:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_SetResolution() is called before data is valid again.
+ 331:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Affects ADC_CountsTo_Volts(), ADC_CountsTo_mVolts(), and
+ 332:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_CountsTo_uVolts() by calculating the correct conversion between ADC
+ 333:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  counts and the applied input voltage. Calculation depends on resolution,
+ 334:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  input range, and voltage reference.
+ 335:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 336:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 337:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_SetResolution(uint8 resolution)
+ 338:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 414              		.loc 1 338 0
+ 415              		.cfi_startproc
+ 416              		@ args = 0, pretend = 0, frame = 16
+ 417              		@ frame_needed = 1, uses_anonymous_args = 0
+ 418 0000 80B5     		push	{r7, lr}
+ 419              		.cfi_def_cfa_offset 8
+ 420              		.cfi_offset 7, -8
+ 421              		.cfi_offset 14, -4
+ 422 0002 84B0     		sub	sp, sp, #16
+ 423              		.cfi_def_cfa_offset 24
+ 424 0004 00AF     		add	r7, sp, #0
+ 425              		.cfi_def_cfa_register 7
+ 426 0006 0346     		mov	r3, r0
+ 427 0008 FB71     		strb	r3, [r7, #7]
+ 339:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint8 tmpReg;
+ 340:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 341:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Set SAR ADC resolution and sample width: 18 conversion cycles at 12bits + 1 gap */
+ 342:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     switch (resolution)
+ 428              		.loc 1 342 0
+ 429 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 430 000c 0A2B     		cmp	r3, #10
+ 431 000e 07D0     		beq	.L19
+ 432 0010 0C2B     		cmp	r3, #12
+ 433 0012 02D0     		beq	.L20
+ 434 0014 082B     		cmp	r3, #8
+ 435 0016 06D0     		beq	.L21
+ 436 0018 08E0     		b	.L23
+ 437              	.L20:
+ 343:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 344:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         case (uint8)ADC_TURBIDO__BITS_12:
+ 345:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             tmpReg = ADC_TURBIDO_SAR_RESOLUTION_12BIT | ADC_TURBIDO_SAR_SAMPLE_WIDTH;
+ 438              		.loc 1 345 0
+ 439 001a C423     		movs	r3, #196
+ 440 001c FB73     		strb	r3, [r7, #15]
+ 346:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 441              		.loc 1 346 0
+ 442 001e 0BE0     		b	.L22
+ 443              	.L19:
+ 347:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         case (uint8)ADC_TURBIDO__BITS_10:
+ 348:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             tmpReg = ADC_TURBIDO_SAR_RESOLUTION_10BIT | ADC_TURBIDO_SAR_SAMPLE_WIDTH;
+ 444              		.loc 1 348 0
+ 445 0020 8423     		movs	r3, #132
+ 446 0022 FB73     		strb	r3, [r7, #15]
+ 349:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 447              		.loc 1 349 0
+ 448 0024 08E0     		b	.L22
+ 449              	.L21:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 15
+
+
+ 350:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         case (uint8)ADC_TURBIDO__BITS_8:
+ 351:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             tmpReg = ADC_TURBIDO_SAR_RESOLUTION_8BIT | ADC_TURBIDO_SAR_SAMPLE_WIDTH;
+ 450              		.loc 1 351 0
+ 451 0026 4423     		movs	r3, #68
+ 452 0028 FB73     		strb	r3, [r7, #15]
+ 352:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 453              		.loc 1 352 0
+ 454 002a 05E0     		b	.L22
+ 455              	.L23:
+ 353:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         default:
+ 354:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             tmpReg = ADC_TURBIDO_SAR_RESOLUTION_12BIT | ADC_TURBIDO_SAR_SAMPLE_WIDTH;
+ 456              		.loc 1 354 0
+ 457 002c C423     		movs	r3, #196
+ 458 002e FB73     		strb	r3, [r7, #15]
+ 355:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             /* Halt CPU in debug mode if resolution is out of valid range */
+ 356:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             CYASSERT(0u != 0u);
+ 459              		.loc 1 356 0
+ 460 0030 0020     		movs	r0, #0
+ 461 0032 FFF7FEFF 		bl	CyHalt
+ 357:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 462              		.loc 1 357 0
+ 463 0036 00BF     		nop
+ 464              	.L22:
+ 358:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 359:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_SAR_CSR2_REG = tmpReg;
+ 465              		.loc 1 359 0
+ 466 0038 044B     		ldr	r3, .L24
+ 467 003a FA7B     		ldrb	r2, [r7, #15]
+ 468 003c 1A70     		strb	r2, [r3]
+ 360:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 361:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****      /* Calculate gain for convert counts to volts */
+ 362:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_CalcGain(resolution);
+ 469              		.loc 1 362 0
+ 470 003e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 471 0040 1846     		mov	r0, r3
+ 472 0042 FFF7FEFF 		bl	ADC_TURBIDO_CalcGain
+ 363:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 473              		.loc 1 363 0
+ 474 0046 1037     		adds	r7, r7, #16
+ 475 0048 BD46     		mov	sp, r7
+ 476              		@ sp needed
+ 477 004a 80BD     		pop	{r7, pc}
+ 478              	.L25:
+ 479              		.align	2
+ 480              	.L24:
+ 481 004c 02590040 		.word	1073764610
+ 482              		.cfi_endproc
+ 483              	.LFE5:
+ 484              		.size	ADC_TURBIDO_SetResolution, .-ADC_TURBIDO_SetResolution
+ 485              		.section	.text.ADC_TURBIDO_IsEndConversion,"ax",%progbits
+ 486              		.align	2
+ 487              		.global	ADC_TURBIDO_IsEndConversion
+ 488              		.thumb
+ 489              		.thumb_func
+ 490              		.type	ADC_TURBIDO_IsEndConversion, %function
+ 491              	ADC_TURBIDO_IsEndConversion:
+ 492              	.LFB6:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 16
+
+
+ 364:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 365:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 366:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** #if(ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__HARDWARE_TRIGGER)
+ 367:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 368:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 369:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /*******************************************************************************
+ 370:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Function Name: ADC_TURBIDO_StartConvert
+ 371:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ********************************************************************************
+ 372:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 373:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Summary:
+ 374:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  Forces the ADC to initiate a conversion. In free-running mode, the ADC runs
+ 375:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  continuously. In software trigger mode, the function also acts as a software
+ 376:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  version of the SOC and every conversion must be triggered by
+ 377:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  ADC_TURBIDO_StartConvert(). This function is not available when the
+ 378:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  Hardware Trigger sample mode is selected.
+ 379:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 380:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Parameters:
+ 381:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  None.
+ 382:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 383:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Return:
+ 384:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  None.
+ 385:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 386:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Theory:
+ 387:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  Forces the ADC to initiate a conversion. In Free Running mode, the ADC will
+ 388:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  run continuously. In a software trigger mode the function also acts as a
+ 389:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  software version of the SOC. Here every conversion has to be triggered by
+ 390:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  the routine. This writes into the SOC bit in SAR_CTRL reg.
+ 391:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 392:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Side Effects:
+ 393:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  In a software trigger mode the function switches source for SOF from the
+ 394:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  external pin to the internal SOF generation. Application should not call
+ 395:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  StartConvert if external source used for SOF.
+ 396:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 397:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *******************************************************************************/
+ 398:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     void ADC_TURBIDO_StartConvert(void)
+ 399:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 400:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #if(ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__FREE_RUNNING)  /* If software triggered m
+ 401:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             ADC_TURBIDO_SAR_CSR0_REG &= (uint8)~ADC_TURBIDO_SAR_MX_SOF_UDB;   /* source: SOF bit */
+ 402:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #endif /* End ADC_TURBIDO_DEFAULT_CONV_MODE */
+ 403:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 404:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         /* Start the conversion */
+ 405:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_SAR_CSR0_REG |= ADC_TURBIDO_SAR_SOF_START_CONV;
+ 406:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 407:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 408:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 409:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /*******************************************************************************
+ 410:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Function Name: ADC_TURBIDO_StopConvert
+ 411:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ********************************************************************************
+ 412:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 413:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Summary:
+ 414:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  Forces the ADC to stop conversions. If a conversion is currently executing,
+ 415:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  that conversion will complete, but no further conversions will occur. This
+ 416:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  function is not available when the Hardware Trigger sample mode is selected.
+ 417:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 418:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Parameters:
+ 419:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  None.
+ 420:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 17
+
+
+ 421:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Return:
+ 422:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  None.
+ 423:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 424:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Theory:
+ 425:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  Stops ADC conversion in Free Running mode.
+ 426:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 427:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     * Side Effects:
+ 428:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  In Software Trigger sample mode, this function sets a software version of the
+ 429:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  SOC to low level and switches the SOC source to hardware SOC input.
+ 430:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *
+ 431:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *******************************************************************************/
+ 432:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     void ADC_TURBIDO_StopConvert(void)
+ 433:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 434:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         /* Stop all conversions */
+ 435:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_SAR_CSR0_REG &= (uint8)~ADC_TURBIDO_SAR_SOF_START_CONV;
+ 436:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 437:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #if(ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__FREE_RUNNING)  /* If software triggered m
+ 438:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             /* Return source to UDB for hardware SOF signal */
+ 439:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             ADC_TURBIDO_SAR_CSR0_REG |= ADC_TURBIDO_SAR_MX_SOF_UDB;    /* source: UDB */
+ 440:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         #endif /* End ADC_TURBIDO_DEFAULT_CONV_MODE */
+ 441:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 442:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 443:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 444:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** #endif /* End ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__HARDWARE_TRIGGER */
+ 445:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 446:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 447:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 448:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_IsEndConversion
+ 449:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 450:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 451:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 452:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Immediately returns the status of the conversion or does not return
+ 453:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  (blocking) until the conversion completes, depending on the retMode
+ 454:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  parameter.
+ 455:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 456:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 457:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  retMode:  Check conversion return mode.
+ 458:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *   ADC_TURBIDO_RETURN_STATUS: Immediately returns the status. If the
+ 459:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *     value returned is zero, the conversion is not complete, and this function
+ 460:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *     should be retried until a nonzero result is returned.
+ 461:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *   ADC_TURBIDO_WAIT_FOR_RESULT: Does not return a result until the ADC
+ 462:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *     conversion is complete.
+ 463:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 464:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 465:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  (uint8)  0 =>  The ADC is still calculating the last result.
+ 466:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *           1 =>  The last conversion is complete.
+ 467:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 468:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Side Effects:
+ 469:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  This function reads the end of conversion status, which is cleared on read.
+ 470:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 471:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 472:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** uint8 ADC_TURBIDO_IsEndConversion(uint8 retMode)
+ 473:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 493              		.loc 1 473 0
+ 494              		.cfi_startproc
+ 495              		@ args = 0, pretend = 0, frame = 16
+ 496              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 18
+
+
+ 497 0000 80B5     		push	{r7, lr}
+ 498              		.cfi_def_cfa_offset 8
+ 499              		.cfi_offset 7, -8
+ 500              		.cfi_offset 14, -4
+ 501 0002 84B0     		sub	sp, sp, #16
+ 502              		.cfi_def_cfa_offset 24
+ 503 0004 00AF     		add	r7, sp, #0
+ 504              		.cfi_def_cfa_register 7
+ 505 0006 0346     		mov	r3, r0
+ 506 0008 FB71     		strb	r3, [r7, #7]
+ 507              	.L28:
+ 474:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint8 status;
+ 475:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 476:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     do
+ 477:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 478:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         status = ADC_TURBIDO_SAR_CSR1_REG & ADC_TURBIDO_SAR_EOF_1;
+ 508              		.loc 1 478 0 discriminator 1
+ 509 000a 0C4B     		ldr	r3, .L31
+ 510 000c 1B78     		ldrb	r3, [r3]
+ 511 000e DBB2     		uxtb	r3, r3
+ 512 0010 03F00103 		and	r3, r3, #1
+ 513 0014 FB73     		strb	r3, [r7, #15]
+ 479:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     } while ((status != ADC_TURBIDO_SAR_EOF_1) && (retMode == ADC_TURBIDO_WAIT_FOR_RESULT));
+ 514              		.loc 1 479 0 discriminator 1
+ 515 0016 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 516 0018 012B     		cmp	r3, #1
+ 517 001a 02D0     		beq	.L27
+ 518 001c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 519 001e 002B     		cmp	r3, #0
+ 520 0020 F3D0     		beq	.L28
+ 521              	.L27:
+ 480:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* If convertion complete, wait until EOF bit released */
+ 481:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     if(status == ADC_TURBIDO_SAR_EOF_1)
+ 522              		.loc 1 481 0
+ 523 0022 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 524 0024 012B     		cmp	r3, #1
+ 525 0026 04D1     		bne	.L29
+ 482:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 483:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         /* wait one ADC clock to let the EOC status bit release */
+ 484:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         CyDelayUs(1u);
+ 526              		.loc 1 484 0
+ 527 0028 0120     		movs	r0, #1
+ 528 002a FFF7FEFF 		bl	CyDelayUs
+ 485:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         /* Do the unconditional read operation of the CSR1 register to make sure the EOC bit has be
+ 486:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         CY_GET_REG8(ADC_TURBIDO_SAR_CSR1_PTR);
+ 529              		.loc 1 486 0
+ 530 002e 034B     		ldr	r3, .L31
+ 531 0030 1B78     		ldrb	r3, [r3]
+ 532              	.L29:
+ 487:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 488:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 489:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     return(status);
+ 533              		.loc 1 489 0
+ 534 0032 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 490:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 535              		.loc 1 490 0
+ 536 0034 1846     		mov	r0, r3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 19
+
+
+ 537 0036 1037     		adds	r7, r7, #16
+ 538 0038 BD46     		mov	sp, r7
+ 539              		@ sp needed
+ 540 003a 80BD     		pop	{r7, pc}
+ 541              	.L32:
+ 542              		.align	2
+ 543              	.L31:
+ 544 003c 01590040 		.word	1073764609
+ 545              		.cfi_endproc
+ 546              	.LFE6:
+ 547              		.size	ADC_TURBIDO_IsEndConversion, .-ADC_TURBIDO_IsEndConversion
+ 548              		.section	.text.ADC_TURBIDO_GetResult8,"ax",%progbits
+ 549              		.align	2
+ 550              		.global	ADC_TURBIDO_GetResult8
+ 551              		.thumb
+ 552              		.thumb_func
+ 553              		.type	ADC_TURBIDO_GetResult8, %function
+ 554              	ADC_TURBIDO_GetResult8:
+ 555              	.LFB7:
+ 491:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 492:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 493:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 494:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_GetResult8
+ 495:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 496:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 497:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 498:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Returns the result of an 8-bit conversion. If the resolution is set greater
+ 499:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  than 8 bits, the function returns the LSB of the result.
+ 500:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_IsEndConversion() should be called to verify that the data
+ 501:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *   sample is ready.
+ 502:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 503:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 504:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 505:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 506:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 507:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  The LSB of the last ADC conversion.
+ 508:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 509:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 510:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_shift - used to convert the ADC counts to the 2s
+ 511:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  compliment form.
+ 512:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 513:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Side Effects:
+ 514:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Converts the ADC counts to the 2s complement form.
+ 515:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 516:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 517:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** int8 ADC_TURBIDO_GetResult8( void )
+ 518:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 556              		.loc 1 518 0
+ 557              		.cfi_startproc
+ 558              		@ args = 0, pretend = 0, frame = 0
+ 559              		@ frame_needed = 1, uses_anonymous_args = 0
+ 560              		@ link register save eliminated.
+ 561 0000 80B4     		push	{r7}
+ 562              		.cfi_def_cfa_offset 4
+ 563              		.cfi_offset 7, -4
+ 564 0002 00AF     		add	r7, sp, #0
+ 565              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 20
+
+
+ 519:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     return( (int8)ADC_TURBIDO_SAR_WRK0_REG - (int8)ADC_TURBIDO_shift);
+ 566              		.loc 1 519 0
+ 567 0004 074B     		ldr	r3, .L35
+ 568 0006 1B78     		ldrb	r3, [r3]
+ 569 0008 DAB2     		uxtb	r2, r3
+ 570 000a 074B     		ldr	r3, .L35+4
+ 571 000c 1B88     		ldrh	r3, [r3]	@ movhi
+ 572 000e 9BB2     		uxth	r3, r3
+ 573 0010 DBB2     		uxtb	r3, r3
+ 574 0012 D31A     		subs	r3, r2, r3
+ 575 0014 DBB2     		uxtb	r3, r3
+ 576 0016 DBB2     		uxtb	r3, r3
+ 577 0018 5BB2     		sxtb	r3, r3
+ 520:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 578              		.loc 1 520 0
+ 579 001a 1846     		mov	r0, r3
+ 580 001c BD46     		mov	sp, r7
+ 581              		@ sp needed
+ 582 001e 5DF8047B 		ldr	r7, [sp], #4
+ 583 0022 7047     		bx	lr
+ 584              	.L36:
+ 585              		.align	2
+ 586              	.L35:
+ 587 0024 A05B0040 		.word	1073765280
+ 588 0028 00000000 		.word	ADC_TURBIDO_shift
+ 589              		.cfi_endproc
+ 590              	.LFE7:
+ 591              		.size	ADC_TURBIDO_GetResult8, .-ADC_TURBIDO_GetResult8
+ 592              		.section	.text.ADC_TURBIDO_GetResult16,"ax",%progbits
+ 593              		.align	2
+ 594              		.global	ADC_TURBIDO_GetResult16
+ 595              		.thumb
+ 596              		.thumb_func
+ 597              		.type	ADC_TURBIDO_GetResult16, %function
+ 598              	ADC_TURBIDO_GetResult16:
+ 599              	.LFB8:
+ 521:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 522:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 523:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 524:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_GetResult16
+ 525:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 526:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 527:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 528:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Returns a 16-bit result for a conversion with a result that has a resolution
+ 529:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  of 8 to 12 bits.
+ 530:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_IsEndConversion() should be called to verify that the data
+ 531:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *   sample is ready
+ 532:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 533:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 534:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 535:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 536:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 537:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  The 16-bit result of the last ADC conversion
+ 538:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 539:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 540:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_shift - used to convert the ADC counts to the 2s
+ 541:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  compliment form.
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 21
+
+
+ 542:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 543:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Side Effects:
+ 544:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Converts the ADC counts to the 2s complement form.
+ 545:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 546:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 547:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** int16 ADC_TURBIDO_GetResult16( void )
+ 548:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 600              		.loc 1 548 0
+ 601              		.cfi_startproc
+ 602              		@ args = 0, pretend = 0, frame = 8
+ 603              		@ frame_needed = 1, uses_anonymous_args = 0
+ 604              		@ link register save eliminated.
+ 605 0000 80B4     		push	{r7}
+ 606              		.cfi_def_cfa_offset 4
+ 607              		.cfi_offset 7, -4
+ 608 0002 83B0     		sub	sp, sp, #12
+ 609              		.cfi_def_cfa_offset 16
+ 610 0004 00AF     		add	r7, sp, #0
+ 611              		.cfi_def_cfa_register 7
+ 549:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uint16 res;
+ 550:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 551:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     res = CY_GET_REG16(ADC_TURBIDO_SAR_WRK_PTR);
+ 612              		.loc 1 551 0
+ 613 0006 094B     		ldr	r3, .L39
+ 614 0008 1B88     		ldrh	r3, [r3]	@ movhi
+ 615 000a FB80     		strh	r3, [r7, #6]	@ movhi
+ 552:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 553:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     return( (int16)res - ADC_TURBIDO_shift );
+ 616              		.loc 1 553 0
+ 617 000c 084B     		ldr	r3, .L39+4
+ 618 000e 1B88     		ldrh	r3, [r3]	@ movhi
+ 619 0010 9BB2     		uxth	r3, r3
+ 620 0012 9BB2     		uxth	r3, r3
+ 621 0014 FA88     		ldrh	r2, [r7, #6]	@ movhi
+ 622 0016 D31A     		subs	r3, r2, r3
+ 623 0018 9BB2     		uxth	r3, r3
+ 624 001a 9BB2     		uxth	r3, r3
+ 625 001c 1BB2     		sxth	r3, r3
+ 554:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 626              		.loc 1 554 0
+ 627 001e 1846     		mov	r0, r3
+ 628 0020 0C37     		adds	r7, r7, #12
+ 629 0022 BD46     		mov	sp, r7
+ 630              		@ sp needed
+ 631 0024 5DF8047B 		ldr	r7, [sp], #4
+ 632 0028 7047     		bx	lr
+ 633              	.L40:
+ 634 002a 00BF     		.align	2
+ 635              	.L39:
+ 636 002c A05B0040 		.word	1073765280
+ 637 0030 00000000 		.word	ADC_TURBIDO_shift
+ 638              		.cfi_endproc
+ 639              	.LFE8:
+ 640              		.size	ADC_TURBIDO_GetResult16, .-ADC_TURBIDO_GetResult16
+ 641              		.section	.text.ADC_TURBIDO_SetOffset,"ax",%progbits
+ 642              		.align	2
+ 643              		.global	ADC_TURBIDO_SetOffset
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 22
+
+
+ 644              		.thumb
+ 645              		.thumb_func
+ 646              		.type	ADC_TURBIDO_SetOffset, %function
+ 647              	ADC_TURBIDO_SetOffset:
+ 648              	.LFB9:
+ 555:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 556:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 557:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 558:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_SetOffset
+ 559:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 560:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 561:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 562:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Sets the ADC offset, which is used by ADC_TURBIDO_CountsTo_Volts(),
+ 563:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_CountsTo_mVolts(), and ADC_TURBIDO_CountsTo_uVolts()
+ 564:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  to subtract the offset from the given reading before calculating the voltage
+ 565:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  conversion.
+ 566:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 567:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 568:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16: This value is measured when the inputs are shorted or connected to
+ 569:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****    the same input voltage.
+ 570:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 571:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 572:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 573:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 574:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 575:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  The ADC_TURBIDO_offset variable modified. This variable is used for
+ 576:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  offset calibration purpose.
+ 577:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Affects the ADC_TURBIDO_CountsTo_Volts,
+ 578:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_CountsTo_mVolts, ADC_TURBIDO_CountsTo_uVolts functions
+ 579:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  by subtracting the given offset.
+ 580:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 581:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 582:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_SetOffset(int16 offset)
+ 583:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 649              		.loc 1 583 0
+ 650              		.cfi_startproc
+ 651              		@ args = 0, pretend = 0, frame = 8
+ 652              		@ frame_needed = 1, uses_anonymous_args = 0
+ 653              		@ link register save eliminated.
+ 654 0000 80B4     		push	{r7}
+ 655              		.cfi_def_cfa_offset 4
+ 656              		.cfi_offset 7, -4
+ 657 0002 83B0     		sub	sp, sp, #12
+ 658              		.cfi_def_cfa_offset 16
+ 659 0004 00AF     		add	r7, sp, #0
+ 660              		.cfi_def_cfa_register 7
+ 661 0006 0346     		mov	r3, r0
+ 662 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 584:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_offset = offset;
+ 663              		.loc 1 584 0
+ 664 000a 044B     		ldr	r3, .L42
+ 665 000c FA88     		ldrh	r2, [r7, #6]	@ movhi
+ 666 000e 1A80     		strh	r2, [r3]	@ movhi
+ 585:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 667              		.loc 1 585 0
+ 668 0010 0C37     		adds	r7, r7, #12
+ 669 0012 BD46     		mov	sp, r7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 23
+
+
+ 670              		@ sp needed
+ 671 0014 5DF8047B 		ldr	r7, [sp], #4
+ 672 0018 7047     		bx	lr
+ 673              	.L43:
+ 674 001a 00BF     		.align	2
+ 675              	.L42:
+ 676 001c 00000000 		.word	ADC_TURBIDO_offset
+ 677              		.cfi_endproc
+ 678              	.LFE9:
+ 679              		.size	ADC_TURBIDO_SetOffset, .-ADC_TURBIDO_SetOffset
+ 680              		.section	.text.ADC_TURBIDO_CalcGain,"ax",%progbits
+ 681              		.align	2
+ 682              		.thumb
+ 683              		.thumb_func
+ 684              		.type	ADC_TURBIDO_CalcGain, %function
+ 685              	ADC_TURBIDO_CalcGain:
+ 686              	.LFB10:
+ 586:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 587:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 588:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 589:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_CalcGain
+ 590:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 591:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 592:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 593:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  This function calculates the ADC gain in counts per 10 volt.
+ 594:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 595:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 596:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  uint8: resolution
+ 597:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 598:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 599:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 600:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 601:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 602:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_shift variable initialized. This variable is used to
+ 603:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  convert the ADC counts to the 2s compliment form.
+ 604:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_countsPer10Volt variable initialized. This variable is used
+ 605:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  for gain calibration purpose.
+ 606:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 607:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 608:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** static void ADC_TURBIDO_CalcGain( uint8 resolution )
+ 609:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 687              		.loc 1 609 0
+ 688              		.cfi_startproc
+ 689              		@ args = 0, pretend = 0, frame = 16
+ 690              		@ frame_needed = 1, uses_anonymous_args = 0
+ 691 0000 80B5     		push	{r7, lr}
+ 692              		.cfi_def_cfa_offset 8
+ 693              		.cfi_offset 7, -8
+ 694              		.cfi_offset 14, -4
+ 695 0002 84B0     		sub	sp, sp, #16
+ 696              		.cfi_def_cfa_offset 24
+ 697 0004 00AF     		add	r7, sp, #0
+ 698              		.cfi_def_cfa_register 7
+ 699 0006 0346     		mov	r3, r0
+ 700 0008 FB71     		strb	r3, [r7, #7]
+ 610:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     int32 counts;
+ 611:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if(!((ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSS_TO_VREF) || \
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 24
+
+
+ 612:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****          (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDDA) || \
+ 613:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****          (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDAC)) )
+ 614:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         uint16 diff_zero;
+ 615:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* End ADC_TURBIDO_DEFAULT_RANGE */
+ 616:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 617:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     switch (resolution)
+ 701              		.loc 1 617 0
+ 702 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 703 000c 0A2B     		cmp	r3, #10
+ 704 000e 08D0     		beq	.L46
+ 705 0010 0C2B     		cmp	r3, #12
+ 706 0012 02D0     		beq	.L47
+ 707 0014 082B     		cmp	r3, #8
+ 708 0016 08D0     		beq	.L48
+ 709 0018 0BE0     		b	.L51
+ 710              	.L47:
+ 618:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 619:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         case (uint8)ADC_TURBIDO__BITS_12:
+ 620:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             counts = (int32)ADC_TURBIDO_SAR_WRK_MAX_12BIT;
+ 711              		.loc 1 620 0
+ 712 001a 4FF48053 		mov	r3, #4096
+ 713 001e FB60     		str	r3, [r7, #12]
+ 621:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #if(!((ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSS_TO_VREF) || \
+ 622:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDDA) || \
+ 623:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDAC)) )
+ 624:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                 diff_zero = ADC_TURBIDO_SAR_DIFF_SHIFT;
+ 625:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #endif /* End ADC_TURBIDO_DEFAULT_RANGE */
+ 626:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 714              		.loc 1 626 0
+ 715 0020 0DE0     		b	.L49
+ 716              	.L46:
+ 627:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         case (uint8)ADC_TURBIDO__BITS_10:
+ 628:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             counts = (int32)ADC_TURBIDO_SAR_WRK_MAX_10BIT;
+ 717              		.loc 1 628 0
+ 718 0022 4FF48063 		mov	r3, #1024
+ 719 0026 FB60     		str	r3, [r7, #12]
+ 629:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #if(!((ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSS_TO_VREF) || \
+ 630:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDDA) || \
+ 631:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDAC)) )
+ 632:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                 diff_zero = ADC_TURBIDO_SAR_DIFF_SHIFT >> 2u;
+ 633:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #endif /* End ADC_TURBIDO_DEFAULT_RANGE */
+ 634:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 720              		.loc 1 634 0
+ 721 0028 09E0     		b	.L49
+ 722              	.L48:
+ 635:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         case (uint8)ADC_TURBIDO__BITS_8:
+ 636:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             counts = (int32)ADC_TURBIDO_SAR_WRK_MAX_8BIT;
+ 723              		.loc 1 636 0
+ 724 002a 4FF48073 		mov	r3, #256
+ 725 002e FB60     		str	r3, [r7, #12]
+ 637:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #if(!((ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSS_TO_VREF) || \
+ 638:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDDA) || \
+ 639:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDAC)) )
+ 640:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                 diff_zero = ADC_TURBIDO_SAR_DIFF_SHIFT >> 4u;
+ 641:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #endif /* End ADC_TURBIDO_DEFAULT_RANGE */
+ 642:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 726              		.loc 1 642 0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 25
+
+
+ 727 0030 05E0     		b	.L49
+ 728              	.L51:
+ 643:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         default: /* Halt CPU in debug mode if resolution is out of valid range */
+ 644:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             counts = 0;
+ 729              		.loc 1 644 0
+ 730 0032 0023     		movs	r3, #0
+ 731 0034 FB60     		str	r3, [r7, #12]
+ 645:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #if(!((ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSS_TO_VREF) || \
+ 646:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDDA) || \
+ 647:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                  (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDAC)) )
+ 648:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                 diff_zero = 0u;
+ 649:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             #endif /* End ADC_TURBIDO_DEFAULT_RANGE */
+ 650:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             CYASSERT(0u != 0u);
+ 732              		.loc 1 650 0
+ 733 0036 0020     		movs	r0, #0
+ 734 0038 FFF7FEFF 		bl	CyHalt
+ 651:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****             break;
+ 735              		.loc 1 651 0
+ 736 003c 00BF     		nop
+ 737              	.L49:
+ 652:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 653:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_countsPerVolt = 0; /* Clear obsolete variable */
+ 738              		.loc 1 653 0
+ 739 003e 0C4B     		ldr	r3, .L52
+ 740 0040 0022     		movs	r2, #0
+ 741 0042 1A80     		strh	r2, [r3]	@ movhi
+ 654:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Calculate gain in counts per 10 volts with rounding */
+ 655:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_countsPer10Volt = (((counts * ADC_TURBIDO_10MV_COUNTS) +
+ 742              		.loc 1 655 0
+ 743 0044 FB68     		ldr	r3, [r7, #12]
+ 744 0046 42F21072 		movw	r2, #10000
+ 745 004a 02FB03F3 		mul	r3, r2, r3
+ 746 004e 03F58063 		add	r3, r3, #1024
+ 656:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                         ADC_TURBIDO_DEFAULT_REF_VOLTAGE_MV) / (ADC_TURBIDO_DEFAULT_REF_VOLTAGE_MV *
+ 747              		.loc 1 656 0
+ 748 0052 002B     		cmp	r3, #0
+ 749 0054 01DA     		bge	.L50
+ 750 0056 03F2FF73 		addw	r3, r3, #2047
+ 751              	.L50:
+ 752 005a DB12     		asrs	r3, r3, #11
+ 753 005c 1A46     		mov	r2, r3
+ 655:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_countsPer10Volt = (((counts * ADC_TURBIDO_10MV_COUNTS) +
+ 754              		.loc 1 655 0
+ 755 005e 054B     		ldr	r3, .L52+4
+ 756 0060 1A60     		str	r2, [r3]
+ 657:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 658:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #if( (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSS_TO_VREF) || \
+ 659:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****          (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDDA) || \
+ 660:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****          (ADC_TURBIDO_DEFAULT_RANGE == ADC_TURBIDO__VSSA_TO_VDAC) )
+ 661:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_shift = 0;
+ 757              		.loc 1 661 0
+ 758 0062 054B     		ldr	r3, .L52+8
+ 759 0064 0022     		movs	r2, #0
+ 760 0066 1A80     		strh	r2, [r3]	@ movhi
+ 662:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #else
+ 663:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         ADC_TURBIDO_shift = diff_zero;
+ 664:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     #endif /* End ADC_TURBIDO_DEFAULT_RANGE */
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 26
+
+
+ 665:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 761              		.loc 1 665 0
+ 762 0068 1037     		adds	r7, r7, #16
+ 763 006a BD46     		mov	sp, r7
+ 764              		@ sp needed
+ 765 006c 80BD     		pop	{r7, pc}
+ 766              	.L53:
+ 767 006e 00BF     		.align	2
+ 768              	.L52:
+ 769 0070 00000000 		.word	ADC_TURBIDO_countsPerVolt
+ 770 0074 00000000 		.word	ADC_TURBIDO_countsPer10Volt
+ 771 0078 00000000 		.word	ADC_TURBIDO_shift
+ 772              		.cfi_endproc
+ 773              	.LFE10:
+ 774              		.size	ADC_TURBIDO_CalcGain, .-ADC_TURBIDO_CalcGain
+ 775              		.section	.text.ADC_TURBIDO_SetGain,"ax",%progbits
+ 776              		.align	2
+ 777              		.global	ADC_TURBIDO_SetGain
+ 778              		.thumb
+ 779              		.thumb_func
+ 780              		.type	ADC_TURBIDO_SetGain, %function
+ 781              	ADC_TURBIDO_SetGain:
+ 782              	.LFB11:
+ 666:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 667:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 668:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 669:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_SetGain
+ 670:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 671:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 672:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 673:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Sets the ADC gain in counts per volt for the voltage conversion functions
+ 674:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  that follow. This value is set by default by the reference and input range
+ 675:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  settings. It should only be used to further calibrate the ADC with a known
+ 676:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  input or if the ADC is using an external reference.
+ 677:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 678:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 679:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16  adcGain  counts per volt
+ 680:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 681:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 682:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 683:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 684:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 685:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_countsPer10Volt variable modified. This variable is used
+ 686:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  for gain calibration purpose.
+ 687:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 688:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 689:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_SetGain(int16 adcGain)
+ 690:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 783              		.loc 1 690 0
+ 784              		.cfi_startproc
+ 785              		@ args = 0, pretend = 0, frame = 8
+ 786              		@ frame_needed = 1, uses_anonymous_args = 0
+ 787              		@ link register save eliminated.
+ 788 0000 80B4     		push	{r7}
+ 789              		.cfi_def_cfa_offset 4
+ 790              		.cfi_offset 7, -4
+ 791 0002 83B0     		sub	sp, sp, #12
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 27
+
+
+ 792              		.cfi_def_cfa_offset 16
+ 793 0004 00AF     		add	r7, sp, #0
+ 794              		.cfi_def_cfa_register 7
+ 795 0006 0346     		mov	r3, r0
+ 796 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 691:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_countsPer10Volt = (int32)adcGain * 10;
+ 797              		.loc 1 691 0
+ 798 000a B7F90620 		ldrsh	r2, [r7, #6]
+ 799 000e 1346     		mov	r3, r2
+ 800 0010 9B00     		lsls	r3, r3, #2
+ 801 0012 1344     		add	r3, r3, r2
+ 802 0014 5B00     		lsls	r3, r3, #1
+ 803 0016 1A46     		mov	r2, r3
+ 804 0018 034B     		ldr	r3, .L55
+ 805 001a 1A60     		str	r2, [r3]
+ 692:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 806              		.loc 1 692 0
+ 807 001c 0C37     		adds	r7, r7, #12
+ 808 001e BD46     		mov	sp, r7
+ 809              		@ sp needed
+ 810 0020 5DF8047B 		ldr	r7, [sp], #4
+ 811 0024 7047     		bx	lr
+ 812              	.L56:
+ 813 0026 00BF     		.align	2
+ 814              	.L55:
+ 815 0028 00000000 		.word	ADC_TURBIDO_countsPer10Volt
+ 816              		.cfi_endproc
+ 817              	.LFE11:
+ 818              		.size	ADC_TURBIDO_SetGain, .-ADC_TURBIDO_SetGain
+ 819              		.section	.text.ADC_TURBIDO_SetScaledGain,"ax",%progbits
+ 820              		.align	2
+ 821              		.global	ADC_TURBIDO_SetScaledGain
+ 822              		.thumb
+ 823              		.thumb_func
+ 824              		.type	ADC_TURBIDO_SetScaledGain, %function
+ 825              	ADC_TURBIDO_SetScaledGain:
+ 826              	.LFB12:
+ 693:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 694:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 695:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 696:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_SetGainPer10Volt
+ 697:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 698:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 699:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 700:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Sets the ADC gain in counts per 10 volt for the voltage conversion functions
+ 701:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  that follow. This value is set by default by the reference and input range
+ 702:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  settings. It should only be used to further calibrate the ADC with a known
+ 703:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  input or if the ADC is using an external reference.
+ 704:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 705:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 706:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16  adcGain  counts per 10 volt
+ 707:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 708:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 709:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  None.
+ 710:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 711:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 712:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_countsPer10Volt variable modified. This variable is used
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 28
+
+
+ 713:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  for gain calibration purpose.
+ 714:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 715:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 716:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** void ADC_TURBIDO_SetScaledGain(int32 adcGain)
+ 717:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 827              		.loc 1 717 0
+ 828              		.cfi_startproc
+ 829              		@ args = 0, pretend = 0, frame = 8
+ 830              		@ frame_needed = 1, uses_anonymous_args = 0
+ 831              		@ link register save eliminated.
+ 832 0000 80B4     		push	{r7}
+ 833              		.cfi_def_cfa_offset 4
+ 834              		.cfi_offset 7, -4
+ 835 0002 83B0     		sub	sp, sp, #12
+ 836              		.cfi_def_cfa_offset 16
+ 837 0004 00AF     		add	r7, sp, #0
+ 838              		.cfi_def_cfa_register 7
+ 839 0006 7860     		str	r0, [r7, #4]
+ 718:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     ADC_TURBIDO_countsPer10Volt = adcGain;
+ 840              		.loc 1 718 0
+ 841 0008 034B     		ldr	r3, .L58
+ 842 000a 7A68     		ldr	r2, [r7, #4]
+ 843 000c 1A60     		str	r2, [r3]
+ 719:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 844              		.loc 1 719 0
+ 845 000e 0C37     		adds	r7, r7, #12
+ 846 0010 BD46     		mov	sp, r7
+ 847              		@ sp needed
+ 848 0012 5DF8047B 		ldr	r7, [sp], #4
+ 849 0016 7047     		bx	lr
+ 850              	.L59:
+ 851              		.align	2
+ 852              	.L58:
+ 853 0018 00000000 		.word	ADC_TURBIDO_countsPer10Volt
+ 854              		.cfi_endproc
+ 855              	.LFE12:
+ 856              		.size	ADC_TURBIDO_SetScaledGain, .-ADC_TURBIDO_SetScaledGain
+ 857              		.section	.text.ADC_TURBIDO_CountsTo_mVolts,"ax",%progbits
+ 858              		.align	2
+ 859              		.global	ADC_TURBIDO_CountsTo_mVolts
+ 860              		.thumb
+ 861              		.thumb_func
+ 862              		.type	ADC_TURBIDO_CountsTo_mVolts, %function
+ 863              	ADC_TURBIDO_CountsTo_mVolts:
+ 864              	.LFB13:
+ 720:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 721:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 722:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 723:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_CountsTo_mVolts
+ 724:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 725:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 726:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 727:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Converts the ADC output to millivolts as a 16-bit integer.
+ 728:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 729:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 730:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16 adcCounts:  Result from the ADC conversion
+ 731:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 29
+
+
+ 732:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 733:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16 Result in mVolts
+ 734:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 735:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 736:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_offset variable used.
+ 737:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_countsPer10Volt variable used.
+ 738:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 739:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 740:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** int16 ADC_TURBIDO_CountsTo_mVolts(int16 adcCounts)
+ 741:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 865              		.loc 1 741 0
+ 866              		.cfi_startproc
+ 867              		@ args = 0, pretend = 0, frame = 16
+ 868              		@ frame_needed = 1, uses_anonymous_args = 0
+ 869              		@ link register save eliminated.
+ 870 0000 80B4     		push	{r7}
+ 871              		.cfi_def_cfa_offset 4
+ 872              		.cfi_offset 7, -4
+ 873 0002 85B0     		sub	sp, sp, #20
+ 874              		.cfi_def_cfa_offset 24
+ 875 0004 00AF     		add	r7, sp, #0
+ 876              		.cfi_def_cfa_register 7
+ 877 0006 0346     		mov	r3, r0
+ 878 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 742:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     int16 mVolts;
+ 743:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     int32 countsPer10Volt;
+ 744:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 745:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     if(ADC_TURBIDO_countsPerVolt != 0)
+ 879              		.loc 1 745 0
+ 880 000a 1D4B     		ldr	r3, .L66
+ 881 000c 1B88     		ldrh	r3, [r3]	@ movhi
+ 882 000e 9BB2     		uxth	r3, r3
+ 883 0010 002B     		cmp	r3, #0
+ 884 0012 09D0     		beq	.L61
+ 746:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {   /* Support obsolete method */
+ 747:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         countsPer10Volt = (int32)ADC_TURBIDO_countsPerVolt * 10;
+ 885              		.loc 1 747 0
+ 886 0014 1A4B     		ldr	r3, .L66
+ 887 0016 1B88     		ldrh	r3, [r3]	@ movhi
+ 888 0018 9BB2     		uxth	r3, r3
+ 889 001a 1AB2     		sxth	r2, r3
+ 890 001c 1346     		mov	r3, r2
+ 891 001e 9B00     		lsls	r3, r3, #2
+ 892 0020 1344     		add	r3, r3, r2
+ 893 0022 5B00     		lsls	r3, r3, #1
+ 894 0024 FB60     		str	r3, [r7, #12]
+ 895 0026 02E0     		b	.L62
+ 896              	.L61:
+ 748:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 749:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     else
+ 750:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 751:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         countsPer10Volt = ADC_TURBIDO_countsPer10Volt;
+ 897              		.loc 1 751 0
+ 898 0028 164B     		ldr	r3, .L66+4
+ 899 002a 1B68     		ldr	r3, [r3]
+ 900 002c FB60     		str	r3, [r7, #12]
+ 901              	.L62:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 30
+
+
+ 752:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 753:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 754:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Subtract ADC offset */
+ 755:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     adcCounts -= ADC_TURBIDO_offset;
+ 902              		.loc 1 755 0
+ 903 002e FA88     		ldrh	r2, [r7, #6]
+ 904 0030 154B     		ldr	r3, .L66+8
+ 905 0032 1B88     		ldrh	r3, [r3]	@ movhi
+ 906 0034 9BB2     		uxth	r3, r3
+ 907 0036 9BB2     		uxth	r3, r3
+ 908 0038 D31A     		subs	r3, r2, r3
+ 909 003a 9BB2     		uxth	r3, r3
+ 910 003c FB80     		strh	r3, [r7, #6]	@ movhi
+ 756:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Convert to millivolts with rounding */
+ 757:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     mVolts = (int16)( (( (int32)adcCounts * ADC_TURBIDO_10MV_COUNTS ) + ( (adcCounts > 0) ?
+ 911              		.loc 1 757 0
+ 912 003e B7F90630 		ldrsh	r3, [r7, #6]
+ 913 0042 42F21072 		movw	r2, #10000
+ 914 0046 02FB03F2 		mul	r2, r2, r3
+ 758:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****                        (countsPer10Volt / 2) : (-(countsPer10Volt / 2)) )) / countsPer10Volt);
+ 915              		.loc 1 758 0
+ 916 004a B7F90630 		ldrsh	r3, [r7, #6]
+ 917 004e 002B     		cmp	r3, #0
+ 918 0050 04DD     		ble	.L63
+ 919              		.loc 1 758 0 is_stmt 0 discriminator 1
+ 920 0052 FB68     		ldr	r3, [r7, #12]
+ 921 0054 D90F     		lsrs	r1, r3, #31
+ 922 0056 0B44     		add	r3, r3, r1
+ 923 0058 5B10     		asrs	r3, r3, #1
+ 924 005a 04E0     		b	.L64
+ 925              	.L63:
+ 926              		.loc 1 758 0 discriminator 2
+ 927 005c FB68     		ldr	r3, [r7, #12]
+ 928 005e D90F     		lsrs	r1, r3, #31
+ 929 0060 0B44     		add	r3, r3, r1
+ 930 0062 5B10     		asrs	r3, r3, #1
+ 931 0064 5B42     		negs	r3, r3
+ 932              	.L64:
+ 757:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     mVolts = (int16)( (( (int32)adcCounts * ADC_TURBIDO_10MV_COUNTS ) + ( (adcCounts > 0) ?
+ 933              		.loc 1 757 0 is_stmt 1
+ 934 0066 1A44     		add	r2, r2, r3
+ 935              		.loc 1 758 0
+ 936 0068 FB68     		ldr	r3, [r7, #12]
+ 937 006a 92FBF3F3 		sdiv	r3, r2, r3
+ 757:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     mVolts = (int16)( (( (int32)adcCounts * ADC_TURBIDO_10MV_COUNTS ) + ( (adcCounts > 0) ?
+ 938              		.loc 1 757 0
+ 939 006e 7B81     		strh	r3, [r7, #10]	@ movhi
+ 759:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 760:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     return( mVolts );
+ 940              		.loc 1 760 0
+ 941 0070 7B89     		ldrh	r3, [r7, #10]
+ 942 0072 1BB2     		sxth	r3, r3
+ 761:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 943              		.loc 1 761 0
+ 944 0074 1846     		mov	r0, r3
+ 945 0076 1437     		adds	r7, r7, #20
+ 946 0078 BD46     		mov	sp, r7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 31
+
+
+ 947              		@ sp needed
+ 948 007a 5DF8047B 		ldr	r7, [sp], #4
+ 949 007e 7047     		bx	lr
+ 950              	.L67:
+ 951              		.align	2
+ 952              	.L66:
+ 953 0080 00000000 		.word	ADC_TURBIDO_countsPerVolt
+ 954 0084 00000000 		.word	ADC_TURBIDO_countsPer10Volt
+ 955 0088 00000000 		.word	ADC_TURBIDO_offset
+ 956              		.cfi_endproc
+ 957              	.LFE13:
+ 958              		.size	ADC_TURBIDO_CountsTo_mVolts, .-ADC_TURBIDO_CountsTo_mVolts
+ 959              		.global	__aeabi_ldivmod
+ 960              		.section	.text.ADC_TURBIDO_CountsTo_uVolts,"ax",%progbits
+ 961              		.align	2
+ 962              		.global	ADC_TURBIDO_CountsTo_uVolts
+ 963              		.thumb
+ 964              		.thumb_func
+ 965              		.type	ADC_TURBIDO_CountsTo_uVolts, %function
+ 966              	ADC_TURBIDO_CountsTo_uVolts:
+ 967              	.LFB14:
+ 762:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 763:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 764:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 765:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_CountsTo_uVolts
+ 766:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 767:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 768:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 769:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Converts the ADC output to microvolts as a 32-bit integer.
+ 770:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 771:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 772:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16 adcCounts: Result from the ADC conversion
+ 773:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 774:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 775:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int32 Result in micro Volts
+ 776:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 777:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 778:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_offset variable used.
+ 779:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_countsPer10Volt used to convert ADC counts to uVolts.
+ 780:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 781:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 782:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** int32 ADC_TURBIDO_CountsTo_uVolts(int16 adcCounts)
+ 783:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 968              		.loc 1 783 0
+ 969              		.cfi_startproc
+ 970              		@ args = 0, pretend = 0, frame = 24
+ 971              		@ frame_needed = 1, uses_anonymous_args = 0
+ 972 0000 B0B5     		push	{r4, r5, r7, lr}
+ 973              		.cfi_def_cfa_offset 16
+ 974              		.cfi_offset 4, -16
+ 975              		.cfi_offset 5, -12
+ 976              		.cfi_offset 7, -8
+ 977              		.cfi_offset 14, -4
+ 978 0002 86B0     		sub	sp, sp, #24
+ 979              		.cfi_def_cfa_offset 40
+ 980 0004 00AF     		add	r7, sp, #0
+ 981              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 32
+
+
+ 982 0006 0346     		mov	r3, r0
+ 983 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 784:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 785:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     int64 uVolts;
+ 786:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     int32 countsPer10Volt;
+ 787:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 788:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     if(ADC_TURBIDO_countsPerVolt != 0)
+ 984              		.loc 1 788 0
+ 985 000a 1E4B     		ldr	r3, .L72
+ 986 000c 1B88     		ldrh	r3, [r3]	@ movhi
+ 987 000e 9BB2     		uxth	r3, r3
+ 988 0010 002B     		cmp	r3, #0
+ 989 0012 09D0     		beq	.L69
+ 789:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {   /* Support obsolete method */
+ 790:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         countsPer10Volt = (int32)ADC_TURBIDO_countsPerVolt * 10;
+ 990              		.loc 1 790 0
+ 991 0014 1B4B     		ldr	r3, .L72
+ 992 0016 1B88     		ldrh	r3, [r3]	@ movhi
+ 993 0018 9BB2     		uxth	r3, r3
+ 994 001a 1AB2     		sxth	r2, r3
+ 995 001c 1346     		mov	r3, r2
+ 996 001e 9B00     		lsls	r3, r3, #2
+ 997 0020 1344     		add	r3, r3, r2
+ 998 0022 5B00     		lsls	r3, r3, #1
+ 999 0024 7B61     		str	r3, [r7, #20]
+ 1000 0026 02E0     		b	.L70
+ 1001              	.L69:
+ 791:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 792:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     else
+ 793:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 794:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         countsPer10Volt = ADC_TURBIDO_countsPer10Volt;
+ 1002              		.loc 1 794 0
+ 1003 0028 174B     		ldr	r3, .L72+4
+ 1004 002a 1B68     		ldr	r3, [r3]
+ 1005 002c 7B61     		str	r3, [r7, #20]
+ 1006              	.L70:
+ 795:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 796:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 797:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Subtract ADC offset */
+ 798:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     adcCounts -= ADC_TURBIDO_offset;
+ 1007              		.loc 1 798 0
+ 1008 002e FA88     		ldrh	r2, [r7, #6]
+ 1009 0030 164B     		ldr	r3, .L72+8
+ 1010 0032 1B88     		ldrh	r3, [r3]	@ movhi
+ 1011 0034 9BB2     		uxth	r3, r3
+ 1012 0036 9BB2     		uxth	r3, r3
+ 1013 0038 D31A     		subs	r3, r2, r3
+ 1014 003a 9BB2     		uxth	r3, r3
+ 1015 003c FB80     		strh	r3, [r7, #6]	@ movhi
+ 799:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* To convert adcCounts to microVolts it is required to be multiplied
+ 800:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     *  on 10 million and later divide on gain in counts per 10V.
+ 801:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     */
+ 802:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     uVolts = (( (int64)adcCounts * ADC_TURBIDO_10UV_COUNTS ) / countsPer10Volt);
+ 1016              		.loc 1 802 0
+ 1017 003e B7F90620 		ldrsh	r2, [r7, #6]
+ 1018 0042 4FEAE273 		asr	r3, r2, #31
+ 1019 0046 1249     		ldr	r1, .L72+12
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 33
+
+
+ 1020 0048 01FB03F0 		mul	r0, r1, r3
+ 1021 004c 0021     		movs	r1, #0
+ 1022 004e 01FB02F1 		mul	r1, r1, r2
+ 1023 0052 0144     		add	r1, r1, r0
+ 1024 0054 0E48     		ldr	r0, .L72+12
+ 1025 0056 A2FB0023 		umull	r2, r3, r2, r0
+ 1026 005a 1944     		add	r1, r1, r3
+ 1027 005c 0B46     		mov	r3, r1
+ 1028 005e 7969     		ldr	r1, [r7, #20]
+ 1029 0060 0C46     		mov	r4, r1
+ 1030 0062 4FEAE475 		asr	r5, r4, #31
+ 1031 0066 1046     		mov	r0, r2
+ 1032 0068 1946     		mov	r1, r3
+ 1033 006a 2246     		mov	r2, r4
+ 1034 006c 2B46     		mov	r3, r5
+ 1035 006e FFF7FEFF 		bl	__aeabi_ldivmod
+ 1036 0072 0246     		mov	r2, r0
+ 1037 0074 0B46     		mov	r3, r1
+ 1038 0076 C7E90223 		strd	r2, [r7, #8]
+ 803:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 804:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     return( uVolts );
+ 1039              		.loc 1 804 0
+ 1040 007a BB68     		ldr	r3, [r7, #8]
+ 805:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 1041              		.loc 1 805 0
+ 1042 007c 1846     		mov	r0, r3
+ 1043 007e 1837     		adds	r7, r7, #24
+ 1044 0080 BD46     		mov	sp, r7
+ 1045              		@ sp needed
+ 1046 0082 B0BD     		pop	{r4, r5, r7, pc}
+ 1047              	.L73:
+ 1048              		.align	2
+ 1049              	.L72:
+ 1050 0084 00000000 		.word	ADC_TURBIDO_countsPerVolt
+ 1051 0088 00000000 		.word	ADC_TURBIDO_countsPer10Volt
+ 1052 008c 00000000 		.word	ADC_TURBIDO_offset
+ 1053 0090 80969800 		.word	10000000
+ 1054              		.cfi_endproc
+ 1055              	.LFE14:
+ 1056              		.size	ADC_TURBIDO_CountsTo_uVolts, .-ADC_TURBIDO_CountsTo_uVolts
+ 1057              		.global	__aeabi_i2f
+ 1058              		.global	__aeabi_fmul
+ 1059              		.global	__aeabi_fdiv
+ 1060              		.section	.text.ADC_TURBIDO_CountsTo_Volts,"ax",%progbits
+ 1061              		.align	2
+ 1062              		.global	ADC_TURBIDO_CountsTo_Volts
+ 1063              		.thumb
+ 1064              		.thumb_func
+ 1065              		.type	ADC_TURBIDO_CountsTo_Volts, %function
+ 1066              	ADC_TURBIDO_CountsTo_Volts:
+ 1067              	.LFB15:
+ 806:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 807:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 808:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** /*******************************************************************************
+ 809:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Function Name: ADC_TURBIDO_CountsTo_Volts
+ 810:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** ********************************************************************************
+ 811:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 34
+
+
+ 812:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Summary:
+ 813:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  Converts the ADC output to volts as a floating-point number.
+ 814:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 815:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Parameters:
+ 816:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  int16 adcCounts: Result from the ADC conversion
+ 817:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 818:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Return:
+ 819:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  float Result in Volts
+ 820:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 821:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** * Global Variables:
+ 822:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_offset variable used.
+ 823:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *  ADC_TURBIDO_countsPer10Volt used to convert ADC counts to Volts.
+ 824:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *
+ 825:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** *******************************************************************************/
+ 826:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** float32 ADC_TURBIDO_CountsTo_Volts(int16 adcCounts)
+ 827:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** {
+ 1068              		.loc 1 827 0
+ 1069              		.cfi_startproc
+ 1070              		@ args = 0, pretend = 0, frame = 16
+ 1071              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1072 0000 90B5     		push	{r4, r7, lr}
+ 1073              		.cfi_def_cfa_offset 12
+ 1074              		.cfi_offset 4, -12
+ 1075              		.cfi_offset 7, -8
+ 1076              		.cfi_offset 14, -4
+ 1077 0002 85B0     		sub	sp, sp, #20
+ 1078              		.cfi_def_cfa_offset 32
+ 1079 0004 00AF     		add	r7, sp, #0
+ 1080              		.cfi_def_cfa_register 7
+ 1081 0006 0346     		mov	r3, r0
+ 1082 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 828:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     float32 volts;
+ 829:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     int32 countsPer10Volt;
+ 830:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 831:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     if(ADC_TURBIDO_countsPerVolt != 0)
+ 1083              		.loc 1 831 0
+ 1084 000a 1A4B     		ldr	r3, .L78
+ 1085 000c 1B88     		ldrh	r3, [r3]	@ movhi
+ 1086 000e 9BB2     		uxth	r3, r3
+ 1087 0010 002B     		cmp	r3, #0
+ 1088 0012 09D0     		beq	.L75
+ 832:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {   /* Support obsolete method */
+ 833:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         countsPer10Volt = (int32)ADC_TURBIDO_countsPerVolt * 10;
+ 1089              		.loc 1 833 0
+ 1090 0014 174B     		ldr	r3, .L78
+ 1091 0016 1B88     		ldrh	r3, [r3]	@ movhi
+ 1092 0018 9BB2     		uxth	r3, r3
+ 1093 001a 1AB2     		sxth	r2, r3
+ 1094 001c 1346     		mov	r3, r2
+ 1095 001e 9B00     		lsls	r3, r3, #2
+ 1096 0020 1344     		add	r3, r3, r2
+ 1097 0022 5B00     		lsls	r3, r3, #1
+ 1098 0024 FB60     		str	r3, [r7, #12]
+ 1099 0026 02E0     		b	.L76
+ 1100              	.L75:
+ 834:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 835:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     else
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 35
+
+
+ 836:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     {
+ 837:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****         countsPer10Volt = ADC_TURBIDO_countsPer10Volt;
+ 1101              		.loc 1 837 0
+ 1102 0028 134B     		ldr	r3, .L78+4
+ 1103 002a 1B68     		ldr	r3, [r3]
+ 1104 002c FB60     		str	r3, [r7, #12]
+ 1105              	.L76:
+ 838:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     }
+ 839:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 840:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     /* Subtract ADC offset */
+ 841:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     adcCounts -= ADC_TURBIDO_offset;
+ 1106              		.loc 1 841 0
+ 1107 002e FA88     		ldrh	r2, [r7, #6]
+ 1108 0030 124B     		ldr	r3, .L78+8
+ 1109 0032 1B88     		ldrh	r3, [r3]	@ movhi
+ 1110 0034 9BB2     		uxth	r3, r3
+ 1111 0036 9BB2     		uxth	r3, r3
+ 1112 0038 D31A     		subs	r3, r2, r3
+ 1113 003a 9BB2     		uxth	r3, r3
+ 1114 003c FB80     		strh	r3, [r7, #6]	@ movhi
+ 842:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 843:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     volts = ((float32)adcCounts * ADC_TURBIDO_10V_COUNTS) / (float32)countsPer10Volt;
+ 1115              		.loc 1 843 0
+ 1116 003e B7F90630 		ldrsh	r3, [r7, #6]
+ 1117 0042 1846     		mov	r0, r3
+ 1118 0044 FFF7FEFF 		bl	__aeabi_i2f
+ 1119 0048 0346     		mov	r3, r0
+ 1120 004a 1846     		mov	r0, r3
+ 1121 004c 0C49     		ldr	r1, .L78+12
+ 1122 004e FFF7FEFF 		bl	__aeabi_fmul
+ 1123 0052 0346     		mov	r3, r0
+ 1124 0054 1C46     		mov	r4, r3
+ 1125 0056 F868     		ldr	r0, [r7, #12]
+ 1126 0058 FFF7FEFF 		bl	__aeabi_i2f
+ 1127 005c 0346     		mov	r3, r0
+ 1128 005e 2046     		mov	r0, r4
+ 1129 0060 1946     		mov	r1, r3
+ 1130 0062 FFF7FEFF 		bl	__aeabi_fdiv
+ 1131 0066 0346     		mov	r3, r0
+ 1132 0068 BB60     		str	r3, [r7, #8]	@ float
+ 844:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** 
+ 845:.\Generated_Source\PSoC5/ADC_TURBIDO.c ****     return( volts );
+ 1133              		.loc 1 845 0
+ 1134 006a BB68     		ldr	r3, [r7, #8]	@ float
+ 846:.\Generated_Source\PSoC5/ADC_TURBIDO.c **** }
+ 1135              		.loc 1 846 0
+ 1136 006c 1846     		mov	r0, r3
+ 1137 006e 1437     		adds	r7, r7, #20
+ 1138 0070 BD46     		mov	sp, r7
+ 1139              		@ sp needed
+ 1140 0072 90BD     		pop	{r4, r7, pc}
+ 1141              	.L79:
+ 1142              		.align	2
+ 1143              	.L78:
+ 1144 0074 00000000 		.word	ADC_TURBIDO_countsPerVolt
+ 1145 0078 00000000 		.word	ADC_TURBIDO_countsPer10Volt
+ 1146 007c 00000000 		.word	ADC_TURBIDO_offset
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 36
+
+
+ 1147 0080 00002041 		.word	1092616192
+ 1148              		.cfi_endproc
+ 1149              	.LFE15:
+ 1150              		.size	ADC_TURBIDO_CountsTo_Volts, .-ADC_TURBIDO_CountsTo_Volts
+ 1151              		.text
+ 1152              	.Letext0:
+ 1153              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 1154              		.section	.debug_info,"",%progbits
+ 1155              	.Ldebug_info0:
+ 1156 0000 48040000 		.4byte	0x448
+ 1157 0004 0400     		.2byte	0x4
+ 1158 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1159 000a 04       		.byte	0x4
+ 1160 000b 01       		.uleb128 0x1
+ 1161 000c 76020000 		.4byte	.LASF57
+ 1162 0010 01       		.byte	0x1
+ 1163 0011 0E010000 		.4byte	.LASF58
+ 1164 0015 CF000000 		.4byte	.LASF59
+ 1165 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1166 001d 00000000 		.4byte	0
+ 1167 0021 00000000 		.4byte	.Ldebug_line0
+ 1168 0025 02       		.uleb128 0x2
+ 1169 0026 04       		.byte	0x4
+ 1170 0027 05       		.byte	0x5
+ 1171 0028 696E7400 		.ascii	"int\000"
+ 1172 002c 03       		.uleb128 0x3
+ 1173 002d 04       		.byte	0x4
+ 1174 002e 07       		.byte	0x7
+ 1175 002f C8010000 		.4byte	.LASF0
+ 1176 0033 03       		.uleb128 0x3
+ 1177 0034 01       		.byte	0x1
+ 1178 0035 06       		.byte	0x6
+ 1179 0036 8B000000 		.4byte	.LASF1
+ 1180 003a 03       		.uleb128 0x3
+ 1181 003b 01       		.byte	0x1
+ 1182 003c 08       		.byte	0x8
+ 1183 003d 24030000 		.4byte	.LASF2
+ 1184 0041 03       		.uleb128 0x3
+ 1185 0042 02       		.byte	0x2
+ 1186 0043 05       		.byte	0x5
+ 1187 0044 32030000 		.4byte	.LASF3
+ 1188 0048 03       		.uleb128 0x3
+ 1189 0049 02       		.byte	0x2
+ 1190 004a 07       		.byte	0x7
+ 1191 004b 1A020000 		.4byte	.LASF4
+ 1192 004f 03       		.uleb128 0x3
+ 1193 0050 04       		.byte	0x4
+ 1194 0051 05       		.byte	0x5
+ 1195 0052 B3000000 		.4byte	.LASF5
+ 1196 0056 03       		.uleb128 0x3
+ 1197 0057 04       		.byte	0x4
+ 1198 0058 07       		.byte	0x7
+ 1199 0059 ED010000 		.4byte	.LASF6
+ 1200 005d 03       		.uleb128 0x3
+ 1201 005e 08       		.byte	0x8
+ 1202 005f 05       		.byte	0x5
+ 1203 0060 7D000000 		.4byte	.LASF7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 37
+
+
+ 1204 0064 03       		.uleb128 0x3
+ 1205 0065 08       		.byte	0x8
+ 1206 0066 07       		.byte	0x7
+ 1207 0067 32000000 		.4byte	.LASF8
+ 1208 006b 03       		.uleb128 0x3
+ 1209 006c 04       		.byte	0x4
+ 1210 006d 07       		.byte	0x7
+ 1211 006e 6D020000 		.4byte	.LASF9
+ 1212 0072 03       		.uleb128 0x3
+ 1213 0073 01       		.byte	0x1
+ 1214 0074 08       		.byte	0x8
+ 1215 0075 82030000 		.4byte	.LASF10
+ 1216 0079 04       		.uleb128 0x4
+ 1217 007a 35010000 		.4byte	.LASF11
+ 1218 007e 02       		.byte	0x2
+ 1219 007f A1       		.byte	0xa1
+ 1220 0080 3A000000 		.4byte	0x3a
+ 1221 0084 04       		.uleb128 0x4
+ 1222 0085 00000000 		.4byte	.LASF12
+ 1223 0089 02       		.byte	0x2
+ 1224 008a A2       		.byte	0xa2
+ 1225 008b 48000000 		.4byte	0x48
+ 1226 008f 04       		.uleb128 0x4
+ 1227 0090 57010000 		.4byte	.LASF13
+ 1228 0094 02       		.byte	0x2
+ 1229 0095 A3       		.byte	0xa3
+ 1230 0096 56000000 		.4byte	0x56
+ 1231 009a 04       		.uleb128 0x4
+ 1232 009b 2D020000 		.4byte	.LASF14
+ 1233 009f 02       		.byte	0x2
+ 1234 00a0 A4       		.byte	0xa4
+ 1235 00a1 33000000 		.4byte	0x33
+ 1236 00a5 04       		.uleb128 0x4
+ 1237 00a6 DC030000 		.4byte	.LASF15
+ 1238 00aa 02       		.byte	0x2
+ 1239 00ab A5       		.byte	0xa5
+ 1240 00ac 41000000 		.4byte	0x41
+ 1241 00b0 04       		.uleb128 0x4
+ 1242 00b1 97000000 		.4byte	.LASF16
+ 1243 00b5 02       		.byte	0x2
+ 1244 00b6 A6       		.byte	0xa6
+ 1245 00b7 4F000000 		.4byte	0x4f
+ 1246 00bb 04       		.uleb128 0x4
+ 1247 00bc 65020000 		.4byte	.LASF17
+ 1248 00c0 02       		.byte	0x2
+ 1249 00c1 A7       		.byte	0xa7
+ 1250 00c2 C6000000 		.4byte	0xc6
+ 1251 00c6 03       		.uleb128 0x3
+ 1252 00c7 04       		.byte	0x4
+ 1253 00c8 04       		.byte	0x4
+ 1254 00c9 13030000 		.4byte	.LASF18
+ 1255 00cd 03       		.uleb128 0x3
+ 1256 00ce 08       		.byte	0x8
+ 1257 00cf 04       		.byte	0x4
+ 1258 00d0 50010000 		.4byte	.LASF19
+ 1259 00d4 04       		.uleb128 0x4
+ 1260 00d5 F2020000 		.4byte	.LASF20
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 38
+
+
+ 1261 00d9 02       		.byte	0x2
+ 1262 00da AC       		.byte	0xac
+ 1263 00db 5D000000 		.4byte	0x5d
+ 1264 00df 05       		.uleb128 0x5
+ 1265 00e0 1F030000 		.4byte	.LASF21
+ 1266 00e4 02       		.byte	0x2
+ 1267 00e5 4B01     		.2byte	0x14b
+ 1268 00e7 EB000000 		.4byte	0xeb
+ 1269 00eb 06       		.uleb128 0x6
+ 1270 00ec 79000000 		.4byte	0x79
+ 1271 00f0 05       		.uleb128 0x5
+ 1272 00f1 08010000 		.4byte	.LASF22
+ 1273 00f5 02       		.byte	0x2
+ 1274 00f6 4C01     		.2byte	0x14c
+ 1275 00f8 FC000000 		.4byte	0xfc
+ 1276 00fc 06       		.uleb128 0x6
+ 1277 00fd 84000000 		.4byte	0x84
+ 1278 0101 05       		.uleb128 0x5
+ 1279 0102 4B020000 		.4byte	.LASF23
+ 1280 0106 02       		.byte	0x2
+ 1281 0107 4D01     		.2byte	0x14d
+ 1282 0109 0D010000 		.4byte	0x10d
+ 1283 010d 06       		.uleb128 0x6
+ 1284 010e 8F000000 		.4byte	0x8f
+ 1285 0112 07       		.uleb128 0x7
+ 1286 0113 05040000 		.4byte	.LASF24
+ 1287 0117 01       		.byte	0x1
+ 1288 0118 4A       		.byte	0x4a
+ 1289 0119 00000000 		.4byte	.LFB0
+ 1290 011d 20000000 		.4byte	.LFE0-.LFB0
+ 1291 0121 01       		.uleb128 0x1
+ 1292 0122 9C       		.byte	0x9c
+ 1293 0123 07       		.uleb128 0x7
+ 1294 0124 71030000 		.4byte	.LASF25
+ 1295 0128 01       		.byte	0x1
+ 1296 0129 6A       		.byte	0x6a
+ 1297 012a 00000000 		.4byte	.LFB1
+ 1298 012e 44000000 		.4byte	.LFE1-.LFB1
+ 1299 0132 01       		.uleb128 0x1
+ 1300 0133 9C       		.byte	0x9c
+ 1301 0134 08       		.uleb128 0x8
+ 1302 0135 BC000000 		.4byte	.LASF28
+ 1303 0139 01       		.byte	0x1
+ 1304 013a 8F       		.byte	0x8f
+ 1305 013b 00000000 		.4byte	.LFB2
+ 1306 013f F4000000 		.4byte	.LFE2-.LFB2
+ 1307 0143 01       		.uleb128 0x1
+ 1308 0144 9C       		.byte	0x9c
+ 1309 0145 66010000 		.4byte	0x166
+ 1310 0149 09       		.uleb128 0x9
+ 1311 014a FE030000 		.4byte	.LASF26
+ 1312 014e 01       		.byte	0x1
+ 1313 014f 91       		.byte	0x91
+ 1314 0150 79000000 		.4byte	0x79
+ 1315 0154 02       		.uleb128 0x2
+ 1316 0155 91       		.byte	0x91
+ 1317 0156 76       		.sleb128 -10
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 39
+
+
+ 1318 0157 09       		.uleb128 0x9
+ 1319 0158 C4030000 		.4byte	.LASF27
+ 1320 015c 01       		.byte	0x1
+ 1321 015d 92       		.byte	0x92
+ 1322 015e 79000000 		.4byte	0x79
+ 1323 0162 02       		.uleb128 0x2
+ 1324 0163 91       		.byte	0x91
+ 1325 0164 77       		.sleb128 -9
+ 1326 0165 00       		.byte	0
+ 1327 0166 08       		.uleb128 0x8
+ 1328 0167 DC010000 		.4byte	.LASF29
+ 1329 016b 01       		.byte	0x1
+ 1330 016c F5       		.byte	0xf5
+ 1331 016d 00000000 		.4byte	.LFB3
+ 1332 0171 80000000 		.4byte	.LFE3-.LFB3
+ 1333 0175 01       		.uleb128 0x1
+ 1334 0176 9C       		.byte	0x9c
+ 1335 0177 8A010000 		.4byte	0x18a
+ 1336 017b 09       		.uleb128 0x9
+ 1337 017c C4030000 		.4byte	.LASF27
+ 1338 0180 01       		.byte	0x1
+ 1339 0181 F7       		.byte	0xf7
+ 1340 0182 79000000 		.4byte	0x79
+ 1341 0186 02       		.uleb128 0x2
+ 1342 0187 91       		.byte	0x91
+ 1343 0188 77       		.sleb128 -9
+ 1344 0189 00       		.byte	0
+ 1345 018a 0A       		.uleb128 0xa
+ 1346 018b 3B010000 		.4byte	.LASF30
+ 1347 018f 01       		.byte	0x1
+ 1348 0190 1F01     		.2byte	0x11f
+ 1349 0192 00000000 		.4byte	.LFB4
+ 1350 0196 40000000 		.4byte	.LFE4-.LFB4
+ 1351 019a 01       		.uleb128 0x1
+ 1352 019b 9C       		.byte	0x9c
+ 1353 019c BF010000 		.4byte	0x1bf
+ 1354 01a0 0B       		.uleb128 0xb
+ 1355 01a1 19030000 		.4byte	.LASF32
+ 1356 01a5 01       		.byte	0x1
+ 1357 01a6 1F01     		.2byte	0x11f
+ 1358 01a8 79000000 		.4byte	0x79
+ 1359 01ac 02       		.uleb128 0x2
+ 1360 01ad 91       		.byte	0x91
+ 1361 01ae 6F       		.sleb128 -17
+ 1362 01af 0C       		.uleb128 0xc
+ 1363 01b0 FE030000 		.4byte	.LASF26
+ 1364 01b4 01       		.byte	0x1
+ 1365 01b5 2101     		.2byte	0x121
+ 1366 01b7 79000000 		.4byte	0x79
+ 1367 01bb 02       		.uleb128 0x2
+ 1368 01bc 91       		.byte	0x91
+ 1369 01bd 77       		.sleb128 -9
+ 1370 01be 00       		.byte	0
+ 1371 01bf 0D       		.uleb128 0xd
+ 1372 01c0 8A010000 		.4byte	.LASF31
+ 1373 01c4 01       		.byte	0x1
+ 1374 01c5 5101     		.2byte	0x151
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 40
+
+
+ 1375 01c7 00000000 		.4byte	.LFB5
+ 1376 01cb 50000000 		.4byte	.LFE5-.LFB5
+ 1377 01cf 01       		.uleb128 0x1
+ 1378 01d0 9C       		.byte	0x9c
+ 1379 01d1 F4010000 		.4byte	0x1f4
+ 1380 01d5 0B       		.uleb128 0xb
+ 1381 01d6 66030000 		.4byte	.LASF33
+ 1382 01da 01       		.byte	0x1
+ 1383 01db 5101     		.2byte	0x151
+ 1384 01dd 79000000 		.4byte	0x79
+ 1385 01e1 02       		.uleb128 0x2
+ 1386 01e2 91       		.byte	0x91
+ 1387 01e3 6F       		.sleb128 -17
+ 1388 01e4 0C       		.uleb128 0xc
+ 1389 01e5 FE030000 		.4byte	.LASF26
+ 1390 01e9 01       		.byte	0x1
+ 1391 01ea 5301     		.2byte	0x153
+ 1392 01ec 79000000 		.4byte	0x79
+ 1393 01f0 02       		.uleb128 0x2
+ 1394 01f1 91       		.byte	0x91
+ 1395 01f2 77       		.sleb128 -9
+ 1396 01f3 00       		.byte	0
+ 1397 01f4 0E       		.uleb128 0xe
+ 1398 01f5 6E010000 		.4byte	.LASF36
+ 1399 01f9 01       		.byte	0x1
+ 1400 01fa D801     		.2byte	0x1d8
+ 1401 01fc 79000000 		.4byte	0x79
+ 1402 0200 00000000 		.4byte	.LFB6
+ 1403 0204 40000000 		.4byte	.LFE6-.LFB6
+ 1404 0208 01       		.uleb128 0x1
+ 1405 0209 9C       		.byte	0x9c
+ 1406 020a 2D020000 		.4byte	0x22d
+ 1407 020e 0B       		.uleb128 0xb
+ 1408 020f C0010000 		.4byte	.LASF34
+ 1409 0213 01       		.byte	0x1
+ 1410 0214 D801     		.2byte	0x1d8
+ 1411 0216 79000000 		.4byte	0x79
+ 1412 021a 02       		.uleb128 0x2
+ 1413 021b 91       		.byte	0x91
+ 1414 021c 6F       		.sleb128 -17
+ 1415 021d 0C       		.uleb128 0xc
+ 1416 021e D5030000 		.4byte	.LASF35
+ 1417 0222 01       		.byte	0x1
+ 1418 0223 DA01     		.2byte	0x1da
+ 1419 0225 79000000 		.4byte	0x79
+ 1420 0229 02       		.uleb128 0x2
+ 1421 022a 91       		.byte	0x91
+ 1422 022b 77       		.sleb128 -9
+ 1423 022c 00       		.byte	0
+ 1424 022d 0F       		.uleb128 0xf
+ 1425 022e 3C030000 		.4byte	.LASF60
+ 1426 0232 01       		.byte	0x1
+ 1427 0233 0502     		.2byte	0x205
+ 1428 0235 9A000000 		.4byte	0x9a
+ 1429 0239 00000000 		.4byte	.LFB7
+ 1430 023d 2C000000 		.4byte	.LFE7-.LFB7
+ 1431 0241 01       		.uleb128 0x1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 41
+
+
+ 1432 0242 9C       		.byte	0x9c
+ 1433 0243 10       		.uleb128 0x10
+ 1434 0244 A2030000 		.4byte	.LASF37
+ 1435 0248 01       		.byte	0x1
+ 1436 0249 2302     		.2byte	0x223
+ 1437 024b A5000000 		.4byte	0xa5
+ 1438 024f 00000000 		.4byte	.LFB8
+ 1439 0253 34000000 		.4byte	.LFE8-.LFB8
+ 1440 0257 01       		.uleb128 0x1
+ 1441 0258 9C       		.byte	0x9c
+ 1442 0259 6D020000 		.4byte	0x26d
+ 1443 025d 11       		.uleb128 0x11
+ 1444 025e 72657300 		.ascii	"res\000"
+ 1445 0262 01       		.byte	0x1
+ 1446 0263 2502     		.2byte	0x225
+ 1447 0265 84000000 		.4byte	0x84
+ 1448 0269 02       		.uleb128 0x2
+ 1449 026a 91       		.byte	0x91
+ 1450 026b 76       		.sleb128 -10
+ 1451 026c 00       		.byte	0
+ 1452 026d 0A       		.uleb128 0xa
+ 1453 026e 9D000000 		.4byte	.LASF38
+ 1454 0272 01       		.byte	0x1
+ 1455 0273 4602     		.2byte	0x246
+ 1456 0275 00000000 		.4byte	.LFB9
+ 1457 0279 20000000 		.4byte	.LFE9-.LFB9
+ 1458 027d 01       		.uleb128 0x1
+ 1459 027e 9C       		.byte	0x9c
+ 1460 027f 93020000 		.4byte	0x293
+ 1461 0283 0B       		.uleb128 0xb
+ 1462 0284 9B030000 		.4byte	.LASF39
+ 1463 0288 01       		.byte	0x1
+ 1464 0289 4602     		.2byte	0x246
+ 1465 028b A5000000 		.4byte	0xa5
+ 1466 028f 02       		.uleb128 0x2
+ 1467 0290 91       		.byte	0x91
+ 1468 0291 76       		.sleb128 -10
+ 1469 0292 00       		.byte	0
+ 1470 0293 12       		.uleb128 0x12
+ 1471 0294 05020000 		.4byte	.LASF61
+ 1472 0298 01       		.byte	0x1
+ 1473 0299 6002     		.2byte	0x260
+ 1474 029b 00000000 		.4byte	.LFB10
+ 1475 029f 7C000000 		.4byte	.LFE10-.LFB10
+ 1476 02a3 01       		.uleb128 0x1
+ 1477 02a4 9C       		.byte	0x9c
+ 1478 02a5 C8020000 		.4byte	0x2c8
+ 1479 02a9 0B       		.uleb128 0xb
+ 1480 02aa 66030000 		.4byte	.LASF33
+ 1481 02ae 01       		.byte	0x1
+ 1482 02af 6002     		.2byte	0x260
+ 1483 02b1 79000000 		.4byte	0x79
+ 1484 02b5 02       		.uleb128 0x2
+ 1485 02b6 91       		.byte	0x91
+ 1486 02b7 6F       		.sleb128 -17
+ 1487 02b8 0C       		.uleb128 0xc
+ 1488 02b9 0F000000 		.4byte	.LASF40
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 42
+
+
+ 1489 02bd 01       		.byte	0x1
+ 1490 02be 6202     		.2byte	0x262
+ 1491 02c0 B0000000 		.4byte	0xb0
+ 1492 02c4 02       		.uleb128 0x2
+ 1493 02c5 91       		.byte	0x91
+ 1494 02c6 74       		.sleb128 -12
+ 1495 02c7 00       		.byte	0
+ 1496 02c8 0A       		.uleb128 0xa
+ 1497 02c9 87030000 		.4byte	.LASF41
+ 1498 02cd 01       		.byte	0x1
+ 1499 02ce B102     		.2byte	0x2b1
+ 1500 02d0 00000000 		.4byte	.LFB11
+ 1501 02d4 2C000000 		.4byte	.LFE11-.LFB11
+ 1502 02d8 01       		.uleb128 0x1
+ 1503 02d9 9C       		.byte	0x9c
+ 1504 02da EE020000 		.4byte	0x2ee
+ 1505 02de 0B       		.uleb128 0xb
+ 1506 02df 07000000 		.4byte	.LASF42
+ 1507 02e3 01       		.byte	0x1
+ 1508 02e4 B102     		.2byte	0x2b1
+ 1509 02e6 A5000000 		.4byte	0xa5
+ 1510 02ea 02       		.uleb128 0x2
+ 1511 02eb 91       		.byte	0x91
+ 1512 02ec 76       		.sleb128 -10
+ 1513 02ed 00       		.byte	0
+ 1514 02ee 0A       		.uleb128 0xa
+ 1515 02ef 63000000 		.4byte	.LASF43
+ 1516 02f3 01       		.byte	0x1
+ 1517 02f4 CC02     		.2byte	0x2cc
+ 1518 02f6 00000000 		.4byte	.LFB12
+ 1519 02fa 1C000000 		.4byte	.LFE12-.LFB12
+ 1520 02fe 01       		.uleb128 0x1
+ 1521 02ff 9C       		.byte	0x9c
+ 1522 0300 14030000 		.4byte	0x314
+ 1523 0304 0B       		.uleb128 0xb
+ 1524 0305 07000000 		.4byte	.LASF42
+ 1525 0309 01       		.byte	0x1
+ 1526 030a CC02     		.2byte	0x2cc
+ 1527 030c B0000000 		.4byte	0xb0
+ 1528 0310 02       		.uleb128 0x2
+ 1529 0311 91       		.byte	0x91
+ 1530 0312 74       		.sleb128 -12
+ 1531 0313 00       		.byte	0
+ 1532 0314 10       		.uleb128 0x10
+ 1533 0315 16000000 		.4byte	.LASF44
+ 1534 0319 01       		.byte	0x1
+ 1535 031a E402     		.2byte	0x2e4
+ 1536 031c A5000000 		.4byte	0xa5
+ 1537 0320 00000000 		.4byte	.LFB13
+ 1538 0324 8C000000 		.4byte	.LFE13-.LFB13
+ 1539 0328 01       		.uleb128 0x1
+ 1540 0329 9C       		.byte	0x9c
+ 1541 032a 5C030000 		.4byte	0x35c
+ 1542 032e 0B       		.uleb128 0xb
+ 1543 032f BA030000 		.4byte	.LASF45
+ 1544 0333 01       		.byte	0x1
+ 1545 0334 E402     		.2byte	0x2e4
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 43
+
+
+ 1546 0336 A5000000 		.4byte	0xa5
+ 1547 033a 02       		.uleb128 0x2
+ 1548 033b 91       		.byte	0x91
+ 1549 033c 6E       		.sleb128 -18
+ 1550 033d 0C       		.uleb128 0xc
+ 1551 033e 44020000 		.4byte	.LASF46
+ 1552 0342 01       		.byte	0x1
+ 1553 0343 E602     		.2byte	0x2e6
+ 1554 0345 A5000000 		.4byte	0xa5
+ 1555 0349 02       		.uleb128 0x2
+ 1556 034a 91       		.byte	0x91
+ 1557 034b 72       		.sleb128 -14
+ 1558 034c 0C       		.uleb128 0xc
+ 1559 034d 5E010000 		.4byte	.LASF47
+ 1560 0351 01       		.byte	0x1
+ 1561 0352 E702     		.2byte	0x2e7
+ 1562 0354 B0000000 		.4byte	0xb0
+ 1563 0358 02       		.uleb128 0x2
+ 1564 0359 91       		.byte	0x91
+ 1565 035a 74       		.sleb128 -12
+ 1566 035b 00       		.byte	0
+ 1567 035c 0E       		.uleb128 0xe
+ 1568 035d E2030000 		.4byte	.LASF48
+ 1569 0361 01       		.byte	0x1
+ 1570 0362 0E03     		.2byte	0x30e
+ 1571 0364 B0000000 		.4byte	0xb0
+ 1572 0368 00000000 		.4byte	.LFB14
+ 1573 036c 94000000 		.4byte	.LFE14-.LFB14
+ 1574 0370 01       		.uleb128 0x1
+ 1575 0371 9C       		.byte	0x9c
+ 1576 0372 A4030000 		.4byte	0x3a4
+ 1577 0376 0B       		.uleb128 0xb
+ 1578 0377 BA030000 		.4byte	.LASF45
+ 1579 037b 01       		.byte	0x1
+ 1580 037c 0E03     		.2byte	0x30e
+ 1581 037e A5000000 		.4byte	0xa5
+ 1582 0382 02       		.uleb128 0x2
+ 1583 0383 91       		.byte	0x91
+ 1584 0384 5E       		.sleb128 -34
+ 1585 0385 0C       		.uleb128 0xc
+ 1586 0386 D5010000 		.4byte	.LASF49
+ 1587 038a 01       		.byte	0x1
+ 1588 038b 1103     		.2byte	0x311
+ 1589 038d D4000000 		.4byte	0xd4
+ 1590 0391 02       		.uleb128 0x2
+ 1591 0392 91       		.byte	0x91
+ 1592 0393 60       		.sleb128 -32
+ 1593 0394 0C       		.uleb128 0xc
+ 1594 0395 5E010000 		.4byte	.LASF47
+ 1595 0399 01       		.byte	0x1
+ 1596 039a 1203     		.2byte	0x312
+ 1597 039c B0000000 		.4byte	0xb0
+ 1598 03a0 02       		.uleb128 0x2
+ 1599 03a1 91       		.byte	0x91
+ 1600 03a2 6C       		.sleb128 -20
+ 1601 03a3 00       		.byte	0
+ 1602 03a4 0E       		.uleb128 0xe
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 44
+
+
+ 1603 03a5 F8020000 		.4byte	.LASF50
+ 1604 03a9 01       		.byte	0x1
+ 1605 03aa 3A03     		.2byte	0x33a
+ 1606 03ac BB000000 		.4byte	0xbb
+ 1607 03b0 00000000 		.4byte	.LFB15
+ 1608 03b4 84000000 		.4byte	.LFE15-.LFB15
+ 1609 03b8 01       		.uleb128 0x1
+ 1610 03b9 9C       		.byte	0x9c
+ 1611 03ba EC030000 		.4byte	0x3ec
+ 1612 03be 0B       		.uleb128 0xb
+ 1613 03bf BA030000 		.4byte	.LASF45
+ 1614 03c3 01       		.byte	0x1
+ 1615 03c4 3A03     		.2byte	0x33a
+ 1616 03c6 A5000000 		.4byte	0xa5
+ 1617 03ca 02       		.uleb128 0x2
+ 1618 03cb 91       		.byte	0x91
+ 1619 03cc 66       		.sleb128 -26
+ 1620 03cd 0C       		.uleb128 0xc
+ 1621 03ce FF010000 		.4byte	.LASF51
+ 1622 03d2 01       		.byte	0x1
+ 1623 03d3 3C03     		.2byte	0x33c
+ 1624 03d5 BB000000 		.4byte	0xbb
+ 1625 03d9 02       		.uleb128 0x2
+ 1626 03da 91       		.byte	0x91
+ 1627 03db 68       		.sleb128 -24
+ 1628 03dc 0C       		.uleb128 0xc
+ 1629 03dd 5E010000 		.4byte	.LASF47
+ 1630 03e1 01       		.byte	0x1
+ 1631 03e2 3D03     		.2byte	0x33d
+ 1632 03e4 B0000000 		.4byte	0xb0
+ 1633 03e8 02       		.uleb128 0x2
+ 1634 03e9 91       		.byte	0x91
+ 1635 03ea 6C       		.sleb128 -20
+ 1636 03eb 00       		.byte	0
+ 1637 03ec 13       		.uleb128 0x13
+ 1638 03ed 51020000 		.4byte	.LASF52
+ 1639 03f1 01       		.byte	0x1
+ 1640 03f2 23       		.byte	0x23
+ 1641 03f3 79000000 		.4byte	0x79
+ 1642 03f7 05       		.uleb128 0x5
+ 1643 03f8 03       		.byte	0x3
+ 1644 03f9 00000000 		.4byte	ADC_TURBIDO_initVar
+ 1645 03fd 13       		.uleb128 0x13
+ 1646 03fe 53030000 		.4byte	.LASF53
+ 1647 0402 01       		.byte	0x1
+ 1648 0403 24       		.byte	0x24
+ 1649 0404 0E040000 		.4byte	0x40e
+ 1650 0408 05       		.uleb128 0x5
+ 1651 0409 03       		.byte	0x3
+ 1652 040a 00000000 		.4byte	ADC_TURBIDO_offset
+ 1653 040e 06       		.uleb128 0x6
+ 1654 040f A5000000 		.4byte	0xa5
+ 1655 0413 13       		.uleb128 0x13
+ 1656 0414 49000000 		.4byte	.LASF54
+ 1657 0418 01       		.byte	0x1
+ 1658 0419 25       		.byte	0x25
+ 1659 041a 0E040000 		.4byte	0x40e
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 45
+
+
+ 1660 041e 05       		.uleb128 0x5
+ 1661 041f 03       		.byte	0x3
+ 1662 0420 00000000 		.4byte	ADC_TURBIDO_countsPerVolt
+ 1663 0424 13       		.uleb128 0x13
+ 1664 0425 A4010000 		.4byte	.LASF55
+ 1665 0429 01       		.byte	0x1
+ 1666 042a 26       		.byte	0x26
+ 1667 042b 35040000 		.4byte	0x435
+ 1668 042f 05       		.uleb128 0x5
+ 1669 0430 03       		.byte	0x3
+ 1670 0431 00000000 		.4byte	ADC_TURBIDO_countsPer10Volt
+ 1671 0435 06       		.uleb128 0x6
+ 1672 0436 B0000000 		.4byte	0xb0
+ 1673 043a 13       		.uleb128 0x13
+ 1674 043b 32020000 		.4byte	.LASF56
+ 1675 043f 01       		.byte	0x1
+ 1676 0440 27       		.byte	0x27
+ 1677 0441 0E040000 		.4byte	0x40e
+ 1678 0445 05       		.uleb128 0x5
+ 1679 0446 03       		.byte	0x3
+ 1680 0447 00000000 		.4byte	ADC_TURBIDO_shift
+ 1681 044b 00       		.byte	0
+ 1682              		.section	.debug_abbrev,"",%progbits
+ 1683              	.Ldebug_abbrev0:
+ 1684 0000 01       		.uleb128 0x1
+ 1685 0001 11       		.uleb128 0x11
+ 1686 0002 01       		.byte	0x1
+ 1687 0003 25       		.uleb128 0x25
+ 1688 0004 0E       		.uleb128 0xe
+ 1689 0005 13       		.uleb128 0x13
+ 1690 0006 0B       		.uleb128 0xb
+ 1691 0007 03       		.uleb128 0x3
+ 1692 0008 0E       		.uleb128 0xe
+ 1693 0009 1B       		.uleb128 0x1b
+ 1694 000a 0E       		.uleb128 0xe
+ 1695 000b 55       		.uleb128 0x55
+ 1696 000c 17       		.uleb128 0x17
+ 1697 000d 11       		.uleb128 0x11
+ 1698 000e 01       		.uleb128 0x1
+ 1699 000f 10       		.uleb128 0x10
+ 1700 0010 17       		.uleb128 0x17
+ 1701 0011 00       		.byte	0
+ 1702 0012 00       		.byte	0
+ 1703 0013 02       		.uleb128 0x2
+ 1704 0014 24       		.uleb128 0x24
+ 1705 0015 00       		.byte	0
+ 1706 0016 0B       		.uleb128 0xb
+ 1707 0017 0B       		.uleb128 0xb
+ 1708 0018 3E       		.uleb128 0x3e
+ 1709 0019 0B       		.uleb128 0xb
+ 1710 001a 03       		.uleb128 0x3
+ 1711 001b 08       		.uleb128 0x8
+ 1712 001c 00       		.byte	0
+ 1713 001d 00       		.byte	0
+ 1714 001e 03       		.uleb128 0x3
+ 1715 001f 24       		.uleb128 0x24
+ 1716 0020 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 46
+
+
+ 1717 0021 0B       		.uleb128 0xb
+ 1718 0022 0B       		.uleb128 0xb
+ 1719 0023 3E       		.uleb128 0x3e
+ 1720 0024 0B       		.uleb128 0xb
+ 1721 0025 03       		.uleb128 0x3
+ 1722 0026 0E       		.uleb128 0xe
+ 1723 0027 00       		.byte	0
+ 1724 0028 00       		.byte	0
+ 1725 0029 04       		.uleb128 0x4
+ 1726 002a 16       		.uleb128 0x16
+ 1727 002b 00       		.byte	0
+ 1728 002c 03       		.uleb128 0x3
+ 1729 002d 0E       		.uleb128 0xe
+ 1730 002e 3A       		.uleb128 0x3a
+ 1731 002f 0B       		.uleb128 0xb
+ 1732 0030 3B       		.uleb128 0x3b
+ 1733 0031 0B       		.uleb128 0xb
+ 1734 0032 49       		.uleb128 0x49
+ 1735 0033 13       		.uleb128 0x13
+ 1736 0034 00       		.byte	0
+ 1737 0035 00       		.byte	0
+ 1738 0036 05       		.uleb128 0x5
+ 1739 0037 16       		.uleb128 0x16
+ 1740 0038 00       		.byte	0
+ 1741 0039 03       		.uleb128 0x3
+ 1742 003a 0E       		.uleb128 0xe
+ 1743 003b 3A       		.uleb128 0x3a
+ 1744 003c 0B       		.uleb128 0xb
+ 1745 003d 3B       		.uleb128 0x3b
+ 1746 003e 05       		.uleb128 0x5
+ 1747 003f 49       		.uleb128 0x49
+ 1748 0040 13       		.uleb128 0x13
+ 1749 0041 00       		.byte	0
+ 1750 0042 00       		.byte	0
+ 1751 0043 06       		.uleb128 0x6
+ 1752 0044 35       		.uleb128 0x35
+ 1753 0045 00       		.byte	0
+ 1754 0046 49       		.uleb128 0x49
+ 1755 0047 13       		.uleb128 0x13
+ 1756 0048 00       		.byte	0
+ 1757 0049 00       		.byte	0
+ 1758 004a 07       		.uleb128 0x7
+ 1759 004b 2E       		.uleb128 0x2e
+ 1760 004c 00       		.byte	0
+ 1761 004d 3F       		.uleb128 0x3f
+ 1762 004e 19       		.uleb128 0x19
+ 1763 004f 03       		.uleb128 0x3
+ 1764 0050 0E       		.uleb128 0xe
+ 1765 0051 3A       		.uleb128 0x3a
+ 1766 0052 0B       		.uleb128 0xb
+ 1767 0053 3B       		.uleb128 0x3b
+ 1768 0054 0B       		.uleb128 0xb
+ 1769 0055 27       		.uleb128 0x27
+ 1770 0056 19       		.uleb128 0x19
+ 1771 0057 11       		.uleb128 0x11
+ 1772 0058 01       		.uleb128 0x1
+ 1773 0059 12       		.uleb128 0x12
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 47
+
+
+ 1774 005a 06       		.uleb128 0x6
+ 1775 005b 40       		.uleb128 0x40
+ 1776 005c 18       		.uleb128 0x18
+ 1777 005d 9642     		.uleb128 0x2116
+ 1778 005f 19       		.uleb128 0x19
+ 1779 0060 00       		.byte	0
+ 1780 0061 00       		.byte	0
+ 1781 0062 08       		.uleb128 0x8
+ 1782 0063 2E       		.uleb128 0x2e
+ 1783 0064 01       		.byte	0x1
+ 1784 0065 3F       		.uleb128 0x3f
+ 1785 0066 19       		.uleb128 0x19
+ 1786 0067 03       		.uleb128 0x3
+ 1787 0068 0E       		.uleb128 0xe
+ 1788 0069 3A       		.uleb128 0x3a
+ 1789 006a 0B       		.uleb128 0xb
+ 1790 006b 3B       		.uleb128 0x3b
+ 1791 006c 0B       		.uleb128 0xb
+ 1792 006d 27       		.uleb128 0x27
+ 1793 006e 19       		.uleb128 0x19
+ 1794 006f 11       		.uleb128 0x11
+ 1795 0070 01       		.uleb128 0x1
+ 1796 0071 12       		.uleb128 0x12
+ 1797 0072 06       		.uleb128 0x6
+ 1798 0073 40       		.uleb128 0x40
+ 1799 0074 18       		.uleb128 0x18
+ 1800 0075 9642     		.uleb128 0x2116
+ 1801 0077 19       		.uleb128 0x19
+ 1802 0078 01       		.uleb128 0x1
+ 1803 0079 13       		.uleb128 0x13
+ 1804 007a 00       		.byte	0
+ 1805 007b 00       		.byte	0
+ 1806 007c 09       		.uleb128 0x9
+ 1807 007d 34       		.uleb128 0x34
+ 1808 007e 00       		.byte	0
+ 1809 007f 03       		.uleb128 0x3
+ 1810 0080 0E       		.uleb128 0xe
+ 1811 0081 3A       		.uleb128 0x3a
+ 1812 0082 0B       		.uleb128 0xb
+ 1813 0083 3B       		.uleb128 0x3b
+ 1814 0084 0B       		.uleb128 0xb
+ 1815 0085 49       		.uleb128 0x49
+ 1816 0086 13       		.uleb128 0x13
+ 1817 0087 02       		.uleb128 0x2
+ 1818 0088 18       		.uleb128 0x18
+ 1819 0089 00       		.byte	0
+ 1820 008a 00       		.byte	0
+ 1821 008b 0A       		.uleb128 0xa
+ 1822 008c 2E       		.uleb128 0x2e
+ 1823 008d 01       		.byte	0x1
+ 1824 008e 3F       		.uleb128 0x3f
+ 1825 008f 19       		.uleb128 0x19
+ 1826 0090 03       		.uleb128 0x3
+ 1827 0091 0E       		.uleb128 0xe
+ 1828 0092 3A       		.uleb128 0x3a
+ 1829 0093 0B       		.uleb128 0xb
+ 1830 0094 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 48
+
+
+ 1831 0095 05       		.uleb128 0x5
+ 1832 0096 27       		.uleb128 0x27
+ 1833 0097 19       		.uleb128 0x19
+ 1834 0098 11       		.uleb128 0x11
+ 1835 0099 01       		.uleb128 0x1
+ 1836 009a 12       		.uleb128 0x12
+ 1837 009b 06       		.uleb128 0x6
+ 1838 009c 40       		.uleb128 0x40
+ 1839 009d 18       		.uleb128 0x18
+ 1840 009e 9742     		.uleb128 0x2117
+ 1841 00a0 19       		.uleb128 0x19
+ 1842 00a1 01       		.uleb128 0x1
+ 1843 00a2 13       		.uleb128 0x13
+ 1844 00a3 00       		.byte	0
+ 1845 00a4 00       		.byte	0
+ 1846 00a5 0B       		.uleb128 0xb
+ 1847 00a6 05       		.uleb128 0x5
+ 1848 00a7 00       		.byte	0
+ 1849 00a8 03       		.uleb128 0x3
+ 1850 00a9 0E       		.uleb128 0xe
+ 1851 00aa 3A       		.uleb128 0x3a
+ 1852 00ab 0B       		.uleb128 0xb
+ 1853 00ac 3B       		.uleb128 0x3b
+ 1854 00ad 05       		.uleb128 0x5
+ 1855 00ae 49       		.uleb128 0x49
+ 1856 00af 13       		.uleb128 0x13
+ 1857 00b0 02       		.uleb128 0x2
+ 1858 00b1 18       		.uleb128 0x18
+ 1859 00b2 00       		.byte	0
+ 1860 00b3 00       		.byte	0
+ 1861 00b4 0C       		.uleb128 0xc
+ 1862 00b5 34       		.uleb128 0x34
+ 1863 00b6 00       		.byte	0
+ 1864 00b7 03       		.uleb128 0x3
+ 1865 00b8 0E       		.uleb128 0xe
+ 1866 00b9 3A       		.uleb128 0x3a
+ 1867 00ba 0B       		.uleb128 0xb
+ 1868 00bb 3B       		.uleb128 0x3b
+ 1869 00bc 05       		.uleb128 0x5
+ 1870 00bd 49       		.uleb128 0x49
+ 1871 00be 13       		.uleb128 0x13
+ 1872 00bf 02       		.uleb128 0x2
+ 1873 00c0 18       		.uleb128 0x18
+ 1874 00c1 00       		.byte	0
+ 1875 00c2 00       		.byte	0
+ 1876 00c3 0D       		.uleb128 0xd
+ 1877 00c4 2E       		.uleb128 0x2e
+ 1878 00c5 01       		.byte	0x1
+ 1879 00c6 3F       		.uleb128 0x3f
+ 1880 00c7 19       		.uleb128 0x19
+ 1881 00c8 03       		.uleb128 0x3
+ 1882 00c9 0E       		.uleb128 0xe
+ 1883 00ca 3A       		.uleb128 0x3a
+ 1884 00cb 0B       		.uleb128 0xb
+ 1885 00cc 3B       		.uleb128 0x3b
+ 1886 00cd 05       		.uleb128 0x5
+ 1887 00ce 27       		.uleb128 0x27
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 49
+
+
+ 1888 00cf 19       		.uleb128 0x19
+ 1889 00d0 11       		.uleb128 0x11
+ 1890 00d1 01       		.uleb128 0x1
+ 1891 00d2 12       		.uleb128 0x12
+ 1892 00d3 06       		.uleb128 0x6
+ 1893 00d4 40       		.uleb128 0x40
+ 1894 00d5 18       		.uleb128 0x18
+ 1895 00d6 9642     		.uleb128 0x2116
+ 1896 00d8 19       		.uleb128 0x19
+ 1897 00d9 01       		.uleb128 0x1
+ 1898 00da 13       		.uleb128 0x13
+ 1899 00db 00       		.byte	0
+ 1900 00dc 00       		.byte	0
+ 1901 00dd 0E       		.uleb128 0xe
+ 1902 00de 2E       		.uleb128 0x2e
+ 1903 00df 01       		.byte	0x1
+ 1904 00e0 3F       		.uleb128 0x3f
+ 1905 00e1 19       		.uleb128 0x19
+ 1906 00e2 03       		.uleb128 0x3
+ 1907 00e3 0E       		.uleb128 0xe
+ 1908 00e4 3A       		.uleb128 0x3a
+ 1909 00e5 0B       		.uleb128 0xb
+ 1910 00e6 3B       		.uleb128 0x3b
+ 1911 00e7 05       		.uleb128 0x5
+ 1912 00e8 27       		.uleb128 0x27
+ 1913 00e9 19       		.uleb128 0x19
+ 1914 00ea 49       		.uleb128 0x49
+ 1915 00eb 13       		.uleb128 0x13
+ 1916 00ec 11       		.uleb128 0x11
+ 1917 00ed 01       		.uleb128 0x1
+ 1918 00ee 12       		.uleb128 0x12
+ 1919 00ef 06       		.uleb128 0x6
+ 1920 00f0 40       		.uleb128 0x40
+ 1921 00f1 18       		.uleb128 0x18
+ 1922 00f2 9642     		.uleb128 0x2116
+ 1923 00f4 19       		.uleb128 0x19
+ 1924 00f5 01       		.uleb128 0x1
+ 1925 00f6 13       		.uleb128 0x13
+ 1926 00f7 00       		.byte	0
+ 1927 00f8 00       		.byte	0
+ 1928 00f9 0F       		.uleb128 0xf
+ 1929 00fa 2E       		.uleb128 0x2e
+ 1930 00fb 00       		.byte	0
+ 1931 00fc 3F       		.uleb128 0x3f
+ 1932 00fd 19       		.uleb128 0x19
+ 1933 00fe 03       		.uleb128 0x3
+ 1934 00ff 0E       		.uleb128 0xe
+ 1935 0100 3A       		.uleb128 0x3a
+ 1936 0101 0B       		.uleb128 0xb
+ 1937 0102 3B       		.uleb128 0x3b
+ 1938 0103 05       		.uleb128 0x5
+ 1939 0104 27       		.uleb128 0x27
+ 1940 0105 19       		.uleb128 0x19
+ 1941 0106 49       		.uleb128 0x49
+ 1942 0107 13       		.uleb128 0x13
+ 1943 0108 11       		.uleb128 0x11
+ 1944 0109 01       		.uleb128 0x1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 50
+
+
+ 1945 010a 12       		.uleb128 0x12
+ 1946 010b 06       		.uleb128 0x6
+ 1947 010c 40       		.uleb128 0x40
+ 1948 010d 18       		.uleb128 0x18
+ 1949 010e 9742     		.uleb128 0x2117
+ 1950 0110 19       		.uleb128 0x19
+ 1951 0111 00       		.byte	0
+ 1952 0112 00       		.byte	0
+ 1953 0113 10       		.uleb128 0x10
+ 1954 0114 2E       		.uleb128 0x2e
+ 1955 0115 01       		.byte	0x1
+ 1956 0116 3F       		.uleb128 0x3f
+ 1957 0117 19       		.uleb128 0x19
+ 1958 0118 03       		.uleb128 0x3
+ 1959 0119 0E       		.uleb128 0xe
+ 1960 011a 3A       		.uleb128 0x3a
+ 1961 011b 0B       		.uleb128 0xb
+ 1962 011c 3B       		.uleb128 0x3b
+ 1963 011d 05       		.uleb128 0x5
+ 1964 011e 27       		.uleb128 0x27
+ 1965 011f 19       		.uleb128 0x19
+ 1966 0120 49       		.uleb128 0x49
+ 1967 0121 13       		.uleb128 0x13
+ 1968 0122 11       		.uleb128 0x11
+ 1969 0123 01       		.uleb128 0x1
+ 1970 0124 12       		.uleb128 0x12
+ 1971 0125 06       		.uleb128 0x6
+ 1972 0126 40       		.uleb128 0x40
+ 1973 0127 18       		.uleb128 0x18
+ 1974 0128 9742     		.uleb128 0x2117
+ 1975 012a 19       		.uleb128 0x19
+ 1976 012b 01       		.uleb128 0x1
+ 1977 012c 13       		.uleb128 0x13
+ 1978 012d 00       		.byte	0
+ 1979 012e 00       		.byte	0
+ 1980 012f 11       		.uleb128 0x11
+ 1981 0130 34       		.uleb128 0x34
+ 1982 0131 00       		.byte	0
+ 1983 0132 03       		.uleb128 0x3
+ 1984 0133 08       		.uleb128 0x8
+ 1985 0134 3A       		.uleb128 0x3a
+ 1986 0135 0B       		.uleb128 0xb
+ 1987 0136 3B       		.uleb128 0x3b
+ 1988 0137 05       		.uleb128 0x5
+ 1989 0138 49       		.uleb128 0x49
+ 1990 0139 13       		.uleb128 0x13
+ 1991 013a 02       		.uleb128 0x2
+ 1992 013b 18       		.uleb128 0x18
+ 1993 013c 00       		.byte	0
+ 1994 013d 00       		.byte	0
+ 1995 013e 12       		.uleb128 0x12
+ 1996 013f 2E       		.uleb128 0x2e
+ 1997 0140 01       		.byte	0x1
+ 1998 0141 03       		.uleb128 0x3
+ 1999 0142 0E       		.uleb128 0xe
+ 2000 0143 3A       		.uleb128 0x3a
+ 2001 0144 0B       		.uleb128 0xb
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 51
+
+
+ 2002 0145 3B       		.uleb128 0x3b
+ 2003 0146 05       		.uleb128 0x5
+ 2004 0147 27       		.uleb128 0x27
+ 2005 0148 19       		.uleb128 0x19
+ 2006 0149 11       		.uleb128 0x11
+ 2007 014a 01       		.uleb128 0x1
+ 2008 014b 12       		.uleb128 0x12
+ 2009 014c 06       		.uleb128 0x6
+ 2010 014d 40       		.uleb128 0x40
+ 2011 014e 18       		.uleb128 0x18
+ 2012 014f 9642     		.uleb128 0x2116
+ 2013 0151 19       		.uleb128 0x19
+ 2014 0152 01       		.uleb128 0x1
+ 2015 0153 13       		.uleb128 0x13
+ 2016 0154 00       		.byte	0
+ 2017 0155 00       		.byte	0
+ 2018 0156 13       		.uleb128 0x13
+ 2019 0157 34       		.uleb128 0x34
+ 2020 0158 00       		.byte	0
+ 2021 0159 03       		.uleb128 0x3
+ 2022 015a 0E       		.uleb128 0xe
+ 2023 015b 3A       		.uleb128 0x3a
+ 2024 015c 0B       		.uleb128 0xb
+ 2025 015d 3B       		.uleb128 0x3b
+ 2026 015e 0B       		.uleb128 0xb
+ 2027 015f 49       		.uleb128 0x49
+ 2028 0160 13       		.uleb128 0x13
+ 2029 0161 3F       		.uleb128 0x3f
+ 2030 0162 19       		.uleb128 0x19
+ 2031 0163 02       		.uleb128 0x2
+ 2032 0164 18       		.uleb128 0x18
+ 2033 0165 00       		.byte	0
+ 2034 0166 00       		.byte	0
+ 2035 0167 00       		.byte	0
+ 2036              		.section	.debug_aranges,"",%progbits
+ 2037 0000 94000000 		.4byte	0x94
+ 2038 0004 0200     		.2byte	0x2
+ 2039 0006 00000000 		.4byte	.Ldebug_info0
+ 2040 000a 04       		.byte	0x4
+ 2041 000b 00       		.byte	0
+ 2042 000c 0000     		.2byte	0
+ 2043 000e 0000     		.2byte	0
+ 2044 0010 00000000 		.4byte	.LFB0
+ 2045 0014 20000000 		.4byte	.LFE0-.LFB0
+ 2046 0018 00000000 		.4byte	.LFB1
+ 2047 001c 44000000 		.4byte	.LFE1-.LFB1
+ 2048 0020 00000000 		.4byte	.LFB2
+ 2049 0024 F4000000 		.4byte	.LFE2-.LFB2
+ 2050 0028 00000000 		.4byte	.LFB3
+ 2051 002c 80000000 		.4byte	.LFE3-.LFB3
+ 2052 0030 00000000 		.4byte	.LFB4
+ 2053 0034 40000000 		.4byte	.LFE4-.LFB4
+ 2054 0038 00000000 		.4byte	.LFB5
+ 2055 003c 50000000 		.4byte	.LFE5-.LFB5
+ 2056 0040 00000000 		.4byte	.LFB6
+ 2057 0044 40000000 		.4byte	.LFE6-.LFB6
+ 2058 0048 00000000 		.4byte	.LFB7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 52
+
+
+ 2059 004c 2C000000 		.4byte	.LFE7-.LFB7
+ 2060 0050 00000000 		.4byte	.LFB8
+ 2061 0054 34000000 		.4byte	.LFE8-.LFB8
+ 2062 0058 00000000 		.4byte	.LFB9
+ 2063 005c 20000000 		.4byte	.LFE9-.LFB9
+ 2064 0060 00000000 		.4byte	.LFB10
+ 2065 0064 7C000000 		.4byte	.LFE10-.LFB10
+ 2066 0068 00000000 		.4byte	.LFB11
+ 2067 006c 2C000000 		.4byte	.LFE11-.LFB11
+ 2068 0070 00000000 		.4byte	.LFB12
+ 2069 0074 1C000000 		.4byte	.LFE12-.LFB12
+ 2070 0078 00000000 		.4byte	.LFB13
+ 2071 007c 8C000000 		.4byte	.LFE13-.LFB13
+ 2072 0080 00000000 		.4byte	.LFB14
+ 2073 0084 94000000 		.4byte	.LFE14-.LFB14
+ 2074 0088 00000000 		.4byte	.LFB15
+ 2075 008c 84000000 		.4byte	.LFE15-.LFB15
+ 2076 0090 00000000 		.4byte	0
+ 2077 0094 00000000 		.4byte	0
+ 2078              		.section	.debug_ranges,"",%progbits
+ 2079              	.Ldebug_ranges0:
+ 2080 0000 00000000 		.4byte	.LFB0
+ 2081 0004 20000000 		.4byte	.LFE0
+ 2082 0008 00000000 		.4byte	.LFB1
+ 2083 000c 44000000 		.4byte	.LFE1
+ 2084 0010 00000000 		.4byte	.LFB2
+ 2085 0014 F4000000 		.4byte	.LFE2
+ 2086 0018 00000000 		.4byte	.LFB3
+ 2087 001c 80000000 		.4byte	.LFE3
+ 2088 0020 00000000 		.4byte	.LFB4
+ 2089 0024 40000000 		.4byte	.LFE4
+ 2090 0028 00000000 		.4byte	.LFB5
+ 2091 002c 50000000 		.4byte	.LFE5
+ 2092 0030 00000000 		.4byte	.LFB6
+ 2093 0034 40000000 		.4byte	.LFE6
+ 2094 0038 00000000 		.4byte	.LFB7
+ 2095 003c 2C000000 		.4byte	.LFE7
+ 2096 0040 00000000 		.4byte	.LFB8
+ 2097 0044 34000000 		.4byte	.LFE8
+ 2098 0048 00000000 		.4byte	.LFB9
+ 2099 004c 20000000 		.4byte	.LFE9
+ 2100 0050 00000000 		.4byte	.LFB10
+ 2101 0054 7C000000 		.4byte	.LFE10
+ 2102 0058 00000000 		.4byte	.LFB11
+ 2103 005c 2C000000 		.4byte	.LFE11
+ 2104 0060 00000000 		.4byte	.LFB12
+ 2105 0064 1C000000 		.4byte	.LFE12
+ 2106 0068 00000000 		.4byte	.LFB13
+ 2107 006c 8C000000 		.4byte	.LFE13
+ 2108 0070 00000000 		.4byte	.LFB14
+ 2109 0074 94000000 		.4byte	.LFE14
+ 2110 0078 00000000 		.4byte	.LFB15
+ 2111 007c 84000000 		.4byte	.LFE15
+ 2112 0080 00000000 		.4byte	0
+ 2113 0084 00000000 		.4byte	0
+ 2114              		.section	.debug_line,"",%progbits
+ 2115              	.Ldebug_line0:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 53
+
+
+ 2116 0000 E0010000 		.section	.debug_str,"MS",%progbits,1
+ 2116      02004A00 
+ 2116      00000201 
+ 2116      FB0E0D00 
+ 2116      01010101 
+ 2117              	.LASF12:
+ 2118 0000 75696E74 		.ascii	"uint16\000"
+ 2118      313600
+ 2119              	.LASF42:
+ 2120 0007 61646347 		.ascii	"adcGain\000"
+ 2120      61696E00 
+ 2121              	.LASF40:
+ 2122 000f 636F756E 		.ascii	"counts\000"
+ 2122      747300
+ 2123              	.LASF44:
+ 2124 0016 4144435F 		.ascii	"ADC_TURBIDO_CountsTo_mVolts\000"
+ 2124      54555242 
+ 2124      49444F5F 
+ 2124      436F756E 
+ 2124      7473546F 
+ 2125              	.LASF8:
+ 2126 0032 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2126      206C6F6E 
+ 2126      6720756E 
+ 2126      7369676E 
+ 2126      65642069 
+ 2127              	.LASF54:
+ 2128 0049 4144435F 		.ascii	"ADC_TURBIDO_countsPerVolt\000"
+ 2128      54555242 
+ 2128      49444F5F 
+ 2128      636F756E 
+ 2128      74735065 
+ 2129              	.LASF43:
+ 2130 0063 4144435F 		.ascii	"ADC_TURBIDO_SetScaledGain\000"
+ 2130      54555242 
+ 2130      49444F5F 
+ 2130      53657453 
+ 2130      63616C65 
+ 2131              	.LASF7:
+ 2132 007d 6C6F6E67 		.ascii	"long long int\000"
+ 2132      206C6F6E 
+ 2132      6720696E 
+ 2132      7400
+ 2133              	.LASF1:
+ 2134 008b 7369676E 		.ascii	"signed char\000"
+ 2134      65642063 
+ 2134      68617200 
+ 2135              	.LASF16:
+ 2136 0097 696E7433 		.ascii	"int32\000"
+ 2136      3200
+ 2137              	.LASF38:
+ 2138 009d 4144435F 		.ascii	"ADC_TURBIDO_SetOffset\000"
+ 2138      54555242 
+ 2138      49444F5F 
+ 2138      5365744F 
+ 2138      66667365 
+ 2139              	.LASF5:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 54
+
+
+ 2140 00b3 6C6F6E67 		.ascii	"long int\000"
+ 2140      20696E74 
+ 2140      00
+ 2141              	.LASF28:
+ 2142 00bc 4144435F 		.ascii	"ADC_TURBIDO_Enable\000"
+ 2142      54555242 
+ 2142      49444F5F 
+ 2142      456E6162 
+ 2142      6C6500
+ 2143              	.LASF59:
+ 2144 00cf 433A5C55 		.ascii	"C:\\Users\\plod1602\\Desktop\\TAC_2015-09-18\\TAC_P"
+ 2144      73657273 
+ 2144      5C706C6F 
+ 2144      64313630 
+ 2144      325C4465 
+ 2145 00fd 534F4335 		.ascii	"SOC5.cydsn\000"
+ 2145      2E637964 
+ 2145      736E00
+ 2146              	.LASF22:
+ 2147 0108 72656731 		.ascii	"reg16\000"
+ 2147      3600
+ 2148              	.LASF58:
+ 2149 010e 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\ADC_TURBIDO.c\000"
+ 2149      6E657261 
+ 2149      7465645F 
+ 2149      536F7572 
+ 2149      63655C50 
+ 2150              	.LASF11:
+ 2151 0135 75696E74 		.ascii	"uint8\000"
+ 2151      3800
+ 2152              	.LASF30:
+ 2153 013b 4144435F 		.ascii	"ADC_TURBIDO_SetPower\000"
+ 2153      54555242 
+ 2153      49444F5F 
+ 2153      53657450 
+ 2153      6F776572 
+ 2154              	.LASF19:
+ 2155 0150 646F7562 		.ascii	"double\000"
+ 2155      6C6500
+ 2156              	.LASF13:
+ 2157 0157 75696E74 		.ascii	"uint32\000"
+ 2157      333200
+ 2158              	.LASF47:
+ 2159 015e 636F756E 		.ascii	"countsPer10Volt\000"
+ 2159      74735065 
+ 2159      72313056 
+ 2159      6F6C7400 
+ 2160              	.LASF36:
+ 2161 016e 4144435F 		.ascii	"ADC_TURBIDO_IsEndConversion\000"
+ 2161      54555242 
+ 2161      49444F5F 
+ 2161      4973456E 
+ 2161      64436F6E 
+ 2162              	.LASF31:
+ 2163 018a 4144435F 		.ascii	"ADC_TURBIDO_SetResolution\000"
+ 2163      54555242 
+ 2163      49444F5F 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 55
+
+
+ 2163      53657452 
+ 2163      65736F6C 
+ 2164              	.LASF55:
+ 2165 01a4 4144435F 		.ascii	"ADC_TURBIDO_countsPer10Volt\000"
+ 2165      54555242 
+ 2165      49444F5F 
+ 2165      636F756E 
+ 2165      74735065 
+ 2166              	.LASF34:
+ 2167 01c0 7265744D 		.ascii	"retMode\000"
+ 2167      6F646500 
+ 2168              	.LASF0:
+ 2169 01c8 756E7369 		.ascii	"unsigned int\000"
+ 2169      676E6564 
+ 2169      20696E74 
+ 2169      00
+ 2170              	.LASF49:
+ 2171 01d5 75566F6C 		.ascii	"uVolts\000"
+ 2171      747300
+ 2172              	.LASF29:
+ 2173 01dc 4144435F 		.ascii	"ADC_TURBIDO_Stop\000"
+ 2173      54555242 
+ 2173      49444F5F 
+ 2173      53746F70 
+ 2173      00
+ 2174              	.LASF6:
+ 2175 01ed 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2175      20756E73 
+ 2175      69676E65 
+ 2175      6420696E 
+ 2175      7400
+ 2176              	.LASF51:
+ 2177 01ff 766F6C74 		.ascii	"volts\000"
+ 2177      7300
+ 2178              	.LASF61:
+ 2179 0205 4144435F 		.ascii	"ADC_TURBIDO_CalcGain\000"
+ 2179      54555242 
+ 2179      49444F5F 
+ 2179      43616C63 
+ 2179      4761696E 
+ 2180              	.LASF4:
+ 2181 021a 73686F72 		.ascii	"short unsigned int\000"
+ 2181      7420756E 
+ 2181      7369676E 
+ 2181      65642069 
+ 2181      6E7400
+ 2182              	.LASF14:
+ 2183 022d 696E7438 		.ascii	"int8\000"
+ 2183      00
+ 2184              	.LASF56:
+ 2185 0232 4144435F 		.ascii	"ADC_TURBIDO_shift\000"
+ 2185      54555242 
+ 2185      49444F5F 
+ 2185      73686966 
+ 2185      7400
+ 2186              	.LASF46:
+ 2187 0244 6D566F6C 		.ascii	"mVolts\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 56
+
+
+ 2187      747300
+ 2188              	.LASF23:
+ 2189 024b 72656733 		.ascii	"reg32\000"
+ 2189      3200
+ 2190              	.LASF52:
+ 2191 0251 4144435F 		.ascii	"ADC_TURBIDO_initVar\000"
+ 2191      54555242 
+ 2191      49444F5F 
+ 2191      696E6974 
+ 2191      56617200 
+ 2192              	.LASF17:
+ 2193 0265 666C6F61 		.ascii	"float32\000"
+ 2193      74333200 
+ 2194              	.LASF9:
+ 2195 026d 73697A65 		.ascii	"sizetype\000"
+ 2195      74797065 
+ 2195      00
+ 2196              	.LASF57:
+ 2197 0276 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 2197      4320342E 
+ 2197      382E3420 
+ 2197      32303134 
+ 2197      30353236 
+ 2198 02a9 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m3 -mthumb -g -O"
+ 2198      20726576 
+ 2198      6973696F 
+ 2198      6E203231 
+ 2198      31333538 
+ 2199 02dc 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 2199      66756E63 
+ 2199      74696F6E 
+ 2199      2D736563 
+ 2199      74696F6E 
+ 2200              	.LASF20:
+ 2201 02f2 696E7436 		.ascii	"int64\000"
+ 2201      3400
+ 2202              	.LASF50:
+ 2203 02f8 4144435F 		.ascii	"ADC_TURBIDO_CountsTo_Volts\000"
+ 2203      54555242 
+ 2203      49444F5F 
+ 2203      436F756E 
+ 2203      7473546F 
+ 2204              	.LASF18:
+ 2205 0313 666C6F61 		.ascii	"float\000"
+ 2205      7400
+ 2206              	.LASF32:
+ 2207 0319 706F7765 		.ascii	"power\000"
+ 2207      7200
+ 2208              	.LASF21:
+ 2209 031f 72656738 		.ascii	"reg8\000"
+ 2209      00
+ 2210              	.LASF2:
+ 2211 0324 756E7369 		.ascii	"unsigned char\000"
+ 2211      676E6564 
+ 2211      20636861 
+ 2211      7200
+ 2212              	.LASF3:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 57
+
+
+ 2213 0332 73686F72 		.ascii	"short int\000"
+ 2213      7420696E 
+ 2213      7400
+ 2214              	.LASF60:
+ 2215 033c 4144435F 		.ascii	"ADC_TURBIDO_GetResult8\000"
+ 2215      54555242 
+ 2215      49444F5F 
+ 2215      47657452 
+ 2215      6573756C 
+ 2216              	.LASF53:
+ 2217 0353 4144435F 		.ascii	"ADC_TURBIDO_offset\000"
+ 2217      54555242 
+ 2217      49444F5F 
+ 2217      6F666673 
+ 2217      657400
+ 2218              	.LASF33:
+ 2219 0366 7265736F 		.ascii	"resolution\000"
+ 2219      6C757469 
+ 2219      6F6E00
+ 2220              	.LASF25:
+ 2221 0371 4144435F 		.ascii	"ADC_TURBIDO_Init\000"
+ 2221      54555242 
+ 2221      49444F5F 
+ 2221      496E6974 
+ 2221      00
+ 2222              	.LASF10:
+ 2223 0382 63686172 		.ascii	"char\000"
+ 2223      00
+ 2224              	.LASF41:
+ 2225 0387 4144435F 		.ascii	"ADC_TURBIDO_SetGain\000"
+ 2225      54555242 
+ 2225      49444F5F 
+ 2225      53657447 
+ 2225      61696E00 
+ 2226              	.LASF39:
+ 2227 039b 6F666673 		.ascii	"offset\000"
+ 2227      657400
+ 2228              	.LASF37:
+ 2229 03a2 4144435F 		.ascii	"ADC_TURBIDO_GetResult16\000"
+ 2229      54555242 
+ 2229      49444F5F 
+ 2229      47657452 
+ 2229      6573756C 
+ 2230              	.LASF45:
+ 2231 03ba 61646343 		.ascii	"adcCounts\000"
+ 2231      6F756E74 
+ 2231      7300
+ 2232              	.LASF27:
+ 2233 03c4 656E6162 		.ascii	"enableInterrupts\000"
+ 2233      6C65496E 
+ 2233      74657272 
+ 2233      75707473 
+ 2233      00
+ 2234              	.LASF35:
+ 2235 03d5 73746174 		.ascii	"status\000"
+ 2235      757300
+ 2236              	.LASF15:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cc4wrnVl.s 			page 58
+
+
+ 2237 03dc 696E7431 		.ascii	"int16\000"
+ 2237      3600
+ 2238              	.LASF48:
+ 2239 03e2 4144435F 		.ascii	"ADC_TURBIDO_CountsTo_uVolts\000"
+ 2239      54555242 
+ 2239      49444F5F 
+ 2239      436F756E 
+ 2239      7473546F 
+ 2240              	.LASF26:
+ 2241 03fe 746D7052 		.ascii	"tmpReg\000"
+ 2241      656700
+ 2242              	.LASF24:
+ 2243 0405 4144435F 		.ascii	"ADC_TURBIDO_Start\000"
+ 2243      54555242 
+ 2243      49444F5F 
+ 2243      53746172 
+ 2243      7400
+ 2244              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br

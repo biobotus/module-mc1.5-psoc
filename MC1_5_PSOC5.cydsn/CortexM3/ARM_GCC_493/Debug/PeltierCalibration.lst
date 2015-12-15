@@ -1,0 +1,4496 @@
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"PeltierCalibration.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.comm	targetTemp,8,8
+  19              		.comm	eepromStatus,4,4
+  20              		.section	.rodata
+  21              		.align	2
+  22              		.type	eepromArray, %object
+  23              		.size	eepromArray, 500
+  24              	eepromArray:
+  25 0000 00000000 		.space	500
+  25      00000000 
+  25      00000000 
+  25      00000000 
+  25      00000000 
+  26              		.align	2
+  27              		.type	SM1eepromArray, %object
+  28              		.size	SM1eepromArray, 300
+  29              	SM1eepromArray:
+  30 01f4 00000000 		.space	300
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  31              		.align	2
+  32              		.type	SM2eepromArray, %object
+  33              		.size	SM2eepromArray, 300
+  34              	SM2eepromArray:
+  35 0320 00000000 		.space	300
+  35      00000000 
+  35      00000000 
+  35      00000000 
+  35      00000000 
+  36              		.section	.text.validateEEPROM,"ax",%progbits
+  37              		.align	2
+  38              		.global	validateEEPROM
+  39              		.thumb
+  40              		.thumb_func
+  41              		.type	validateEEPROM, %function
+  42              	validateEEPROM:
+  43              	.LFB56:
+  44              		.file 1 ".\\PeltierCalibration.c"
+   1:.\PeltierCalibration.c **** /* ========================================
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 2
+
+
+   2:.\PeltierCalibration.c ****  *
+   3:.\PeltierCalibration.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\PeltierCalibration.c ****  * All Rights Reserved
+   5:.\PeltierCalibration.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\PeltierCalibration.c ****  *
+   7:.\PeltierCalibration.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\PeltierCalibration.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\PeltierCalibration.c ****  *
+  10:.\PeltierCalibration.c ****  * ========================================
+  11:.\PeltierCalibration.c **** */
+  12:.\PeltierCalibration.c **** #include <PeltierCalibration.h>
+  13:.\PeltierCalibration.c **** double targetTemp;          // variable containing TAC target temperature
+  14:.\PeltierCalibration.c **** cystatus eepromStatus;
+  15:.\PeltierCalibration.c **** static const uint8 eepromArray[(5*CALIBRATION_TABLE_SIZE)] = {0};
+  16:.\PeltierCalibration.c **** // The calibration tables are organized like so : LSB first -> [3*i] = LSB, [3*i+1] = MSB, [3*i+2]=
+  17:.\PeltierCalibration.c **** static const uint8 SM1eepromArray[(3*CALIBRATION_TABLE_SIZE)] = {0};
+  18:.\PeltierCalibration.c **** static const uint8 SM2eepromArray[(3*CALIBRATION_TABLE_SIZE)] = {0};
+  19:.\PeltierCalibration.c **** 
+  20:.\PeltierCalibration.c **** 
+  21:.\PeltierCalibration.c **** 
+  22:.\PeltierCalibration.c **** 
+  23:.\PeltierCalibration.c **** void validateEEPROM(int subModuleId)
+  24:.\PeltierCalibration.c **** {
+  45              		.loc 1 24 0
+  46              		.cfi_startproc
+  47              		@ args = 0, pretend = 0, frame = 16
+  48              		@ frame_needed = 1, uses_anonymous_args = 0
+  49 0000 80B5     		push	{r7, lr}
+  50              		.cfi_def_cfa_offset 8
+  51              		.cfi_offset 7, -8
+  52              		.cfi_offset 14, -4
+  53 0002 84B0     		sub	sp, sp, #16
+  54              		.cfi_def_cfa_offset 24
+  55 0004 00AF     		add	r7, sp, #0
+  56              		.cfi_def_cfa_register 7
+  57 0006 7860     		str	r0, [r7, #4]
+  25:.\PeltierCalibration.c ****     int i;
+  26:.\PeltierCalibration.c ****     
+  27:.\PeltierCalibration.c ****     if (subModuleId == SubModule1_ID)
+  58              		.loc 1 27 0
+  59 0008 7B68     		ldr	r3, [r7, #4]
+  60 000a 012B     		cmp	r3, #1
+  61 000c 1DD1     		bne	.L2
+  28:.\PeltierCalibration.c ****     {
+  29:.\PeltierCalibration.c ****         for (i=0; i<10; i++)
+  62              		.loc 1 29 0
+  63 000e 0023     		movs	r3, #0
+  64 0010 FB60     		str	r3, [r7, #12]
+  65 0012 16E0     		b	.L3
+  66              	.L5:
+  30:.\PeltierCalibration.c ****         {
+  31:.\PeltierCalibration.c ****             if (SM1calibrationValues[i] != 0)
+  67              		.loc 1 31 0
+  68 0014 204A     		ldr	r2, .L10
+  69 0016 FB68     		ldr	r3, [r7, #12]
+  70 0018 32F81330 		ldrh	r3, [r2, r3, lsl #1]
+  71 001c 002B     		cmp	r3, #0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 3
+
+
+  72 001e 0DD0     		beq	.L4
+  32:.\PeltierCalibration.c ****             {            
+  33:.\PeltierCalibration.c ****                 Blue_LED_Write(1u);
+  73              		.loc 1 33 0
+  74 0020 0120     		movs	r0, #1
+  75 0022 FFF7FEFF 		bl	Blue_LED_Write
+  34:.\PeltierCalibration.c ****                 CyDelay(300);
+  76              		.loc 1 34 0
+  77 0026 4FF49670 		mov	r0, #300
+  78 002a FFF7FEFF 		bl	CyDelay
+  35:.\PeltierCalibration.c ****                 Blue_LED_Write(0u);
+  79              		.loc 1 35 0
+  80 002e 0020     		movs	r0, #0
+  81 0030 FFF7FEFF 		bl	Blue_LED_Write
+  36:.\PeltierCalibration.c ****                 CyDelay(300); 
+  82              		.loc 1 36 0
+  83 0034 4FF49670 		mov	r0, #300
+  84 0038 FFF7FEFF 		bl	CyDelay
+  85              	.L4:
+  29:.\PeltierCalibration.c ****         {
+  86              		.loc 1 29 0 discriminator 2
+  87 003c FB68     		ldr	r3, [r7, #12]
+  88 003e 0133     		adds	r3, r3, #1
+  89 0040 FB60     		str	r3, [r7, #12]
+  90              	.L3:
+  29:.\PeltierCalibration.c ****         {
+  91              		.loc 1 29 0 is_stmt 0 discriminator 1
+  92 0042 FB68     		ldr	r3, [r7, #12]
+  93 0044 092B     		cmp	r3, #9
+  94 0046 E5DD     		ble	.L5
+  95 0048 1FE0     		b	.L6
+  96              	.L2:
+  37:.\PeltierCalibration.c ****             }
+  38:.\PeltierCalibration.c ****         }
+  39:.\PeltierCalibration.c ****     }
+  40:.\PeltierCalibration.c ****     else if(subModuleId == SubModule2_ID)
+  97              		.loc 1 40 0 is_stmt 1
+  98 004a 7B68     		ldr	r3, [r7, #4]
+  99 004c 022B     		cmp	r3, #2
+ 100 004e 1CD1     		bne	.L6
+  41:.\PeltierCalibration.c ****     {
+  42:.\PeltierCalibration.c ****         for (i=0; i<10; i++)
+ 101              		.loc 1 42 0
+ 102 0050 0023     		movs	r3, #0
+ 103 0052 FB60     		str	r3, [r7, #12]
+ 104 0054 16E0     		b	.L7
+ 105              	.L9:
+  43:.\PeltierCalibration.c ****         {
+  44:.\PeltierCalibration.c ****             if (SM2calibrationValues[i] != 0)
+ 106              		.loc 1 44 0
+ 107 0056 114A     		ldr	r2, .L10+4
+ 108 0058 FB68     		ldr	r3, [r7, #12]
+ 109 005a 32F81330 		ldrh	r3, [r2, r3, lsl #1]
+ 110 005e 002B     		cmp	r3, #0
+ 111 0060 0DD0     		beq	.L8
+  45:.\PeltierCalibration.c ****             {            
+  46:.\PeltierCalibration.c ****                 Blue_LED_Write(1u);
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 4
+
+
+ 112              		.loc 1 46 0
+ 113 0062 0120     		movs	r0, #1
+ 114 0064 FFF7FEFF 		bl	Blue_LED_Write
+  47:.\PeltierCalibration.c ****                 CyDelay(300);
+ 115              		.loc 1 47 0
+ 116 0068 4FF49670 		mov	r0, #300
+ 117 006c FFF7FEFF 		bl	CyDelay
+  48:.\PeltierCalibration.c ****                 Blue_LED_Write(0u);
+ 118              		.loc 1 48 0
+ 119 0070 0020     		movs	r0, #0
+ 120 0072 FFF7FEFF 		bl	Blue_LED_Write
+  49:.\PeltierCalibration.c ****                 CyDelay(300); 
+ 121              		.loc 1 49 0
+ 122 0076 4FF49670 		mov	r0, #300
+ 123 007a FFF7FEFF 		bl	CyDelay
+ 124              	.L8:
+  42:.\PeltierCalibration.c ****         {
+ 125              		.loc 1 42 0 discriminator 2
+ 126 007e FB68     		ldr	r3, [r7, #12]
+ 127 0080 0133     		adds	r3, r3, #1
+ 128 0082 FB60     		str	r3, [r7, #12]
+ 129              	.L7:
+  42:.\PeltierCalibration.c ****         {
+ 130              		.loc 1 42 0 is_stmt 0 discriminator 1
+ 131 0084 FB68     		ldr	r3, [r7, #12]
+ 132 0086 092B     		cmp	r3, #9
+ 133 0088 E5DD     		ble	.L9
+ 134              	.L6:
+  50:.\PeltierCalibration.c ****             }
+  51:.\PeltierCalibration.c ****         }  
+  52:.\PeltierCalibration.c ****     }
+  53:.\PeltierCalibration.c **** 
+  54:.\PeltierCalibration.c ****     CyDelay(1000);
+ 135              		.loc 1 54 0 is_stmt 1
+ 136 008a 4FF47A70 		mov	r0, #1000
+ 137 008e FFF7FEFF 		bl	CyDelay
+  55:.\PeltierCalibration.c **** }
+ 138              		.loc 1 55 0
+ 139 0092 1037     		adds	r7, r7, #16
+ 140              		.cfi_def_cfa_offset 8
+ 141 0094 BD46     		mov	sp, r7
+ 142              		.cfi_def_cfa_register 13
+ 143              		@ sp needed
+ 144 0096 80BD     		pop	{r7, pc}
+ 145              	.L11:
+ 146              		.align	2
+ 147              	.L10:
+ 148 0098 00000000 		.word	SM1calibrationValues
+ 149 009c 00000000 		.word	SM2calibrationValues
+ 150              		.cfi_endproc
+ 151              	.LFE56:
+ 152              		.size	validateEEPROM, .-validateEEPROM
+ 153              		.section	.text.getCalibrationTable,"ax",%progbits
+ 154              		.align	2
+ 155              		.global	getCalibrationTable
+ 156              		.thumb
+ 157              		.thumb_func
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 5
+
+
+ 158              		.type	getCalibrationTable, %function
+ 159              	getCalibrationTable:
+ 160              	.LFB57:
+  56:.\PeltierCalibration.c **** 
+  57:.\PeltierCalibration.c **** //* Used to read calibration table from EEPROM */
+  58:.\PeltierCalibration.c **** //Return 1 if data is present in the calibration table in the EEPROM, 0 otherwise.
+  59:.\PeltierCalibration.c **** boolean getCalibrationTable(Tac_Submodule* TACPtr)
+  60:.\PeltierCalibration.c **** {
+ 161              		.loc 1 60 0
+ 162              		.cfi_startproc
+ 163              		@ args = 0, pretend = 0, frame = 24
+ 164              		@ frame_needed = 1, uses_anonymous_args = 0
+ 165              		@ link register save eliminated.
+ 166 0000 80B4     		push	{r7}
+ 167              		.cfi_def_cfa_offset 4
+ 168              		.cfi_offset 7, -4
+ 169 0002 87B0     		sub	sp, sp, #28
+ 170              		.cfi_def_cfa_offset 32
+ 171 0004 00AF     		add	r7, sp, #0
+ 172              		.cfi_def_cfa_register 7
+ 173 0006 7860     		str	r0, [r7, #4]
+  61:.\PeltierCalibration.c ****     int i=0;
+ 174              		.loc 1 61 0
+ 175 0008 0023     		movs	r3, #0
+ 176 000a 7B61     		str	r3, [r7, #20]
+  62:.\PeltierCalibration.c ****     
+  63:.\PeltierCalibration.c ****     if (TACPtr->subModuleId == SubModule1_ID)
+ 177              		.loc 1 63 0
+ 178 000c 7B68     		ldr	r3, [r7, #4]
+ 179 000e 1B88     		ldrh	r3, [r3]
+ 180 0010 012B     		cmp	r3, #1
+ 181 0012 35D1     		bne	.L13
+ 182              	.LBB2:
+  64:.\PeltierCalibration.c ****     {
+  65:.\PeltierCalibration.c ****         volatile const uint8* array1 = (volatile uint8 *) &SM1eepromArray[0]; // array1 devrait poi
+ 183              		.loc 1 65 0
+ 184 0014 484B     		ldr	r3, .L21
+ 185 0016 3B61     		str	r3, [r7, #16]
+  66:.\PeltierCalibration.c ****         for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+ 186              		.loc 1 66 0
+ 187 0018 0023     		movs	r3, #0
+ 188 001a 7B61     		str	r3, [r7, #20]
+ 189 001c 2CE0     		b	.L14
+ 190              	.L15:
+  67:.\PeltierCalibration.c ****         {
+  68:.\PeltierCalibration.c ****             SM1calibrationValues[i] = (int16)((array1[(3*i)+1] << 8) | array1[(3*i)]); 
+ 191              		.loc 1 68 0 discriminator 3
+ 192 001e 7A69     		ldr	r2, [r7, #20]
+ 193 0020 1346     		mov	r3, r2
+ 194 0022 5B00     		lsls	r3, r3, #1
+ 195 0024 1344     		add	r3, r3, r2
+ 196 0026 0133     		adds	r3, r3, #1
+ 197 0028 3A69     		ldr	r2, [r7, #16]
+ 198 002a 1344     		add	r3, r3, r2
+ 199 002c 1B78     		ldrb	r3, [r3]
+ 200 002e DBB2     		uxtb	r3, r3
+ 201 0030 1B02     		lsls	r3, r3, #8
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 6
+
+
+ 202 0032 99B2     		uxth	r1, r3
+ 203 0034 7A69     		ldr	r2, [r7, #20]
+ 204 0036 1346     		mov	r3, r2
+ 205 0038 5B00     		lsls	r3, r3, #1
+ 206 003a 1344     		add	r3, r3, r2
+ 207 003c 1A46     		mov	r2, r3
+ 208 003e 3B69     		ldr	r3, [r7, #16]
+ 209 0040 1344     		add	r3, r3, r2
+ 210 0042 1B78     		ldrb	r3, [r3]
+ 211 0044 DBB2     		uxtb	r3, r3
+ 212 0046 9BB2     		uxth	r3, r3
+ 213 0048 0A46     		mov	r2, r1	@ movhi
+ 214 004a 1343     		orrs	r3, r3, r2
+ 215 004c 99B2     		uxth	r1, r3
+ 216 004e 3B4A     		ldr	r2, .L21+4
+ 217 0050 7B69     		ldr	r3, [r7, #20]
+ 218 0052 22F81310 		strh	r1, [r2, r3, lsl #1]	@ movhi
+  69:.\PeltierCalibration.c ****             SM1percentageValues[i] = (int8)array1[3*i+2]; 
+ 219              		.loc 1 69 0 discriminator 3
+ 220 0056 7A69     		ldr	r2, [r7, #20]
+ 221 0058 1346     		mov	r3, r2
+ 222 005a 5B00     		lsls	r3, r3, #1
+ 223 005c 1344     		add	r3, r3, r2
+ 224 005e 0233     		adds	r3, r3, #2
+ 225 0060 3A69     		ldr	r2, [r7, #16]
+ 226 0062 1344     		add	r3, r3, r2
+ 227 0064 1B78     		ldrb	r3, [r3]
+ 228 0066 D9B2     		uxtb	r1, r3
+ 229 0068 354A     		ldr	r2, .L21+8
+ 230 006a 7B69     		ldr	r3, [r7, #20]
+ 231 006c 1344     		add	r3, r3, r2
+ 232 006e 0A46     		mov	r2, r1
+ 233 0070 1A70     		strb	r2, [r3]
+  66:.\PeltierCalibration.c ****         for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+ 234              		.loc 1 66 0 discriminator 3
+ 235 0072 7B69     		ldr	r3, [r7, #20]
+ 236 0074 0133     		adds	r3, r3, #1
+ 237 0076 7B61     		str	r3, [r7, #20]
+ 238              	.L14:
+  66:.\PeltierCalibration.c ****         for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+ 239              		.loc 1 66 0 is_stmt 0 discriminator 1
+ 240 0078 7B69     		ldr	r3, [r7, #20]
+ 241 007a 632B     		cmp	r3, #99
+ 242 007c CFDD     		ble	.L15
+ 243              	.LBE2:
+ 244 007e 38E0     		b	.L16
+ 245              	.L13:
+  70:.\PeltierCalibration.c ****         }
+  71:.\PeltierCalibration.c ****     }
+  72:.\PeltierCalibration.c ****     else if (TACPtr->subModuleId == SubModule2_ID)
+ 246              		.loc 1 72 0 is_stmt 1
+ 247 0080 7B68     		ldr	r3, [r7, #4]
+ 248 0082 1B88     		ldrh	r3, [r3]
+ 249 0084 022B     		cmp	r3, #2
+ 250 0086 34D1     		bne	.L16
+ 251              	.LBB3:
+  73:.\PeltierCalibration.c ****     {
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 7
+
+
+  74:.\PeltierCalibration.c ****         volatile const uint8* array1 = (volatile uint8 *) &SM2eepromArray[0]; // array1 devrait poi
+ 252              		.loc 1 74 0
+ 253 0088 2E4B     		ldr	r3, .L21+12
+ 254 008a FB60     		str	r3, [r7, #12]
+  75:.\PeltierCalibration.c ****         for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+ 255              		.loc 1 75 0
+ 256 008c 0023     		movs	r3, #0
+ 257 008e 7B61     		str	r3, [r7, #20]
+ 258 0090 2CE0     		b	.L17
+ 259              	.L18:
+  76:.\PeltierCalibration.c ****         {
+  77:.\PeltierCalibration.c ****             SM2calibrationValues[i] = (int16)((array1[(3*i)+1] << 8) | array1[(3*i)]);
+ 260              		.loc 1 77 0 discriminator 3
+ 261 0092 7A69     		ldr	r2, [r7, #20]
+ 262 0094 1346     		mov	r3, r2
+ 263 0096 5B00     		lsls	r3, r3, #1
+ 264 0098 1344     		add	r3, r3, r2
+ 265 009a 0133     		adds	r3, r3, #1
+ 266 009c FA68     		ldr	r2, [r7, #12]
+ 267 009e 1344     		add	r3, r3, r2
+ 268 00a0 1B78     		ldrb	r3, [r3]
+ 269 00a2 DBB2     		uxtb	r3, r3
+ 270 00a4 1B02     		lsls	r3, r3, #8
+ 271 00a6 99B2     		uxth	r1, r3
+ 272 00a8 7A69     		ldr	r2, [r7, #20]
+ 273 00aa 1346     		mov	r3, r2
+ 274 00ac 5B00     		lsls	r3, r3, #1
+ 275 00ae 1344     		add	r3, r3, r2
+ 276 00b0 1A46     		mov	r2, r3
+ 277 00b2 FB68     		ldr	r3, [r7, #12]
+ 278 00b4 1344     		add	r3, r3, r2
+ 279 00b6 1B78     		ldrb	r3, [r3]
+ 280 00b8 DBB2     		uxtb	r3, r3
+ 281 00ba 9BB2     		uxth	r3, r3
+ 282 00bc 0A46     		mov	r2, r1	@ movhi
+ 283 00be 1343     		orrs	r3, r3, r2
+ 284 00c0 99B2     		uxth	r1, r3
+ 285 00c2 214A     		ldr	r2, .L21+16
+ 286 00c4 7B69     		ldr	r3, [r7, #20]
+ 287 00c6 22F81310 		strh	r1, [r2, r3, lsl #1]	@ movhi
+  78:.\PeltierCalibration.c ****             SM2percentageValues[i] = (int8)array1[3*i+2]; 
+ 288              		.loc 1 78 0 discriminator 3
+ 289 00ca 7A69     		ldr	r2, [r7, #20]
+ 290 00cc 1346     		mov	r3, r2
+ 291 00ce 5B00     		lsls	r3, r3, #1
+ 292 00d0 1344     		add	r3, r3, r2
+ 293 00d2 0233     		adds	r3, r3, #2
+ 294 00d4 FA68     		ldr	r2, [r7, #12]
+ 295 00d6 1344     		add	r3, r3, r2
+ 296 00d8 1B78     		ldrb	r3, [r3]
+ 297 00da D9B2     		uxtb	r1, r3
+ 298 00dc 1B4A     		ldr	r2, .L21+20
+ 299 00de 7B69     		ldr	r3, [r7, #20]
+ 300 00e0 1344     		add	r3, r3, r2
+ 301 00e2 0A46     		mov	r2, r1
+ 302 00e4 1A70     		strb	r2, [r3]
+  75:.\PeltierCalibration.c ****         for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 8
+
+
+ 303              		.loc 1 75 0 discriminator 3
+ 304 00e6 7B69     		ldr	r3, [r7, #20]
+ 305 00e8 0133     		adds	r3, r3, #1
+ 306 00ea 7B61     		str	r3, [r7, #20]
+ 307              	.L17:
+  75:.\PeltierCalibration.c ****         for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+ 308              		.loc 1 75 0 is_stmt 0 discriminator 1
+ 309 00ec 7B69     		ldr	r3, [r7, #20]
+ 310 00ee 632B     		cmp	r3, #99
+ 311 00f0 CFDD     		ble	.L18
+ 312              	.L16:
+ 313              	.LBE3:
+  79:.\PeltierCalibration.c ****         }   
+  80:.\PeltierCalibration.c ****     }  
+  81:.\PeltierCalibration.c ****     // If the 3 first values from the EEPROM are null, the calibration was never done.
+  82:.\PeltierCalibration.c ****     if ((TACPtr->calibrationValuesPtr[0] == 0) && (TACPtr->calibrationValuesPtr[1] == 0) && (TACPtr
+ 314              		.loc 1 82 0 is_stmt 1
+ 315 00f2 7B68     		ldr	r3, [r7, #4]
+ 316 00f4 DB69     		ldr	r3, [r3, #28]
+ 317 00f6 1B88     		ldrh	r3, [r3]
+ 318 00f8 002B     		cmp	r3, #0
+ 319 00fa 11D1     		bne	.L19
+ 320              		.loc 1 82 0 is_stmt 0 discriminator 1
+ 321 00fc 7B68     		ldr	r3, [r7, #4]
+ 322 00fe DB69     		ldr	r3, [r3, #28]
+ 323 0100 0233     		adds	r3, r3, #2
+ 324 0102 1B88     		ldrh	r3, [r3]
+ 325 0104 002B     		cmp	r3, #0
+ 326 0106 0BD1     		bne	.L19
+ 327              		.loc 1 82 0 discriminator 2
+ 328 0108 7B68     		ldr	r3, [r7, #4]
+ 329 010a DB69     		ldr	r3, [r3, #28]
+ 330 010c 0433     		adds	r3, r3, #4
+ 331 010e 1B88     		ldrh	r3, [r3]
+ 332 0110 002B     		cmp	r3, #0
+ 333 0112 05D1     		bne	.L19
+  83:.\PeltierCalibration.c ****     {
+  84:.\PeltierCalibration.c ****         TACPtr->areCalibrationValuesRetrieved = False;
+ 334              		.loc 1 84 0 is_stmt 1
+ 335 0114 7B68     		ldr	r3, [r7, #4]
+ 336 0116 0022     		movs	r2, #0
+ 337 0118 83F82420 		strb	r2, [r3, #36]
+  85:.\PeltierCalibration.c ****         return 0;
+ 338              		.loc 1 85 0
+ 339 011c 0023     		movs	r3, #0
+ 340 011e 04E0     		b	.L20
+ 341              	.L19:
+  86:.\PeltierCalibration.c ****     }
+  87:.\PeltierCalibration.c ****     else
+  88:.\PeltierCalibration.c ****     {
+  89:.\PeltierCalibration.c ****         TACPtr->areCalibrationValuesRetrieved = True;
+ 342              		.loc 1 89 0
+ 343 0120 7B68     		ldr	r3, [r7, #4]
+ 344 0122 0122     		movs	r2, #1
+ 345 0124 83F82420 		strb	r2, [r3, #36]
+  90:.\PeltierCalibration.c ****         return 1;
+ 346              		.loc 1 90 0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 9
+
+
+ 347 0128 0123     		movs	r3, #1
+ 348              	.L20:
+  91:.\PeltierCalibration.c ****     }
+  92:.\PeltierCalibration.c ****     /*
+  93:.\PeltierCalibration.c ****     volatile const uint8* array1 = (volatile uint8 *) &eepromArray[0]; // array1 devrait pointer ve
+  94:.\PeltierCalibration.c ****    
+  95:.\PeltierCalibration.c ****     int i=0;
+  96:.\PeltierCalibration.c ****     for(i = 0; i<CALIBRATION_TABLE_SIZE; i++)
+  97:.\PeltierCalibration.c ****     {       
+  98:.\PeltierCalibration.c ****         SM1calibrationValues[i] = (int)(array1[(5*i)+3] << 24) | (array1[(5*i)+2] << 16) | (array1[
+  99:.\PeltierCalibration.c ****         SM1percentageValues[i] = (int8)array1[5*i+4];
+ 100:.\PeltierCalibration.c ****     }
+ 101:.\PeltierCalibration.c ****     
+ 102:.\PeltierCalibration.c ****     // If the two first values from the EEPROM are null, the calibration was never done.
+ 103:.\PeltierCalibration.c ****     if ((SM1calibrationValues[0] == 0) & (SM1calibrationValues[1] == 0))
+ 104:.\PeltierCalibration.c ****         return 0;
+ 105:.\PeltierCalibration.c ****     else
+ 106:.\PeltierCalibration.c ****         return 1;  
+ 107:.\PeltierCalibration.c ****     */
+ 108:.\PeltierCalibration.c **** }
+ 349              		.loc 1 108 0
+ 350 012a 1846     		mov	r0, r3
+ 351 012c 1C37     		adds	r7, r7, #28
+ 352              		.cfi_def_cfa_offset 4
+ 353 012e BD46     		mov	sp, r7
+ 354              		.cfi_def_cfa_register 13
+ 355              		@ sp needed
+ 356 0130 5DF8047B 		ldr	r7, [sp], #4
+ 357              		.cfi_restore 7
+ 358              		.cfi_def_cfa_offset 0
+ 359 0134 7047     		bx	lr
+ 360              	.L22:
+ 361 0136 00BF     		.align	2
+ 362              	.L21:
+ 363 0138 F4010000 		.word	SM1eepromArray
+ 364 013c 00000000 		.word	SM1calibrationValues
+ 365 0140 00000000 		.word	SM1percentageValues
+ 366 0144 20030000 		.word	SM2eepromArray
+ 367 0148 00000000 		.word	SM2calibrationValues
+ 368 014c 00000000 		.word	SM2percentageValues
+ 369              		.cfi_endproc
+ 370              	.LFE57:
+ 371              		.size	getCalibrationTable, .-getCalibrationTable
+ 372              		.section	.text.setCalibrationTable,"ax",%progbits
+ 373              		.align	2
+ 374              		.global	setCalibrationTable
+ 375              		.thumb
+ 376              		.thumb_func
+ 377              		.type	setCalibrationTable, %function
+ 378              	setCalibrationTable:
+ 379              	.LFB58:
+ 109:.\PeltierCalibration.c **** //* Used to set calibration table from EEPROM */
+ 110:.\PeltierCalibration.c **** void setCalibrationTable(Tac_Submodule* TACPtr)
+ 111:.\PeltierCalibration.c **** {    
+ 380              		.loc 1 111 0
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 320
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 10
+
+
+ 383              		@ frame_needed = 1, uses_anonymous_args = 0
+ 384 0000 80B5     		push	{r7, lr}
+ 385              		.cfi_def_cfa_offset 8
+ 386              		.cfi_offset 7, -8
+ 387              		.cfi_offset 14, -4
+ 388 0002 D0B0     		sub	sp, sp, #320
+ 389              		.cfi_def_cfa_offset 328
+ 390 0004 00AF     		add	r7, sp, #0
+ 391              		.cfi_def_cfa_register 7
+ 392 0006 3B1D     		adds	r3, r7, #4
+ 393 0008 1860     		str	r0, [r3]
+ 112:.\PeltierCalibration.c ****     int i = 0;
+ 394              		.loc 1 112 0
+ 395 000a 0023     		movs	r3, #0
+ 396 000c C7F83C31 		str	r3, [r7, #316]
+ 113:.\PeltierCalibration.c ****     uint8_t *array1;
+ 114:.\PeltierCalibration.c ****     
+ 115:.\PeltierCalibration.c ****     uint8 tempTemperatureAndPercentageArray[3*CALIBRATION_TABLE_SIZE] = {0}; // 4 bytes of temperat
+ 397              		.loc 1 115 0
+ 398 0010 07F10C03 		add	r3, r7, #12
+ 399 0014 1A46     		mov	r2, r3
+ 400 0016 4FF49673 		mov	r3, #300
+ 401 001a 1046     		mov	r0, r2
+ 402 001c 0021     		movs	r1, #0
+ 403 001e 1A46     		mov	r2, r3
+ 404 0020 FFF7FEFF 		bl	memset
+ 116:.\PeltierCalibration.c ****     
+ 117:.\PeltierCalibration.c ****     if (TACPtr->subModuleId == SubModule1_ID)
+ 405              		.loc 1 117 0
+ 406 0024 3B1D     		adds	r3, r7, #4
+ 407 0026 1B68     		ldr	r3, [r3]
+ 408 0028 1B88     		ldrh	r3, [r3]
+ 409 002a 012B     		cmp	r3, #1
+ 410 002c 44D1     		bne	.L24
+ 118:.\PeltierCalibration.c ****     {
+ 119:.\PeltierCalibration.c ****         for(i=0; i<CALIBRATION_TABLE_SIZE; i++)
+ 411              		.loc 1 119 0
+ 412 002e 0023     		movs	r3, #0
+ 413 0030 C7F83C31 		str	r3, [r7, #316]
+ 414 0034 30E0     		b	.L25
+ 415              	.L26:
+ 120:.\PeltierCalibration.c ****         {
+ 121:.\PeltierCalibration.c ****             array1 = (uint8_t*)(&SM1calibrationValues[i]);
+ 416              		.loc 1 121 0 discriminator 3
+ 417 0036 D7F83C31 		ldr	r3, [r7, #316]
+ 418 003a 5B00     		lsls	r3, r3, #1
+ 419 003c 454A     		ldr	r2, .L30
+ 420 003e 1344     		add	r3, r3, r2
+ 421 0040 C7F83831 		str	r3, [r7, #312]
+ 122:.\PeltierCalibration.c ****             tempTemperatureAndPercentageArray[3*i] = array1[0];     // LSB
+ 422              		.loc 1 122 0 discriminator 3
+ 423 0044 D7F83C21 		ldr	r2, [r7, #316]
+ 424 0048 1346     		mov	r3, r2
+ 425 004a 5B00     		lsls	r3, r3, #1
+ 426 004c 1344     		add	r3, r3, r2
+ 427 004e D7F83821 		ldr	r2, [r7, #312]
+ 428 0052 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 11
+
+
+ 429 0054 07F10C02 		add	r2, r7, #12
+ 430 0058 D154     		strb	r1, [r2, r3]
+ 123:.\PeltierCalibration.c ****             tempTemperatureAndPercentageArray[(3*i)+1] = array1[1]; // MSB
+ 431              		.loc 1 123 0 discriminator 3
+ 432 005a D7F83C21 		ldr	r2, [r7, #316]
+ 433 005e 1346     		mov	r3, r2
+ 434 0060 5B00     		lsls	r3, r3, #1
+ 435 0062 1344     		add	r3, r3, r2
+ 436 0064 0133     		adds	r3, r3, #1
+ 437 0066 D7F83821 		ldr	r2, [r7, #312]
+ 438 006a 5178     		ldrb	r1, [r2, #1]	@ zero_extendqisi2
+ 439 006c 07F10C02 		add	r2, r7, #12
+ 440 0070 D154     		strb	r1, [r2, r3]
+ 124:.\PeltierCalibration.c ****             tempTemperatureAndPercentageArray[(3*i)+2] = (uint8)SM1percentageValues[i]; // Storing 
+ 441              		.loc 1 124 0 discriminator 3
+ 442 0072 D7F83C21 		ldr	r2, [r7, #316]
+ 443 0076 1346     		mov	r3, r2
+ 444 0078 5B00     		lsls	r3, r3, #1
+ 445 007a 1344     		add	r3, r3, r2
+ 446 007c 0233     		adds	r3, r3, #2
+ 447 007e 3649     		ldr	r1, .L30+4
+ 448 0080 D7F83C21 		ldr	r2, [r7, #316]
+ 449 0084 0A44     		add	r2, r2, r1
+ 450 0086 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 451 0088 07F10C02 		add	r2, r7, #12
+ 452 008c D154     		strb	r1, [r2, r3]
+ 119:.\PeltierCalibration.c ****         {
+ 453              		.loc 1 119 0 discriminator 3
+ 454 008e D7F83C31 		ldr	r3, [r7, #316]
+ 455 0092 0133     		adds	r3, r3, #1
+ 456 0094 C7F83C31 		str	r3, [r7, #316]
+ 457              	.L25:
+ 119:.\PeltierCalibration.c ****         {
+ 458              		.loc 1 119 0 is_stmt 0 discriminator 1
+ 459 0098 D7F83C31 		ldr	r3, [r7, #316]
+ 460 009c 632B     		cmp	r3, #99
+ 461 009e CADD     		ble	.L26
+ 125:.\PeltierCalibration.c ****         }
+ 126:.\PeltierCalibration.c ****         eepromStatus = Em_EEPROM_Write(&tempTemperatureAndPercentageArray[0], &SM1eepromArray[0], 3
+ 462              		.loc 1 126 0 is_stmt 1
+ 463 00a0 07F10C03 		add	r3, r7, #12
+ 464 00a4 1846     		mov	r0, r3
+ 465 00a6 2D49     		ldr	r1, .L30+8
+ 466 00a8 4FF49672 		mov	r2, #300
+ 467 00ac FFF7FEFF 		bl	Em_EEPROM_Write
+ 468 00b0 0246     		mov	r2, r0
+ 469 00b2 2B4B     		ldr	r3, .L30+12
+ 470 00b4 1A60     		str	r2, [r3]
+ 471 00b6 48E0     		b	.L23
+ 472              	.L24:
+ 127:.\PeltierCalibration.c ****         }
+ 128:.\PeltierCalibration.c ****     else if (TACPtr->subModuleId == SubModule2_ID)
+ 473              		.loc 1 128 0
+ 474 00b8 3B1D     		adds	r3, r7, #4
+ 475 00ba 1B68     		ldr	r3, [r3]
+ 476 00bc 1B88     		ldrh	r3, [r3]
+ 477 00be 022B     		cmp	r3, #2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 12
+
+
+ 478 00c0 43D1     		bne	.L23
+ 129:.\PeltierCalibration.c ****     {
+ 130:.\PeltierCalibration.c ****         for(i=0; i<CALIBRATION_TABLE_SIZE; i++)
+ 479              		.loc 1 130 0
+ 480 00c2 0023     		movs	r3, #0
+ 481 00c4 C7F83C31 		str	r3, [r7, #316]
+ 482 00c8 30E0     		b	.L28
+ 483              	.L29:
+ 131:.\PeltierCalibration.c ****         {
+ 132:.\PeltierCalibration.c ****             array1 = (uint8_t*)(&SM2calibrationValues[i]);
+ 484              		.loc 1 132 0 discriminator 3
+ 485 00ca D7F83C31 		ldr	r3, [r7, #316]
+ 486 00ce 5B00     		lsls	r3, r3, #1
+ 487 00d0 244A     		ldr	r2, .L30+16
+ 488 00d2 1344     		add	r3, r3, r2
+ 489 00d4 C7F83831 		str	r3, [r7, #312]
+ 133:.\PeltierCalibration.c ****             tempTemperatureAndPercentageArray[3*i] = array1[0];     // LSB
+ 490              		.loc 1 133 0 discriminator 3
+ 491 00d8 D7F83C21 		ldr	r2, [r7, #316]
+ 492 00dc 1346     		mov	r3, r2
+ 493 00de 5B00     		lsls	r3, r3, #1
+ 494 00e0 1344     		add	r3, r3, r2
+ 495 00e2 D7F83821 		ldr	r2, [r7, #312]
+ 496 00e6 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 497 00e8 07F10C02 		add	r2, r7, #12
+ 498 00ec D154     		strb	r1, [r2, r3]
+ 134:.\PeltierCalibration.c ****             tempTemperatureAndPercentageArray[(3*i)+1] = array1[1]; // MSB
+ 499              		.loc 1 134 0 discriminator 3
+ 500 00ee D7F83C21 		ldr	r2, [r7, #316]
+ 501 00f2 1346     		mov	r3, r2
+ 502 00f4 5B00     		lsls	r3, r3, #1
+ 503 00f6 1344     		add	r3, r3, r2
+ 504 00f8 0133     		adds	r3, r3, #1
+ 505 00fa D7F83821 		ldr	r2, [r7, #312]
+ 506 00fe 5178     		ldrb	r1, [r2, #1]	@ zero_extendqisi2
+ 507 0100 07F10C02 		add	r2, r7, #12
+ 508 0104 D154     		strb	r1, [r2, r3]
+ 135:.\PeltierCalibration.c ****             tempTemperatureAndPercentageArray[(3*i)+2] = (uint8)SM1percentageValues[i]; // Storing 
+ 509              		.loc 1 135 0 discriminator 3
+ 510 0106 D7F83C21 		ldr	r2, [r7, #316]
+ 511 010a 1346     		mov	r3, r2
+ 512 010c 5B00     		lsls	r3, r3, #1
+ 513 010e 1344     		add	r3, r3, r2
+ 514 0110 0233     		adds	r3, r3, #2
+ 515 0112 1149     		ldr	r1, .L30+4
+ 516 0114 D7F83C21 		ldr	r2, [r7, #316]
+ 517 0118 0A44     		add	r2, r2, r1
+ 518 011a 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 519 011c 07F10C02 		add	r2, r7, #12
+ 520 0120 D154     		strb	r1, [r2, r3]
+ 130:.\PeltierCalibration.c ****         {
+ 521              		.loc 1 130 0 discriminator 3
+ 522 0122 D7F83C31 		ldr	r3, [r7, #316]
+ 523 0126 0133     		adds	r3, r3, #1
+ 524 0128 C7F83C31 		str	r3, [r7, #316]
+ 525              	.L28:
+ 130:.\PeltierCalibration.c ****         {
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 13
+
+
+ 526              		.loc 1 130 0 is_stmt 0 discriminator 1
+ 527 012c D7F83C31 		ldr	r3, [r7, #316]
+ 528 0130 632B     		cmp	r3, #99
+ 529 0132 CADD     		ble	.L29
+ 136:.\PeltierCalibration.c ****         } 
+ 137:.\PeltierCalibration.c ****         eepromStatus = Em_EEPROM_Write(&tempTemperatureAndPercentageArray[0], &SM2eepromArray[0], 3
+ 530              		.loc 1 137 0 is_stmt 1
+ 531 0134 07F10C03 		add	r3, r7, #12
+ 532 0138 1846     		mov	r0, r3
+ 533 013a 0B49     		ldr	r1, .L30+20
+ 534 013c 4FF49672 		mov	r2, #300
+ 535 0140 FFF7FEFF 		bl	Em_EEPROM_Write
+ 536 0144 0246     		mov	r2, r0
+ 537 0146 064B     		ldr	r3, .L30+12
+ 538 0148 1A60     		str	r2, [r3]
+ 539              	.L23:
+ 138:.\PeltierCalibration.c ****     }
+ 139:.\PeltierCalibration.c ****    
+ 140:.\PeltierCalibration.c ****     /*
+ 141:.\PeltierCalibration.c ****     int i = 0;
+ 142:.\PeltierCalibration.c ****     uint8_t *array1;
+ 143:.\PeltierCalibration.c ****     
+ 144:.\PeltierCalibration.c ****     uint8 tempTemperatureAndPercentageArray[5*CALIBRATION_TABLE_SIZE] = {0}; // 4 bytes of temperat
+ 145:.\PeltierCalibration.c ****     
+ 146:.\PeltierCalibration.c ****     for(i=0; i<CALIBRATION_TABLE_SIZE; i++)
+ 147:.\PeltierCalibration.c ****     {
+ 148:.\PeltierCalibration.c ****         array1 = (uint8_t*)(&SM1calibrationValues[i]);
+ 149:.\PeltierCalibration.c ****         tempTemperatureAndPercentageArray[5*i] = array1[0];     // LSB
+ 150:.\PeltierCalibration.c ****         tempTemperatureAndPercentageArray[(5*i)+1] = array1[1]; 
+ 151:.\PeltierCalibration.c ****         tempTemperatureAndPercentageArray[(5*i)+2] = array1[2];
+ 152:.\PeltierCalibration.c ****         tempTemperatureAndPercentageArray[(5*i)+3] = array1[3]; // MSB
+ 153:.\PeltierCalibration.c ****         tempTemperatureAndPercentageArray[(5*i)+4] = (uint8)SM1percentageValues[i]; // Storing a by
+ 154:.\PeltierCalibration.c ****     }	
+ 155:.\PeltierCalibration.c **** 	eepromStatus = Em_EEPROM_Write(&tempTemperatureAndPercentageArray[0], &eepromArray[0], 5*CALIBRATI
+ 156:.\PeltierCalibration.c ****     */
+ 157:.\PeltierCalibration.c **** }
+ 540              		.loc 1 157 0
+ 541 014a 07F5A077 		add	r7, r7, #320
+ 542              		.cfi_def_cfa_offset 8
+ 543 014e BD46     		mov	sp, r7
+ 544              		.cfi_def_cfa_register 13
+ 545              		@ sp needed
+ 546 0150 80BD     		pop	{r7, pc}
+ 547              	.L31:
+ 548 0152 00BF     		.align	2
+ 549              	.L30:
+ 550 0154 00000000 		.word	SM1calibrationValues
+ 551 0158 00000000 		.word	SM1percentageValues
+ 552 015c F4010000 		.word	SM1eepromArray
+ 553 0160 00000000 		.word	eepromStatus
+ 554 0164 00000000 		.word	SM2calibrationValues
+ 555 0168 20030000 		.word	SM2eepromArray
+ 556              		.cfi_endproc
+ 557              	.LFE58:
+ 558              		.size	setCalibrationTable, .-setCalibrationTable
+ 559              		.section	.text.calibration,"ax",%progbits
+ 560              		.align	2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 14
+
+
+ 561              		.global	calibration
+ 562              		.thumb
+ 563              		.thumb_func
+ 564              		.type	calibration, %function
+ 565              	calibration:
+ 566              	.LFB59:
+ 158:.\PeltierCalibration.c **** 
+ 159:.\PeltierCalibration.c **** uint8 calibration(Tac_Submodule* TACPtr)
+ 160:.\PeltierCalibration.c **** {
+ 567              		.loc 1 160 0
+ 568              		.cfi_startproc
+ 569              		@ args = 0, pretend = 0, frame = 240
+ 570              		@ frame_needed = 1, uses_anonymous_args = 0
+ 571 0000 90B5     		push	{r4, r7, lr}
+ 572              		.cfi_def_cfa_offset 12
+ 573              		.cfi_offset 4, -12
+ 574              		.cfi_offset 7, -8
+ 575              		.cfi_offset 14, -4
+ 576 0002 BDB0     		sub	sp, sp, #244
+ 577              		.cfi_def_cfa_offset 256
+ 578 0004 00AF     		add	r7, sp, #0
+ 579              		.cfi_def_cfa_register 7
+ 580 0006 7860     		str	r0, [r7, #4]
+ 161:.\PeltierCalibration.c ****     if (TACPtr->subModuleId==SubModule1_ID || TACPtr->subModuleId==SubModule2_ID)
+ 581              		.loc 1 161 0
+ 582 0008 7B68     		ldr	r3, [r7, #4]
+ 583 000a 1B88     		ldrh	r3, [r3]
+ 584 000c 012B     		cmp	r3, #1
+ 585 000e 04D0     		beq	.L33
+ 586              		.loc 1 161 0 is_stmt 0 discriminator 1
+ 587 0010 7B68     		ldr	r3, [r7, #4]
+ 588 0012 1B88     		ldrh	r3, [r3]
+ 589 0014 022B     		cmp	r3, #2
+ 590 0016 40F0FE80 		bne	.L34
+ 591              	.L33:
+ 592              	.LBB4:
+ 162:.\PeltierCalibration.c ****     {
+ 163:.\PeltierCalibration.c ****         // Set the fan to 100%
+ 164:.\PeltierCalibration.c ****         // Wait for temperature to be stable (ambiant temperature) with no Peltier output
+ 165:.\PeltierCalibration.c ****         // Start by cooling, from the lowest PWM value to the highest
+ 166:.\PeltierCalibration.c ****         // Register all values
+ 167:.\PeltierCalibration.c ****         // Put the Peltier off and wait for return to ambiant temperature
+ 168:.\PeltierCalibration.c ****         // Start heating slowly then increment the PWM gradually registering all values at the same
+ 169:.\PeltierCalibration.c ****         
+ 170:.\PeltierCalibration.c ****         // Set the fan to 100%
+ 171:.\PeltierCalibration.c ****         changeFanSpeed(100,TACPtr->subModuleId);
+ 593              		.loc 1 171 0 is_stmt 1
+ 594 001a 7B68     		ldr	r3, [r7, #4]
+ 595 001c 1B88     		ldrh	r3, [r3]
+ 596 001e 6420     		movs	r0, #100
+ 597 0020 1946     		mov	r1, r3
+ 598 0022 FFF7FEFF 		bl	changeFanSpeed
+ 172:.\PeltierCalibration.c ****         changeFanState(fanEnabled, TACPtr->subModuleId);
+ 599              		.loc 1 172 0
+ 600 0026 7B68     		ldr	r3, [r7, #4]
+ 601 0028 1B88     		ldrh	r3, [r3]
+ 602 002a 0120     		movs	r0, #1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 15
+
+
+ 603 002c 1946     		mov	r1, r3
+ 604 002e FFF7FEFF 		bl	changeFanState
+ 173:.\PeltierCalibration.c ****         
+ 174:.\PeltierCalibration.c ****         // Make sure that the Peltier element is not active :
+ 175:.\PeltierCalibration.c ****         changePeltierModuleState(peltierDisabled, TACPtr->subModuleId); // Signal inH_1 and inH_2 h
+ 605              		.loc 1 175 0
+ 606 0032 7B68     		ldr	r3, [r7, #4]
+ 607 0034 1B88     		ldrh	r3, [r3]
+ 608 0036 0020     		movs	r0, #0
+ 609 0038 1946     		mov	r1, r3
+ 610 003a FFF7FEFF 		bl	changePeltierModuleState
+ 176:.\PeltierCalibration.c ****         
+ 177:.\PeltierCalibration.c ****         // Wait for temperature to be stable (ambiant temperature)
+ 178:.\PeltierCalibration.c ****         int16 ambientTemperature = getStableTemp(TACPtr);
+ 611              		.loc 1 178 0
+ 612 003e 7868     		ldr	r0, [r7, #4]
+ 613 0040 FFF7FEFF 		bl	getStableTemp
+ 614 0044 0346     		mov	r3, r0
+ 615 0046 A7F8E630 		strh	r3, [r7, #230]	@ movhi
+ 179:.\PeltierCalibration.c **** 
+ 180:.\PeltierCalibration.c ****                 
+ 181:.\PeltierCalibration.c ****         // Initialize range of PWM percentage to be used :
+ 182:.\PeltierCalibration.c ****         int8 pwmStartValue = PELTIER_PWM_INCREMENT_VALUE;
+ 616              		.loc 1 182 0
+ 617 004a 0A23     		movs	r3, #10
+ 618 004c 87F8E530 		strb	r3, [r7, #229]
+ 183:.\PeltierCalibration.c ****         int8 pwmEndValue = BEST_COOLING_PWM_PERCENTAGE;
+ 619              		.loc 1 183 0
+ 620 0050 5023     		movs	r3, #80
+ 621 0052 87F8E430 		strb	r3, [r7, #228]
+ 184:.\PeltierCalibration.c ****         int pwmPercentageIncrement = (int)PELTIER_PWM_INCREMENT_VALUE;
+ 622              		.loc 1 184 0
+ 623 0056 0A23     		movs	r3, #10
+ 624 0058 C7F8E030 		str	r3, [r7, #224]
+ 185:.\PeltierCalibration.c ****         int pwmPercentageBeeingSent = pwmStartValue;
+ 625              		.loc 1 185 0
+ 626 005c 97F9E530 		ldrsb	r3, [r7, #229]
+ 627 0060 C7F8EC30 		str	r3, [r7, #236]
+ 186:.\PeltierCalibration.c ****         
+ 187:.\PeltierCalibration.c ****         // Placing the Peltier in cooling mode :
+ 188:.\PeltierCalibration.c ****         changePeltierModuleCurrentDirection(Cooling, TACPtr);
+ 628              		.loc 1 188 0
+ 629 0064 0120     		movs	r0, #1
+ 630 0066 7968     		ldr	r1, [r7, #4]
+ 631 0068 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 189:.\PeltierCalibration.c ****         changePeltierModuleState(peltierEnabled, TACPtr->subModuleId);
+ 632              		.loc 1 189 0
+ 633 006c 7B68     		ldr	r3, [r7, #4]
+ 634 006e 1B88     		ldrh	r3, [r3]
+ 635 0070 0120     		movs	r0, #1
+ 636 0072 1946     		mov	r1, r3
+ 637 0074 FFF7FEFF 		bl	changePeltierModuleState
+ 190:.\PeltierCalibration.c ****         
+ 191:.\PeltierCalibration.c ****         int32 calibrationValueCount = 0;
+ 638              		.loc 1 191 0
+ 639 0078 0023     		movs	r3, #0
+ 640 007a C7F8DC30 		str	r3, [r7, #220]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 16
+
+
+ 192:.\PeltierCalibration.c ****         int16 currentTemp = 0;
+ 641              		.loc 1 192 0
+ 642 007e 0023     		movs	r3, #0
+ 643 0080 A7F8DA30 		strh	r3, [r7, #218]	@ movhi
+ 193:.\PeltierCalibration.c ****         
+ 194:.\PeltierCalibration.c ****         int numberOfCoolingDatas = (pwmEndValue-pwmStartValue)/pwmPercentageIncrement + 1;
+ 644              		.loc 1 194 0
+ 645 0084 97F9E420 		ldrsb	r2, [r7, #228]
+ 646 0088 97F9E530 		ldrsb	r3, [r7, #229]
+ 647 008c D21A     		subs	r2, r2, r3
+ 648 008e D7F8E030 		ldr	r3, [r7, #224]
+ 649 0092 92FBF3F3 		sdiv	r3, r2, r3
+ 650 0096 0133     		adds	r3, r3, #1
+ 651 0098 C7F8D430 		str	r3, [r7, #212]
+ 195:.\PeltierCalibration.c ****         
+ 196:.\PeltierCalibration.c ****         int16 tempTable[CALIBRATION_TABLE_SIZE];
+ 197:.\PeltierCalibration.c ****         
+ 198:.\PeltierCalibration.c ****         // Start by cooling, from the lowest PWM value to the highest
+ 199:.\PeltierCalibration.c ****         int i;
+ 200:.\PeltierCalibration.c ****         for (i=numberOfCoolingDatas-1; i>-1; i--)
+ 652              		.loc 1 200 0
+ 653 009c D7F8D430 		ldr	r3, [r7, #212]
+ 654 00a0 013B     		subs	r3, r3, #1
+ 655 00a2 C7F8E830 		str	r3, [r7, #232]
+ 656 00a6 33E0     		b	.L35
+ 657              	.L38:
+ 658              	.LBB5:
+ 201:.\PeltierCalibration.c ****         {               
+ 202:.\PeltierCalibration.c ****             if (STOP_CALIBRATION_FLAG != 0)
+ 659              		.loc 1 202 0
+ 660 00a8 5D4B     		ldr	r3, .L47
+ 661 00aa 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 662 00ac 002B     		cmp	r3, #0
+ 663 00ae 04D0     		beq	.L36
+ 203:.\PeltierCalibration.c ****             {
+ 204:.\PeltierCalibration.c ****                 STOP_CALIBRATION_FLAG = 0;
+ 664              		.loc 1 204 0
+ 665 00b0 5B4B     		ldr	r3, .L47
+ 666 00b2 0022     		movs	r2, #0
+ 667 00b4 1A70     		strb	r2, [r3]
+ 205:.\PeltierCalibration.c ****                 return CALIBRATION_STOPPED;
+ 668              		.loc 1 205 0
+ 669 00b6 1323     		movs	r3, #19
+ 670 00b8 AEE0     		b	.L45
+ 671              	.L36:
+ 206:.\PeltierCalibration.c ****             }
+ 207:.\PeltierCalibration.c ****             
+ 208:.\PeltierCalibration.c ****             // Modify the desired PWM value.
+ 209:.\PeltierCalibration.c ****             changePeltierPWMValue(pwmPercentageBeeingSent, TACPtr->subModuleId);
+ 672              		.loc 1 209 0 discriminator 2
+ 673 00ba 7B68     		ldr	r3, [r7, #4]
+ 674 00bc 1B88     		ldrh	r3, [r3]
+ 675 00be D7F8EC00 		ldr	r0, [r7, #236]
+ 676 00c2 1946     		mov	r1, r3
+ 677 00c4 FFF7FEFF 		bl	changePeltierPWMValue
+ 210:.\PeltierCalibration.c ****             currentTemp = getStableTemp(TACPtr);
+ 678              		.loc 1 210 0 discriminator 2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 17
+
+
+ 679 00c8 7868     		ldr	r0, [r7, #4]
+ 680 00ca FFF7FEFF 		bl	getStableTemp
+ 681 00ce 0346     		mov	r3, r0
+ 682 00d0 A7F8DA30 		strh	r3, [r7, #218]	@ movhi
+ 211:.\PeltierCalibration.c ****             
+ 212:.\PeltierCalibration.c ****             // Save calibration values in table.
+ 213:.\PeltierCalibration.c ****             TACPtr->calibrationValuesPtr[i] = currentTemp;
+ 683              		.loc 1 213 0 discriminator 2
+ 684 00d4 7B68     		ldr	r3, [r7, #4]
+ 685 00d6 DA69     		ldr	r2, [r3, #28]
+ 686 00d8 D7F8E830 		ldr	r3, [r7, #232]
+ 687 00dc 5B00     		lsls	r3, r3, #1
+ 688 00de 1344     		add	r3, r3, r2
+ 689 00e0 B7F8DA20 		ldrh	r2, [r7, #218]	@ movhi
+ 690 00e4 1A80     		strh	r2, [r3]	@ movhi
+ 214:.\PeltierCalibration.c ****             TACPtr->percentageValuesPtr[i] = pwmPercentageBeeingSent;
+ 691              		.loc 1 214 0 discriminator 2
+ 692 00e6 7B68     		ldr	r3, [r7, #4]
+ 693 00e8 1A6A     		ldr	r2, [r3, #32]
+ 694 00ea D7F8E830 		ldr	r3, [r7, #232]
+ 695 00ee 1344     		add	r3, r3, r2
+ 696 00f0 D7F8EC20 		ldr	r2, [r7, #236]
+ 697 00f4 D2B2     		uxtb	r2, r2
+ 698 00f6 1A70     		strb	r2, [r3]
+ 215:.\PeltierCalibration.c **** 
+ 216:.\PeltierCalibration.c ****     		//Preparing the next value to send to the PWM to respect the % increment.
+ 217:.\PeltierCalibration.c ****     		pwmPercentageBeeingSent += pwmPercentageIncrement;
+ 699              		.loc 1 217 0 discriminator 2
+ 700 00f8 D7F8EC20 		ldr	r2, [r7, #236]
+ 701 00fc D7F8E030 		ldr	r3, [r7, #224]
+ 702 0100 1344     		add	r3, r3, r2
+ 703 0102 C7F8EC30 		str	r3, [r7, #236]
+ 704              	.LBE5:
+ 200:.\PeltierCalibration.c ****         {               
+ 705              		.loc 1 200 0 discriminator 2
+ 706 0106 D7F8E830 		ldr	r3, [r7, #232]
+ 707 010a 013B     		subs	r3, r3, #1
+ 708 010c C7F8E830 		str	r3, [r7, #232]
+ 709              	.L35:
+ 200:.\PeltierCalibration.c ****         {               
+ 710              		.loc 1 200 0 is_stmt 0 discriminator 1
+ 711 0110 D7F8E830 		ldr	r3, [r7, #232]
+ 712 0114 002B     		cmp	r3, #0
+ 713 0116 C7DA     		bge	.L38
+ 218:.\PeltierCalibration.c ****         }       
+ 219:.\PeltierCalibration.c ****         
+ 220:.\PeltierCalibration.c ****         // Put the Peltier off and wait for return to ambiant temperature
+ 221:.\PeltierCalibration.c ****         changePeltierModuleState(peltierDisabled, TACPtr->subModuleId);
+ 714              		.loc 1 221 0 is_stmt 1
+ 715 0118 7B68     		ldr	r3, [r7, #4]
+ 716 011a 1B88     		ldrh	r3, [r3]
+ 717 011c 0020     		movs	r0, #0
+ 718 011e 1946     		mov	r1, r3
+ 719 0120 FFF7FEFF 		bl	changePeltierModuleState
+ 222:.\PeltierCalibration.c ****         TACPtr->calibrationValuesPtr[numberOfCoolingDatas] = getStableTemp(TACPtr);
+ 720              		.loc 1 222 0
+ 721 0124 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 18
+
+
+ 722 0126 DA69     		ldr	r2, [r3, #28]
+ 723 0128 D7F8D430 		ldr	r3, [r7, #212]
+ 724 012c 5B00     		lsls	r3, r3, #1
+ 725 012e D418     		adds	r4, r2, r3
+ 726 0130 7868     		ldr	r0, [r7, #4]
+ 727 0132 FFF7FEFF 		bl	getStableTemp
+ 728 0136 0346     		mov	r3, r0
+ 729 0138 2380     		strh	r3, [r4]	@ movhi
+ 223:.\PeltierCalibration.c ****         TACPtr->percentageValuesPtr[numberOfCoolingDatas] = 0;        
+ 730              		.loc 1 223 0
+ 731 013a 7B68     		ldr	r3, [r7, #4]
+ 732 013c 1A6A     		ldr	r2, [r3, #32]
+ 733 013e D7F8D430 		ldr	r3, [r7, #212]
+ 734 0142 1344     		add	r3, r3, r2
+ 735 0144 0022     		movs	r2, #0
+ 736 0146 1A70     		strb	r2, [r3]
+ 224:.\PeltierCalibration.c ****         
+ 225:.\PeltierCalibration.c ****         // Initialize range of PWM percentage to be used :
+ 226:.\PeltierCalibration.c ****         pwmStartValue = PELTIER_PWM_INCREMENT_VALUE;
+ 737              		.loc 1 226 0
+ 738 0148 0A23     		movs	r3, #10
+ 739 014a 87F8E530 		strb	r3, [r7, #229]
+ 227:.\PeltierCalibration.c ****         pwmEndValue = BEST_HEATING_PWM_PERCENTAGE;
+ 740              		.loc 1 227 0
+ 741 014e 6423     		movs	r3, #100
+ 742 0150 87F8E430 		strb	r3, [r7, #228]
+ 228:.\PeltierCalibration.c ****         pwmPercentageBeeingSent = pwmStartValue;
+ 743              		.loc 1 228 0
+ 744 0154 97F9E530 		ldrsb	r3, [r7, #229]
+ 745 0158 C7F8EC30 		str	r3, [r7, #236]
+ 229:.\PeltierCalibration.c ****         
+ 230:.\PeltierCalibration.c ****         changePeltierModuleCurrentDirection(Heating, TACPtr);
+ 746              		.loc 1 230 0
+ 747 015c 0020     		movs	r0, #0
+ 748 015e 7968     		ldr	r1, [r7, #4]
+ 749 0160 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 231:.\PeltierCalibration.c ****         changePeltierModuleState(peltierEnabled, TACPtr->subModuleId);
+ 750              		.loc 1 231 0
+ 751 0164 7B68     		ldr	r3, [r7, #4]
+ 752 0166 1B88     		ldrh	r3, [r3]
+ 753 0168 0120     		movs	r0, #1
+ 754 016a 1946     		mov	r1, r3
+ 755 016c FFF7FEFF 		bl	changePeltierModuleState
+ 232:.\PeltierCalibration.c ****         
+ 233:.\PeltierCalibration.c ****         // Start heating slowly then increment the PWM gradually registering all values at the same
+ 234:.\PeltierCalibration.c ****         for (i=numberOfCoolingDatas+1; i<CALIBRATION_TABLE_SIZE; i++)
+ 756              		.loc 1 234 0
+ 757 0170 D7F8D430 		ldr	r3, [r7, #212]
+ 758 0174 0133     		adds	r3, r3, #1
+ 759 0176 C7F8E830 		str	r3, [r7, #232]
+ 760 017a 3DE0     		b	.L39
+ 761              	.L44:
+ 235:.\PeltierCalibration.c ****         {
+ 236:.\PeltierCalibration.c ****             if (STOP_CALIBRATION_FLAG != 0)
+ 762              		.loc 1 236 0
+ 763 017c 284B     		ldr	r3, .L47
+ 764 017e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 19
+
+
+ 765 0180 002B     		cmp	r3, #0
+ 766 0182 04D0     		beq	.L40
+ 237:.\PeltierCalibration.c ****             {
+ 238:.\PeltierCalibration.c ****                 STOP_CALIBRATION_FLAG = 0;
+ 767              		.loc 1 238 0
+ 768 0184 264B     		ldr	r3, .L47
+ 769 0186 0022     		movs	r2, #0
+ 770 0188 1A70     		strb	r2, [r3]
+ 239:.\PeltierCalibration.c ****                 return CALIBRATION_STOPPED;
+ 771              		.loc 1 239 0
+ 772 018a 1323     		movs	r3, #19
+ 773 018c 44E0     		b	.L45
+ 774              	.L40:
+ 240:.\PeltierCalibration.c ****             }
+ 241:.\PeltierCalibration.c ****             
+ 242:.\PeltierCalibration.c ****             if (TACPtr->currentTemperature < TACPtr->maxTargetTemperature)
+ 775              		.loc 1 242 0
+ 776 018e 7B68     		ldr	r3, [r7, #4]
+ 777 0190 1A89     		ldrh	r2, [r3, #8]
+ 778 0192 7B68     		ldr	r3, [r7, #4]
+ 779 0194 5B89     		ldrh	r3, [r3, #10]
+ 780 0196 12B2     		sxth	r2, r2
+ 781 0198 1BB2     		sxth	r3, r3
+ 782 019a 9A42     		cmp	r2, r3
+ 783 019c 26DA     		bge	.L41
+ 784              	.LBB6:
+ 243:.\PeltierCalibration.c ****             {
+ 244:.\PeltierCalibration.c ****                 // Modify the desired PWM value.
+ 245:.\PeltierCalibration.c ****                 changePeltierPWMValue(pwmPercentageBeeingSent, TACPtr->subModuleId);
+ 785              		.loc 1 245 0
+ 786 019e 7B68     		ldr	r3, [r7, #4]
+ 787 01a0 1B88     		ldrh	r3, [r3]
+ 788 01a2 D7F8EC00 		ldr	r0, [r7, #236]
+ 789 01a6 1946     		mov	r1, r3
+ 790 01a8 FFF7FEFF 		bl	changePeltierPWMValue
+ 246:.\PeltierCalibration.c ****                 currentTemp = getStableTemp(TACPtr);
+ 791              		.loc 1 246 0
+ 792 01ac 7868     		ldr	r0, [r7, #4]
+ 793 01ae FFF7FEFF 		bl	getStableTemp
+ 794 01b2 0346     		mov	r3, r0
+ 795 01b4 A7F8DA30 		strh	r3, [r7, #218]	@ movhi
+ 247:.\PeltierCalibration.c ****                 
+ 248:.\PeltierCalibration.c ****                 // Save calibration values in table.
+ 249:.\PeltierCalibration.c ****                 TACPtr->calibrationValuesPtr[i] = currentTemp;
+ 796              		.loc 1 249 0
+ 797 01b8 7B68     		ldr	r3, [r7, #4]
+ 798 01ba DA69     		ldr	r2, [r3, #28]
+ 799 01bc D7F8E830 		ldr	r3, [r7, #232]
+ 800 01c0 5B00     		lsls	r3, r3, #1
+ 801 01c2 1344     		add	r3, r3, r2
+ 802 01c4 B7F8DA20 		ldrh	r2, [r7, #218]	@ movhi
+ 803 01c8 1A80     		strh	r2, [r3]	@ movhi
+ 250:.\PeltierCalibration.c ****                 TACPtr->percentageValuesPtr[i] = pwmPercentageBeeingSent;
+ 804              		.loc 1 250 0
+ 805 01ca 7B68     		ldr	r3, [r7, #4]
+ 806 01cc 1A6A     		ldr	r2, [r3, #32]
+ 807 01ce D7F8E830 		ldr	r3, [r7, #232]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 20
+
+
+ 808 01d2 1344     		add	r3, r3, r2
+ 809 01d4 D7F8EC20 		ldr	r2, [r7, #236]
+ 810 01d8 D2B2     		uxtb	r2, r2
+ 811 01da 1A70     		strb	r2, [r3]
+ 251:.\PeltierCalibration.c **** 
+ 252:.\PeltierCalibration.c ****         		//Preparing the next value to send to the PWM to respect the % increment.
+ 253:.\PeltierCalibration.c ****         		pwmPercentageBeeingSent += pwmPercentageIncrement;
+ 812              		.loc 1 253 0
+ 813 01dc D7F8EC20 		ldr	r2, [r7, #236]
+ 814 01e0 D7F8E030 		ldr	r3, [r7, #224]
+ 815 01e4 1344     		add	r3, r3, r2
+ 816 01e6 C7F8EC30 		str	r3, [r7, #236]
+ 817              	.LBE6:
+ 818 01ea 00E0     		b	.L46
+ 819              	.L41:
+ 254:.\PeltierCalibration.c ****             }
+ 255:.\PeltierCalibration.c ****             else
+ 256:.\PeltierCalibration.c ****             {
+ 257:.\PeltierCalibration.c ****                 break;
+ 820              		.loc 1 257 0
+ 821 01ec 08E0     		b	.L43
+ 822              	.L46:
+ 234:.\PeltierCalibration.c ****         {
+ 823              		.loc 1 234 0 discriminator 2
+ 824 01ee D7F8E830 		ldr	r3, [r7, #232]
+ 825 01f2 0133     		adds	r3, r3, #1
+ 826 01f4 C7F8E830 		str	r3, [r7, #232]
+ 827              	.L39:
+ 234:.\PeltierCalibration.c ****         {
+ 828              		.loc 1 234 0 is_stmt 0 discriminator 1
+ 829 01f8 D7F8E830 		ldr	r3, [r7, #232]
+ 830 01fc 632B     		cmp	r3, #99
+ 831 01fe BDDD     		ble	.L44
+ 832              	.L43:
+ 258:.\PeltierCalibration.c ****             }
+ 259:.\PeltierCalibration.c ****         }
+ 260:.\PeltierCalibration.c ****         changePeltierModuleState(peltierDisabled,TACPtr->subModuleId); // Sets Signal inH_1 and inH
+ 833              		.loc 1 260 0 is_stmt 1
+ 834 0200 7B68     		ldr	r3, [r7, #4]
+ 835 0202 1B88     		ldrh	r3, [r3]
+ 836 0204 0020     		movs	r0, #0
+ 837 0206 1946     		mov	r1, r3
+ 838 0208 FFF7FEFF 		bl	changePeltierModuleState
+ 261:.\PeltierCalibration.c ****         setCalibrationTable(TACPtr);
+ 839              		.loc 1 261 0
+ 840 020c 7868     		ldr	r0, [r7, #4]
+ 841 020e FFF7FEFF 		bl	setCalibrationTable
+ 262:.\PeltierCalibration.c ****         return 1;        
+ 842              		.loc 1 262 0
+ 843 0212 0123     		movs	r3, #1
+ 844 0214 00E0     		b	.L45
+ 845              	.L34:
+ 846              	.LBE4:
+ 263:.\PeltierCalibration.c ****     }
+ 264:.\PeltierCalibration.c ****     else
+ 265:.\PeltierCalibration.c ****     {
+ 266:.\PeltierCalibration.c ****         // If not using the sub module 1 nor 2, tell it to the master as I don't know where we are 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 21
+
+
+ 267:.\PeltierCalibration.c ****         return BAD_SUBMODULE_NUMBER;
+ 847              		.loc 1 267 0
+ 848 0216 1723     		movs	r3, #23
+ 849              	.L45:
+ 268:.\PeltierCalibration.c ****     }
+ 269:.\PeltierCalibration.c **** }
+ 850              		.loc 1 269 0 discriminator 1
+ 851 0218 1846     		mov	r0, r3
+ 852 021a F437     		adds	r7, r7, #244
+ 853              		.cfi_def_cfa_offset 12
+ 854 021c BD46     		mov	sp, r7
+ 855              		.cfi_def_cfa_register 13
+ 856              		@ sp needed
+ 857 021e 90BD     		pop	{r4, r7, pc}
+ 858              	.L48:
+ 859              		.align	2
+ 860              	.L47:
+ 861 0220 00000000 		.word	STOP_CALIBRATION_FLAG
+ 862              		.cfi_endproc
+ 863              	.LFE59:
+ 864              		.size	calibration, .-calibration
+ 865              		.section	.text.getStableTemp,"ax",%progbits
+ 866              		.align	2
+ 867              		.global	getStableTemp
+ 868              		.thumb
+ 869              		.thumb_func
+ 870              		.type	getStableTemp, %function
+ 871              	getStableTemp:
+ 872              	.LFB60:
+ 270:.\PeltierCalibration.c **** int16 getStableTemp(Tac_Submodule* TACPtr)
+ 271:.\PeltierCalibration.c **** {
+ 873              		.loc 1 271 0
+ 874              		.cfi_startproc
+ 875              		@ args = 0, pretend = 0, frame = 16
+ 876              		@ frame_needed = 1, uses_anonymous_args = 0
+ 877 0000 80B5     		push	{r7, lr}
+ 878              		.cfi_def_cfa_offset 8
+ 879              		.cfi_offset 7, -8
+ 880              		.cfi_offset 14, -4
+ 881 0002 84B0     		sub	sp, sp, #16
+ 882              		.cfi_def_cfa_offset 24
+ 883 0004 00AF     		add	r7, sp, #0
+ 884              		.cfi_def_cfa_register 7
+ 885 0006 7860     		str	r0, [r7, #4]
+ 272:.\PeltierCalibration.c ****     int16 currentTemp = 0;
+ 886              		.loc 1 272 0
+ 887 0008 0023     		movs	r3, #0
+ 888 000a FB81     		strh	r3, [r7, #14]	@ movhi
+ 273:.\PeltierCalibration.c ****     int16 pastTemp = 0;
+ 889              		.loc 1 273 0
+ 890 000c 0023     		movs	r3, #0
+ 891 000e BB81     		strh	r3, [r7, #12]	@ movhi
+ 274:.\PeltierCalibration.c ****     int8 tolerance_hit = 0;     // Will contain the number of times a reading was +- tolerance from
+ 892              		.loc 1 274 0
+ 893 0010 0023     		movs	r3, #0
+ 894 0012 FB72     		strb	r3, [r7, #11]
+ 275:.\PeltierCalibration.c ****     int16 deltaValue = 0; 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 22
+
+
+ 895              		.loc 1 275 0
+ 896 0014 0023     		movs	r3, #0
+ 897 0016 3B81     		strh	r3, [r7, #8]	@ movhi
+ 276:.\PeltierCalibration.c ****     
+ 277:.\PeltierCalibration.c ****     while(tolerance_hit < NB_STABLE_VALUE_REQUIRED && currentTemp <= TACPtr->maxTargetTemperature)
+ 898              		.loc 1 277 0
+ 899 0018 28E0     		b	.L50
+ 900              	.L56:
+ 278:.\PeltierCalibration.c ****     {                
+ 279:.\PeltierCalibration.c ****         if (STOP_CALIBRATION_FLAG != 0)
+ 901              		.loc 1 279 0
+ 902 001a 1D4B     		ldr	r3, .L57
+ 903 001c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 904 001e 002B     		cmp	r3, #0
+ 905 0020 04D0     		beq	.L51
+ 280:.\PeltierCalibration.c ****         {
+ 281:.\PeltierCalibration.c ****             STOP_CALIBRATION_FLAG = 0;
+ 906              		.loc 1 281 0
+ 907 0022 1B4B     		ldr	r3, .L57
+ 908 0024 0022     		movs	r2, #0
+ 909 0026 1A70     		strb	r2, [r3]
+ 282:.\PeltierCalibration.c ****             return CALIBRATION_STOPPED;
+ 910              		.loc 1 282 0
+ 911 0028 1323     		movs	r3, #19
+ 912 002a 2BE0     		b	.L52
+ 913              	.L51:
+ 283:.\PeltierCalibration.c ****         }   
+ 284:.\PeltierCalibration.c ****         
+ 285:.\PeltierCalibration.c ****          // Partie température
+ 286:.\PeltierCalibration.c ****         currentTemp = getThermistorTemp(TACPtr);
+ 914              		.loc 1 286 0
+ 915 002c 7868     		ldr	r0, [r7, #4]
+ 916 002e FFF7FEFF 		bl	getThermistorTemp
+ 917 0032 0346     		mov	r3, r0
+ 918 0034 FB81     		strh	r3, [r7, #14]	@ movhi
+ 287:.\PeltierCalibration.c ****         deltaValue = abs(currentTemp - pastTemp);        
+ 919              		.loc 1 287 0
+ 920 0036 B7F90E20 		ldrsh	r2, [r7, #14]
+ 921 003a B7F90C30 		ldrsh	r3, [r7, #12]
+ 922 003e D31A     		subs	r3, r2, r3
+ 923 0040 002B     		cmp	r3, #0
+ 924 0042 B8BF     		it	lt
+ 925 0044 5B42     		rsblt	r3, r3, #0
+ 926 0046 3B81     		strh	r3, [r7, #8]	@ movhi
+ 288:.\PeltierCalibration.c ****         
+ 289:.\PeltierCalibration.c ****         // Ajout Kevin
+ 290:.\PeltierCalibration.c ****         if (deltaValue < TEMP_TOLERANCE)
+ 927              		.loc 1 290 0
+ 928 0048 B7F90830 		ldrsh	r3, [r7, #8]
+ 929 004c 022B     		cmp	r3, #2
+ 930 004e 05DC     		bgt	.L53
+ 291:.\PeltierCalibration.c ****         {
+ 292:.\PeltierCalibration.c ****             tolerance_hit ++;
+ 931              		.loc 1 292 0
+ 932 0050 FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 933 0052 DBB2     		uxtb	r3, r3
+ 934 0054 0133     		adds	r3, r3, #1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 23
+
+
+ 935 0056 DBB2     		uxtb	r3, r3
+ 936 0058 FB72     		strb	r3, [r7, #11]
+ 937 005a 03E0     		b	.L54
+ 938              	.L53:
+ 293:.\PeltierCalibration.c ****         }
+ 294:.\PeltierCalibration.c ****         else
+ 295:.\PeltierCalibration.c ****         {
+ 296:.\PeltierCalibration.c ****             tolerance_hit = 0;
+ 939              		.loc 1 296 0
+ 940 005c 0023     		movs	r3, #0
+ 941 005e FB72     		strb	r3, [r7, #11]
+ 297:.\PeltierCalibration.c ****             pastTemp = currentTemp;
+ 942              		.loc 1 297 0
+ 943 0060 FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 944 0062 BB81     		strh	r3, [r7, #12]	@ movhi
+ 945              	.L54:
+ 298:.\PeltierCalibration.c ****         }
+ 299:.\PeltierCalibration.c ****           
+ 300:.\PeltierCalibration.c ****         CyDelay(CY_DELAY_MS_FOR_STABLE_TEMP);    // CRUCIAL: Wait before reading next temperature  
+ 946              		.loc 1 300 0
+ 947 0064 41F28830 		movw	r0, #5000
+ 948 0068 FFF7FEFF 		bl	CyDelay
+ 949              	.L50:
+ 277:.\PeltierCalibration.c ****     {                
+ 950              		.loc 1 277 0
+ 951 006c 97F90B30 		ldrsb	r3, [r7, #11]
+ 952 0070 062B     		cmp	r3, #6
+ 953 0072 06DC     		bgt	.L55
+ 277:.\PeltierCalibration.c ****     {                
+ 954              		.loc 1 277 0 is_stmt 0 discriminator 1
+ 955 0074 7B68     		ldr	r3, [r7, #4]
+ 956 0076 5B89     		ldrh	r3, [r3, #10]
+ 957 0078 B7F90E20 		ldrsh	r2, [r7, #14]
+ 958 007c 1BB2     		sxth	r3, r3
+ 959 007e 9A42     		cmp	r2, r3
+ 960 0080 CBDD     		ble	.L56
+ 961              	.L55:
+ 301:.\PeltierCalibration.c ****     }
+ 302:.\PeltierCalibration.c ****     
+ 303:.\PeltierCalibration.c ****     return currentTemp;
+ 962              		.loc 1 303 0 is_stmt 1
+ 963 0082 FB89     		ldrh	r3, [r7, #14]
+ 964              	.L52:
+ 965 0084 1BB2     		sxth	r3, r3
+ 304:.\PeltierCalibration.c **** }
+ 966              		.loc 1 304 0
+ 967 0086 1846     		mov	r0, r3
+ 968 0088 1037     		adds	r7, r7, #16
+ 969              		.cfi_def_cfa_offset 8
+ 970 008a BD46     		mov	sp, r7
+ 971              		.cfi_def_cfa_register 13
+ 972              		@ sp needed
+ 973 008c 80BD     		pop	{r7, pc}
+ 974              	.L58:
+ 975 008e 00BF     		.align	2
+ 976              	.L57:
+ 977 0090 00000000 		.word	STOP_CALIBRATION_FLAG
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 24
+
+
+ 978              		.cfi_endproc
+ 979              	.LFE60:
+ 980              		.size	getStableTemp, .-getStableTemp
+ 981              		.global	__aeabi_i2d
+ 982              		.global	__aeabi_ddiv
+ 983              		.global	__aeabi_dadd
+ 984              		.global	__aeabi_d2iz
+ 985              		.section	.text.peltierControl,"ax",%progbits
+ 986              		.align	2
+ 987              		.global	peltierControl
+ 988              		.thumb
+ 989              		.thumb_func
+ 990              		.type	peltierControl, %function
+ 991              	peltierControl:
+ 992              	.LFB61:
+ 305:.\PeltierCalibration.c **** 
+ 306:.\PeltierCalibration.c **** 
+ 307:.\PeltierCalibration.c **** 
+ 308:.\PeltierCalibration.c **** /*===========================================================================*/
+ 309:.\PeltierCalibration.c **** // Should not be called directly, will be called by "controlTemperature" function
+ 310:.\PeltierCalibration.c **** void peltierControl(int function, int diff, uint8 moduleNumber, int targetTemperature)
+ 311:.\PeltierCalibration.c **** {
+ 993              		.loc 1 311 0
+ 994              		.cfi_startproc
+ 995              		@ args = 0, pretend = 0, frame = 40
+ 996              		@ frame_needed = 1, uses_anonymous_args = 0
+ 997 0000 80B5     		push	{r7, lr}
+ 998              		.cfi_def_cfa_offset 8
+ 999              		.cfi_offset 7, -8
+ 1000              		.cfi_offset 14, -4
+ 1001 0002 8AB0     		sub	sp, sp, #40
+ 1002              		.cfi_def_cfa_offset 48
+ 1003 0004 00AF     		add	r7, sp, #0
+ 1004              		.cfi_def_cfa_register 7
+ 1005 0006 F860     		str	r0, [r7, #12]
+ 1006 0008 B960     		str	r1, [r7, #8]
+ 1007 000a 3B60     		str	r3, [r7]
+ 1008 000c 1346     		mov	r3, r2
+ 1009 000e FB71     		strb	r3, [r7, #7]
+ 312:.\PeltierCalibration.c ****     Tac_Submodule* TacPtr;
+ 313:.\PeltierCalibration.c ****     
+ 314:.\PeltierCalibration.c ****     if (moduleNumber == SubModule1_ID)
+ 1010              		.loc 1 314 0
+ 1011 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1012 0012 012B     		cmp	r3, #1
+ 1013 0014 02D1     		bne	.L60
+ 315:.\PeltierCalibration.c ****     {
+ 316:.\PeltierCalibration.c ****         TacPtr = &SM1;        
+ 1014              		.loc 1 316 0
+ 1015 0016 6E4B     		ldr	r3, .L77+24
+ 1016 0018 7B62     		str	r3, [r7, #36]
+ 1017 001a 04E0     		b	.L61
+ 1018              	.L60:
+ 317:.\PeltierCalibration.c ****     }
+ 318:.\PeltierCalibration.c ****     else if(moduleNumber == SubModule2_ID)
+ 1019              		.loc 1 318 0
+ 1020 001c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 25
+
+
+ 1021 001e 022B     		cmp	r3, #2
+ 1022 0020 01D1     		bne	.L61
+ 319:.\PeltierCalibration.c ****     {
+ 320:.\PeltierCalibration.c ****         TacPtr = &SM2;
+ 1023              		.loc 1 320 0
+ 1024 0022 6C4B     		ldr	r3, .L77+28
+ 1025 0024 7B62     		str	r3, [r7, #36]
+ 1026              	.L61:
+ 321:.\PeltierCalibration.c ****     }
+ 322:.\PeltierCalibration.c ****     double controlValue;
+ 323:.\PeltierCalibration.c ****     if(function == PELTIER_COOL )
+ 1027              		.loc 1 323 0
+ 1028 0026 FB68     		ldr	r3, [r7, #12]
+ 1029 0028 012B     		cmp	r3, #1
+ 1030 002a 4AD1     		bne	.L62
+ 1031              	.LBB7:
+ 324:.\PeltierCalibration.c ****     {
+ 325:.\PeltierCalibration.c ****         //double controlValue = (0.3+((0.000625*pow(diff,2))/3.08))*480; // Calculated from desired
+ 326:.\PeltierCalibration.c ****         if(diff>10)
+ 1032              		.loc 1 326 0
+ 1033 002c BB68     		ldr	r3, [r7, #8]
+ 1034 002e 0A2B     		cmp	r3, #10
+ 1035 0030 05DD     		ble	.L63
+ 327:.\PeltierCalibration.c ****         {
+ 328:.\PeltierCalibration.c ****             controlValue = 300;
+ 1036              		.loc 1 328 0
+ 1037 0032 61A3     		adr	r3, .L77
+ 1038 0034 D3E90023 		ldrd	r2, [r3]
+ 1039 0038 C7E90623 		strd	r2, [r7, #24]
+ 1040 003c 1AE0     		b	.L64
+ 1041              	.L63:
+ 329:.\PeltierCalibration.c ****         }
+ 330:.\PeltierCalibration.c ****         else
+ 331:.\PeltierCalibration.c ****         {
+ 332:.\PeltierCalibration.c ****            controlValue = ((4*diff)/0.595)+132; // See excel for reference ramp 
+ 1042              		.loc 1 332 0
+ 1043 003e BB68     		ldr	r3, [r7, #8]
+ 1044 0040 9B00     		lsls	r3, r3, #2
+ 1045 0042 1846     		mov	r0, r3
+ 1046 0044 FFF7FEFF 		bl	__aeabi_i2d
+ 1047 0048 0246     		mov	r2, r0
+ 1048 004a 0B46     		mov	r3, r1
+ 1049 004c 1046     		mov	r0, r2
+ 1050 004e 1946     		mov	r1, r3
+ 1051 0050 5BA3     		adr	r3, .L77+8
+ 1052 0052 D3E90023 		ldrd	r2, [r3]
+ 1053 0056 FFF7FEFF 		bl	__aeabi_ddiv
+ 1054 005a 0246     		mov	r2, r0
+ 1055 005c 0B46     		mov	r3, r1
+ 1056 005e 1046     		mov	r0, r2
+ 1057 0060 1946     		mov	r1, r3
+ 1058 0062 4FF00002 		mov	r2, #0
+ 1059 0066 5C4B     		ldr	r3, .L77+32
+ 1060 0068 FFF7FEFF 		bl	__aeabi_dadd
+ 1061 006c 0246     		mov	r2, r0
+ 1062 006e 0B46     		mov	r3, r1
+ 1063 0070 C7E90623 		strd	r2, [r7, #24]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 26
+
+
+ 1064              	.L64:
+ 333:.\PeltierCalibration.c ****         }        
+ 334:.\PeltierCalibration.c ****         int val = (int)controlValue;
+ 1065              		.loc 1 334 0
+ 1066 0074 D7E90601 		ldrd	r0, [r7, #24]
+ 1067 0078 FFF7FEFF 		bl	__aeabi_d2iz
+ 1068 007c 0346     		mov	r3, r0
+ 1069 007e 7B61     		str	r3, [r7, #20]
+ 335:.\PeltierCalibration.c ****         
+ 336:.\PeltierCalibration.c ****         // Deactivate the desired Peltier Element.
+ 337:.\PeltierCalibration.c ****         changePeltierModuleState(0,moduleNumber); 
+ 1070              		.loc 1 337 0
+ 1071 0080 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1072 0082 0020     		movs	r0, #0
+ 1073 0084 1946     		mov	r1, r3
+ 1074 0086 FFF7FEFF 		bl	changePeltierModuleState
+ 338:.\PeltierCalibration.c ****         
+ 339:.\PeltierCalibration.c ****         // changes PWM value, affecting Peltier's power
+ 340:.\PeltierCalibration.c ****         if (moduleNumber == 1)
+ 1075              		.loc 1 340 0
+ 1076 008a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1077 008c 012B     		cmp	r3, #1
+ 1078 008e 05D1     		bne	.L65
+ 341:.\PeltierCalibration.c ****         {
+ 342:.\PeltierCalibration.c ****             Peltier1_PWM_Ctrl_WriteCompare(val);
+ 1079              		.loc 1 342 0
+ 1080 0090 7B69     		ldr	r3, [r7, #20]
+ 1081 0092 9BB2     		uxth	r3, r3
+ 1082 0094 1846     		mov	r0, r3
+ 1083 0096 FFF7FEFF 		bl	Peltier1_PWM_Ctrl_WriteCompare
+ 1084 009a 07E0     		b	.L66
+ 1085              	.L65:
+ 343:.\PeltierCalibration.c ****         }
+ 344:.\PeltierCalibration.c ****         else if (moduleNumber == 2)
+ 1086              		.loc 1 344 0
+ 1087 009c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1088 009e 022B     		cmp	r3, #2
+ 1089 00a0 04D1     		bne	.L66
+ 345:.\PeltierCalibration.c ****         {
+ 346:.\PeltierCalibration.c ****             Peltier2_PWM_Ctrl_WriteCompare(val);
+ 1090              		.loc 1 346 0
+ 1091 00a2 7B69     		ldr	r3, [r7, #20]
+ 1092 00a4 9BB2     		uxth	r3, r3
+ 1093 00a6 1846     		mov	r0, r3
+ 1094 00a8 FFF7FEFF 		bl	Peltier2_PWM_Ctrl_WriteCompare
+ 1095              	.L66:
+ 347:.\PeltierCalibration.c ****         }
+ 348:.\PeltierCalibration.c ****         
+ 349:.\PeltierCalibration.c ****         // Sets the H_bridge to heat or cool depending on the parameter passed
+ 350:.\PeltierCalibration.c ****         changePeltierModuleCurrentDirection(function, TacPtr);
+ 1096              		.loc 1 350 0
+ 1097 00ac F868     		ldr	r0, [r7, #12]
+ 1098 00ae 796A     		ldr	r1, [r7, #36]
+ 1099 00b0 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 351:.\PeltierCalibration.c ****         
+ 352:.\PeltierCalibration.c ****         // Reactivate the desired Peltier Element.
+ 353:.\PeltierCalibration.c ****         changePeltierModuleState(1,TacPtr->subModuleId);
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 27
+
+
+ 1100              		.loc 1 353 0
+ 1101 00b4 7B6A     		ldr	r3, [r7, #36]
+ 1102 00b6 1B88     		ldrh	r3, [r3]
+ 1103 00b8 0120     		movs	r0, #1
+ 1104 00ba 1946     		mov	r1, r3
+ 1105 00bc FFF7FEFF 		bl	changePeltierModuleState
+ 1106              	.LBE7:
+ 1107 00c0 76E0     		b	.L59
+ 1108              	.L62:
+ 354:.\PeltierCalibration.c ****         
+ 355:.\PeltierCalibration.c ****         //Peltier_on_Write(0u);   // deactivates peltier element
+ 356:.\PeltierCalibration.c ****         //LED_Write(0u);          
+ 357:.\PeltierCalibration.c ****         //peltierPWM_WriteCompare(val);       // changes PWM value, affecting Peltier's power
+ 358:.\PeltierCalibration.c ****         //peltier_control_Write(function);    // Sets the H_bridge to heat or cool depending on the
+ 359:.\PeltierCalibration.c ****         ////peltierPWM_Start();
+ 360:.\PeltierCalibration.c ****         //Peltier_on_Write(1u);   // Signal inH_1 and inH_2   
+ 361:.\PeltierCalibration.c ****     }
+ 362:.\PeltierCalibration.c ****     else if(function ==  PELTIER_HEAT)
+ 1109              		.loc 1 362 0
+ 1110 00c2 FB68     		ldr	r3, [r7, #12]
+ 1111 00c4 022B     		cmp	r3, #2
+ 1112 00c6 4DD1     		bne	.L68
+ 1113              	.LBB8:
+ 363:.\PeltierCalibration.c ****     {
+ 364:.\PeltierCalibration.c ****         //double controlValue = (0.3+((0.000625*pow(diff,2))/2))*480; // Calculated from desired ra
+ 365:.\PeltierCalibration.c ****         if(diff>20)
+ 1114              		.loc 1 365 0
+ 1115 00c8 BB68     		ldr	r3, [r7, #8]
+ 1116 00ca 142B     		cmp	r3, #20
+ 1117 00cc 05DD     		ble	.L69
+ 366:.\PeltierCalibration.c ****         {
+ 367:.\PeltierCalibration.c ****             controlValue = 384;
+ 1118              		.loc 1 367 0
+ 1119 00ce 4FF00002 		mov	r2, #0
+ 1120 00d2 424B     		ldr	r3, .L77+36
+ 1121 00d4 C7E90623 		strd	r2, [r7, #24]
+ 1122 00d8 1AE0     		b	.L70
+ 1123              	.L69:
+ 368:.\PeltierCalibration.c ****         }
+ 369:.\PeltierCalibration.c ****         else
+ 370:.\PeltierCalibration.c ****         {
+ 371:.\PeltierCalibration.c ****            controlValue = ((4*diff)/0.396)+132; // See excel for reference ramp 
+ 1124              		.loc 1 371 0
+ 1125 00da BB68     		ldr	r3, [r7, #8]
+ 1126 00dc 9B00     		lsls	r3, r3, #2
+ 1127 00de 1846     		mov	r0, r3
+ 1128 00e0 FFF7FEFF 		bl	__aeabi_i2d
+ 1129 00e4 0246     		mov	r2, r0
+ 1130 00e6 0B46     		mov	r3, r1
+ 1131 00e8 1046     		mov	r0, r2
+ 1132 00ea 1946     		mov	r1, r3
+ 1133 00ec 36A3     		adr	r3, .L77+16
+ 1134 00ee D3E90023 		ldrd	r2, [r3]
+ 1135 00f2 FFF7FEFF 		bl	__aeabi_ddiv
+ 1136 00f6 0246     		mov	r2, r0
+ 1137 00f8 0B46     		mov	r3, r1
+ 1138 00fa 1046     		mov	r0, r2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 28
+
+
+ 1139 00fc 1946     		mov	r1, r3
+ 1140 00fe 4FF00002 		mov	r2, #0
+ 1141 0102 354B     		ldr	r3, .L77+32
+ 1142 0104 FFF7FEFF 		bl	__aeabi_dadd
+ 1143 0108 0246     		mov	r2, r0
+ 1144 010a 0B46     		mov	r3, r1
+ 1145 010c C7E90623 		strd	r2, [r7, #24]
+ 1146              	.L70:
+ 372:.\PeltierCalibration.c ****         } 
+ 373:.\PeltierCalibration.c ****         int val = (int)controlValue;
+ 1147              		.loc 1 373 0
+ 1148 0110 D7E90601 		ldrd	r0, [r7, #24]
+ 1149 0114 FFF7FEFF 		bl	__aeabi_d2iz
+ 1150 0118 0346     		mov	r3, r0
+ 1151 011a 3B61     		str	r3, [r7, #16]
+ 374:.\PeltierCalibration.c ****         
+ 375:.\PeltierCalibration.c ****         // Deactivate the desired Peltier Element.
+ 376:.\PeltierCalibration.c ****         changePeltierModuleState(0,TacPtr->subModuleId); 
+ 1152              		.loc 1 376 0
+ 1153 011c 7B6A     		ldr	r3, [r7, #36]
+ 1154 011e 1B88     		ldrh	r3, [r3]
+ 1155 0120 0020     		movs	r0, #0
+ 1156 0122 1946     		mov	r1, r3
+ 1157 0124 FFF7FEFF 		bl	changePeltierModuleState
+ 377:.\PeltierCalibration.c ****         
+ 378:.\PeltierCalibration.c ****         // changes PWM value, affecting Peltier's power
+ 379:.\PeltierCalibration.c ****         if (TacPtr->subModuleId == 1)
+ 1158              		.loc 1 379 0
+ 1159 0128 7B6A     		ldr	r3, [r7, #36]
+ 1160 012a 1B88     		ldrh	r3, [r3]
+ 1161 012c 012B     		cmp	r3, #1
+ 1162 012e 05D1     		bne	.L71
+ 380:.\PeltierCalibration.c ****         {
+ 381:.\PeltierCalibration.c ****             Peltier1_PWM_Ctrl_WriteCompare(val);
+ 1163              		.loc 1 381 0
+ 1164 0130 3B69     		ldr	r3, [r7, #16]
+ 1165 0132 9BB2     		uxth	r3, r3
+ 1166 0134 1846     		mov	r0, r3
+ 1167 0136 FFF7FEFF 		bl	Peltier1_PWM_Ctrl_WriteCompare
+ 1168 013a 08E0     		b	.L72
+ 1169              	.L71:
+ 382:.\PeltierCalibration.c ****         }
+ 383:.\PeltierCalibration.c ****         else if (TacPtr->subModuleId == 2)
+ 1170              		.loc 1 383 0
+ 1171 013c 7B6A     		ldr	r3, [r7, #36]
+ 1172 013e 1B88     		ldrh	r3, [r3]
+ 1173 0140 022B     		cmp	r3, #2
+ 1174 0142 04D1     		bne	.L72
+ 384:.\PeltierCalibration.c ****         {
+ 385:.\PeltierCalibration.c ****             Peltier2_PWM_Ctrl_WriteCompare(val);
+ 1175              		.loc 1 385 0
+ 1176 0144 3B69     		ldr	r3, [r7, #16]
+ 1177 0146 9BB2     		uxth	r3, r3
+ 1178 0148 1846     		mov	r0, r3
+ 1179 014a FFF7FEFF 		bl	Peltier2_PWM_Ctrl_WriteCompare
+ 1180              	.L72:
+ 386:.\PeltierCalibration.c ****         }
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 29
+
+
+ 387:.\PeltierCalibration.c ****         
+ 388:.\PeltierCalibration.c ****         // Sets the H_bridge to heat or cool depending on the parameter passed
+ 389:.\PeltierCalibration.c ****         changePeltierModuleCurrentDirection(function, TacPtr);
+ 1181              		.loc 1 389 0
+ 1182 014e F868     		ldr	r0, [r7, #12]
+ 1183 0150 796A     		ldr	r1, [r7, #36]
+ 1184 0152 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 390:.\PeltierCalibration.c ****         
+ 391:.\PeltierCalibration.c ****         // Reactivate the desired Peltier Element.
+ 392:.\PeltierCalibration.c ****         changePeltierModuleState(1,TacPtr->subModuleId);
+ 1185              		.loc 1 392 0
+ 1186 0156 7B6A     		ldr	r3, [r7, #36]
+ 1187 0158 1B88     		ldrh	r3, [r3]
+ 1188 015a 0120     		movs	r0, #1
+ 1189 015c 1946     		mov	r1, r3
+ 1190 015e FFF7FEFF 		bl	changePeltierModuleState
+ 1191              	.LBE8:
+ 1192 0162 25E0     		b	.L59
+ 1193              	.L68:
+ 393:.\PeltierCalibration.c ****         
+ 394:.\PeltierCalibration.c ****         //Peltier_on_Write(0u);
+ 395:.\PeltierCalibration.c ****         //peltierPWM_WriteCompare(val);
+ 396:.\PeltierCalibration.c ****         //peltier_control_Write(function);    // Sets the H_bridge to heat or cool depending on the
+ 397:.\PeltierCalibration.c ****         ////peltierPWM_Start();
+ 398:.\PeltierCalibration.c ****         //Peltier_on_Write(1u);   // Signal inH_1 and inH_2        
+ 399:.\PeltierCalibration.c ****     }    
+ 400:.\PeltierCalibration.c ****     else if(function == PELTIER_MAINTAIN)   // Never called
+ 1194              		.loc 1 400 0
+ 1195 0164 FB68     		ldr	r3, [r7, #12]
+ 1196 0166 022B     		cmp	r3, #2
+ 1197 0168 22D1     		bne	.L59
+ 1198              	.LBB9:
+ 401:.\PeltierCalibration.c ****     {
+ 402:.\PeltierCalibration.c ****         // Deactivate the desired Peltier Element.
+ 403:.\PeltierCalibration.c ****         changePeltierModuleState(0,moduleNumber);
+ 1199              		.loc 1 403 0
+ 1200 016a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1201 016c 0020     		movs	r0, #0
+ 1202 016e 1946     		mov	r1, r3
+ 1203 0170 FFF7FEFF 		bl	changePeltierModuleState
+ 404:.\PeltierCalibration.c ****         
+ 405:.\PeltierCalibration.c ****         if (targetTemperature>25)
+ 1204              		.loc 1 405 0
+ 1205 0174 3B68     		ldr	r3, [r7]
+ 1206 0176 192B     		cmp	r3, #25
+ 1207 0178 04DD     		ble	.L73
+ 1208              	.LBB10:
+ 406:.\PeltierCalibration.c ****         {
+ 407:.\PeltierCalibration.c ****             // Sets the H_bridge to heat or cool depending on the parameter passed
+ 408:.\PeltierCalibration.c ****             changePeltierModuleCurrentDirection(PELTIER_HEAT, TacPtr);
+ 1209              		.loc 1 408 0
+ 1210 017a 0220     		movs	r0, #2
+ 1211 017c 796A     		ldr	r1, [r7, #36]
+ 1212 017e FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 1213              	.LBE10:
+ 1214 0182 03E0     		b	.L74
+ 1215              	.L73:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 30
+
+
+ 1216              	.LBB11:
+ 409:.\PeltierCalibration.c ****         }
+ 410:.\PeltierCalibration.c ****         else
+ 411:.\PeltierCalibration.c ****         {
+ 412:.\PeltierCalibration.c ****             // Sets the H_bridge to heat or cool depending on the parameter passed
+ 413:.\PeltierCalibration.c ****             changePeltierModuleCurrentDirection(PELTIER_COOL, TacPtr);            
+ 1217              		.loc 1 413 0
+ 1218 0184 0120     		movs	r0, #1
+ 1219 0186 796A     		ldr	r1, [r7, #36]
+ 1220 0188 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 1221              	.L74:
+ 1222              	.LBE11:
+ 414:.\PeltierCalibration.c ****         } 
+ 415:.\PeltierCalibration.c ****         
+ 416:.\PeltierCalibration.c ****         // changes PWM value, affecting Peltier's power
+ 417:.\PeltierCalibration.c ****         if (moduleNumber == 1)
+ 1223              		.loc 1 417 0
+ 1224 018c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1225 018e 012B     		cmp	r3, #1
+ 1226 0190 03D1     		bne	.L75
+ 418:.\PeltierCalibration.c ****         {
+ 419:.\PeltierCalibration.c ****             Peltier1_PWM_Ctrl_WriteCompare(100);
+ 1227              		.loc 1 419 0
+ 1228 0192 6420     		movs	r0, #100
+ 1229 0194 FFF7FEFF 		bl	Peltier1_PWM_Ctrl_WriteCompare
+ 1230 0198 05E0     		b	.L76
+ 1231              	.L75:
+ 420:.\PeltierCalibration.c ****         }
+ 421:.\PeltierCalibration.c ****         else if (moduleNumber == 2)
+ 1232              		.loc 1 421 0
+ 1233 019a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1234 019c 022B     		cmp	r3, #2
+ 1235 019e 02D1     		bne	.L76
+ 422:.\PeltierCalibration.c ****         {
+ 423:.\PeltierCalibration.c ****             Peltier2_PWM_Ctrl_WriteCompare(100);
+ 1236              		.loc 1 423 0
+ 1237 01a0 6420     		movs	r0, #100
+ 1238 01a2 FFF7FEFF 		bl	Peltier2_PWM_Ctrl_WriteCompare
+ 1239              	.L76:
+ 424:.\PeltierCalibration.c ****         }
+ 425:.\PeltierCalibration.c ****         
+ 426:.\PeltierCalibration.c ****         // Reactivate the desired Peltier Element.
+ 427:.\PeltierCalibration.c ****         changePeltierModuleState(1,moduleNumber);
+ 1240              		.loc 1 427 0
+ 1241 01a6 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1242 01a8 0120     		movs	r0, #1
+ 1243 01aa 1946     		mov	r1, r3
+ 1244 01ac FFF7FEFF 		bl	changePeltierModuleState
+ 1245              	.L59:
+ 1246              	.LBE9:
+ 428:.\PeltierCalibration.c ****         
+ 429:.\PeltierCalibration.c ****         /*
+ 430:.\PeltierCalibration.c ****         if(targetTemp > 25) // need to apply heat to maintain temperature
+ 431:.\PeltierCalibration.c ****         {
+ 432:.\PeltierCalibration.c ****             Peltier_on_Write(0u);   // Signal inH_1 and inH_2 
+ 433:.\PeltierCalibration.c ****             peltier_control_Write(PELTIER_HEAT);    // Sets the H_bridge to heat or cool depending 
+ 434:.\PeltierCalibration.c ****             peltierPWM_WriteCompare(100);   // TODO Calculate this value in function of targetTemp
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 31
+
+
+ 435:.\PeltierCalibration.c ****             Peltier_on_Write(1u);   // Signal inH_1 and inH_2 
+ 436:.\PeltierCalibration.c ****         }
+ 437:.\PeltierCalibration.c ****         else    // Need to cool 
+ 438:.\PeltierCalibration.c ****         {
+ 439:.\PeltierCalibration.c ****             Peltier_on_Write(0u);   // Signal inH_1 and inH_2 
+ 440:.\PeltierCalibration.c ****             peltier_control_Write(PELTIER_COOL);    // Sets the H_bridge to heat or cool depending 
+ 441:.\PeltierCalibration.c ****             peltierPWM_WriteCompare(100); 
+ 442:.\PeltierCalibration.c ****             Peltier_on_Write(1u);   // Signal inH_1 and inH_2 
+ 443:.\PeltierCalibration.c ****         }*/
+ 444:.\PeltierCalibration.c ****     }
+ 445:.\PeltierCalibration.c **** }
+ 1247              		.loc 1 445 0
+ 1248 01b0 2837     		adds	r7, r7, #40
+ 1249              		.cfi_def_cfa_offset 8
+ 1250 01b2 BD46     		mov	sp, r7
+ 1251              		.cfi_def_cfa_register 13
+ 1252              		@ sp needed
+ 1253 01b4 80BD     		pop	{r7, pc}
+ 1254              	.L78:
+ 1255 01b6 00BF     		.align	3
+ 1256              	.L77:
+ 1257 01b8 00000000 		.word	0
+ 1258 01bc 00C07240 		.word	1081262080
+ 1259 01c0 0AD7A370 		.word	1889785610
+ 1260 01c4 3D0AE33F 		.word	1071843901
+ 1261 01c8 F2D24D62 		.word	1649267442
+ 1262 01cc 1058D93F 		.word	1071208464
+ 1263 01d0 00000000 		.word	SM1
+ 1264 01d4 00000000 		.word	SM2
+ 1265 01d8 00806040 		.word	1080066048
+ 1266 01dc 00007840 		.word	1081606144
+ 1267              		.cfi_endproc
+ 1268              	.LFE61:
+ 1269              		.size	peltierControl, .-peltierControl
+ 1270              		.section	.text.updateSMPeriodValue,"ax",%progbits
+ 1271              		.align	2
+ 1272              		.global	updateSMPeriodValue
+ 1273              		.thumb
+ 1274              		.thumb_func
+ 1275              		.type	updateSMPeriodValue, %function
+ 1276              	updateSMPeriodValue:
+ 1277              	.LFB62:
+ 446:.\PeltierCalibration.c **** 
+ 447:.\PeltierCalibration.c **** // Fan functions section
+ 448:.\PeltierCalibration.c **** 
+ 449:.\PeltierCalibration.c **** 
+ 450:.\PeltierCalibration.c **** 
+ 451:.\PeltierCalibration.c **** 
+ 452:.\PeltierCalibration.c **** 
+ 453:.\PeltierCalibration.c **** // Agitator functions section
+ 454:.\PeltierCalibration.c **** 
+ 455:.\PeltierCalibration.c **** 
+ 456:.\PeltierCalibration.c **** // Peltier functions section
+ 457:.\PeltierCalibration.c **** 
+ 458:.\PeltierCalibration.c **** 
+ 459:.\PeltierCalibration.c **** 
+ 460:.\PeltierCalibration.c **** 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 32
+
+
+ 461:.\PeltierCalibration.c **** uint8 updateSMPeriodValue()
+ 462:.\PeltierCalibration.c **** {    
+ 1278              		.loc 1 462 0
+ 1279              		.cfi_startproc
+ 1280              		@ args = 0, pretend = 0, frame = 0
+ 1281              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1282 0000 80B5     		push	{r7, lr}
+ 1283              		.cfi_def_cfa_offset 8
+ 1284              		.cfi_offset 7, -8
+ 1285              		.cfi_offset 14, -4
+ 1286 0002 00AF     		add	r7, sp, #0
+ 1287              		.cfi_def_cfa_register 7
+ 463:.\PeltierCalibration.c ****     SM1.pwmPeriodValue = Peltier1_PWM_Ctrl_ReadPeriod();
+ 1288              		.loc 1 463 0
+ 1289 0004 FFF7FEFF 		bl	Peltier1_PWM_Ctrl_ReadPeriod
+ 1290 0008 0346     		mov	r3, r0
+ 1291 000a 1A46     		mov	r2, r3
+ 1292 000c 054B     		ldr	r3, .L81
+ 1293 000e 5A82     		strh	r2, [r3, #18]	@ movhi
+ 464:.\PeltierCalibration.c ****     SM2.pwmPeriodValue = Peltier2_PWM_Ctrl_ReadPeriod();
+ 1294              		.loc 1 464 0
+ 1295 0010 FFF7FEFF 		bl	Peltier2_PWM_Ctrl_ReadPeriod
+ 1296 0014 0346     		mov	r3, r0
+ 1297 0016 1A46     		mov	r2, r3
+ 1298 0018 034B     		ldr	r3, .L81+4
+ 1299 001a 5A82     		strh	r2, [r3, #18]	@ movhi
+ 465:.\PeltierCalibration.c **** 
+ 466:.\PeltierCalibration.c ****     return 1;
+ 1300              		.loc 1 466 0
+ 1301 001c 0123     		movs	r3, #1
+ 467:.\PeltierCalibration.c **** }
+ 1302              		.loc 1 467 0
+ 1303 001e 1846     		mov	r0, r3
+ 1304 0020 80BD     		pop	{r7, pc}
+ 1305              	.L82:
+ 1306 0022 00BF     		.align	2
+ 1307              	.L81:
+ 1308 0024 00000000 		.word	SM1
+ 1309 0028 00000000 		.word	SM2
+ 1310              		.cfi_endproc
+ 1311              	.LFE62:
+ 1312              		.size	updateSMPeriodValue, .-updateSMPeriodValue
+ 1313              		.section	.text.testPWMPeriods,"ax",%progbits
+ 1314              		.align	2
+ 1315              		.global	testPWMPeriods
+ 1316              		.thumb
+ 1317              		.thumb_func
+ 1318              		.type	testPWMPeriods, %function
+ 1319              	testPWMPeriods:
+ 1320              	.LFB63:
+ 468:.\PeltierCalibration.c **** 
+ 469:.\PeltierCalibration.c **** void testPWMPeriods()
+ 470:.\PeltierCalibration.c **** {
+ 1321              		.loc 1 470 0
+ 1322              		.cfi_startproc
+ 1323              		@ args = 0, pretend = 0, frame = 8
+ 1324              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 33
+
+
+ 1325 0000 80B5     		push	{r7, lr}
+ 1326              		.cfi_def_cfa_offset 8
+ 1327              		.cfi_offset 7, -8
+ 1328              		.cfi_offset 14, -4
+ 1329 0002 82B0     		sub	sp, sp, #8
+ 1330              		.cfi_def_cfa_offset 16
+ 1331 0004 00AF     		add	r7, sp, #0
+ 1332              		.cfi_def_cfa_register 7
+ 471:.\PeltierCalibration.c ****     uint32 desiredFreq = 0; // In KHz.
+ 1333              		.loc 1 471 0
+ 1334 0006 0023     		movs	r3, #0
+ 1335 0008 7B60     		str	r3, [r7, #4]
+ 472:.\PeltierCalibration.c ****     uint16 desiredPeriod = 0;
+ 1336              		.loc 1 472 0
+ 1337 000a 0023     		movs	r3, #0
+ 1338 000c 7B80     		strh	r3, [r7, #2]	@ movhi
+ 473:.\PeltierCalibration.c ****     uint16 actualPeriod = 0;
+ 1339              		.loc 1 473 0
+ 1340 000e 0023     		movs	r3, #0
+ 1341 0010 3B80     		strh	r3, [r7]	@ movhi
+ 474:.\PeltierCalibration.c ****     
+ 475:.\PeltierCalibration.c ****     for (desiredFreq=60000; desiredFreq<80000; desiredFreq+=2000)
+ 1342              		.loc 1 475 0
+ 1343 0012 4EF66023 		movw	r3, #60000
+ 1344 0016 7B60     		str	r3, [r7, #4]
+ 1345 0018 1AE0     		b	.L84
+ 1346              	.L85:
+ 1347              	.LBB12:
+ 476:.\PeltierCalibration.c ****     {
+ 477:.\PeltierCalibration.c ****         actualPeriod = Peltier1_PWM_Ctrl_ReadPeriod();
+ 1348              		.loc 1 477 0 discriminator 3
+ 1349 001a FFF7FEFF 		bl	Peltier1_PWM_Ctrl_ReadPeriod
+ 1350 001e 0346     		mov	r3, r0
+ 1351 0020 3B80     		strh	r3, [r7]	@ movhi
+ 478:.\PeltierCalibration.c ****         desiredPeriod = 24000000/desiredFreq; //2400/desiredFreq;
+ 1352              		.loc 1 478 0 discriminator 3
+ 1353 0022 0F4A     		ldr	r2, .L86
+ 1354 0024 7B68     		ldr	r3, [r7, #4]
+ 1355 0026 B2FBF3F3 		udiv	r3, r2, r3
+ 1356 002a 7B80     		strh	r3, [r7, #2]	@ movhi
+ 479:.\PeltierCalibration.c ****         Peltier1_PWM_Ctrl_WritePeriod(desiredPeriod);
+ 1357              		.loc 1 479 0 discriminator 3
+ 1358 002c 7B88     		ldrh	r3, [r7, #2]
+ 1359 002e 1846     		mov	r0, r3
+ 1360 0030 FFF7FEFF 		bl	Peltier1_PWM_Ctrl_WritePeriod
+ 480:.\PeltierCalibration.c ****         changePeltierPWMValue(80,SM1.subModuleId);
+ 1361              		.loc 1 480 0 discriminator 3
+ 1362 0034 0B4B     		ldr	r3, .L86+4
+ 1363 0036 1B88     		ldrh	r3, [r3]
+ 1364 0038 5020     		movs	r0, #80
+ 1365 003a 1946     		mov	r1, r3
+ 1366 003c FFF7FEFF 		bl	changePeltierPWMValue
+ 481:.\PeltierCalibration.c ****         CyDelay(10000);        
+ 1367              		.loc 1 481 0 discriminator 3
+ 1368 0040 42F21070 		movw	r0, #10000
+ 1369 0044 FFF7FEFF 		bl	CyDelay
+ 1370              	.LBE12:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 34
+
+
+ 475:.\PeltierCalibration.c ****     {
+ 1371              		.loc 1 475 0 discriminator 3
+ 1372 0048 7B68     		ldr	r3, [r7, #4]
+ 1373 004a 03F5FA63 		add	r3, r3, #2000
+ 1374 004e 7B60     		str	r3, [r7, #4]
+ 1375              	.L84:
+ 475:.\PeltierCalibration.c ****     {
+ 1376              		.loc 1 475 0 is_stmt 0 discriminator 1
+ 1377 0050 7B68     		ldr	r3, [r7, #4]
+ 1378 0052 054A     		ldr	r2, .L86+8
+ 1379 0054 9342     		cmp	r3, r2
+ 1380 0056 E0D9     		bls	.L85
+ 482:.\PeltierCalibration.c ****     }
+ 483:.\PeltierCalibration.c **** }
+ 1381              		.loc 1 483 0 is_stmt 1
+ 1382 0058 0837     		adds	r7, r7, #8
+ 1383              		.cfi_def_cfa_offset 8
+ 1384 005a BD46     		mov	sp, r7
+ 1385              		.cfi_def_cfa_register 13
+ 1386              		@ sp needed
+ 1387 005c 80BD     		pop	{r7, pc}
+ 1388              	.L87:
+ 1389 005e 00BF     		.align	2
+ 1390              	.L86:
+ 1391 0060 00366E01 		.word	24000000
+ 1392 0064 00000000 		.word	SM1
+ 1393 0068 7F380100 		.word	79999
+ 1394              		.cfi_endproc
+ 1395              	.LFE63:
+ 1396              		.size	testPWMPeriods, .-testPWMPeriods
+ 1397              		.text
+ 1398              	.Letext0:
+ 1399              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 1400              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 1401              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 1402              		.file 5 "./Defines.h"
+ 1403              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 1404              		.file 7 "./TAC_Submodule.h"
+ 1405              		.file 8 "./PeltierCalibration.h"
+ 1406              		.section	.debug_info,"",%progbits
+ 1407              	.Ldebug_info0:
+ 1408 0000 A8080000 		.4byte	0x8a8
+ 1409 0004 0400     		.2byte	0x4
+ 1410 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1411 000a 04       		.byte	0x4
+ 1412 000b 01       		.uleb128 0x1
+ 1413 000c BF030000 		.4byte	.LASF123
+ 1414 0010 01       		.byte	0x1
+ 1415 0011 82060000 		.4byte	.LASF124
+ 1416 0015 20030000 		.4byte	.LASF125
+ 1417 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1418 001d 00000000 		.4byte	0
+ 1419 0021 00000000 		.4byte	.Ldebug_line0
+ 1420 0025 02       		.uleb128 0x2
+ 1421 0026 01       		.byte	0x1
+ 1422 0027 06       		.byte	0x6
+ 1423 0028 68070000 		.4byte	.LASF0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 35
+
+
+ 1424 002c 03       		.uleb128 0x3
+ 1425 002d E7050000 		.4byte	.LASF4
+ 1426 0031 02       		.byte	0x2
+ 1427 0032 1D       		.byte	0x1d
+ 1428 0033 37000000 		.4byte	0x37
+ 1429 0037 02       		.uleb128 0x2
+ 1430 0038 01       		.byte	0x1
+ 1431 0039 08       		.byte	0x8
+ 1432 003a A9060000 		.4byte	.LASF1
+ 1433 003e 02       		.uleb128 0x2
+ 1434 003f 02       		.byte	0x2
+ 1435 0040 05       		.byte	0x5
+ 1436 0041 50050000 		.4byte	.LASF2
+ 1437 0045 02       		.uleb128 0x2
+ 1438 0046 02       		.byte	0x2
+ 1439 0047 07       		.byte	0x7
+ 1440 0048 74070000 		.4byte	.LASF3
+ 1441 004c 03       		.uleb128 0x3
+ 1442 004d B2000000 		.4byte	.LASF5
+ 1443 0051 02       		.byte	0x2
+ 1444 0052 3F       		.byte	0x3f
+ 1445 0053 57000000 		.4byte	0x57
+ 1446 0057 02       		.uleb128 0x2
+ 1447 0058 04       		.byte	0x4
+ 1448 0059 05       		.byte	0x5
+ 1449 005a 78050000 		.4byte	.LASF6
+ 1450 005e 02       		.uleb128 0x2
+ 1451 005f 04       		.byte	0x4
+ 1452 0060 07       		.byte	0x7
+ 1453 0061 50060000 		.4byte	.LASF7
+ 1454 0065 02       		.uleb128 0x2
+ 1455 0066 08       		.byte	0x8
+ 1456 0067 05       		.byte	0x5
+ 1457 0068 6E030000 		.4byte	.LASF8
+ 1458 006c 02       		.uleb128 0x2
+ 1459 006d 08       		.byte	0x8
+ 1460 006e 07       		.byte	0x7
+ 1461 006f D9010000 		.4byte	.LASF9
+ 1462 0073 04       		.uleb128 0x4
+ 1463 0074 04       		.byte	0x4
+ 1464 0075 05       		.byte	0x5
+ 1465 0076 696E7400 		.ascii	"int\000"
+ 1466 007a 02       		.uleb128 0x2
+ 1467 007b 04       		.byte	0x4
+ 1468 007c 07       		.byte	0x7
+ 1469 007d 87000000 		.4byte	.LASF10
+ 1470 0081 03       		.uleb128 0x3
+ 1471 0082 18030000 		.4byte	.LASF11
+ 1472 0086 03       		.byte	0x3
+ 1473 0087 15       		.byte	0x15
+ 1474 0088 2C000000 		.4byte	0x2c
+ 1475 008c 03       		.uleb128 0x3
+ 1476 008d 62060000 		.4byte	.LASF12
+ 1477 0091 03       		.byte	0x3
+ 1478 0092 2C       		.byte	0x2c
+ 1479 0093 4C000000 		.4byte	0x4c
+ 1480 0097 03       		.uleb128 0x3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 36
+
+
+ 1481 0098 A8070000 		.4byte	.LASF13
+ 1482 009c 04       		.byte	0x4
+ 1483 009d A1       		.byte	0xa1
+ 1484 009e 37000000 		.4byte	0x37
+ 1485 00a2 03       		.uleb128 0x3
+ 1486 00a3 E1020000 		.4byte	.LASF14
+ 1487 00a7 04       		.byte	0x4
+ 1488 00a8 A2       		.byte	0xa2
+ 1489 00a9 45000000 		.4byte	0x45
+ 1490 00ad 03       		.uleb128 0x3
+ 1491 00ae 4D040000 		.4byte	.LASF15
+ 1492 00b2 04       		.byte	0x4
+ 1493 00b3 A3       		.byte	0xa3
+ 1494 00b4 5E000000 		.4byte	0x5e
+ 1495 00b8 03       		.uleb128 0x3
+ 1496 00b9 E8020000 		.4byte	.LASF16
+ 1497 00bd 04       		.byte	0x4
+ 1498 00be A4       		.byte	0xa4
+ 1499 00bf 25000000 		.4byte	0x25
+ 1500 00c3 03       		.uleb128 0x3
+ 1501 00c4 BC000000 		.4byte	.LASF17
+ 1502 00c8 04       		.byte	0x4
+ 1503 00c9 A5       		.byte	0xa5
+ 1504 00ca 3E000000 		.4byte	0x3e
+ 1505 00ce 03       		.uleb128 0x3
+ 1506 00cf 9E010000 		.4byte	.LASF18
+ 1507 00d3 04       		.byte	0x4
+ 1508 00d4 A6       		.byte	0xa6
+ 1509 00d5 57000000 		.4byte	0x57
+ 1510 00d9 02       		.uleb128 0x2
+ 1511 00da 04       		.byte	0x4
+ 1512 00db 04       		.byte	0x4
+ 1513 00dc 98010000 		.4byte	.LASF19
+ 1514 00e0 02       		.uleb128 0x2
+ 1515 00e1 08       		.byte	0x8
+ 1516 00e2 04       		.byte	0x4
+ 1517 00e3 AE070000 		.4byte	.LASF20
+ 1518 00e7 02       		.uleb128 0x2
+ 1519 00e8 01       		.byte	0x1
+ 1520 00e9 08       		.byte	0x8
+ 1521 00ea C5020000 		.4byte	.LASF21
+ 1522 00ee 05       		.uleb128 0x5
+ 1523 00ef 79060000 		.4byte	.LASF22
+ 1524 00f3 04       		.byte	0x4
+ 1525 00f4 4301     		.2byte	0x143
+ 1526 00f6 5E000000 		.4byte	0x5e
+ 1527 00fa 06       		.uleb128 0x6
+ 1528 00fb 97000000 		.4byte	0x97
+ 1529 00ff 02       		.uleb128 0x2
+ 1530 0100 04       		.byte	0x4
+ 1531 0101 07       		.byte	0x7
+ 1532 0102 47060000 		.4byte	.LASF23
+ 1533 0106 02       		.uleb128 0x2
+ 1534 0107 08       		.byte	0x8
+ 1535 0108 04       		.byte	0x4
+ 1536 0109 D2040000 		.4byte	.LASF24
+ 1537 010d 07       		.uleb128 0x7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 37
+
+
+ 1538 010e 01       		.byte	0x1
+ 1539 010f 05       		.byte	0x5
+ 1540 0110 6A       		.byte	0x6a
+ 1541 0111 22010000 		.4byte	0x122
+ 1542 0115 08       		.uleb128 0x8
+ 1543 0116 A7040000 		.4byte	.LASF25
+ 1544 011a 00       		.sleb128 0
+ 1545 011b 08       		.uleb128 0x8
+ 1546 011c 18020000 		.4byte	.LASF26
+ 1547 0120 01       		.sleb128 1
+ 1548 0121 00       		.byte	0
+ 1549 0122 03       		.uleb128 0x3
+ 1550 0123 0B070000 		.4byte	.LASF27
+ 1551 0127 05       		.byte	0x5
+ 1552 0128 6A       		.byte	0x6a
+ 1553 0129 0D010000 		.4byte	0x10d
+ 1554 012d 07       		.uleb128 0x7
+ 1555 012e 01       		.byte	0x1
+ 1556 012f 05       		.byte	0x5
+ 1557 0130 6B       		.byte	0x6b
+ 1558 0131 42010000 		.4byte	0x142
+ 1559 0135 08       		.uleb128 0x8
+ 1560 0136 87070000 		.4byte	.LASF28
+ 1561 013a 00       		.sleb128 0
+ 1562 013b 08       		.uleb128 0x8
+ 1563 013c C7040000 		.4byte	.LASF29
+ 1564 0140 01       		.sleb128 1
+ 1565 0141 00       		.byte	0
+ 1566 0142 03       		.uleb128 0x3
+ 1567 0143 2F000000 		.4byte	.LASF30
+ 1568 0147 05       		.byte	0x5
+ 1569 0148 6B       		.byte	0x6b
+ 1570 0149 2D010000 		.4byte	0x12d
+ 1571 014d 07       		.uleb128 0x7
+ 1572 014e 01       		.byte	0x1
+ 1573 014f 05       		.byte	0x5
+ 1574 0150 6C       		.byte	0x6c
+ 1575 0151 62010000 		.4byte	0x162
+ 1576 0155 08       		.uleb128 0x8
+ 1577 0156 6F020000 		.4byte	.LASF31
+ 1578 015a 00       		.sleb128 0
+ 1579 015b 08       		.uleb128 0x8
+ 1580 015c 1B060000 		.4byte	.LASF32
+ 1581 0160 01       		.sleb128 1
+ 1582 0161 00       		.byte	0
+ 1583 0162 03       		.uleb128 0x3
+ 1584 0163 06020000 		.4byte	.LASF33
+ 1585 0167 05       		.byte	0x5
+ 1586 0168 6C       		.byte	0x6c
+ 1587 0169 4D010000 		.4byte	0x14d
+ 1588 016d 07       		.uleb128 0x7
+ 1589 016e 01       		.byte	0x1
+ 1590 016f 05       		.byte	0x5
+ 1591 0170 6D       		.byte	0x6d
+ 1592 0171 94010000 		.4byte	0x194
+ 1593 0175 08       		.uleb128 0x8
+ 1594 0176 AB050000 		.4byte	.LASF34
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 38
+
+
+ 1595 017a 00       		.sleb128 0
+ 1596 017b 08       		.uleb128 0x8
+ 1597 017c F5000000 		.4byte	.LASF35
+ 1598 0180 01       		.sleb128 1
+ 1599 0181 08       		.uleb128 0x8
+ 1600 0182 96040000 		.4byte	.LASF36
+ 1601 0186 02       		.sleb128 2
+ 1602 0187 08       		.uleb128 0x8
+ 1603 0188 CE060000 		.4byte	.LASF37
+ 1604 018c 03       		.sleb128 3
+ 1605 018d 08       		.uleb128 0x8
+ 1606 018e 0B080000 		.4byte	.LASF38
+ 1607 0192 04       		.sleb128 4
+ 1608 0193 00       		.byte	0
+ 1609 0194 03       		.uleb128 0x3
+ 1610 0195 3D000000 		.4byte	.LASF39
+ 1611 0199 05       		.byte	0x5
+ 1612 019a 6D       		.byte	0x6d
+ 1613 019b 6D010000 		.4byte	0x16d
+ 1614 019f 07       		.uleb128 0x7
+ 1615 01a0 01       		.byte	0x1
+ 1616 01a1 05       		.byte	0x5
+ 1617 01a2 6E       		.byte	0x6e
+ 1618 01a3 BA010000 		.4byte	0x1ba
+ 1619 01a7 08       		.uleb128 0x8
+ 1620 01a8 1B050000 		.4byte	.LASF40
+ 1621 01ac 02       		.sleb128 2
+ 1622 01ad 08       		.uleb128 0x8
+ 1623 01ae DE040000 		.4byte	.LASF41
+ 1624 01b2 01       		.sleb128 1
+ 1625 01b3 08       		.uleb128 0x8
+ 1626 01b4 1E070000 		.4byte	.LASF42
+ 1627 01b8 00       		.sleb128 0
+ 1628 01b9 00       		.byte	0
+ 1629 01ba 03       		.uleb128 0x3
+ 1630 01bb 1D010000 		.4byte	.LASF43
+ 1631 01bf 05       		.byte	0x5
+ 1632 01c0 6E       		.byte	0x6e
+ 1633 01c1 9F010000 		.4byte	0x19f
+ 1634 01c5 07       		.uleb128 0x7
+ 1635 01c6 01       		.byte	0x1
+ 1636 01c7 05       		.byte	0x5
+ 1637 01c8 6F       		.byte	0x6f
+ 1638 01c9 DA010000 		.4byte	0x1da
+ 1639 01cd 08       		.uleb128 0x8
+ 1640 01ce 8E050000 		.4byte	.LASF44
+ 1641 01d2 00       		.sleb128 0
+ 1642 01d3 08       		.uleb128 0x8
+ 1643 01d4 8C020000 		.4byte	.LASF45
+ 1644 01d8 01       		.sleb128 1
+ 1645 01d9 00       		.byte	0
+ 1646 01da 03       		.uleb128 0x3
+ 1647 01db E6040000 		.4byte	.LASF46
+ 1648 01df 05       		.byte	0x5
+ 1649 01e0 6F       		.byte	0x6f
+ 1650 01e1 C5010000 		.4byte	0x1c5
+ 1651 01e5 07       		.uleb128 0x7
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 39
+
+
+ 1652 01e6 01       		.byte	0x1
+ 1653 01e7 05       		.byte	0x5
+ 1654 01e8 70       		.byte	0x70
+ 1655 01e9 FA010000 		.4byte	0x1fa
+ 1656 01ed 08       		.uleb128 0x8
+ 1657 01ee 00000000 		.4byte	.LASF47
+ 1658 01f2 00       		.sleb128 0
+ 1659 01f3 08       		.uleb128 0x8
+ 1660 01f4 12000000 		.4byte	.LASF48
+ 1661 01f8 01       		.sleb128 1
+ 1662 01f9 00       		.byte	0
+ 1663 01fa 03       		.uleb128 0x3
+ 1664 01fb 52030000 		.4byte	.LASF49
+ 1665 01ff 05       		.byte	0x5
+ 1666 0200 70       		.byte	0x70
+ 1667 0201 E5010000 		.4byte	0x1e5
+ 1668 0205 07       		.uleb128 0x7
+ 1669 0206 01       		.byte	0x1
+ 1670 0207 05       		.byte	0x5
+ 1671 0208 71       		.byte	0x71
+ 1672 0209 1A020000 		.4byte	0x21a
+ 1673 020d 08       		.uleb128 0x8
+ 1674 020e 9C050000 		.4byte	.LASF50
+ 1675 0212 00       		.sleb128 0
+ 1676 0213 08       		.uleb128 0x8
+ 1677 0214 C2000000 		.4byte	.LASF51
+ 1678 0218 01       		.sleb128 1
+ 1679 0219 00       		.byte	0
+ 1680 021a 03       		.uleb128 0x3
+ 1681 021b 01030000 		.4byte	.LASF52
+ 1682 021f 05       		.byte	0x5
+ 1683 0220 71       		.byte	0x71
+ 1684 0221 05020000 		.4byte	0x205
+ 1685 0225 09       		.uleb128 0x9
+ 1686 0226 30       		.byte	0x30
+ 1687 0227 05       		.byte	0x5
+ 1688 0228 74       		.byte	0x74
+ 1689 0229 4E030000 		.4byte	0x34e
+ 1690 022d 0A       		.uleb128 0xa
+ 1691 022e 22050000 		.4byte	.LASF53
+ 1692 0232 05       		.byte	0x5
+ 1693 0233 76       		.byte	0x76
+ 1694 0234 A2000000 		.4byte	0xa2
+ 1695 0238 00       		.byte	0
+ 1696 0239 0A       		.uleb128 0xa
+ 1697 023a 6F000000 		.4byte	.LASF54
+ 1698 023e 05       		.byte	0x5
+ 1699 023f 77       		.byte	0x77
+ 1700 0240 A2000000 		.4byte	0xa2
+ 1701 0244 02       		.byte	0x2
+ 1702 0245 0A       		.uleb128 0xa
+ 1703 0246 9A030000 		.4byte	.LASF55
+ 1704 024a 05       		.byte	0x5
+ 1705 024b 79       		.byte	0x79
+ 1706 024c 62010000 		.4byte	0x162
+ 1707 0250 04       		.byte	0x4
+ 1708 0251 0A       		.uleb128 0xa
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 40
+
+
+ 1709 0252 D5050000 		.4byte	.LASF56
+ 1710 0256 05       		.byte	0x5
+ 1711 0257 7B       		.byte	0x7b
+ 1712 0258 C3000000 		.4byte	0xc3
+ 1713 025c 06       		.byte	0x6
+ 1714 025d 0A       		.uleb128 0xa
+ 1715 025e 28020000 		.4byte	.LASF57
+ 1716 0262 05       		.byte	0x5
+ 1717 0263 7C       		.byte	0x7c
+ 1718 0264 C3000000 		.4byte	0xc3
+ 1719 0268 08       		.byte	0x8
+ 1720 0269 0A       		.uleb128 0xa
+ 1721 026a 83010000 		.4byte	.LASF58
+ 1722 026e 05       		.byte	0x5
+ 1723 026f 7D       		.byte	0x7d
+ 1724 0270 C3000000 		.4byte	0xc3
+ 1725 0274 0A       		.byte	0xa
+ 1726 0275 0A       		.uleb128 0xa
+ 1727 0276 33010000 		.4byte	.LASF59
+ 1728 027a 05       		.byte	0x5
+ 1729 027b 7E       		.byte	0x7e
+ 1730 027c 94010000 		.4byte	0x194
+ 1731 0280 0C       		.byte	0xc
+ 1732 0281 0A       		.uleb128 0xa
+ 1733 0282 36060000 		.4byte	.LASF60
+ 1734 0286 05       		.byte	0x5
+ 1735 0287 7F       		.byte	0x7f
+ 1736 0288 BA010000 		.4byte	0x1ba
+ 1737 028c 0D       		.byte	0xd
+ 1738 028d 0A       		.uleb128 0xa
+ 1739 028e DF070000 		.4byte	.LASF61
+ 1740 0292 05       		.byte	0x5
+ 1741 0293 81       		.byte	0x81
+ 1742 0294 A2000000 		.4byte	0xa2
+ 1743 0298 0E       		.byte	0xe
+ 1744 0299 0A       		.uleb128 0xa
+ 1745 029a 4E020000 		.4byte	.LASF62
+ 1746 029e 05       		.byte	0x5
+ 1747 029f 82       		.byte	0x82
+ 1748 02a0 97000000 		.4byte	0x97
+ 1749 02a4 10       		.byte	0x10
+ 1750 02a5 0A       		.uleb128 0xa
+ 1751 02a6 02010000 		.4byte	.LASF63
+ 1752 02aa 05       		.byte	0x5
+ 1753 02ab 83       		.byte	0x83
+ 1754 02ac 97000000 		.4byte	0x97
+ 1755 02b0 11       		.byte	0x11
+ 1756 02b1 0A       		.uleb128 0xa
+ 1757 02b2 B6020000 		.4byte	.LASF64
+ 1758 02b6 05       		.byte	0x5
+ 1759 02b7 84       		.byte	0x84
+ 1760 02b8 A2000000 		.4byte	0xa2
+ 1761 02bc 12       		.byte	0x12
+ 1762 02bd 0A       		.uleb128 0xa
+ 1763 02be A7030000 		.4byte	.LASF65
+ 1764 02c2 05       		.byte	0x5
+ 1765 02c3 85       		.byte	0x85
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 41
+
+
+ 1766 02c4 DA010000 		.4byte	0x1da
+ 1767 02c8 14       		.byte	0x14
+ 1768 02c9 0A       		.uleb128 0xa
+ 1769 02ca 52000000 		.4byte	.LASF66
+ 1770 02ce 05       		.byte	0x5
+ 1771 02cf 87       		.byte	0x87
+ 1772 02d0 97000000 		.4byte	0x97
+ 1773 02d4 15       		.byte	0x15
+ 1774 02d5 0A       		.uleb128 0xa
+ 1775 02d6 F1050000 		.4byte	.LASF67
+ 1776 02da 05       		.byte	0x5
+ 1777 02db 88       		.byte	0x88
+ 1778 02dc 22010000 		.4byte	0x122
+ 1779 02e0 16       		.byte	0x16
+ 1780 02e1 0A       		.uleb128 0xa
+ 1781 02e2 CE000000 		.4byte	.LASF68
+ 1782 02e6 05       		.byte	0x5
+ 1783 02e7 8A       		.byte	0x8a
+ 1784 02e8 97000000 		.4byte	0x97
+ 1785 02ec 17       		.byte	0x17
+ 1786 02ed 0A       		.uleb128 0xa
+ 1787 02ee AD020000 		.4byte	.LASF69
+ 1788 02f2 05       		.byte	0x5
+ 1789 02f3 8B       		.byte	0x8b
+ 1790 02f4 42010000 		.4byte	0x142
+ 1791 02f8 18       		.byte	0x18
+ 1792 02f9 0A       		.uleb128 0xa
+ 1793 02fa FF050000 		.4byte	.LASF70
+ 1794 02fe 05       		.byte	0x5
+ 1795 02ff 8D       		.byte	0x8d
+ 1796 0300 4E030000 		.4byte	0x34e
+ 1797 0304 1C       		.byte	0x1c
+ 1798 0305 0A       		.uleb128 0xa
+ 1799 0306 5A030000 		.4byte	.LASF71
+ 1800 030a 05       		.byte	0x5
+ 1801 030b 8E       		.byte	0x8e
+ 1802 030c 54030000 		.4byte	0x354
+ 1803 0310 20       		.byte	0x20
+ 1804 0311 0A       		.uleb128 0xa
+ 1805 0312 94000000 		.4byte	.LASF72
+ 1806 0316 05       		.byte	0x5
+ 1807 0317 8F       		.byte	0x8f
+ 1808 0318 FA010000 		.4byte	0x1fa
+ 1809 031c 24       		.byte	0x24
+ 1810 031d 0A       		.uleb128 0xa
+ 1811 031e 7C030000 		.4byte	.LASF73
+ 1812 0322 05       		.byte	0x5
+ 1813 0323 90       		.byte	0x90
+ 1814 0324 FA010000 		.4byte	0x1fa
+ 1815 0328 25       		.byte	0x25
+ 1816 0329 0A       		.uleb128 0xa
+ 1817 032a 60040000 		.4byte	.LASF74
+ 1818 032e 05       		.byte	0x5
+ 1819 032f 92       		.byte	0x92
+ 1820 0330 1A020000 		.4byte	0x21a
+ 1821 0334 26       		.byte	0x26
+ 1822 0335 0A       		.uleb128 0xa
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 42
+
+
+ 1823 0336 06000000 		.4byte	.LASF75
+ 1824 033a 05       		.byte	0x5
+ 1825 033b 94       		.byte	0x94
+ 1826 033c 4E030000 		.4byte	0x34e
+ 1827 0340 28       		.byte	0x28
+ 1828 0341 0A       		.uleb128 0xa
+ 1829 0342 99060000 		.4byte	.LASF76
+ 1830 0346 05       		.byte	0x5
+ 1831 0347 95       		.byte	0x95
+ 1832 0348 5A030000 		.4byte	0x35a
+ 1833 034c 2C       		.byte	0x2c
+ 1834 034d 00       		.byte	0
+ 1835 034e 0B       		.uleb128 0xb
+ 1836 034f 04       		.byte	0x4
+ 1837 0350 C3000000 		.4byte	0xc3
+ 1838 0354 0B       		.uleb128 0xb
+ 1839 0355 04       		.byte	0x4
+ 1840 0356 B8000000 		.4byte	0xb8
+ 1841 035a 0B       		.uleb128 0xb
+ 1842 035b 04       		.byte	0x4
+ 1843 035c 97000000 		.4byte	0x97
+ 1844 0360 03       		.uleb128 0x3
+ 1845 0361 C0060000 		.4byte	.LASF77
+ 1846 0365 05       		.byte	0x5
+ 1847 0366 97       		.byte	0x97
+ 1848 0367 25020000 		.4byte	0x225
+ 1849 036b 0C       		.uleb128 0xc
+ 1850 036c B8040000 		.4byte	.LASF80
+ 1851 0370 01       		.byte	0x1
+ 1852 0371 17       		.byte	0x17
+ 1853 0372 00000000 		.4byte	.LFB56
+ 1854 0376 A0000000 		.4byte	.LFE56-.LFB56
+ 1855 037a 01       		.uleb128 0x1
+ 1856 037b 9C       		.byte	0x9c
+ 1857 037c 9B030000 		.4byte	0x39b
+ 1858 0380 0D       		.uleb128 0xd
+ 1859 0381 22050000 		.4byte	.LASF53
+ 1860 0385 01       		.byte	0x1
+ 1861 0386 17       		.byte	0x17
+ 1862 0387 73000000 		.4byte	0x73
+ 1863 038b 02       		.uleb128 0x2
+ 1864 038c 91       		.byte	0x91
+ 1865 038d 6C       		.sleb128 -20
+ 1866 038e 0E       		.uleb128 0xe
+ 1867 038f 6900     		.ascii	"i\000"
+ 1868 0391 01       		.byte	0x1
+ 1869 0392 19       		.byte	0x19
+ 1870 0393 73000000 		.4byte	0x73
+ 1871 0397 02       		.uleb128 0x2
+ 1872 0398 91       		.byte	0x91
+ 1873 0399 74       		.sleb128 -12
+ 1874 039a 00       		.byte	0
+ 1875 039b 0F       		.uleb128 0xf
+ 1876 039c 31070000 		.4byte	.LASF83
+ 1877 03a0 01       		.byte	0x1
+ 1878 03a1 3B       		.byte	0x3b
+ 1879 03a2 FA010000 		.4byte	0x1fa
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 43
+
+
+ 1880 03a6 00000000 		.4byte	.LFB57
+ 1881 03aa 50010000 		.4byte	.LFE57-.LFB57
+ 1882 03ae 01       		.uleb128 0x1
+ 1883 03af 9C       		.byte	0x9c
+ 1884 03b0 03040000 		.4byte	0x403
+ 1885 03b4 0D       		.uleb128 0xd
+ 1886 03b5 E0060000 		.4byte	.LASF78
+ 1887 03b9 01       		.byte	0x1
+ 1888 03ba 3B       		.byte	0x3b
+ 1889 03bb 03040000 		.4byte	0x403
+ 1890 03bf 02       		.uleb128 0x2
+ 1891 03c0 91       		.byte	0x91
+ 1892 03c1 64       		.sleb128 -28
+ 1893 03c2 0E       		.uleb128 0xe
+ 1894 03c3 6900     		.ascii	"i\000"
+ 1895 03c5 01       		.byte	0x1
+ 1896 03c6 3D       		.byte	0x3d
+ 1897 03c7 73000000 		.4byte	0x73
+ 1898 03cb 02       		.uleb128 0x2
+ 1899 03cc 91       		.byte	0x91
+ 1900 03cd 74       		.sleb128 -12
+ 1901 03ce 10       		.uleb128 0x10
+ 1902 03cf 14000000 		.4byte	.LBB2
+ 1903 03d3 6A000000 		.4byte	.LBE2-.LBB2
+ 1904 03d7 EA030000 		.4byte	0x3ea
+ 1905 03db 11       		.uleb128 0x11
+ 1906 03dc 14060000 		.4byte	.LASF79
+ 1907 03e0 01       		.byte	0x1
+ 1908 03e1 41       		.byte	0x41
+ 1909 03e2 09040000 		.4byte	0x409
+ 1910 03e6 02       		.uleb128 0x2
+ 1911 03e7 91       		.byte	0x91
+ 1912 03e8 70       		.sleb128 -16
+ 1913 03e9 00       		.byte	0
+ 1914 03ea 12       		.uleb128 0x12
+ 1915 03eb 88000000 		.4byte	.LBB3
+ 1916 03ef 6A000000 		.4byte	.LBE3-.LBB3
+ 1917 03f3 11       		.uleb128 0x11
+ 1918 03f4 14060000 		.4byte	.LASF79
+ 1919 03f8 01       		.byte	0x1
+ 1920 03f9 4A       		.byte	0x4a
+ 1921 03fa 09040000 		.4byte	0x409
+ 1922 03fe 02       		.uleb128 0x2
+ 1923 03ff 91       		.byte	0x91
+ 1924 0400 6C       		.sleb128 -20
+ 1925 0401 00       		.byte	0
+ 1926 0402 00       		.byte	0
+ 1927 0403 0B       		.uleb128 0xb
+ 1928 0404 04       		.byte	0x4
+ 1929 0405 60030000 		.4byte	0x360
+ 1930 0409 0B       		.uleb128 0xb
+ 1931 040a 04       		.byte	0x4
+ 1932 040b 0F040000 		.4byte	0x40f
+ 1933 040f 13       		.uleb128 0x13
+ 1934 0410 FA000000 		.4byte	0xfa
+ 1935 0414 0C       		.uleb128 0xc
+ 1936 0415 61010000 		.4byte	.LASF81
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 44
+
+
+ 1937 0419 01       		.byte	0x1
+ 1938 041a 6E       		.byte	0x6e
+ 1939 041b 00000000 		.4byte	.LFB58
+ 1940 041f 6C010000 		.4byte	.LFE58-.LFB58
+ 1941 0423 01       		.uleb128 0x1
+ 1942 0424 9C       		.byte	0x9c
+ 1943 0425 62040000 		.4byte	0x462
+ 1944 0429 0D       		.uleb128 0xd
+ 1945 042a E0060000 		.4byte	.LASF78
+ 1946 042e 01       		.byte	0x1
+ 1947 042f 6E       		.byte	0x6e
+ 1948 0430 03040000 		.4byte	0x403
+ 1949 0434 03       		.uleb128 0x3
+ 1950 0435 91       		.byte	0x91
+ 1951 0436 BC7D     		.sleb128 -324
+ 1952 0438 0E       		.uleb128 0xe
+ 1953 0439 6900     		.ascii	"i\000"
+ 1954 043b 01       		.byte	0x1
+ 1955 043c 70       		.byte	0x70
+ 1956 043d 73000000 		.4byte	0x73
+ 1957 0441 02       		.uleb128 0x2
+ 1958 0442 91       		.byte	0x91
+ 1959 0443 74       		.sleb128 -12
+ 1960 0444 11       		.uleb128 0x11
+ 1961 0445 14060000 		.4byte	.LASF79
+ 1962 0449 01       		.byte	0x1
+ 1963 044a 71       		.byte	0x71
+ 1964 044b 62040000 		.4byte	0x462
+ 1965 044f 02       		.uleb128 0x2
+ 1966 0450 91       		.byte	0x91
+ 1967 0451 70       		.sleb128 -16
+ 1968 0452 11       		.uleb128 0x11
+ 1969 0453 2E050000 		.4byte	.LASF82
+ 1970 0457 01       		.byte	0x1
+ 1971 0458 73       		.byte	0x73
+ 1972 0459 68040000 		.4byte	0x468
+ 1973 045d 03       		.uleb128 0x3
+ 1974 045e 91       		.byte	0x91
+ 1975 045f C47D     		.sleb128 -316
+ 1976 0461 00       		.byte	0
+ 1977 0462 0B       		.uleb128 0xb
+ 1978 0463 04       		.byte	0x4
+ 1979 0464 81000000 		.4byte	0x81
+ 1980 0468 14       		.uleb128 0x14
+ 1981 0469 97000000 		.4byte	0x97
+ 1982 046d 79040000 		.4byte	0x479
+ 1983 0471 15       		.uleb128 0x15
+ 1984 0472 FF000000 		.4byte	0xff
+ 1985 0476 2B01     		.2byte	0x12b
+ 1986 0478 00       		.byte	0
+ 1987 0479 16       		.uleb128 0x16
+ 1988 047a C9050000 		.4byte	.LASF84
+ 1989 047e 01       		.byte	0x1
+ 1990 047f 9F       		.byte	0x9f
+ 1991 0480 97000000 		.4byte	0x97
+ 1992 0484 00000000 		.4byte	.LFB59
+ 1993 0488 24020000 		.4byte	.LFE59-.LFB59
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 45
+
+
+ 1994 048c 01       		.uleb128 0x1
+ 1995 048d 9C       		.byte	0x9c
+ 1996 048e AD050000 		.4byte	0x5ad
+ 1997 0492 0D       		.uleb128 0xd
+ 1998 0493 E0060000 		.4byte	.LASF78
+ 1999 0497 01       		.byte	0x1
+ 2000 0498 9F       		.byte	0x9f
+ 2001 0499 03040000 		.4byte	0x403
+ 2002 049d 03       		.uleb128 0x3
+ 2003 049e 91       		.byte	0x91
+ 2004 049f 847E     		.sleb128 -252
+ 2005 04a1 12       		.uleb128 0x12
+ 2006 04a2 1A000000 		.4byte	.LBB4
+ 2007 04a6 FC010000 		.4byte	.LBE4-.LBB4
+ 2008 04aa 17       		.uleb128 0x17
+ 2009 04ab EF070000 		.4byte	.LASF85
+ 2010 04af 01       		.byte	0x1
+ 2011 04b0 AB       		.byte	0xab
+ 2012 04b1 73000000 		.4byte	0x73
+ 2013 04b5 BB040000 		.4byte	0x4bb
+ 2014 04b9 18       		.uleb128 0x18
+ 2015 04ba 00       		.byte	0
+ 2016 04bb 17       		.uleb128 0x17
+ 2017 04bc 5A050000 		.4byte	.LASF86
+ 2018 04c0 01       		.byte	0x1
+ 2019 04c1 AC       		.byte	0xac
+ 2020 04c2 73000000 		.4byte	0x73
+ 2021 04c6 CC040000 		.4byte	0x4cc
+ 2022 04ca 18       		.uleb128 0x18
+ 2023 04cb 00       		.byte	0
+ 2024 04cc 17       		.uleb128 0x17
+ 2025 04cd C0010000 		.4byte	.LASF87
+ 2026 04d1 01       		.byte	0x1
+ 2027 04d2 AF       		.byte	0xaf
+ 2028 04d3 73000000 		.4byte	0x73
+ 2029 04d7 DD040000 		.4byte	0x4dd
+ 2030 04db 18       		.uleb128 0x18
+ 2031 04dc 00       		.byte	0
+ 2032 04dd 11       		.uleb128 0x11
+ 2033 04de 3B020000 		.4byte	.LASF88
+ 2034 04e2 01       		.byte	0x1
+ 2035 04e3 B2       		.byte	0xb2
+ 2036 04e4 C3000000 		.4byte	0xc3
+ 2037 04e8 02       		.uleb128 0x2
+ 2038 04e9 91       		.byte	0x91
+ 2039 04ea 66       		.sleb128 -26
+ 2040 04eb 11       		.uleb128 0x11
+ 2041 04ec 75010000 		.4byte	.LASF89
+ 2042 04f0 01       		.byte	0x1
+ 2043 04f1 B6       		.byte	0xb6
+ 2044 04f2 B8000000 		.4byte	0xb8
+ 2045 04f6 02       		.uleb128 0x2
+ 2046 04f7 91       		.byte	0x91
+ 2047 04f8 65       		.sleb128 -27
+ 2048 04f9 11       		.uleb128 0x11
+ 2049 04fa 63020000 		.4byte	.LASF90
+ 2050 04fe 01       		.byte	0x1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 46
+
+
+ 2051 04ff B7       		.byte	0xb7
+ 2052 0500 B8000000 		.4byte	0xb8
+ 2053 0504 02       		.uleb128 0x2
+ 2054 0505 91       		.byte	0x91
+ 2055 0506 64       		.sleb128 -28
+ 2056 0507 11       		.uleb128 0x11
+ 2057 0508 04050000 		.4byte	.LASF91
+ 2058 050c 01       		.byte	0x1
+ 2059 050d B8       		.byte	0xb8
+ 2060 050e 73000000 		.4byte	0x73
+ 2061 0512 02       		.uleb128 0x2
+ 2062 0513 91       		.byte	0x91
+ 2063 0514 60       		.sleb128 -32
+ 2064 0515 11       		.uleb128 0x11
+ 2065 0516 17000000 		.4byte	.LASF92
+ 2066 051a 01       		.byte	0x1
+ 2067 051b B9       		.byte	0xb9
+ 2068 051c 73000000 		.4byte	0x73
+ 2069 0520 02       		.uleb128 0x2
+ 2070 0521 91       		.byte	0x91
+ 2071 0522 6C       		.sleb128 -20
+ 2072 0523 17       		.uleb128 0x17
+ 2073 0524 72040000 		.4byte	.LASF93
+ 2074 0528 01       		.byte	0x1
+ 2075 0529 BC       		.byte	0xbc
+ 2076 052a 73000000 		.4byte	0x73
+ 2077 052e 34050000 		.4byte	0x534
+ 2078 0532 18       		.uleb128 0x18
+ 2079 0533 00       		.byte	0
+ 2080 0534 11       		.uleb128 0x11
+ 2081 0535 F0010000 		.4byte	.LASF94
+ 2082 0539 01       		.byte	0x1
+ 2083 053a BF       		.byte	0xbf
+ 2084 053b CE000000 		.4byte	0xce
+ 2085 053f 02       		.uleb128 0x2
+ 2086 0540 91       		.byte	0x91
+ 2087 0541 5C       		.sleb128 -36
+ 2088 0542 11       		.uleb128 0x11
+ 2089 0543 CA020000 		.4byte	.LASF95
+ 2090 0547 01       		.byte	0x1
+ 2091 0548 C0       		.byte	0xc0
+ 2092 0549 C3000000 		.4byte	0xc3
+ 2093 054d 02       		.uleb128 0x2
+ 2094 054e 91       		.byte	0x91
+ 2095 054f 5A       		.sleb128 -38
+ 2096 0550 11       		.uleb128 0x11
+ 2097 0551 53070000 		.4byte	.LASF96
+ 2098 0555 01       		.byte	0x1
+ 2099 0556 C2       		.byte	0xc2
+ 2100 0557 73000000 		.4byte	0x73
+ 2101 055b 02       		.uleb128 0x2
+ 2102 055c 91       		.byte	0x91
+ 2103 055d 54       		.sleb128 -44
+ 2104 055e 11       		.uleb128 0x11
+ 2105 055f A3020000 		.4byte	.LASF97
+ 2106 0563 01       		.byte	0x1
+ 2107 0564 C4       		.byte	0xc4
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 47
+
+
+ 2108 0565 AD050000 		.4byte	0x5ad
+ 2109 0569 03       		.uleb128 0x3
+ 2110 056a 91       		.byte	0x91
+ 2111 056b 8C7E     		.sleb128 -244
+ 2112 056d 0E       		.uleb128 0xe
+ 2113 056e 6900     		.ascii	"i\000"
+ 2114 0570 01       		.byte	0x1
+ 2115 0571 C7       		.byte	0xc7
+ 2116 0572 73000000 		.4byte	0x73
+ 2117 0576 02       		.uleb128 0x2
+ 2118 0577 91       		.byte	0x91
+ 2119 0578 68       		.sleb128 -24
+ 2120 0579 10       		.uleb128 0x10
+ 2121 057a A8000000 		.4byte	.LBB5
+ 2122 057e 5E000000 		.4byte	.LBE5-.LBB5
+ 2123 0582 94050000 		.4byte	0x594
+ 2124 0586 19       		.uleb128 0x19
+ 2125 0587 C9070000 		.4byte	.LASF98
+ 2126 058b 01       		.byte	0x1
+ 2127 058c D1       		.byte	0xd1
+ 2128 058d 73000000 		.4byte	0x73
+ 2129 0591 18       		.uleb128 0x18
+ 2130 0592 00       		.byte	0
+ 2131 0593 00       		.byte	0
+ 2132 0594 12       		.uleb128 0x12
+ 2133 0595 9E010000 		.4byte	.LBB6
+ 2134 0599 4C000000 		.4byte	.LBE6-.LBB6
+ 2135 059d 19       		.uleb128 0x19
+ 2136 059e C9070000 		.4byte	.LASF98
+ 2137 05a2 01       		.byte	0x1
+ 2138 05a3 D1       		.byte	0xd1
+ 2139 05a4 73000000 		.4byte	0x73
+ 2140 05a8 18       		.uleb128 0x18
+ 2141 05a9 00       		.byte	0
+ 2142 05aa 00       		.byte	0
+ 2143 05ab 00       		.byte	0
+ 2144 05ac 00       		.byte	0
+ 2145 05ad 14       		.uleb128 0x14
+ 2146 05ae C3000000 		.4byte	0xc3
+ 2147 05b2 BD050000 		.4byte	0x5bd
+ 2148 05b6 1A       		.uleb128 0x1a
+ 2149 05b7 FF000000 		.4byte	0xff
+ 2150 05bb 63       		.byte	0x63
+ 2151 05bc 00       		.byte	0
+ 2152 05bd 1B       		.uleb128 0x1b
+ 2153 05be E7060000 		.4byte	.LASF99
+ 2154 05c2 01       		.byte	0x1
+ 2155 05c3 0E01     		.2byte	0x10e
+ 2156 05c5 C3000000 		.4byte	0xc3
+ 2157 05c9 00000000 		.4byte	.LFB60
+ 2158 05cd 94000000 		.4byte	.LFE60-.LFB60
+ 2159 05d1 01       		.uleb128 0x1
+ 2160 05d2 9C       		.byte	0x9c
+ 2161 05d3 23060000 		.4byte	0x623
+ 2162 05d7 1C       		.uleb128 0x1c
+ 2163 05d8 E0060000 		.4byte	.LASF78
+ 2164 05dc 01       		.byte	0x1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 48
+
+
+ 2165 05dd 0E01     		.2byte	0x10e
+ 2166 05df 03040000 		.4byte	0x403
+ 2167 05e3 02       		.uleb128 0x2
+ 2168 05e4 91       		.byte	0x91
+ 2169 05e5 6C       		.sleb128 -20
+ 2170 05e6 1D       		.uleb128 0x1d
+ 2171 05e7 CA020000 		.4byte	.LASF95
+ 2172 05eb 01       		.byte	0x1
+ 2173 05ec 1001     		.2byte	0x110
+ 2174 05ee C3000000 		.4byte	0xc3
+ 2175 05f2 02       		.uleb128 0x2
+ 2176 05f3 91       		.byte	0x91
+ 2177 05f4 76       		.sleb128 -10
+ 2178 05f5 1D       		.uleb128 0x1d
+ 2179 05f6 58010000 		.4byte	.LASF100
+ 2180 05fa 01       		.byte	0x1
+ 2181 05fb 1101     		.2byte	0x111
+ 2182 05fd C3000000 		.4byte	0xc3
+ 2183 0601 02       		.uleb128 0x2
+ 2184 0602 91       		.byte	0x91
+ 2185 0603 74       		.sleb128 -12
+ 2186 0604 1D       		.uleb128 0x1d
+ 2187 0605 45070000 		.4byte	.LASF101
+ 2188 0609 01       		.byte	0x1
+ 2189 060a 1201     		.2byte	0x112
+ 2190 060c B8000000 		.4byte	0xb8
+ 2191 0610 02       		.uleb128 0x2
+ 2192 0611 91       		.byte	0x91
+ 2193 0612 73       		.sleb128 -13
+ 2194 0613 1D       		.uleb128 0x1d
+ 2195 0614 D6020000 		.4byte	.LASF102
+ 2196 0618 01       		.byte	0x1
+ 2197 0619 1301     		.2byte	0x113
+ 2198 061b C3000000 		.4byte	0xc3
+ 2199 061f 02       		.uleb128 0x2
+ 2200 0620 91       		.byte	0x91
+ 2201 0621 70       		.sleb128 -16
+ 2202 0622 00       		.byte	0
+ 2203 0623 1E       		.uleb128 0x1e
+ 2204 0624 60000000 		.4byte	.LASF103
+ 2205 0628 01       		.byte	0x1
+ 2206 0629 3601     		.2byte	0x136
+ 2207 062b 00000000 		.4byte	.LFB61
+ 2208 062f E0010000 		.4byte	.LFE61-.LFB61
+ 2209 0633 01       		.uleb128 0x1
+ 2210 0634 9C       		.byte	0x9c
+ 2211 0635 57070000 		.4byte	0x757
+ 2212 0639 1C       		.uleb128 0x1c
+ 2213 063a B7060000 		.4byte	.LASF104
+ 2214 063e 01       		.byte	0x1
+ 2215 063f 3601     		.2byte	0x136
+ 2216 0641 73000000 		.4byte	0x73
+ 2217 0645 02       		.uleb128 0x2
+ 2218 0646 91       		.byte	0x91
+ 2219 0647 5C       		.sleb128 -36
+ 2220 0648 1C       		.uleb128 0x1c
+ 2221 0649 97050000 		.4byte	.LASF105
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 49
+
+
+ 2222 064d 01       		.byte	0x1
+ 2223 064e 3601     		.2byte	0x136
+ 2224 0650 73000000 		.4byte	0x73
+ 2225 0654 02       		.uleb128 0x2
+ 2226 0655 91       		.byte	0x91
+ 2227 0656 58       		.sleb128 -40
+ 2228 0657 1C       		.uleb128 0x1c
+ 2229 0658 FE070000 		.4byte	.LASF106
+ 2230 065c 01       		.byte	0x1
+ 2231 065d 3601     		.2byte	0x136
+ 2232 065f 97000000 		.4byte	0x97
+ 2233 0663 02       		.uleb128 0x2
+ 2234 0664 91       		.byte	0x91
+ 2235 0665 57       		.sleb128 -41
+ 2236 0666 1C       		.uleb128 0x1c
+ 2237 0667 D5050000 		.4byte	.LASF56
+ 2238 066b 01       		.byte	0x1
+ 2239 066c 3601     		.2byte	0x136
+ 2240 066e 73000000 		.4byte	0x73
+ 2241 0672 02       		.uleb128 0x2
+ 2242 0673 91       		.byte	0x91
+ 2243 0674 50       		.sleb128 -48
+ 2244 0675 1D       		.uleb128 0x1d
+ 2245 0676 16010000 		.4byte	.LASF107
+ 2246 067a 01       		.byte	0x1
+ 2247 067b 3801     		.2byte	0x138
+ 2248 067d 03040000 		.4byte	0x403
+ 2249 0681 02       		.uleb128 0x2
+ 2250 0682 91       		.byte	0x91
+ 2251 0683 74       		.sleb128 -12
+ 2252 0684 1D       		.uleb128 0x1d
+ 2253 0685 7F020000 		.4byte	.LASF108
+ 2254 0689 01       		.byte	0x1
+ 2255 068a 4201     		.2byte	0x142
+ 2256 068c E0000000 		.4byte	0xe0
+ 2257 0690 02       		.uleb128 0x2
+ 2258 0691 91       		.byte	0x91
+ 2259 0692 68       		.sleb128 -24
+ 2260 0693 10       		.uleb128 0x10
+ 2261 0694 2C000000 		.4byte	.LBB7
+ 2262 0698 94000000 		.4byte	.LBE7-.LBB7
+ 2263 069c CE060000 		.4byte	0x6ce
+ 2264 06a0 1F       		.uleb128 0x1f
+ 2265 06a1 76616C00 		.ascii	"val\000"
+ 2266 06a5 01       		.byte	0x1
+ 2267 06a6 4E01     		.2byte	0x14e
+ 2268 06a8 73000000 		.4byte	0x73
+ 2269 06ac 02       		.uleb128 0x2
+ 2270 06ad 91       		.byte	0x91
+ 2271 06ae 64       		.sleb128 -28
+ 2272 06af 17       		.uleb128 0x17
+ 2273 06b0 C0010000 		.4byte	.LASF87
+ 2274 06b4 01       		.byte	0x1
+ 2275 06b5 AF       		.byte	0xaf
+ 2276 06b6 73000000 		.4byte	0x73
+ 2277 06ba C0060000 		.4byte	0x6c0
+ 2278 06be 18       		.uleb128 0x18
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 50
+
+
+ 2279 06bf 00       		.byte	0
+ 2280 06c0 19       		.uleb128 0x19
+ 2281 06c1 72040000 		.4byte	.LASF93
+ 2282 06c5 01       		.byte	0x1
+ 2283 06c6 BC       		.byte	0xbc
+ 2284 06c7 73000000 		.4byte	0x73
+ 2285 06cb 18       		.uleb128 0x18
+ 2286 06cc 00       		.byte	0
+ 2287 06cd 00       		.byte	0
+ 2288 06ce 10       		.uleb128 0x10
+ 2289 06cf C8000000 		.4byte	.LBB8
+ 2290 06d3 9A000000 		.4byte	.LBE8-.LBB8
+ 2291 06d7 09070000 		.4byte	0x709
+ 2292 06db 1F       		.uleb128 0x1f
+ 2293 06dc 76616C00 		.ascii	"val\000"
+ 2294 06e0 01       		.byte	0x1
+ 2295 06e1 7501     		.2byte	0x175
+ 2296 06e3 73000000 		.4byte	0x73
+ 2297 06e7 02       		.uleb128 0x2
+ 2298 06e8 91       		.byte	0x91
+ 2299 06e9 60       		.sleb128 -32
+ 2300 06ea 17       		.uleb128 0x17
+ 2301 06eb C0010000 		.4byte	.LASF87
+ 2302 06ef 01       		.byte	0x1
+ 2303 06f0 AF       		.byte	0xaf
+ 2304 06f1 73000000 		.4byte	0x73
+ 2305 06f5 FB060000 		.4byte	0x6fb
+ 2306 06f9 18       		.uleb128 0x18
+ 2307 06fa 00       		.byte	0
+ 2308 06fb 19       		.uleb128 0x19
+ 2309 06fc 72040000 		.4byte	.LASF93
+ 2310 0700 01       		.byte	0x1
+ 2311 0701 BC       		.byte	0xbc
+ 2312 0702 73000000 		.4byte	0x73
+ 2313 0706 18       		.uleb128 0x18
+ 2314 0707 00       		.byte	0
+ 2315 0708 00       		.byte	0
+ 2316 0709 12       		.uleb128 0x12
+ 2317 070a 6A010000 		.4byte	.LBB9
+ 2318 070e 46000000 		.4byte	.LBE9-.LBB9
+ 2319 0712 17       		.uleb128 0x17
+ 2320 0713 C0010000 		.4byte	.LASF87
+ 2321 0717 01       		.byte	0x1
+ 2322 0718 AF       		.byte	0xaf
+ 2323 0719 73000000 		.4byte	0x73
+ 2324 071d 23070000 		.4byte	0x723
+ 2325 0721 18       		.uleb128 0x18
+ 2326 0722 00       		.byte	0
+ 2327 0723 10       		.uleb128 0x10
+ 2328 0724 7A010000 		.4byte	.LBB10
+ 2329 0728 08000000 		.4byte	.LBE10-.LBB10
+ 2330 072c 3E070000 		.4byte	0x73e
+ 2331 0730 19       		.uleb128 0x19
+ 2332 0731 72040000 		.4byte	.LASF93
+ 2333 0735 01       		.byte	0x1
+ 2334 0736 BC       		.byte	0xbc
+ 2335 0737 73000000 		.4byte	0x73
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 51
+
+
+ 2336 073b 18       		.uleb128 0x18
+ 2337 073c 00       		.byte	0
+ 2338 073d 00       		.byte	0
+ 2339 073e 12       		.uleb128 0x12
+ 2340 073f 84010000 		.4byte	.LBB11
+ 2341 0743 08000000 		.4byte	.LBE11-.LBB11
+ 2342 0747 19       		.uleb128 0x19
+ 2343 0748 72040000 		.4byte	.LASF93
+ 2344 074c 01       		.byte	0x1
+ 2345 074d BC       		.byte	0xbc
+ 2346 074e 73000000 		.4byte	0x73
+ 2347 0752 18       		.uleb128 0x18
+ 2348 0753 00       		.byte	0
+ 2349 0754 00       		.byte	0
+ 2350 0755 00       		.byte	0
+ 2351 0756 00       		.byte	0
+ 2352 0757 20       		.uleb128 0x20
+ 2353 0758 B5070000 		.4byte	.LASF126
+ 2354 075c 01       		.byte	0x1
+ 2355 075d CD01     		.2byte	0x1cd
+ 2356 075f 97000000 		.4byte	0x97
+ 2357 0763 00000000 		.4byte	.LFB62
+ 2358 0767 2C000000 		.4byte	.LFE62-.LFB62
+ 2359 076b 01       		.uleb128 0x1
+ 2360 076c 9C       		.byte	0x9c
+ 2361 076d 21       		.uleb128 0x21
+ 2362 076e 69050000 		.4byte	.LASF127
+ 2363 0772 01       		.byte	0x1
+ 2364 0773 D501     		.2byte	0x1d5
+ 2365 0775 00000000 		.4byte	.LFB63
+ 2366 0779 6C000000 		.4byte	.LFE63-.LFB63
+ 2367 077d 01       		.uleb128 0x1
+ 2368 077e 9C       		.byte	0x9c
+ 2369 077f C8070000 		.4byte	0x7c8
+ 2370 0783 1D       		.uleb128 0x1d
+ 2371 0784 2A060000 		.4byte	.LASF109
+ 2372 0788 01       		.byte	0x1
+ 2373 0789 D701     		.2byte	0x1d7
+ 2374 078b AD000000 		.4byte	0xad
+ 2375 078f 02       		.uleb128 0x2
+ 2376 0790 91       		.byte	0x91
+ 2377 0791 74       		.sleb128 -12
+ 2378 0792 1D       		.uleb128 0x1d
+ 2379 0793 95020000 		.4byte	.LASF110
+ 2380 0797 01       		.byte	0x1
+ 2381 0798 D801     		.2byte	0x1d8
+ 2382 079a A2000000 		.4byte	0xa2
+ 2383 079e 02       		.uleb128 0x2
+ 2384 079f 91       		.byte	0x91
+ 2385 07a0 72       		.sleb128 -14
+ 2386 07a1 1D       		.uleb128 0x1d
+ 2387 07a2 BC050000 		.4byte	.LASF111
+ 2388 07a6 01       		.byte	0x1
+ 2389 07a7 D901     		.2byte	0x1d9
+ 2390 07a9 A2000000 		.4byte	0xa2
+ 2391 07ad 02       		.uleb128 0x2
+ 2392 07ae 91       		.byte	0x91
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 52
+
+
+ 2393 07af 70       		.sleb128 -16
+ 2394 07b0 12       		.uleb128 0x12
+ 2395 07b1 1A000000 		.4byte	.LBB12
+ 2396 07b5 2E000000 		.4byte	.LBE12-.LBB12
+ 2397 07b9 19       		.uleb128 0x19
+ 2398 07ba C9070000 		.4byte	.LASF98
+ 2399 07be 01       		.byte	0x1
+ 2400 07bf D1       		.byte	0xd1
+ 2401 07c0 73000000 		.4byte	0x73
+ 2402 07c4 18       		.uleb128 0x18
+ 2403 07c5 00       		.byte	0
+ 2404 07c6 00       		.byte	0
+ 2405 07c7 00       		.byte	0
+ 2406 07c8 14       		.uleb128 0x14
+ 2407 07c9 97000000 		.4byte	0x97
+ 2408 07cd D9070000 		.4byte	0x7d9
+ 2409 07d1 15       		.uleb128 0x15
+ 2410 07d2 FF000000 		.4byte	0xff
+ 2411 07d6 F301     		.2byte	0x1f3
+ 2412 07d8 00       		.byte	0
+ 2413 07d9 11       		.uleb128 0x11
+ 2414 07da 54040000 		.4byte	.LASF112
+ 2415 07de 01       		.byte	0x1
+ 2416 07df 0F       		.byte	0xf
+ 2417 07e0 EA070000 		.4byte	0x7ea
+ 2418 07e4 05       		.uleb128 0x5
+ 2419 07e5 03       		.byte	0x3
+ 2420 07e6 00000000 		.4byte	eepromArray
+ 2421 07ea 13       		.uleb128 0x13
+ 2422 07eb C8070000 		.4byte	0x7c8
+ 2423 07ef 11       		.uleb128 0x11
+ 2424 07f0 6A060000 		.4byte	.LASF113
+ 2425 07f4 01       		.byte	0x1
+ 2426 07f5 11       		.byte	0x11
+ 2427 07f6 00080000 		.4byte	0x800
+ 2428 07fa 05       		.uleb128 0x5
+ 2429 07fb 03       		.byte	0x3
+ 2430 07fc F4010000 		.4byte	SM1eepromArray
+ 2431 0800 13       		.uleb128 0x13
+ 2432 0801 68040000 		.4byte	0x468
+ 2433 0805 11       		.uleb128 0x11
+ 2434 0806 B1010000 		.4byte	.LASF114
+ 2435 080a 01       		.byte	0x1
+ 2436 080b 12       		.byte	0x12
+ 2437 080c 16080000 		.4byte	0x816
+ 2438 0810 05       		.uleb128 0x5
+ 2439 0811 03       		.byte	0x3
+ 2440 0812 20030000 		.4byte	SM2eepromArray
+ 2441 0816 13       		.uleb128 0x13
+ 2442 0817 68040000 		.4byte	0x468
+ 2443 081b 22       		.uleb128 0x22
+ 2444 081c 81050000 		.4byte	.LASF115
+ 2445 0820 06       		.byte	0x6
+ 2446 0821 1606     		.2byte	0x616
+ 2447 0823 27080000 		.4byte	0x827
+ 2448 0827 06       		.uleb128 0x6
+ 2449 0828 8C000000 		.4byte	0x8c
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 53
+
+
+ 2450 082c 23       		.uleb128 0x23
+ 2451 082d F5060000 		.4byte	.LASF116
+ 2452 0831 05       		.byte	0x5
+ 2453 0832 5D       		.byte	0x5d
+ 2454 0833 97000000 		.4byte	0x97
+ 2455 0837 24       		.uleb128 0x24
+ 2456 0838 534D3100 		.ascii	"SM1\000"
+ 2457 083c 07       		.byte	0x7
+ 2458 083d 19       		.byte	0x19
+ 2459 083e 60030000 		.4byte	0x360
+ 2460 0842 24       		.uleb128 0x24
+ 2461 0843 534D3200 		.ascii	"SM2\000"
+ 2462 0847 07       		.byte	0x7
+ 2463 0848 1A       		.byte	0x1a
+ 2464 0849 60030000 		.4byte	0x360
+ 2465 084d 23       		.uleb128 0x23
+ 2466 084e 43010000 		.4byte	.LASF117
+ 2467 0852 08       		.byte	0x8
+ 2468 0853 13       		.byte	0x13
+ 2469 0854 AD050000 		.4byte	0x5ad
+ 2470 0858 14       		.uleb128 0x14
+ 2471 0859 97000000 		.4byte	0x97
+ 2472 085d 68080000 		.4byte	0x868
+ 2473 0861 1A       		.uleb128 0x1a
+ 2474 0862 FF000000 		.4byte	0xff
+ 2475 0866 63       		.byte	0x63
+ 2476 0867 00       		.byte	0
+ 2477 0868 23       		.uleb128 0x23
+ 2478 0869 E1000000 		.4byte	.LASF118
+ 2479 086d 08       		.byte	0x8
+ 2480 086e 14       		.byte	0x14
+ 2481 086f 58080000 		.4byte	0x858
+ 2482 0873 23       		.uleb128 0x23
+ 2483 0874 93070000 		.4byte	.LASF119
+ 2484 0878 08       		.byte	0x8
+ 2485 0879 15       		.byte	0x15
+ 2486 087a AD050000 		.4byte	0x5ad
+ 2487 087e 23       		.uleb128 0x23
+ 2488 087f ED020000 		.4byte	.LASF120
+ 2489 0883 08       		.byte	0x8
+ 2490 0884 16       		.byte	0x16
+ 2491 0885 58080000 		.4byte	0x858
+ 2492 0889 25       		.uleb128 0x25
+ 2493 088a 26070000 		.4byte	.LASF121
+ 2494 088e 01       		.byte	0x1
+ 2495 088f 0D       		.byte	0xd
+ 2496 0890 E0000000 		.4byte	0xe0
+ 2497 0894 05       		.uleb128 0x5
+ 2498 0895 03       		.byte	0x3
+ 2499 0896 00000000 		.4byte	targetTemp
+ 2500 089a 25       		.uleb128 0x25
+ 2501 089b A4010000 		.4byte	.LASF122
+ 2502 089f 01       		.byte	0x1
+ 2503 08a0 0E       		.byte	0xe
+ 2504 08a1 EE000000 		.4byte	0xee
+ 2505 08a5 05       		.uleb128 0x5
+ 2506 08a6 03       		.byte	0x3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 54
+
+
+ 2507 08a7 00000000 		.4byte	eepromStatus
+ 2508 08ab 00       		.byte	0
+ 2509              		.section	.debug_abbrev,"",%progbits
+ 2510              	.Ldebug_abbrev0:
+ 2511 0000 01       		.uleb128 0x1
+ 2512 0001 11       		.uleb128 0x11
+ 2513 0002 01       		.byte	0x1
+ 2514 0003 25       		.uleb128 0x25
+ 2515 0004 0E       		.uleb128 0xe
+ 2516 0005 13       		.uleb128 0x13
+ 2517 0006 0B       		.uleb128 0xb
+ 2518 0007 03       		.uleb128 0x3
+ 2519 0008 0E       		.uleb128 0xe
+ 2520 0009 1B       		.uleb128 0x1b
+ 2521 000a 0E       		.uleb128 0xe
+ 2522 000b 55       		.uleb128 0x55
+ 2523 000c 17       		.uleb128 0x17
+ 2524 000d 11       		.uleb128 0x11
+ 2525 000e 01       		.uleb128 0x1
+ 2526 000f 10       		.uleb128 0x10
+ 2527 0010 17       		.uleb128 0x17
+ 2528 0011 00       		.byte	0
+ 2529 0012 00       		.byte	0
+ 2530 0013 02       		.uleb128 0x2
+ 2531 0014 24       		.uleb128 0x24
+ 2532 0015 00       		.byte	0
+ 2533 0016 0B       		.uleb128 0xb
+ 2534 0017 0B       		.uleb128 0xb
+ 2535 0018 3E       		.uleb128 0x3e
+ 2536 0019 0B       		.uleb128 0xb
+ 2537 001a 03       		.uleb128 0x3
+ 2538 001b 0E       		.uleb128 0xe
+ 2539 001c 00       		.byte	0
+ 2540 001d 00       		.byte	0
+ 2541 001e 03       		.uleb128 0x3
+ 2542 001f 16       		.uleb128 0x16
+ 2543 0020 00       		.byte	0
+ 2544 0021 03       		.uleb128 0x3
+ 2545 0022 0E       		.uleb128 0xe
+ 2546 0023 3A       		.uleb128 0x3a
+ 2547 0024 0B       		.uleb128 0xb
+ 2548 0025 3B       		.uleb128 0x3b
+ 2549 0026 0B       		.uleb128 0xb
+ 2550 0027 49       		.uleb128 0x49
+ 2551 0028 13       		.uleb128 0x13
+ 2552 0029 00       		.byte	0
+ 2553 002a 00       		.byte	0
+ 2554 002b 04       		.uleb128 0x4
+ 2555 002c 24       		.uleb128 0x24
+ 2556 002d 00       		.byte	0
+ 2557 002e 0B       		.uleb128 0xb
+ 2558 002f 0B       		.uleb128 0xb
+ 2559 0030 3E       		.uleb128 0x3e
+ 2560 0031 0B       		.uleb128 0xb
+ 2561 0032 03       		.uleb128 0x3
+ 2562 0033 08       		.uleb128 0x8
+ 2563 0034 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 55
+
+
+ 2564 0035 00       		.byte	0
+ 2565 0036 05       		.uleb128 0x5
+ 2566 0037 16       		.uleb128 0x16
+ 2567 0038 00       		.byte	0
+ 2568 0039 03       		.uleb128 0x3
+ 2569 003a 0E       		.uleb128 0xe
+ 2570 003b 3A       		.uleb128 0x3a
+ 2571 003c 0B       		.uleb128 0xb
+ 2572 003d 3B       		.uleb128 0x3b
+ 2573 003e 05       		.uleb128 0x5
+ 2574 003f 49       		.uleb128 0x49
+ 2575 0040 13       		.uleb128 0x13
+ 2576 0041 00       		.byte	0
+ 2577 0042 00       		.byte	0
+ 2578 0043 06       		.uleb128 0x6
+ 2579 0044 35       		.uleb128 0x35
+ 2580 0045 00       		.byte	0
+ 2581 0046 49       		.uleb128 0x49
+ 2582 0047 13       		.uleb128 0x13
+ 2583 0048 00       		.byte	0
+ 2584 0049 00       		.byte	0
+ 2585 004a 07       		.uleb128 0x7
+ 2586 004b 04       		.uleb128 0x4
+ 2587 004c 01       		.byte	0x1
+ 2588 004d 0B       		.uleb128 0xb
+ 2589 004e 0B       		.uleb128 0xb
+ 2590 004f 3A       		.uleb128 0x3a
+ 2591 0050 0B       		.uleb128 0xb
+ 2592 0051 3B       		.uleb128 0x3b
+ 2593 0052 0B       		.uleb128 0xb
+ 2594 0053 01       		.uleb128 0x1
+ 2595 0054 13       		.uleb128 0x13
+ 2596 0055 00       		.byte	0
+ 2597 0056 00       		.byte	0
+ 2598 0057 08       		.uleb128 0x8
+ 2599 0058 28       		.uleb128 0x28
+ 2600 0059 00       		.byte	0
+ 2601 005a 03       		.uleb128 0x3
+ 2602 005b 0E       		.uleb128 0xe
+ 2603 005c 1C       		.uleb128 0x1c
+ 2604 005d 0D       		.uleb128 0xd
+ 2605 005e 00       		.byte	0
+ 2606 005f 00       		.byte	0
+ 2607 0060 09       		.uleb128 0x9
+ 2608 0061 13       		.uleb128 0x13
+ 2609 0062 01       		.byte	0x1
+ 2610 0063 0B       		.uleb128 0xb
+ 2611 0064 0B       		.uleb128 0xb
+ 2612 0065 3A       		.uleb128 0x3a
+ 2613 0066 0B       		.uleb128 0xb
+ 2614 0067 3B       		.uleb128 0x3b
+ 2615 0068 0B       		.uleb128 0xb
+ 2616 0069 01       		.uleb128 0x1
+ 2617 006a 13       		.uleb128 0x13
+ 2618 006b 00       		.byte	0
+ 2619 006c 00       		.byte	0
+ 2620 006d 0A       		.uleb128 0xa
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 56
+
+
+ 2621 006e 0D       		.uleb128 0xd
+ 2622 006f 00       		.byte	0
+ 2623 0070 03       		.uleb128 0x3
+ 2624 0071 0E       		.uleb128 0xe
+ 2625 0072 3A       		.uleb128 0x3a
+ 2626 0073 0B       		.uleb128 0xb
+ 2627 0074 3B       		.uleb128 0x3b
+ 2628 0075 0B       		.uleb128 0xb
+ 2629 0076 49       		.uleb128 0x49
+ 2630 0077 13       		.uleb128 0x13
+ 2631 0078 38       		.uleb128 0x38
+ 2632 0079 0B       		.uleb128 0xb
+ 2633 007a 00       		.byte	0
+ 2634 007b 00       		.byte	0
+ 2635 007c 0B       		.uleb128 0xb
+ 2636 007d 0F       		.uleb128 0xf
+ 2637 007e 00       		.byte	0
+ 2638 007f 0B       		.uleb128 0xb
+ 2639 0080 0B       		.uleb128 0xb
+ 2640 0081 49       		.uleb128 0x49
+ 2641 0082 13       		.uleb128 0x13
+ 2642 0083 00       		.byte	0
+ 2643 0084 00       		.byte	0
+ 2644 0085 0C       		.uleb128 0xc
+ 2645 0086 2E       		.uleb128 0x2e
+ 2646 0087 01       		.byte	0x1
+ 2647 0088 3F       		.uleb128 0x3f
+ 2648 0089 19       		.uleb128 0x19
+ 2649 008a 03       		.uleb128 0x3
+ 2650 008b 0E       		.uleb128 0xe
+ 2651 008c 3A       		.uleb128 0x3a
+ 2652 008d 0B       		.uleb128 0xb
+ 2653 008e 3B       		.uleb128 0x3b
+ 2654 008f 0B       		.uleb128 0xb
+ 2655 0090 27       		.uleb128 0x27
+ 2656 0091 19       		.uleb128 0x19
+ 2657 0092 11       		.uleb128 0x11
+ 2658 0093 01       		.uleb128 0x1
+ 2659 0094 12       		.uleb128 0x12
+ 2660 0095 06       		.uleb128 0x6
+ 2661 0096 40       		.uleb128 0x40
+ 2662 0097 18       		.uleb128 0x18
+ 2663 0098 9642     		.uleb128 0x2116
+ 2664 009a 19       		.uleb128 0x19
+ 2665 009b 01       		.uleb128 0x1
+ 2666 009c 13       		.uleb128 0x13
+ 2667 009d 00       		.byte	0
+ 2668 009e 00       		.byte	0
+ 2669 009f 0D       		.uleb128 0xd
+ 2670 00a0 05       		.uleb128 0x5
+ 2671 00a1 00       		.byte	0
+ 2672 00a2 03       		.uleb128 0x3
+ 2673 00a3 0E       		.uleb128 0xe
+ 2674 00a4 3A       		.uleb128 0x3a
+ 2675 00a5 0B       		.uleb128 0xb
+ 2676 00a6 3B       		.uleb128 0x3b
+ 2677 00a7 0B       		.uleb128 0xb
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 57
+
+
+ 2678 00a8 49       		.uleb128 0x49
+ 2679 00a9 13       		.uleb128 0x13
+ 2680 00aa 02       		.uleb128 0x2
+ 2681 00ab 18       		.uleb128 0x18
+ 2682 00ac 00       		.byte	0
+ 2683 00ad 00       		.byte	0
+ 2684 00ae 0E       		.uleb128 0xe
+ 2685 00af 34       		.uleb128 0x34
+ 2686 00b0 00       		.byte	0
+ 2687 00b1 03       		.uleb128 0x3
+ 2688 00b2 08       		.uleb128 0x8
+ 2689 00b3 3A       		.uleb128 0x3a
+ 2690 00b4 0B       		.uleb128 0xb
+ 2691 00b5 3B       		.uleb128 0x3b
+ 2692 00b6 0B       		.uleb128 0xb
+ 2693 00b7 49       		.uleb128 0x49
+ 2694 00b8 13       		.uleb128 0x13
+ 2695 00b9 02       		.uleb128 0x2
+ 2696 00ba 18       		.uleb128 0x18
+ 2697 00bb 00       		.byte	0
+ 2698 00bc 00       		.byte	0
+ 2699 00bd 0F       		.uleb128 0xf
+ 2700 00be 2E       		.uleb128 0x2e
+ 2701 00bf 01       		.byte	0x1
+ 2702 00c0 3F       		.uleb128 0x3f
+ 2703 00c1 19       		.uleb128 0x19
+ 2704 00c2 03       		.uleb128 0x3
+ 2705 00c3 0E       		.uleb128 0xe
+ 2706 00c4 3A       		.uleb128 0x3a
+ 2707 00c5 0B       		.uleb128 0xb
+ 2708 00c6 3B       		.uleb128 0x3b
+ 2709 00c7 0B       		.uleb128 0xb
+ 2710 00c8 27       		.uleb128 0x27
+ 2711 00c9 19       		.uleb128 0x19
+ 2712 00ca 49       		.uleb128 0x49
+ 2713 00cb 13       		.uleb128 0x13
+ 2714 00cc 11       		.uleb128 0x11
+ 2715 00cd 01       		.uleb128 0x1
+ 2716 00ce 12       		.uleb128 0x12
+ 2717 00cf 06       		.uleb128 0x6
+ 2718 00d0 40       		.uleb128 0x40
+ 2719 00d1 18       		.uleb128 0x18
+ 2720 00d2 9742     		.uleb128 0x2117
+ 2721 00d4 19       		.uleb128 0x19
+ 2722 00d5 01       		.uleb128 0x1
+ 2723 00d6 13       		.uleb128 0x13
+ 2724 00d7 00       		.byte	0
+ 2725 00d8 00       		.byte	0
+ 2726 00d9 10       		.uleb128 0x10
+ 2727 00da 0B       		.uleb128 0xb
+ 2728 00db 01       		.byte	0x1
+ 2729 00dc 11       		.uleb128 0x11
+ 2730 00dd 01       		.uleb128 0x1
+ 2731 00de 12       		.uleb128 0x12
+ 2732 00df 06       		.uleb128 0x6
+ 2733 00e0 01       		.uleb128 0x1
+ 2734 00e1 13       		.uleb128 0x13
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 58
+
+
+ 2735 00e2 00       		.byte	0
+ 2736 00e3 00       		.byte	0
+ 2737 00e4 11       		.uleb128 0x11
+ 2738 00e5 34       		.uleb128 0x34
+ 2739 00e6 00       		.byte	0
+ 2740 00e7 03       		.uleb128 0x3
+ 2741 00e8 0E       		.uleb128 0xe
+ 2742 00e9 3A       		.uleb128 0x3a
+ 2743 00ea 0B       		.uleb128 0xb
+ 2744 00eb 3B       		.uleb128 0x3b
+ 2745 00ec 0B       		.uleb128 0xb
+ 2746 00ed 49       		.uleb128 0x49
+ 2747 00ee 13       		.uleb128 0x13
+ 2748 00ef 02       		.uleb128 0x2
+ 2749 00f0 18       		.uleb128 0x18
+ 2750 00f1 00       		.byte	0
+ 2751 00f2 00       		.byte	0
+ 2752 00f3 12       		.uleb128 0x12
+ 2753 00f4 0B       		.uleb128 0xb
+ 2754 00f5 01       		.byte	0x1
+ 2755 00f6 11       		.uleb128 0x11
+ 2756 00f7 01       		.uleb128 0x1
+ 2757 00f8 12       		.uleb128 0x12
+ 2758 00f9 06       		.uleb128 0x6
+ 2759 00fa 00       		.byte	0
+ 2760 00fb 00       		.byte	0
+ 2761 00fc 13       		.uleb128 0x13
+ 2762 00fd 26       		.uleb128 0x26
+ 2763 00fe 00       		.byte	0
+ 2764 00ff 49       		.uleb128 0x49
+ 2765 0100 13       		.uleb128 0x13
+ 2766 0101 00       		.byte	0
+ 2767 0102 00       		.byte	0
+ 2768 0103 14       		.uleb128 0x14
+ 2769 0104 01       		.uleb128 0x1
+ 2770 0105 01       		.byte	0x1
+ 2771 0106 49       		.uleb128 0x49
+ 2772 0107 13       		.uleb128 0x13
+ 2773 0108 01       		.uleb128 0x1
+ 2774 0109 13       		.uleb128 0x13
+ 2775 010a 00       		.byte	0
+ 2776 010b 00       		.byte	0
+ 2777 010c 15       		.uleb128 0x15
+ 2778 010d 21       		.uleb128 0x21
+ 2779 010e 00       		.byte	0
+ 2780 010f 49       		.uleb128 0x49
+ 2781 0110 13       		.uleb128 0x13
+ 2782 0111 2F       		.uleb128 0x2f
+ 2783 0112 05       		.uleb128 0x5
+ 2784 0113 00       		.byte	0
+ 2785 0114 00       		.byte	0
+ 2786 0115 16       		.uleb128 0x16
+ 2787 0116 2E       		.uleb128 0x2e
+ 2788 0117 01       		.byte	0x1
+ 2789 0118 3F       		.uleb128 0x3f
+ 2790 0119 19       		.uleb128 0x19
+ 2791 011a 03       		.uleb128 0x3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 59
+
+
+ 2792 011b 0E       		.uleb128 0xe
+ 2793 011c 3A       		.uleb128 0x3a
+ 2794 011d 0B       		.uleb128 0xb
+ 2795 011e 3B       		.uleb128 0x3b
+ 2796 011f 0B       		.uleb128 0xb
+ 2797 0120 27       		.uleb128 0x27
+ 2798 0121 19       		.uleb128 0x19
+ 2799 0122 49       		.uleb128 0x49
+ 2800 0123 13       		.uleb128 0x13
+ 2801 0124 11       		.uleb128 0x11
+ 2802 0125 01       		.uleb128 0x1
+ 2803 0126 12       		.uleb128 0x12
+ 2804 0127 06       		.uleb128 0x6
+ 2805 0128 40       		.uleb128 0x40
+ 2806 0129 18       		.uleb128 0x18
+ 2807 012a 9642     		.uleb128 0x2116
+ 2808 012c 19       		.uleb128 0x19
+ 2809 012d 01       		.uleb128 0x1
+ 2810 012e 13       		.uleb128 0x13
+ 2811 012f 00       		.byte	0
+ 2812 0130 00       		.byte	0
+ 2813 0131 17       		.uleb128 0x17
+ 2814 0132 2E       		.uleb128 0x2e
+ 2815 0133 01       		.byte	0x1
+ 2816 0134 3F       		.uleb128 0x3f
+ 2817 0135 19       		.uleb128 0x19
+ 2818 0136 03       		.uleb128 0x3
+ 2819 0137 0E       		.uleb128 0xe
+ 2820 0138 3A       		.uleb128 0x3a
+ 2821 0139 0B       		.uleb128 0xb
+ 2822 013a 3B       		.uleb128 0x3b
+ 2823 013b 0B       		.uleb128 0xb
+ 2824 013c 49       		.uleb128 0x49
+ 2825 013d 13       		.uleb128 0x13
+ 2826 013e 3C       		.uleb128 0x3c
+ 2827 013f 19       		.uleb128 0x19
+ 2828 0140 01       		.uleb128 0x1
+ 2829 0141 13       		.uleb128 0x13
+ 2830 0142 00       		.byte	0
+ 2831 0143 00       		.byte	0
+ 2832 0144 18       		.uleb128 0x18
+ 2833 0145 18       		.uleb128 0x18
+ 2834 0146 00       		.byte	0
+ 2835 0147 00       		.byte	0
+ 2836 0148 00       		.byte	0
+ 2837 0149 19       		.uleb128 0x19
+ 2838 014a 2E       		.uleb128 0x2e
+ 2839 014b 01       		.byte	0x1
+ 2840 014c 3F       		.uleb128 0x3f
+ 2841 014d 19       		.uleb128 0x19
+ 2842 014e 03       		.uleb128 0x3
+ 2843 014f 0E       		.uleb128 0xe
+ 2844 0150 3A       		.uleb128 0x3a
+ 2845 0151 0B       		.uleb128 0xb
+ 2846 0152 3B       		.uleb128 0x3b
+ 2847 0153 0B       		.uleb128 0xb
+ 2848 0154 49       		.uleb128 0x49
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 60
+
+
+ 2849 0155 13       		.uleb128 0x13
+ 2850 0156 3C       		.uleb128 0x3c
+ 2851 0157 19       		.uleb128 0x19
+ 2852 0158 00       		.byte	0
+ 2853 0159 00       		.byte	0
+ 2854 015a 1A       		.uleb128 0x1a
+ 2855 015b 21       		.uleb128 0x21
+ 2856 015c 00       		.byte	0
+ 2857 015d 49       		.uleb128 0x49
+ 2858 015e 13       		.uleb128 0x13
+ 2859 015f 2F       		.uleb128 0x2f
+ 2860 0160 0B       		.uleb128 0xb
+ 2861 0161 00       		.byte	0
+ 2862 0162 00       		.byte	0
+ 2863 0163 1B       		.uleb128 0x1b
+ 2864 0164 2E       		.uleb128 0x2e
+ 2865 0165 01       		.byte	0x1
+ 2866 0166 3F       		.uleb128 0x3f
+ 2867 0167 19       		.uleb128 0x19
+ 2868 0168 03       		.uleb128 0x3
+ 2869 0169 0E       		.uleb128 0xe
+ 2870 016a 3A       		.uleb128 0x3a
+ 2871 016b 0B       		.uleb128 0xb
+ 2872 016c 3B       		.uleb128 0x3b
+ 2873 016d 05       		.uleb128 0x5
+ 2874 016e 27       		.uleb128 0x27
+ 2875 016f 19       		.uleb128 0x19
+ 2876 0170 49       		.uleb128 0x49
+ 2877 0171 13       		.uleb128 0x13
+ 2878 0172 11       		.uleb128 0x11
+ 2879 0173 01       		.uleb128 0x1
+ 2880 0174 12       		.uleb128 0x12
+ 2881 0175 06       		.uleb128 0x6
+ 2882 0176 40       		.uleb128 0x40
+ 2883 0177 18       		.uleb128 0x18
+ 2884 0178 9642     		.uleb128 0x2116
+ 2885 017a 19       		.uleb128 0x19
+ 2886 017b 01       		.uleb128 0x1
+ 2887 017c 13       		.uleb128 0x13
+ 2888 017d 00       		.byte	0
+ 2889 017e 00       		.byte	0
+ 2890 017f 1C       		.uleb128 0x1c
+ 2891 0180 05       		.uleb128 0x5
+ 2892 0181 00       		.byte	0
+ 2893 0182 03       		.uleb128 0x3
+ 2894 0183 0E       		.uleb128 0xe
+ 2895 0184 3A       		.uleb128 0x3a
+ 2896 0185 0B       		.uleb128 0xb
+ 2897 0186 3B       		.uleb128 0x3b
+ 2898 0187 05       		.uleb128 0x5
+ 2899 0188 49       		.uleb128 0x49
+ 2900 0189 13       		.uleb128 0x13
+ 2901 018a 02       		.uleb128 0x2
+ 2902 018b 18       		.uleb128 0x18
+ 2903 018c 00       		.byte	0
+ 2904 018d 00       		.byte	0
+ 2905 018e 1D       		.uleb128 0x1d
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 61
+
+
+ 2906 018f 34       		.uleb128 0x34
+ 2907 0190 00       		.byte	0
+ 2908 0191 03       		.uleb128 0x3
+ 2909 0192 0E       		.uleb128 0xe
+ 2910 0193 3A       		.uleb128 0x3a
+ 2911 0194 0B       		.uleb128 0xb
+ 2912 0195 3B       		.uleb128 0x3b
+ 2913 0196 05       		.uleb128 0x5
+ 2914 0197 49       		.uleb128 0x49
+ 2915 0198 13       		.uleb128 0x13
+ 2916 0199 02       		.uleb128 0x2
+ 2917 019a 18       		.uleb128 0x18
+ 2918 019b 00       		.byte	0
+ 2919 019c 00       		.byte	0
+ 2920 019d 1E       		.uleb128 0x1e
+ 2921 019e 2E       		.uleb128 0x2e
+ 2922 019f 01       		.byte	0x1
+ 2923 01a0 3F       		.uleb128 0x3f
+ 2924 01a1 19       		.uleb128 0x19
+ 2925 01a2 03       		.uleb128 0x3
+ 2926 01a3 0E       		.uleb128 0xe
+ 2927 01a4 3A       		.uleb128 0x3a
+ 2928 01a5 0B       		.uleb128 0xb
+ 2929 01a6 3B       		.uleb128 0x3b
+ 2930 01a7 05       		.uleb128 0x5
+ 2931 01a8 27       		.uleb128 0x27
+ 2932 01a9 19       		.uleb128 0x19
+ 2933 01aa 11       		.uleb128 0x11
+ 2934 01ab 01       		.uleb128 0x1
+ 2935 01ac 12       		.uleb128 0x12
+ 2936 01ad 06       		.uleb128 0x6
+ 2937 01ae 40       		.uleb128 0x40
+ 2938 01af 18       		.uleb128 0x18
+ 2939 01b0 9642     		.uleb128 0x2116
+ 2940 01b2 19       		.uleb128 0x19
+ 2941 01b3 01       		.uleb128 0x1
+ 2942 01b4 13       		.uleb128 0x13
+ 2943 01b5 00       		.byte	0
+ 2944 01b6 00       		.byte	0
+ 2945 01b7 1F       		.uleb128 0x1f
+ 2946 01b8 34       		.uleb128 0x34
+ 2947 01b9 00       		.byte	0
+ 2948 01ba 03       		.uleb128 0x3
+ 2949 01bb 08       		.uleb128 0x8
+ 2950 01bc 3A       		.uleb128 0x3a
+ 2951 01bd 0B       		.uleb128 0xb
+ 2952 01be 3B       		.uleb128 0x3b
+ 2953 01bf 05       		.uleb128 0x5
+ 2954 01c0 49       		.uleb128 0x49
+ 2955 01c1 13       		.uleb128 0x13
+ 2956 01c2 02       		.uleb128 0x2
+ 2957 01c3 18       		.uleb128 0x18
+ 2958 01c4 00       		.byte	0
+ 2959 01c5 00       		.byte	0
+ 2960 01c6 20       		.uleb128 0x20
+ 2961 01c7 2E       		.uleb128 0x2e
+ 2962 01c8 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 62
+
+
+ 2963 01c9 3F       		.uleb128 0x3f
+ 2964 01ca 19       		.uleb128 0x19
+ 2965 01cb 03       		.uleb128 0x3
+ 2966 01cc 0E       		.uleb128 0xe
+ 2967 01cd 3A       		.uleb128 0x3a
+ 2968 01ce 0B       		.uleb128 0xb
+ 2969 01cf 3B       		.uleb128 0x3b
+ 2970 01d0 05       		.uleb128 0x5
+ 2971 01d1 49       		.uleb128 0x49
+ 2972 01d2 13       		.uleb128 0x13
+ 2973 01d3 11       		.uleb128 0x11
+ 2974 01d4 01       		.uleb128 0x1
+ 2975 01d5 12       		.uleb128 0x12
+ 2976 01d6 06       		.uleb128 0x6
+ 2977 01d7 40       		.uleb128 0x40
+ 2978 01d8 18       		.uleb128 0x18
+ 2979 01d9 9642     		.uleb128 0x2116
+ 2980 01db 19       		.uleb128 0x19
+ 2981 01dc 00       		.byte	0
+ 2982 01dd 00       		.byte	0
+ 2983 01de 21       		.uleb128 0x21
+ 2984 01df 2E       		.uleb128 0x2e
+ 2985 01e0 01       		.byte	0x1
+ 2986 01e1 3F       		.uleb128 0x3f
+ 2987 01e2 19       		.uleb128 0x19
+ 2988 01e3 03       		.uleb128 0x3
+ 2989 01e4 0E       		.uleb128 0xe
+ 2990 01e5 3A       		.uleb128 0x3a
+ 2991 01e6 0B       		.uleb128 0xb
+ 2992 01e7 3B       		.uleb128 0x3b
+ 2993 01e8 05       		.uleb128 0x5
+ 2994 01e9 11       		.uleb128 0x11
+ 2995 01ea 01       		.uleb128 0x1
+ 2996 01eb 12       		.uleb128 0x12
+ 2997 01ec 06       		.uleb128 0x6
+ 2998 01ed 40       		.uleb128 0x40
+ 2999 01ee 18       		.uleb128 0x18
+ 3000 01ef 9642     		.uleb128 0x2116
+ 3001 01f1 19       		.uleb128 0x19
+ 3002 01f2 01       		.uleb128 0x1
+ 3003 01f3 13       		.uleb128 0x13
+ 3004 01f4 00       		.byte	0
+ 3005 01f5 00       		.byte	0
+ 3006 01f6 22       		.uleb128 0x22
+ 3007 01f7 34       		.uleb128 0x34
+ 3008 01f8 00       		.byte	0
+ 3009 01f9 03       		.uleb128 0x3
+ 3010 01fa 0E       		.uleb128 0xe
+ 3011 01fb 3A       		.uleb128 0x3a
+ 3012 01fc 0B       		.uleb128 0xb
+ 3013 01fd 3B       		.uleb128 0x3b
+ 3014 01fe 05       		.uleb128 0x5
+ 3015 01ff 49       		.uleb128 0x49
+ 3016 0200 13       		.uleb128 0x13
+ 3017 0201 3F       		.uleb128 0x3f
+ 3018 0202 19       		.uleb128 0x19
+ 3019 0203 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 63
+
+
+ 3020 0204 19       		.uleb128 0x19
+ 3021 0205 00       		.byte	0
+ 3022 0206 00       		.byte	0
+ 3023 0207 23       		.uleb128 0x23
+ 3024 0208 34       		.uleb128 0x34
+ 3025 0209 00       		.byte	0
+ 3026 020a 03       		.uleb128 0x3
+ 3027 020b 0E       		.uleb128 0xe
+ 3028 020c 3A       		.uleb128 0x3a
+ 3029 020d 0B       		.uleb128 0xb
+ 3030 020e 3B       		.uleb128 0x3b
+ 3031 020f 0B       		.uleb128 0xb
+ 3032 0210 49       		.uleb128 0x49
+ 3033 0211 13       		.uleb128 0x13
+ 3034 0212 3F       		.uleb128 0x3f
+ 3035 0213 19       		.uleb128 0x19
+ 3036 0214 3C       		.uleb128 0x3c
+ 3037 0215 19       		.uleb128 0x19
+ 3038 0216 00       		.byte	0
+ 3039 0217 00       		.byte	0
+ 3040 0218 24       		.uleb128 0x24
+ 3041 0219 34       		.uleb128 0x34
+ 3042 021a 00       		.byte	0
+ 3043 021b 03       		.uleb128 0x3
+ 3044 021c 08       		.uleb128 0x8
+ 3045 021d 3A       		.uleb128 0x3a
+ 3046 021e 0B       		.uleb128 0xb
+ 3047 021f 3B       		.uleb128 0x3b
+ 3048 0220 0B       		.uleb128 0xb
+ 3049 0221 49       		.uleb128 0x49
+ 3050 0222 13       		.uleb128 0x13
+ 3051 0223 3F       		.uleb128 0x3f
+ 3052 0224 19       		.uleb128 0x19
+ 3053 0225 3C       		.uleb128 0x3c
+ 3054 0226 19       		.uleb128 0x19
+ 3055 0227 00       		.byte	0
+ 3056 0228 00       		.byte	0
+ 3057 0229 25       		.uleb128 0x25
+ 3058 022a 34       		.uleb128 0x34
+ 3059 022b 00       		.byte	0
+ 3060 022c 03       		.uleb128 0x3
+ 3061 022d 0E       		.uleb128 0xe
+ 3062 022e 3A       		.uleb128 0x3a
+ 3063 022f 0B       		.uleb128 0xb
+ 3064 0230 3B       		.uleb128 0x3b
+ 3065 0231 0B       		.uleb128 0xb
+ 3066 0232 49       		.uleb128 0x49
+ 3067 0233 13       		.uleb128 0x13
+ 3068 0234 3F       		.uleb128 0x3f
+ 3069 0235 19       		.uleb128 0x19
+ 3070 0236 02       		.uleb128 0x2
+ 3071 0237 18       		.uleb128 0x18
+ 3072 0238 00       		.byte	0
+ 3073 0239 00       		.byte	0
+ 3074 023a 00       		.byte	0
+ 3075              		.section	.debug_aranges,"",%progbits
+ 3076 0000 54000000 		.4byte	0x54
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 64
+
+
+ 3077 0004 0200     		.2byte	0x2
+ 3078 0006 00000000 		.4byte	.Ldebug_info0
+ 3079 000a 04       		.byte	0x4
+ 3080 000b 00       		.byte	0
+ 3081 000c 0000     		.2byte	0
+ 3082 000e 0000     		.2byte	0
+ 3083 0010 00000000 		.4byte	.LFB56
+ 3084 0014 A0000000 		.4byte	.LFE56-.LFB56
+ 3085 0018 00000000 		.4byte	.LFB57
+ 3086 001c 50010000 		.4byte	.LFE57-.LFB57
+ 3087 0020 00000000 		.4byte	.LFB58
+ 3088 0024 6C010000 		.4byte	.LFE58-.LFB58
+ 3089 0028 00000000 		.4byte	.LFB59
+ 3090 002c 24020000 		.4byte	.LFE59-.LFB59
+ 3091 0030 00000000 		.4byte	.LFB60
+ 3092 0034 94000000 		.4byte	.LFE60-.LFB60
+ 3093 0038 00000000 		.4byte	.LFB61
+ 3094 003c E0010000 		.4byte	.LFE61-.LFB61
+ 3095 0040 00000000 		.4byte	.LFB62
+ 3096 0044 2C000000 		.4byte	.LFE62-.LFB62
+ 3097 0048 00000000 		.4byte	.LFB63
+ 3098 004c 6C000000 		.4byte	.LFE63-.LFB63
+ 3099 0050 00000000 		.4byte	0
+ 3100 0054 00000000 		.4byte	0
+ 3101              		.section	.debug_ranges,"",%progbits
+ 3102              	.Ldebug_ranges0:
+ 3103 0000 00000000 		.4byte	.LFB56
+ 3104 0004 A0000000 		.4byte	.LFE56
+ 3105 0008 00000000 		.4byte	.LFB57
+ 3106 000c 50010000 		.4byte	.LFE57
+ 3107 0010 00000000 		.4byte	.LFB58
+ 3108 0014 6C010000 		.4byte	.LFE58
+ 3109 0018 00000000 		.4byte	.LFB59
+ 3110 001c 24020000 		.4byte	.LFE59
+ 3111 0020 00000000 		.4byte	.LFB60
+ 3112 0024 94000000 		.4byte	.LFE60
+ 3113 0028 00000000 		.4byte	.LFB61
+ 3114 002c E0010000 		.4byte	.LFE61
+ 3115 0030 00000000 		.4byte	.LFB62
+ 3116 0034 2C000000 		.4byte	.LFE62
+ 3117 0038 00000000 		.4byte	.LFB63
+ 3118 003c 6C000000 		.4byte	.LFE63
+ 3119 0040 00000000 		.4byte	0
+ 3120 0044 00000000 		.4byte	0
+ 3121              		.section	.debug_line,"",%progbits
+ 3122              	.Ldebug_line0:
+ 3123 0000 C6030000 		.section	.debug_str,"MS",%progbits,1
+ 3123      02009501 
+ 3123      00000201 
+ 3123      FB0E0D00 
+ 3123      01010101 
+ 3124              	.LASF47:
+ 3125 0000 46616C73 		.ascii	"False\000"
+ 3125      6500
+ 3126              	.LASF75:
+ 3127 0006 6572726F 		.ascii	"errorTabPtr\000"
+ 3127      72546162 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 65
+
+
+ 3127      50747200 
+ 3128              	.LASF48:
+ 3129 0012 54727565 		.ascii	"True\000"
+ 3129      00
+ 3130              	.LASF92:
+ 3131 0017 70776D50 		.ascii	"pwmPercentageBeeingSent\000"
+ 3131      65726365 
+ 3131      6E746167 
+ 3131      65426565 
+ 3131      696E6753 
+ 3132              	.LASF30:
+ 3133 002f 66616E53 		.ascii	"fanState_type\000"
+ 3133      74617465 
+ 3133      5F747970 
+ 3133      6500
+ 3134              	.LASF39:
+ 3135 003d 74656D70 		.ascii	"temperatureMode_type\000"
+ 3135      65726174 
+ 3135      7572654D 
+ 3135      6F64655F 
+ 3135      74797065 
+ 3136              	.LASF66:
+ 3137 0052 61676974 		.ascii	"agitatorSpeed\000"
+ 3137      61746F72 
+ 3137      53706565 
+ 3137      6400
+ 3138              	.LASF103:
+ 3139 0060 70656C74 		.ascii	"peltierControl\000"
+ 3139      69657243 
+ 3139      6F6E7472 
+ 3139      6F6C00
+ 3140              	.LASF54:
+ 3141 006f 6D617854 		.ascii	"maxTemperatureDeviation\000"
+ 3141      656D7065 
+ 3141      72617475 
+ 3141      72654465 
+ 3141      76696174 
+ 3142              	.LASF10:
+ 3143 0087 756E7369 		.ascii	"unsigned int\000"
+ 3143      676E6564 
+ 3143      20696E74 
+ 3143      00
+ 3144              	.LASF72:
+ 3145 0094 61726543 		.ascii	"areCalibrationValuesRetrieved\000"
+ 3145      616C6962 
+ 3145      72617469 
+ 3145      6F6E5661 
+ 3145      6C756573 
+ 3146              	.LASF5:
+ 3147 00b2 5F5F696E 		.ascii	"__int32_t\000"
+ 3147      7433325F 
+ 3147      7400
+ 3148              	.LASF17:
+ 3149 00bc 696E7431 		.ascii	"int16\000"
+ 3149      3600
+ 3150              	.LASF51:
+ 3151 00c2 43616C69 		.ascii	"Calibrating\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 66
+
+
+ 3151      62726174 
+ 3151      696E6700 
+ 3152              	.LASF68:
+ 3153 00ce 66616E53 		.ascii	"fanSpeedPercentage\000"
+ 3153      70656564 
+ 3153      50657263 
+ 3153      656E7461 
+ 3153      676500
+ 3154              	.LASF118:
+ 3155 00e1 534D3170 		.ascii	"SM1percentageValues\000"
+ 3155      65726365 
+ 3155      6E746167 
+ 3155      6556616C 
+ 3155      75657300 
+ 3156              	.LASF35:
+ 3157 00f5 57616974 		.ascii	"Waiting_drop\000"
+ 3157      696E675F 
+ 3157      64726F70 
+ 3157      00
+ 3158              	.LASF63:
+ 3159 0102 61637475 		.ascii	"actualPwmPercentage\000"
+ 3159      616C5077 
+ 3159      6D506572 
+ 3159      63656E74 
+ 3159      61676500 
+ 3160              	.LASF107:
+ 3161 0116 54616350 		.ascii	"TacPtr\000"
+ 3161      747200
+ 3162              	.LASF43:
+ 3163 011d 63757272 		.ascii	"currentDirection_type\000"
+ 3163      656E7444 
+ 3163      69726563 
+ 3163      74696F6E 
+ 3163      5F747970 
+ 3164              	.LASF59:
+ 3165 0133 74656D70 		.ascii	"temperatureMode\000"
+ 3165      65726174 
+ 3165      7572654D 
+ 3165      6F646500 
+ 3166              	.LASF117:
+ 3167 0143 534D3163 		.ascii	"SM1calibrationValues\000"
+ 3167      616C6962 
+ 3167      72617469 
+ 3167      6F6E5661 
+ 3167      6C756573 
+ 3168              	.LASF100:
+ 3169 0158 70617374 		.ascii	"pastTemp\000"
+ 3169      54656D70 
+ 3169      00
+ 3170              	.LASF81:
+ 3171 0161 73657443 		.ascii	"setCalibrationTable\000"
+ 3171      616C6962 
+ 3171      72617469 
+ 3171      6F6E5461 
+ 3171      626C6500 
+ 3172              	.LASF89:
+ 3173 0175 70776D53 		.ascii	"pwmStartValue\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 67
+
+
+ 3173      74617274 
+ 3173      56616C75 
+ 3173      6500
+ 3174              	.LASF58:
+ 3175 0183 6D617854 		.ascii	"maxTargetTemperature\000"
+ 3175      61726765 
+ 3175      7454656D 
+ 3175      70657261 
+ 3175      74757265 
+ 3176              	.LASF19:
+ 3177 0198 666C6F61 		.ascii	"float\000"
+ 3177      7400
+ 3178              	.LASF18:
+ 3179 019e 696E7433 		.ascii	"int32\000"
+ 3179      3200
+ 3180              	.LASF122:
+ 3181 01a4 65657072 		.ascii	"eepromStatus\000"
+ 3181      6F6D5374 
+ 3181      61747573 
+ 3181      00
+ 3182              	.LASF114:
+ 3183 01b1 534D3265 		.ascii	"SM2eepromArray\000"
+ 3183      6570726F 
+ 3183      6D417272 
+ 3183      617900
+ 3184              	.LASF87:
+ 3185 01c0 6368616E 		.ascii	"changePeltierModuleState\000"
+ 3185      67655065 
+ 3185      6C746965 
+ 3185      724D6F64 
+ 3185      756C6553 
+ 3186              	.LASF9:
+ 3187 01d9 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 3187      206C6F6E 
+ 3187      6720756E 
+ 3187      7369676E 
+ 3187      65642069 
+ 3188              	.LASF94:
+ 3189 01f0 63616C69 		.ascii	"calibrationValueCount\000"
+ 3189      62726174 
+ 3189      696F6E56 
+ 3189      616C7565 
+ 3189      436F756E 
+ 3190              	.LASF33:
+ 3191 0206 70656C74 		.ascii	"peltierState_type\000"
+ 3191      69657253 
+ 3191      74617465 
+ 3191      5F747970 
+ 3191      6500
+ 3192              	.LASF26:
+ 3193 0218 61676974 		.ascii	"agitatorEnabled\000"
+ 3193      61746F72 
+ 3193      456E6162 
+ 3193      6C656400 
+ 3194              	.LASF57:
+ 3195 0228 63757272 		.ascii	"currentTemperature\000"
+ 3195      656E7454 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 68
+
+
+ 3195      656D7065 
+ 3195      72617475 
+ 3195      726500
+ 3196              	.LASF88:
+ 3197 023b 616D6269 		.ascii	"ambientTemperature\000"
+ 3197      656E7454 
+ 3197      656D7065 
+ 3197      72617475 
+ 3197      726500
+ 3198              	.LASF62:
+ 3199 024e 64657369 		.ascii	"desiredPwmPercentage\000"
+ 3199      72656450 
+ 3199      776D5065 
+ 3199      7263656E 
+ 3199      74616765 
+ 3200              	.LASF90:
+ 3201 0263 70776D45 		.ascii	"pwmEndValue\000"
+ 3201      6E645661 
+ 3201      6C756500 
+ 3202              	.LASF31:
+ 3203 026f 70656C74 		.ascii	"peltierDisabled\000"
+ 3203      69657244 
+ 3203      69736162 
+ 3203      6C656400 
+ 3204              	.LASF108:
+ 3205 027f 636F6E74 		.ascii	"controlValue\000"
+ 3205      726F6C56 
+ 3205      616C7565 
+ 3205      00
+ 3206              	.LASF45:
+ 3207 028c 5570546F 		.ascii	"UpToDate\000"
+ 3207      44617465 
+ 3207      00
+ 3208              	.LASF110:
+ 3209 0295 64657369 		.ascii	"desiredPeriod\000"
+ 3209      72656450 
+ 3209      6572696F 
+ 3209      6400
+ 3210              	.LASF97:
+ 3211 02a3 74656D70 		.ascii	"tempTable\000"
+ 3211      5461626C 
+ 3211      6500
+ 3212              	.LASF69:
+ 3213 02ad 66616E53 		.ascii	"fanState\000"
+ 3213      74617465 
+ 3213      00
+ 3214              	.LASF64:
+ 3215 02b6 70776D50 		.ascii	"pwmPeriodValue\000"
+ 3215      6572696F 
+ 3215      6456616C 
+ 3215      756500
+ 3216              	.LASF21:
+ 3217 02c5 63686172 		.ascii	"char\000"
+ 3217      00
+ 3218              	.LASF95:
+ 3219 02ca 63757272 		.ascii	"currentTemp\000"
+ 3219      656E7454 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 69
+
+
+ 3219      656D7000 
+ 3220              	.LASF102:
+ 3221 02d6 64656C74 		.ascii	"deltaValue\000"
+ 3221      6156616C 
+ 3221      756500
+ 3222              	.LASF14:
+ 3223 02e1 75696E74 		.ascii	"uint16\000"
+ 3223      313600
+ 3224              	.LASF16:
+ 3225 02e8 696E7438 		.ascii	"int8\000"
+ 3225      00
+ 3226              	.LASF120:
+ 3227 02ed 534D3270 		.ascii	"SM2percentageValues\000"
+ 3227      65726365 
+ 3227      6E746167 
+ 3227      6556616C 
+ 3227      75657300 
+ 3228              	.LASF52:
+ 3229 0301 63616C69 		.ascii	"calibratingStatus_type\000"
+ 3229      62726174 
+ 3229      696E6753 
+ 3229      74617475 
+ 3229      735F7479 
+ 3230              	.LASF11:
+ 3231 0318 75696E74 		.ascii	"uint8_t\000"
+ 3231      385F7400 
+ 3232              	.LASF125:
+ 3233 0320 433A5C55 		.ascii	"C:\\Users\\plod1602\\Desktop\\TAC_PID\\TAC_PSOC5.cy"
+ 3233      73657273 
+ 3233      5C706C6F 
+ 3233      64313630 
+ 3233      325C4465 
+ 3234 034e 64736E00 		.ascii	"dsn\000"
+ 3235              	.LASF49:
+ 3236 0352 626F6F6C 		.ascii	"boolean\000"
+ 3236      65616E00 
+ 3237              	.LASF71:
+ 3238 035a 70657263 		.ascii	"percentageValuesPtr\000"
+ 3238      656E7461 
+ 3238      67655661 
+ 3238      6C756573 
+ 3238      50747200 
+ 3239              	.LASF8:
+ 3240 036e 6C6F6E67 		.ascii	"long long int\000"
+ 3240      206C6F6E 
+ 3240      6720696E 
+ 3240      7400
+ 3241              	.LASF73:
+ 3242 037c 61726543 		.ascii	"areCalibrationValuesAvailable\000"
+ 3242      616C6962 
+ 3242      72617469 
+ 3242      6F6E5661 
+ 3242      6C756573 
+ 3243              	.LASF55:
+ 3244 039a 70656C74 		.ascii	"peltierState\000"
+ 3244      69657253 
+ 3244      74617465 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 70
+
+
+ 3244      00
+ 3245              	.LASF65:
+ 3246 03a7 70776D56 		.ascii	"pwmValueFromCalibration\000"
+ 3246      616C7565 
+ 3246      46726F6D 
+ 3246      43616C69 
+ 3246      62726174 
+ 3247              	.LASF123:
+ 3248 03bf 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 3248      4320342E 
+ 3248      392E3320 
+ 3248      32303135 
+ 3248      30333033 
+ 3249 03f2 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 3249      20726576 
+ 3249      6973696F 
+ 3249      6E203232 
+ 3249      31323230 
+ 3250 0425 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 3250      66756E63 
+ 3250      74696F6E 
+ 3250      2D736563 
+ 3250      74696F6E 
+ 3251              	.LASF15:
+ 3252 044d 75696E74 		.ascii	"uint32\000"
+ 3252      333200
+ 3253              	.LASF112:
+ 3254 0454 65657072 		.ascii	"eepromArray\000"
+ 3254      6F6D4172 
+ 3254      72617900 
+ 3255              	.LASF74:
+ 3256 0460 63616C69 		.ascii	"calibratingStatus\000"
+ 3256      62726174 
+ 3256      696E6753 
+ 3256      74617475 
+ 3256      7300
+ 3257              	.LASF93:
+ 3258 0472 6368616E 		.ascii	"changePeltierModuleCurrentDirection\000"
+ 3258      67655065 
+ 3258      6C746965 
+ 3258      724D6F64 
+ 3258      756C6543 
+ 3259              	.LASF36:
+ 3260 0496 4D61696E 		.ascii	"Maintaining_cool\000"
+ 3260      7461696E 
+ 3260      696E675F 
+ 3260      636F6F6C 
+ 3260      00
+ 3261              	.LASF25:
+ 3262 04a7 61676974 		.ascii	"agitatorDisabled\000"
+ 3262      61746F72 
+ 3262      44697361 
+ 3262      626C6564 
+ 3262      00
+ 3263              	.LASF80:
+ 3264 04b8 76616C69 		.ascii	"validateEEPROM\000"
+ 3264      64617465 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 71
+
+
+ 3264      45455052 
+ 3264      4F4D00
+ 3265              	.LASF29:
+ 3266 04c7 66616E45 		.ascii	"fanEnabled\000"
+ 3266      6E61626C 
+ 3266      656400
+ 3267              	.LASF24:
+ 3268 04d2 6C6F6E67 		.ascii	"long double\000"
+ 3268      20646F75 
+ 3268      626C6500 
+ 3269              	.LASF41:
+ 3270 04de 436F6F6C 		.ascii	"Cooling\000"
+ 3270      696E6700 
+ 3271              	.LASF46:
+ 3272 04e6 70776D46 		.ascii	"pwmFromCalibrationStatus_type\000"
+ 3272      726F6D43 
+ 3272      616C6962 
+ 3272      72617469 
+ 3272      6F6E5374 
+ 3273              	.LASF91:
+ 3274 0504 70776D50 		.ascii	"pwmPercentageIncrement\000"
+ 3274      65726365 
+ 3274      6E746167 
+ 3274      65496E63 
+ 3274      72656D65 
+ 3275              	.LASF40:
+ 3276 051b 4E6F7453 		.ascii	"NotSet\000"
+ 3276      657400
+ 3277              	.LASF53:
+ 3278 0522 7375624D 		.ascii	"subModuleId\000"
+ 3278      6F64756C 
+ 3278      65496400 
+ 3279              	.LASF82:
+ 3280 052e 74656D70 		.ascii	"tempTemperatureAndPercentageArray\000"
+ 3280      54656D70 
+ 3280      65726174 
+ 3280      75726541 
+ 3280      6E645065 
+ 3281              	.LASF2:
+ 3282 0550 73686F72 		.ascii	"short int\000"
+ 3282      7420696E 
+ 3282      7400
+ 3283              	.LASF86:
+ 3284 055a 6368616E 		.ascii	"changeFanState\000"
+ 3284      67654661 
+ 3284      6E537461 
+ 3284      746500
+ 3285              	.LASF127:
+ 3286 0569 74657374 		.ascii	"testPWMPeriods\000"
+ 3286      50574D50 
+ 3286      6572696F 
+ 3286      647300
+ 3287              	.LASF6:
+ 3288 0578 6C6F6E67 		.ascii	"long int\000"
+ 3288      20696E74 
+ 3288      00
+ 3289              	.LASF115:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 72
+
+
+ 3290 0581 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 3290      52784275 
+ 3290      66666572 
+ 3290      00
+ 3291              	.LASF44:
+ 3292 058e 4F757444 		.ascii	"OutDated\000"
+ 3292      61746564 
+ 3292      00
+ 3293              	.LASF105:
+ 3294 0597 64696666 		.ascii	"diff\000"
+ 3294      00
+ 3295              	.LASF50:
+ 3296 059c 4E6F7443 		.ascii	"NotCalibrating\000"
+ 3296      616C6962 
+ 3296      72617469 
+ 3296      6E6700
+ 3297              	.LASF34:
+ 3298 05ab 4D61696E 		.ascii	"Maintaining_heat\000"
+ 3298      7461696E 
+ 3298      696E675F 
+ 3298      68656174 
+ 3298      00
+ 3299              	.LASF111:
+ 3300 05bc 61637475 		.ascii	"actualPeriod\000"
+ 3300      616C5065 
+ 3300      72696F64 
+ 3300      00
+ 3301              	.LASF84:
+ 3302 05c9 63616C69 		.ascii	"calibration\000"
+ 3302      62726174 
+ 3302      696F6E00 
+ 3303              	.LASF56:
+ 3304 05d5 74617267 		.ascii	"targetTemperature\000"
+ 3304      65745465 
+ 3304      6D706572 
+ 3304      61747572 
+ 3304      6500
+ 3305              	.LASF4:
+ 3306 05e7 5F5F7569 		.ascii	"__uint8_t\000"
+ 3306      6E74385F 
+ 3306      7400
+ 3307              	.LASF67:
+ 3308 05f1 61676974 		.ascii	"agitatorState\000"
+ 3308      61746F72 
+ 3308      53746174 
+ 3308      6500
+ 3309              	.LASF70:
+ 3310 05ff 63616C69 		.ascii	"calibrationValuesPtr\000"
+ 3310      62726174 
+ 3310      696F6E56 
+ 3310      616C7565 
+ 3310      73507472 
+ 3311              	.LASF79:
+ 3312 0614 61727261 		.ascii	"array1\000"
+ 3312      793100
+ 3313              	.LASF32:
+ 3314 061b 70656C74 		.ascii	"peltierEnabled\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 73
+
+
+ 3314      69657245 
+ 3314      6E61626C 
+ 3314      656400
+ 3315              	.LASF109:
+ 3316 062a 64657369 		.ascii	"desiredFreq\000"
+ 3316      72656446 
+ 3316      72657100 
+ 3317              	.LASF60:
+ 3318 0636 63757272 		.ascii	"currentDirection\000"
+ 3318      656E7444 
+ 3318      69726563 
+ 3318      74696F6E 
+ 3318      00
+ 3319              	.LASF23:
+ 3320 0647 73697A65 		.ascii	"sizetype\000"
+ 3320      74797065 
+ 3320      00
+ 3321              	.LASF7:
+ 3322 0650 6C6F6E67 		.ascii	"long unsigned int\000"
+ 3322      20756E73 
+ 3322      69676E65 
+ 3322      6420696E 
+ 3322      7400
+ 3323              	.LASF12:
+ 3324 0662 696E7433 		.ascii	"int32_t\000"
+ 3324      325F7400 
+ 3325              	.LASF113:
+ 3326 066a 534D3165 		.ascii	"SM1eepromArray\000"
+ 3326      6570726F 
+ 3326      6D417272 
+ 3326      617900
+ 3327              	.LASF22:
+ 3328 0679 63797374 		.ascii	"cystatus\000"
+ 3328      61747573 
+ 3328      00
+ 3329              	.LASF124:
+ 3330 0682 2E5C5065 		.ascii	".\\PeltierCalibration.c\000"
+ 3330      6C746965 
+ 3330      7243616C 
+ 3330      69627261 
+ 3330      74696F6E 
+ 3331              	.LASF76:
+ 3332 0699 6572726F 		.ascii	"errorTabCounter\000"
+ 3332      72546162 
+ 3332      436F756E 
+ 3332      74657200 
+ 3333              	.LASF1:
+ 3334 06a9 756E7369 		.ascii	"unsigned char\000"
+ 3334      676E6564 
+ 3334      20636861 
+ 3334      7200
+ 3335              	.LASF104:
+ 3336 06b7 66756E63 		.ascii	"function\000"
+ 3336      74696F6E 
+ 3336      00
+ 3337              	.LASF77:
+ 3338 06c0 5461635F 		.ascii	"Tac_Submodule\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 74
+
+
+ 3338      5375626D 
+ 3338      6F64756C 
+ 3338      6500
+ 3339              	.LASF37:
+ 3340 06ce 57616974 		.ascii	"Waiting_overshoot\000"
+ 3340      696E675F 
+ 3340      6F766572 
+ 3340      73686F6F 
+ 3340      7400
+ 3341              	.LASF78:
+ 3342 06e0 54414350 		.ascii	"TACPtr\000"
+ 3342      747200
+ 3343              	.LASF99:
+ 3344 06e7 67657453 		.ascii	"getStableTemp\000"
+ 3344      7461626C 
+ 3344      6554656D 
+ 3344      7000
+ 3345              	.LASF116:
+ 3346 06f5 53544F50 		.ascii	"STOP_CALIBRATION_FLAG\000"
+ 3346      5F43414C 
+ 3346      49425241 
+ 3346      54494F4E 
+ 3346      5F464C41 
+ 3347              	.LASF27:
+ 3348 070b 61676974 		.ascii	"agitatorState_type\000"
+ 3348      61746F72 
+ 3348      53746174 
+ 3348      655F7479 
+ 3348      706500
+ 3349              	.LASF42:
+ 3350 071e 48656174 		.ascii	"Heating\000"
+ 3350      696E6700 
+ 3351              	.LASF121:
+ 3352 0726 74617267 		.ascii	"targetTemp\000"
+ 3352      65745465 
+ 3352      6D7000
+ 3353              	.LASF83:
+ 3354 0731 67657443 		.ascii	"getCalibrationTable\000"
+ 3354      616C6962 
+ 3354      72617469 
+ 3354      6F6E5461 
+ 3354      626C6500 
+ 3355              	.LASF101:
+ 3356 0745 746F6C65 		.ascii	"tolerance_hit\000"
+ 3356      72616E63 
+ 3356      655F6869 
+ 3356      7400
+ 3357              	.LASF96:
+ 3358 0753 6E756D62 		.ascii	"numberOfCoolingDatas\000"
+ 3358      65724F66 
+ 3358      436F6F6C 
+ 3358      696E6744 
+ 3358      61746173 
+ 3359              	.LASF0:
+ 3360 0768 7369676E 		.ascii	"signed char\000"
+ 3360      65642063 
+ 3360      68617200 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccH3HTbW.s 			page 75
+
+
+ 3361              	.LASF3:
+ 3362 0774 73686F72 		.ascii	"short unsigned int\000"
+ 3362      7420756E 
+ 3362      7369676E 
+ 3362      65642069 
+ 3362      6E7400
+ 3363              	.LASF28:
+ 3364 0787 66616E44 		.ascii	"fanDisabled\000"
+ 3364      69736162 
+ 3364      6C656400 
+ 3365              	.LASF119:
+ 3366 0793 534D3263 		.ascii	"SM2calibrationValues\000"
+ 3366      616C6962 
+ 3366      72617469 
+ 3366      6F6E5661 
+ 3366      6C756573 
+ 3367              	.LASF13:
+ 3368 07a8 75696E74 		.ascii	"uint8\000"
+ 3368      3800
+ 3369              	.LASF20:
+ 3370 07ae 646F7562 		.ascii	"double\000"
+ 3370      6C6500
+ 3371              	.LASF126:
+ 3372 07b5 75706461 		.ascii	"updateSMPeriodValue\000"
+ 3372      7465534D 
+ 3372      50657269 
+ 3372      6F645661 
+ 3372      6C756500 
+ 3373              	.LASF98:
+ 3374 07c9 6368616E 		.ascii	"changePeltierPWMValue\000"
+ 3374      67655065 
+ 3374      6C746965 
+ 3374      7250574D 
+ 3374      56616C75 
+ 3375              	.LASF61:
+ 3376 07df 70776D43 		.ascii	"pwmCompareValue\000"
+ 3376      6F6D7061 
+ 3376      72655661 
+ 3376      6C756500 
+ 3377              	.LASF85:
+ 3378 07ef 6368616E 		.ascii	"changeFanSpeed\000"
+ 3378      67654661 
+ 3378      6E537065 
+ 3378      656400
+ 3379              	.LASF106:
+ 3380 07fe 6D6F6475 		.ascii	"moduleNumber\000"
+ 3380      6C654E75 
+ 3380      6D626572 
+ 3380      00
+ 3381              	.LASF38:
+ 3382 080b 57616974 		.ascii	"Waiting\000"
+ 3382      696E6700 
+ 3383              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

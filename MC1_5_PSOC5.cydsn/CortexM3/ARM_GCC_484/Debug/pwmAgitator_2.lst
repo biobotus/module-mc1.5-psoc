@@ -1,0 +1,2625 @@
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"pwmAgitator_2.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	pwmAgitator_2_initVar
+  19              		.bss
+  20              		.type	pwmAgitator_2_initVar, %object
+  21              		.size	pwmAgitator_2_initVar, 1
+  22              	pwmAgitator_2_initVar:
+  23 0000 00       		.space	1
+  24              		.section	.text.pwmAgitator_2_Start,"ax",%progbits
+  25              		.align	2
+  26              		.global	pwmAgitator_2_Start
+  27              		.thumb
+  28              		.thumb_func
+  29              		.type	pwmAgitator_2_Start, %function
+  30              	pwmAgitator_2_Start:
+  31              	.LFB0:
+  32              		.file 1 ".\\Generated_Source\\PSoC5\\pwmAgitator_2.c"
+   1:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * File Name: pwmAgitator_2.c
+   3:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Version 3.30
+   4:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+   5:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Description:
+   6:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  The PWM User Module consist of an 8 or 16-bit counter with two 8 or 16-bit
+   7:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  comparitors. Each instance of this user module is capable of generating
+   8:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  two PWM outputs with the same period. The pulse width is selectable between
+   9:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  1 and 255/65535. The period is selectable between 2 and 255/65536 clocks.
+  10:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  The compare value output may be configured to be active when the present
+  11:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  counter is less than or less than/equal to the compare value.
+  12:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  A terminal count output is also provided. It generates a pulse one clock
+  13:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  width wide when the counter is equal to zero.
+  14:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  15:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Note:
+  16:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  17:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************
+  18:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+  19:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * You may use this file only in accordance with the license, terms, conditions,
+  20:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  21:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * the software package with which this file was provided.
+  22:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************/
+  23:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  24:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #include "pwmAgitator_2.h"
+  25:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 2
+
+
+  26:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /* Error message for removed <resource> through optimization */
+  27:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #ifdef pwmAgitator_2_PWMUDB_genblk1_ctrlreg__REMOVED
+  28:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #error PWM_v3_30 detected with a constant 0 for the enable or \
+  29:.\Generated_Source\PSoC5/pwmAgitator_2.c ****          constant 1 for reset. This will prevent the component from operating.
+  30:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* pwmAgitator_2_PWMUDB_genblk1_ctrlreg__REMOVED */
+  31:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  32:.\Generated_Source\PSoC5/pwmAgitator_2.c **** uint8 pwmAgitator_2_initVar = 0u;
+  33:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  34:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  35:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+  36:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Function Name: pwmAgitator_2_Start
+  37:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************
+  38:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  39:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Summary:
+  40:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  The start function initializes the pwm with the default values, the
+  41:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  enables the counter to begin counting.  It does not enable interrupts,
+  42:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  the EnableInt command should be called if interrupt generation is required.
+  43:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  44:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Parameters:
+  45:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+  46:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  47:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Return:
+  48:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+  49:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  50:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Global variables:
+  51:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  pwmAgitator_2_initVar: Is modified when this function is called for the
+  52:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *   first time. Is used to ensure that initialization happens only once.
+  53:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  54:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************/
+  55:.\Generated_Source\PSoC5/pwmAgitator_2.c **** void pwmAgitator_2_Start(void) 
+  56:.\Generated_Source\PSoC5/pwmAgitator_2.c **** {
+  33              		.loc 1 56 0
+  34              		.cfi_startproc
+  35              		@ args = 0, pretend = 0, frame = 0
+  36              		@ frame_needed = 1, uses_anonymous_args = 0
+  37 0000 80B5     		push	{r7, lr}
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 00AF     		add	r7, sp, #0
+  42              		.cfi_def_cfa_register 7
+  57:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /* If not Initialized then initialize all required hardware and software */
+  58:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     if(pwmAgitator_2_initVar == 0u)
+  43              		.loc 1 58 0
+  44 0004 054B     		ldr	r3, .L3
+  45 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  46 0008 002B     		cmp	r3, #0
+  47 000a 04D1     		bne	.L2
+  59:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+  60:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_Init();
+  48              		.loc 1 60 0
+  49 000c FFF7FEFF 		bl	pwmAgitator_2_Init
+  61:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_initVar = 1u;
+  50              		.loc 1 61 0
+  51 0010 024B     		ldr	r3, .L3
+  52 0012 0122     		movs	r2, #1
+  53 0014 1A70     		strb	r2, [r3]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 3
+
+
+  54              	.L2:
+  62:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+  63:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     pwmAgitator_2_Enable();
+  55              		.loc 1 63 0
+  56 0016 FFF7FEFF 		bl	pwmAgitator_2_Enable
+  64:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  65:.\Generated_Source\PSoC5/pwmAgitator_2.c **** }
+  57              		.loc 1 65 0
+  58 001a 80BD     		pop	{r7, pc}
+  59              	.L4:
+  60              		.align	2
+  61              	.L3:
+  62 001c 00000000 		.word	pwmAgitator_2_initVar
+  63              		.cfi_endproc
+  64              	.LFE0:
+  65              		.size	pwmAgitator_2_Start, .-pwmAgitator_2_Start
+  66              		.section	.text.pwmAgitator_2_Init,"ax",%progbits
+  67              		.align	2
+  68              		.global	pwmAgitator_2_Init
+  69              		.thumb
+  70              		.thumb_func
+  71              		.type	pwmAgitator_2_Init, %function
+  72              	pwmAgitator_2_Init:
+  73              	.LFB1:
+  66:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  67:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  68:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+  69:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Function Name: pwmAgitator_2_Init
+  70:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************
+  71:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  72:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Summary:
+  73:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  Initialize component's parameters to the parameters set by user in the
+  74:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  customizer of the component placed onto schematic. Usually called in
+  75:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  pwmAgitator_2_Start().
+  76:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  77:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Parameters:
+  78:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+  79:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  80:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Return:
+  81:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+  82:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+  83:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************/
+  84:.\Generated_Source\PSoC5/pwmAgitator_2.c **** void pwmAgitator_2_Init(void) 
+  85:.\Generated_Source\PSoC5/pwmAgitator_2.c **** {
+  74              		.loc 1 85 0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 8
+  77              		@ frame_needed = 1, uses_anonymous_args = 0
+  78 0000 80B5     		push	{r7, lr}
+  79              		.cfi_def_cfa_offset 8
+  80              		.cfi_offset 7, -8
+  81              		.cfi_offset 14, -4
+  82 0002 82B0     		sub	sp, sp, #8
+  83              		.cfi_def_cfa_offset 16
+  84 0004 00AF     		add	r7, sp, #0
+  85              		.cfi_def_cfa_register 7
+  86:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UsingFixedFunction || pwmAgitator_2_UseControl)
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 4
+
+
+  87:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         uint8 ctrl;
+  88:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction || pwmAgitator_2_UseControl) */
+  89:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  90:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if(!pwmAgitator_2_UsingFixedFunction)
+  91:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(pwmAgitator_2_UseStatus)
+  92:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Interrupt State Backup for Critical Region*/
+  93:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             uint8 pwmAgitator_2_interruptState;
+  94:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UseStatus) */
+  95:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (!pwmAgitator_2_UsingFixedFunction) */
+  96:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+  97:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UsingFixedFunction)
+  98:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* You are allowed to write the compare value (FF only) */
+  99:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_CONTROL |= pwmAgitator_2_CFG0_MODE;
+ 100:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_DeadBand2_4)
+ 101:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_CONTROL |= pwmAgitator_2_CFG0_DB;
+ 102:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_DeadBand2_4) */
+ 103:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 104:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         ctrl = pwmAgitator_2_CONTROL3 & ((uint8 )(~pwmAgitator_2_CTRL_CMPMODE1_MASK));
+ 105:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_CONTROL3 = ctrl | pwmAgitator_2_DEFAULT_COMPARE1_MODE;
+ 106:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 107:.\Generated_Source\PSoC5/pwmAgitator_2.c ****          /* Clear and Set SYNCTC and SYNCCMP bits of RT1 register */
+ 108:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_RT1 &= ((uint8)(~pwmAgitator_2_RT1_MASK));
+ 109:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_RT1 |= pwmAgitator_2_SYNC;
+ 110:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 111:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /*Enable DSI Sync all all inputs of the PWM*/
+ 112:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_RT1 &= ((uint8)(~pwmAgitator_2_SYNCDSI_MASK));
+ 113:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_RT1 |= pwmAgitator_2_SYNCDSI_EN;
+ 114:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 115:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #elif (pwmAgitator_2_UseControl)
+ 116:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* Set the default compare mode defined in the parameter */
+ 117:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         ctrl = pwmAgitator_2_CONTROL & ((uint8)(~pwmAgitator_2_CTRL_CMPMODE2_MASK)) &
+  86              		.loc 1 117 0
+  87 0006 1A4B     		ldr	r3, .L6
+  88 0008 1B78     		ldrb	r3, [r3]
+  89 000a DBB2     		uxtb	r3, r3
+  90 000c 23F03F03 		bic	r3, r3, #63
+  91 0010 FB71     		strb	r3, [r7, #7]
+ 118:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 ((uint8)(~pwmAgitator_2_CTRL_CMPMODE1_MASK));
+ 119:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_CONTROL = ctrl | pwmAgitator_2_DEFAULT_COMPARE2_MODE |
+  92              		.loc 1 119 0
+  93 0012 174B     		ldr	r3, .L6
+  94 0014 FA79     		ldrb	r2, [r7, #7]
+  95 0016 42F00902 		orr	r2, r2, #9
+  96 001a D2B2     		uxtb	r2, r2
+  97 001c 1A70     		strb	r2, [r3]
+ 120:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                    pwmAgitator_2_DEFAULT_COMPARE1_MODE;
+ 121:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 122:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 123:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (!pwmAgitator_2_UsingFixedFunction)
+ 124:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_Resolution == 8)
+ 125:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Set FIFO 0 to 1 byte register for period*/
+ 126:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_AUX_CONTROLDP0 |= (pwmAgitator_2_AUX_CTRL_FIFO0_CLR);
+  98              		.loc 1 126 0
+  99 001e 154B     		ldr	r3, .L6+4
+ 100 0020 144A     		ldr	r2, .L6+4
+ 101 0022 1278     		ldrb	r2, [r2]
+ 102 0024 D2B2     		uxtb	r2, r2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 5
+
+
+ 103 0026 42F00102 		orr	r2, r2, #1
+ 104 002a D2B2     		uxtb	r2, r2
+ 105 002c 1A70     		strb	r2, [r3]
+ 127:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else /* (pwmAgitator_2_Resolution == 16)*/
+ 128:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Set FIFO 0 to 1 byte register for period */
+ 129:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_AUX_CONTROLDP0 |= (pwmAgitator_2_AUX_CTRL_FIFO0_CLR);
+ 130:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_AUX_CONTROLDP1 |= (pwmAgitator_2_AUX_CTRL_FIFO0_CLR);
+ 131:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_Resolution == 8) */
+ 132:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 133:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_WriteCounter(pwmAgitator_2_INIT_PERIOD_VALUE);
+ 106              		.loc 1 133 0
+ 107 002e C820     		movs	r0, #200
+ 108 0030 FFF7FEFF 		bl	pwmAgitator_2_WriteCounter
+ 134:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (!pwmAgitator_2_UsingFixedFunction) */
+ 135:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 136:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     pwmAgitator_2_WritePeriod(pwmAgitator_2_INIT_PERIOD_VALUE);
+ 109              		.loc 1 136 0
+ 110 0034 C820     		movs	r0, #200
+ 111 0036 FFF7FEFF 		bl	pwmAgitator_2_WritePeriod
+ 137:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 138:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_UseOneCompareMode)
+ 139:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_WriteCompare(pwmAgitator_2_INIT_COMPARE_VALUE1);
+ 112              		.loc 1 139 0
+ 113 003a 0020     		movs	r0, #0
+ 114 003c FFF7FEFF 		bl	pwmAgitator_2_WriteCompare
+ 140:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 141:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_WriteCompare1(pwmAgitator_2_INIT_COMPARE_VALUE1);
+ 142:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_WriteCompare2(pwmAgitator_2_INIT_COMPARE_VALUE2);
+ 143:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UseOneCompareMode) */
+ 144:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 145:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_KillModeMinTime)
+ 146:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_WriteKillTime(pwmAgitator_2_MinimumKillTime);
+ 147:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_KillModeMinTime) */
+ 148:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 149:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_DeadBandUsed)
+ 150:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_WriteDeadTime(pwmAgitator_2_INIT_DEAD_TIME);
+ 151:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_DeadBandUsed) */
+ 152:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 153:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UseStatus || pwmAgitator_2_UsingFixedFunction)
+ 154:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_SetInterruptMode(pwmAgitator_2_INIT_INTERRUPTS_MODE);
+ 115              		.loc 1 154 0
+ 116 0040 0020     		movs	r0, #0
+ 117 0042 FFF7FEFF 		bl	pwmAgitator_2_SetInterruptMode
+ 155:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UseStatus || pwmAgitator_2_UsingFixedFunction) */
+ 156:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 157:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UsingFixedFunction)
+ 158:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* Globally Enable the Fixed Function Block chosen */
+ 159:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_GLOBAL_ENABLE |= pwmAgitator_2_BLOCK_EN_MASK;
+ 160:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* Set the Interrupt source to come from the status register */
+ 161:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_CONTROL2 |= pwmAgitator_2_CTRL2_IRQ_SEL;
+ 162:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #else
+ 163:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(pwmAgitator_2_UseStatus)
+ 164:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 165:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* CyEnterCriticalRegion and CyExitCriticalRegion are used to mark following region cri
+ 166:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Enter Critical Region*/
+ 167:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_interruptState = CyEnterCriticalSection();
+ 118              		.loc 1 167 0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 6
+
+
+ 119 0046 FFF7FEFF 		bl	CyEnterCriticalSection
+ 120 004a 0346     		mov	r3, r0
+ 121 004c BB71     		strb	r3, [r7, #6]
+ 168:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Use the interrupt output of the status register for IRQ output */
+ 169:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_STATUS_AUX_CTRL |= pwmAgitator_2_STATUS_ACTL_INT_EN_MASK;
+ 122              		.loc 1 169 0
+ 123 004e 094B     		ldr	r3, .L6+4
+ 124 0050 084A     		ldr	r2, .L6+4
+ 125 0052 1278     		ldrb	r2, [r2]
+ 126 0054 D2B2     		uxtb	r2, r2
+ 127 0056 42F01002 		orr	r2, r2, #16
+ 128 005a D2B2     		uxtb	r2, r2
+ 129 005c 1A70     		strb	r2, [r3]
+ 170:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 171:.\Generated_Source\PSoC5/pwmAgitator_2.c ****              /* Exit Critical Region*/
+ 172:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CyExitCriticalSection(pwmAgitator_2_interruptState);
+ 130              		.loc 1 172 0
+ 131 005e BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 132 0060 1846     		mov	r0, r3
+ 133 0062 FFF7FEFF 		bl	CyExitCriticalSection
+ 173:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 174:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Clear the FIFO to enable the pwmAgitator_2_STATUS_FIFOFULL
+ 175:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                    bit to be set on FIFO full. */
+ 176:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_ClearFIFO();
+ 134              		.loc 1 176 0
+ 135 0066 FFF7FEFF 		bl	pwmAgitator_2_ClearFIFO
+ 177:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UseStatus) */
+ 178:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 179:.\Generated_Source\PSoC5/pwmAgitator_2.c **** }
+ 136              		.loc 1 179 0
+ 137 006a 0837     		adds	r7, r7, #8
+ 138 006c BD46     		mov	sp, r7
+ 139              		@ sp needed
+ 140 006e 80BD     		pop	{r7, pc}
+ 141              	.L7:
+ 142              		.align	2
+ 143              	.L6:
+ 144 0070 75640040 		.word	1073767541
+ 145 0074 95640040 		.word	1073767573
+ 146              		.cfi_endproc
+ 147              	.LFE1:
+ 148              		.size	pwmAgitator_2_Init, .-pwmAgitator_2_Init
+ 149              		.section	.text.pwmAgitator_2_Enable,"ax",%progbits
+ 150              		.align	2
+ 151              		.global	pwmAgitator_2_Enable
+ 152              		.thumb
+ 153              		.thumb_func
+ 154              		.type	pwmAgitator_2_Enable, %function
+ 155              	pwmAgitator_2_Enable:
+ 156              	.LFB2:
+ 180:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 181:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 182:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+ 183:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Function Name: pwmAgitator_2_Enable
+ 184:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************
+ 185:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 186:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Summary:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 7
+
+
+ 187:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  Enables the PWM block operation
+ 188:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 189:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Parameters:
+ 190:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+ 191:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 192:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Return:
+ 193:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+ 194:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 195:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Side Effects:
+ 196:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  This works only if software enable mode is chosen
+ 197:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 198:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************/
+ 199:.\Generated_Source\PSoC5/pwmAgitator_2.c **** void pwmAgitator_2_Enable(void) 
+ 200:.\Generated_Source\PSoC5/pwmAgitator_2.c **** {
+ 157              		.loc 1 200 0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 1, uses_anonymous_args = 0
+ 161              		@ link register save eliminated.
+ 162 0000 80B4     		push	{r7}
+ 163              		.cfi_def_cfa_offset 4
+ 164              		.cfi_offset 7, -4
+ 165 0002 00AF     		add	r7, sp, #0
+ 166              		.cfi_def_cfa_register 7
+ 201:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /* Globally Enable the Fixed Function Block chosen */
+ 202:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UsingFixedFunction)
+ 203:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_GLOBAL_ENABLE |= pwmAgitator_2_BLOCK_EN_MASK;
+ 204:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_GLOBAL_STBY_ENABLE |= pwmAgitator_2_BLOCK_STBY_EN_MASK;
+ 205:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 206:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 207:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /* Enable the PWM from the control register  */
+ 208:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UseControl || pwmAgitator_2_UsingFixedFunction)
+ 209:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_CONTROL |= pwmAgitator_2_CTRL_ENABLE;
+ 167              		.loc 1 209 0
+ 168 0004 054B     		ldr	r3, .L9
+ 169 0006 054A     		ldr	r2, .L9
+ 170 0008 1278     		ldrb	r2, [r2]
+ 171 000a D2B2     		uxtb	r2, r2
+ 172 000c 62F07F02 		orn	r2, r2, #127
+ 173 0010 D2B2     		uxtb	r2, r2
+ 174 0012 1A70     		strb	r2, [r3]
+ 210:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UseControl || pwmAgitator_2_UsingFixedFunction) */
+ 211:.\Generated_Source\PSoC5/pwmAgitator_2.c **** }
+ 175              		.loc 1 211 0
+ 176 0014 BD46     		mov	sp, r7
+ 177              		@ sp needed
+ 178 0016 5DF8047B 		ldr	r7, [sp], #4
+ 179 001a 7047     		bx	lr
+ 180              	.L10:
+ 181              		.align	2
+ 182              	.L9:
+ 183 001c 75640040 		.word	1073767541
+ 184              		.cfi_endproc
+ 185              	.LFE2:
+ 186              		.size	pwmAgitator_2_Enable, .-pwmAgitator_2_Enable
+ 187              		.section	.text.pwmAgitator_2_Stop,"ax",%progbits
+ 188              		.align	2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 8
+
+
+ 189              		.global	pwmAgitator_2_Stop
+ 190              		.thumb
+ 191              		.thumb_func
+ 192              		.type	pwmAgitator_2_Stop, %function
+ 193              	pwmAgitator_2_Stop:
+ 194              	.LFB3:
+ 212:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 213:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 214:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+ 215:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Function Name: pwmAgitator_2_Stop
+ 216:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************
+ 217:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 218:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Summary:
+ 219:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  The stop function halts the PWM, but does not change any modes or disable
+ 220:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  interrupts.
+ 221:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 222:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Parameters:
+ 223:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+ 224:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 225:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Return:
+ 226:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+ 227:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 228:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Side Effects:
+ 229:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  If the Enable mode is set to Hardware only then this function
+ 230:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  has no effect on the operation of the PWM
+ 231:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 232:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************/
+ 233:.\Generated_Source\PSoC5/pwmAgitator_2.c **** void pwmAgitator_2_Stop(void) 
+ 234:.\Generated_Source\PSoC5/pwmAgitator_2.c **** {
+ 195              		.loc 1 234 0
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 0
+ 198              		@ frame_needed = 1, uses_anonymous_args = 0
+ 199              		@ link register save eliminated.
+ 200 0000 80B4     		push	{r7}
+ 201              		.cfi_def_cfa_offset 4
+ 202              		.cfi_offset 7, -4
+ 203 0002 00AF     		add	r7, sp, #0
+ 204              		.cfi_def_cfa_register 7
+ 235:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UseControl || pwmAgitator_2_UsingFixedFunction)
+ 236:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_CONTROL &= ((uint8)(~pwmAgitator_2_CTRL_ENABLE));
+ 205              		.loc 1 236 0
+ 206 0004 054B     		ldr	r3, .L12
+ 207 0006 054A     		ldr	r2, .L12
+ 208 0008 1278     		ldrb	r2, [r2]
+ 209 000a D2B2     		uxtb	r2, r2
+ 210 000c 02F07F02 		and	r2, r2, #127
+ 211 0010 D2B2     		uxtb	r2, r2
+ 212 0012 1A70     		strb	r2, [r3]
+ 237:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UseControl || pwmAgitator_2_UsingFixedFunction) */
+ 238:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 239:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /* Globally disable the Fixed Function Block chosen */
+ 240:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UsingFixedFunction)
+ 241:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_GLOBAL_ENABLE &= ((uint8)(~pwmAgitator_2_BLOCK_EN_MASK));
+ 242:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         pwmAgitator_2_GLOBAL_STBY_ENABLE &= ((uint8)(~pwmAgitator_2_BLOCK_STBY_EN_MASK));
+ 243:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 244:.\Generated_Source\PSoC5/pwmAgitator_2.c **** }
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 9
+
+
+ 213              		.loc 1 244 0
+ 214 0014 BD46     		mov	sp, r7
+ 215              		@ sp needed
+ 216 0016 5DF8047B 		ldr	r7, [sp], #4
+ 217 001a 7047     		bx	lr
+ 218              	.L13:
+ 219              		.align	2
+ 220              	.L12:
+ 221 001c 75640040 		.word	1073767541
+ 222              		.cfi_endproc
+ 223              	.LFE3:
+ 224              		.size	pwmAgitator_2_Stop, .-pwmAgitator_2_Stop
+ 225              		.section	.text.pwmAgitator_2_WriteCounter,"ax",%progbits
+ 226              		.align	2
+ 227              		.global	pwmAgitator_2_WriteCounter
+ 228              		.thumb
+ 229              		.thumb_func
+ 230              		.type	pwmAgitator_2_WriteCounter, %function
+ 231              	pwmAgitator_2_WriteCounter:
+ 232              	.LFB4:
+ 245:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 246:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_UseOneCompareMode)
+ 247:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_CompareMode1SW)
+ 248:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 249:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 250:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /*******************************************************************************
+ 251:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Function Name: pwmAgitator_2_SetCompareMode
+ 252:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         ********************************************************************************
+ 253:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 254:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Summary:
+ 255:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  This function writes the Compare Mode for the pwm output when in Dither mode,
+ 256:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  Center Align Mode or One Output Mode.
+ 257:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 258:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Parameters:
+ 259:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  comparemode:  The new compare mode for the PWM output. Use the compare types
+ 260:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *                defined in the H file as input arguments.
+ 261:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 262:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Return:
+ 263:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  None
+ 264:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 265:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *******************************************************************************/
+ 266:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         void pwmAgitator_2_SetCompareMode(uint8 comparemode) 
+ 267:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         {
+ 268:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #if(pwmAgitator_2_UsingFixedFunction)
+ 269:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 270:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #if(0 != pwmAgitator_2_CTRL_CMPMODE1_SHIFT)
+ 271:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                     uint8 comparemodemasked = ((uint8)((uint8)comparemode << pwmAgitator_2_CTRL_CMP
+ 272:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #else
+ 273:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                     uint8 comparemodemasked = comparemode;
+ 274:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #endif /* (0 != pwmAgitator_2_CTRL_CMPMODE1_SHIFT) */
+ 275:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 276:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_CONTROL3 &= ((uint8)(~pwmAgitator_2_CTRL_CMPMODE1_MASK)); /*Clear Exi
+ 277:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_CONTROL3 |= comparemodemasked;
+ 278:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 279:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #elif (pwmAgitator_2_UseControl)
+ 280:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 281:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #if(0 != pwmAgitator_2_CTRL_CMPMODE1_SHIFT)
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 10
+
+
+ 282:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                     uint8 comparemode1masked = ((uint8)((uint8)comparemode << pwmAgitator_2_CTRL_CM
+ 283:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                                 pwmAgitator_2_CTRL_CMPMODE1_MASK;
+ 284:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #else
+ 285:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                     uint8 comparemode1masked = comparemode & pwmAgitator_2_CTRL_CMPMODE1_MASK;
+ 286:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #endif /* (0 != pwmAgitator_2_CTRL_CMPMODE1_SHIFT) */
+ 287:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 288:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #if(0 != pwmAgitator_2_CTRL_CMPMODE2_SHIFT)
+ 289:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                     uint8 comparemode2masked = ((uint8)((uint8)comparemode << pwmAgitator_2_CTRL_CM
+ 290:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                                pwmAgitator_2_CTRL_CMPMODE2_MASK;
+ 291:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #else
+ 292:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                     uint8 comparemode2masked = comparemode & pwmAgitator_2_CTRL_CMPMODE2_MASK;
+ 293:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 #endif /* (0 != pwmAgitator_2_CTRL_CMPMODE2_SHIFT) */
+ 294:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 295:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 /*Clear existing mode */
+ 296:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_CONTROL &= ((uint8)(~(pwmAgitator_2_CTRL_CMPMODE1_MASK |
+ 297:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                             pwmAgitator_2_CTRL_CMPMODE2_MASK)));
+ 298:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_CONTROL |= (comparemode1masked | comparemode2masked);
+ 299:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 300:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #else
+ 301:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 uint8 temp = comparemode;
+ 302:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 303:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         }
+ 304:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* pwmAgitator_2_CompareMode1SW */
+ 305:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 306:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #else /* UseOneCompareMode */
+ 307:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 308:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_CompareMode1SW)
+ 309:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 310:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 311:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /*******************************************************************************
+ 312:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Function Name: pwmAgitator_2_SetCompareMode1
+ 313:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         ********************************************************************************
+ 314:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 315:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Summary:
+ 316:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  This function writes the Compare Mode for the pwm or pwm1 output
+ 317:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 318:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Parameters:
+ 319:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  comparemode:  The new compare mode for the PWM output. Use the compare types
+ 320:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *                defined in the H file as input arguments.
+ 321:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 322:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Return:
+ 323:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  None
+ 324:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 325:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *******************************************************************************/
+ 326:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         void pwmAgitator_2_SetCompareMode1(uint8 comparemode) 
+ 327:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         {
+ 328:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #if(0 != pwmAgitator_2_CTRL_CMPMODE1_SHIFT)
+ 329:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 uint8 comparemodemasked = ((uint8)((uint8)comparemode << pwmAgitator_2_CTRL_CMPMODE
+ 330:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                            pwmAgitator_2_CTRL_CMPMODE1_MASK;
+ 331:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #else
+ 332:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 uint8 comparemodemasked = comparemode & pwmAgitator_2_CTRL_CMPMODE1_MASK;
+ 333:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #endif /* (0 != pwmAgitator_2_CTRL_CMPMODE1_SHIFT) */
+ 334:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 335:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #if (pwmAgitator_2_UseControl)
+ 336:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_CONTROL &= ((uint8)(~pwmAgitator_2_CTRL_CMPMODE1_MASK)); /*Clear exis
+ 337:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_CONTROL |= comparemodemasked;
+ 338:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #endif /* (pwmAgitator_2_UseControl) */
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 11
+
+
+ 339:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         }
+ 340:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* pwmAgitator_2_CompareMode1SW */
+ 341:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 342:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_CompareMode2SW)
+ 343:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 344:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 345:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 346:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_SetCompareMode2
+ 347:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 348:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 349:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 350:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function writes the Compare Mode for the pwm or pwm2 output
+ 351:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 352:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 353:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  comparemode:  The new compare mode for the PWM output. Use the compare types
+ 354:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *                defined in the H file as input arguments.
+ 355:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 356:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 357:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 358:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 359:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 360:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_SetCompareMode2(uint8 comparemode) 
+ 361:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 362:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 363:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(0 != pwmAgitator_2_CTRL_CMPMODE2_SHIFT)
+ 364:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             uint8 comparemodemasked = ((uint8)((uint8)comparemode << pwmAgitator_2_CTRL_CMPMODE2_SH
+ 365:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                                  pwmAgitator_2_CTRL_CMPMODE2_MASK;
+ 366:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 367:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             uint8 comparemodemasked = comparemode & pwmAgitator_2_CTRL_CMPMODE2_MASK;
+ 368:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (0 != pwmAgitator_2_CTRL_CMPMODE2_SHIFT) */
+ 369:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 370:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_UseControl)
+ 371:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_CONTROL &= ((uint8)(~pwmAgitator_2_CTRL_CMPMODE2_MASK)); /*Clear existing
+ 372:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_CONTROL |= comparemodemasked;
+ 373:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UseControl) */
+ 374:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 375:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /*pwmAgitator_2_CompareMode2SW */
+ 376:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 377:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* UseOneCompareMode */
+ 378:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 379:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 380:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (!pwmAgitator_2_UsingFixedFunction)
+ 381:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 382:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 383:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 384:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_WriteCounter
+ 385:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 386:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 387:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 388:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Writes a new counter value directly to the counter register. This will be
+ 389:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  implemented for that currently running period and only that period. This API
+ 390:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  is valid only for UDB implementation and not available for fixed function
+ 391:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  PWM implementation.
+ 392:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 393:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 394:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  counter:  The period new period counter value.
+ 395:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 12
+
+
+ 396:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 397:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 398:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 399:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Side Effects:
+ 400:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  The PWM Period will be reloaded when a counter value will be a zero
+ 401:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 402:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 403:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_WriteCounter(uint8 counter) \
+ 404:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                        
+ 405:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 233              		.loc 1 405 0
+ 234              		.cfi_startproc
+ 235              		@ args = 0, pretend = 0, frame = 8
+ 236              		@ frame_needed = 1, uses_anonymous_args = 0
+ 237              		@ link register save eliminated.
+ 238 0000 80B4     		push	{r7}
+ 239              		.cfi_def_cfa_offset 4
+ 240              		.cfi_offset 7, -4
+ 241 0002 83B0     		sub	sp, sp, #12
+ 242              		.cfi_def_cfa_offset 16
+ 243 0004 00AF     		add	r7, sp, #0
+ 244              		.cfi_def_cfa_register 7
+ 245 0006 0346     		mov	r3, r0
+ 246 0008 FB71     		strb	r3, [r7, #7]
+ 406:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         CY_SET_REG8(pwmAgitator_2_COUNTER_LSB_PTR, counter);
+ 247              		.loc 1 406 0
+ 248 000a 044B     		ldr	r3, .L15
+ 249 000c FA79     		ldrb	r2, [r7, #7]
+ 250 000e 1A70     		strb	r2, [r3]
+ 407:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 251              		.loc 1 407 0
+ 252 0010 0C37     		adds	r7, r7, #12
+ 253 0012 BD46     		mov	sp, r7
+ 254              		@ sp needed
+ 255 0014 5DF8047B 		ldr	r7, [sp], #4
+ 256 0018 7047     		bx	lr
+ 257              	.L16:
+ 258 001a 00BF     		.align	2
+ 259              	.L15:
+ 260 001c 05640040 		.word	1073767429
+ 261              		.cfi_endproc
+ 262              	.LFE4:
+ 263              		.size	pwmAgitator_2_WriteCounter, .-pwmAgitator_2_WriteCounter
+ 264              		.section	.text.pwmAgitator_2_ReadCounter,"ax",%progbits
+ 265              		.align	2
+ 266              		.global	pwmAgitator_2_ReadCounter
+ 267              		.thumb
+ 268              		.thumb_func
+ 269              		.type	pwmAgitator_2_ReadCounter, %function
+ 270              	pwmAgitator_2_ReadCounter:
+ 271              	.LFB5:
+ 408:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 409:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 410:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 411:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadCounter
+ 412:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 413:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 13
+
+
+ 414:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 415:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function returns the current value of the counter.  It doesn't matter
+ 416:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  if the counter is enabled or running.
+ 417:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 418:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 419:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 420:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 421:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 422:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  The current value of the counter.
+ 423:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 424:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 425:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadCounter(void) 
+ 426:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 272              		.loc 1 426 0
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 0
+ 275              		@ frame_needed = 1, uses_anonymous_args = 0
+ 276              		@ link register save eliminated.
+ 277 0000 80B4     		push	{r7}
+ 278              		.cfi_def_cfa_offset 4
+ 279              		.cfi_offset 7, -4
+ 280 0002 00AF     		add	r7, sp, #0
+ 281              		.cfi_def_cfa_register 7
+ 427:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* Force capture by reading Accumulator */
+ 428:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* Must first do a software capture to be able to read the counter */
+ 429:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* It is up to the user code to make sure there isn't already captured data in the FIFO */
+ 430:.\Generated_Source\PSoC5/pwmAgitator_2.c ****           (void)CY_GET_REG8(pwmAgitator_2_COUNTERCAP_LSB_PTR_8BIT);
+ 282              		.loc 1 430 0
+ 283 0004 044B     		ldr	r3, .L19
+ 284 0006 1B78     		ldrb	r3, [r3]
+ 431:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 432:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* Read the data from the FIFO */
+ 433:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (CY_GET_REG8(pwmAgitator_2_CAPTURE_LSB_PTR));
+ 285              		.loc 1 433 0
+ 286 0008 044B     		ldr	r3, .L19+4
+ 287 000a 1B78     		ldrb	r3, [r3]
+ 288 000c DBB2     		uxtb	r3, r3
+ 434:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 289              		.loc 1 434 0
+ 290 000e 1846     		mov	r0, r3
+ 291 0010 BD46     		mov	sp, r7
+ 292              		@ sp needed
+ 293 0012 5DF8047B 		ldr	r7, [sp], #4
+ 294 0016 7047     		bx	lr
+ 295              	.L20:
+ 296              		.align	2
+ 297              	.L19:
+ 298 0018 15640040 		.word	1073767445
+ 299 001c 55640040 		.word	1073767509
+ 300              		.cfi_endproc
+ 301              	.LFE5:
+ 302              		.size	pwmAgitator_2_ReadCounter, .-pwmAgitator_2_ReadCounter
+ 303              		.section	.text.pwmAgitator_2_ClearFIFO,"ax",%progbits
+ 304              		.align	2
+ 305              		.global	pwmAgitator_2_ClearFIFO
+ 306              		.thumb
+ 307              		.thumb_func
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 14
+
+
+ 308              		.type	pwmAgitator_2_ClearFIFO, %function
+ 309              	pwmAgitator_2_ClearFIFO:
+ 310              	.LFB6:
+ 435:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 436:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if (pwmAgitator_2_UseStatus)
+ 437:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 438:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 439:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /*******************************************************************************
+ 440:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Function Name: pwmAgitator_2_ClearFIFO
+ 441:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         ********************************************************************************
+ 442:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 443:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Summary:
+ 444:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  This function clears all capture data from the capture FIFO
+ 445:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 446:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Parameters:
+ 447:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  None
+ 448:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 449:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         * Return:
+ 450:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *  None
+ 451:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *
+ 452:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         *******************************************************************************/
+ 453:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         void pwmAgitator_2_ClearFIFO(void) 
+ 454:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         {
+ 311              		.loc 1 454 0
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 0
+ 314              		@ frame_needed = 1, uses_anonymous_args = 0
+ 315 0000 80B5     		push	{r7, lr}
+ 316              		.cfi_def_cfa_offset 8
+ 317              		.cfi_offset 7, -8
+ 318              		.cfi_offset 14, -4
+ 319 0002 00AF     		add	r7, sp, #0
+ 320              		.cfi_def_cfa_register 7
+ 455:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             while(0u != (pwmAgitator_2_ReadStatusRegister() & pwmAgitator_2_STATUS_FIFONEMPTY))
+ 321              		.loc 1 455 0
+ 322 0004 01E0     		b	.L22
+ 323              	.L23:
+ 456:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             {
+ 457:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 (void)pwmAgitator_2_ReadCapture();
+ 324              		.loc 1 457 0
+ 325 0006 FFF7FEFF 		bl	pwmAgitator_2_ReadCapture
+ 326              	.L22:
+ 455:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             while(0u != (pwmAgitator_2_ReadStatusRegister() & pwmAgitator_2_STATUS_FIFONEMPTY))
+ 327              		.loc 1 455 0 discriminator 1
+ 328 000a FFF7FEFF 		bl	pwmAgitator_2_ReadStatusRegister
+ 329 000e 0346     		mov	r3, r0
+ 330 0010 03F01003 		and	r3, r3, #16
+ 331 0014 002B     		cmp	r3, #0
+ 332 0016 F6D1     		bne	.L23
+ 458:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             }
+ 459:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         }
+ 333              		.loc 1 459 0
+ 334 0018 80BD     		pop	{r7, pc}
+ 335              		.cfi_endproc
+ 336              	.LFE6:
+ 337              		.size	pwmAgitator_2_ClearFIFO, .-pwmAgitator_2_ClearFIFO
+ 338 001a 00BF     		.section	.text.pwmAgitator_2_WritePeriod,"ax",%progbits
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 15
+
+
+ 339              		.align	2
+ 340              		.global	pwmAgitator_2_WritePeriod
+ 341              		.thumb
+ 342              		.thumb_func
+ 343              		.type	pwmAgitator_2_WritePeriod, %function
+ 344              	pwmAgitator_2_WritePeriod:
+ 345              	.LFB7:
+ 460:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 461:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* pwmAgitator_2_UseStatus */
+ 462:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 463:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* !pwmAgitator_2_UsingFixedFunction */
+ 464:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 465:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 466:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+ 467:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Function Name: pwmAgitator_2_WritePeriod
+ 468:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************
+ 469:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 470:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Summary:
+ 471:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  This function is used to change the period of the counter.  The new period
+ 472:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  will be loaded the next time terminal count is detected.
+ 473:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 474:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Parameters:
+ 475:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  period:  Period value. May be between 1 and (2^Resolution)-1.  A value of 0
+ 476:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *           will result in the counter remaining at zero.
+ 477:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 478:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Return:
+ 479:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+ 480:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 481:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************/
+ 482:.\Generated_Source\PSoC5/pwmAgitator_2.c **** void pwmAgitator_2_WritePeriod(uint8 period) 
+ 483:.\Generated_Source\PSoC5/pwmAgitator_2.c **** {
+ 346              		.loc 1 483 0
+ 347              		.cfi_startproc
+ 348              		@ args = 0, pretend = 0, frame = 8
+ 349              		@ frame_needed = 1, uses_anonymous_args = 0
+ 350              		@ link register save eliminated.
+ 351 0000 80B4     		push	{r7}
+ 352              		.cfi_def_cfa_offset 4
+ 353              		.cfi_offset 7, -4
+ 354 0002 83B0     		sub	sp, sp, #12
+ 355              		.cfi_def_cfa_offset 16
+ 356 0004 00AF     		add	r7, sp, #0
+ 357              		.cfi_def_cfa_register 7
+ 358 0006 0346     		mov	r3, r0
+ 359 0008 FB71     		strb	r3, [r7, #7]
+ 484:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if(pwmAgitator_2_UsingFixedFunction)
+ 485:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         CY_SET_REG16(pwmAgitator_2_PERIOD_LSB_PTR, (uint16)period);
+ 486:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #else
+ 487:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         CY_SET_REG8(pwmAgitator_2_PERIOD_LSB_PTR, period);
+ 360              		.loc 1 487 0
+ 361 000a 044B     		ldr	r3, .L25
+ 362 000c FA79     		ldrb	r2, [r7, #7]
+ 363 000e 1A70     		strb	r2, [r3]
+ 488:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 489:.\Generated_Source\PSoC5/pwmAgitator_2.c **** }
+ 364              		.loc 1 489 0
+ 365 0010 0C37     		adds	r7, r7, #12
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 16
+
+
+ 366 0012 BD46     		mov	sp, r7
+ 367              		@ sp needed
+ 368 0014 5DF8047B 		ldr	r7, [sp], #4
+ 369 0018 7047     		bx	lr
+ 370              	.L26:
+ 371 001a 00BF     		.align	2
+ 372              	.L25:
+ 373 001c 45640040 		.word	1073767493
+ 374              		.cfi_endproc
+ 375              	.LFE7:
+ 376              		.size	pwmAgitator_2_WritePeriod, .-pwmAgitator_2_WritePeriod
+ 377              		.section	.text.pwmAgitator_2_WriteCompare,"ax",%progbits
+ 378              		.align	2
+ 379              		.global	pwmAgitator_2_WriteCompare
+ 380              		.thumb
+ 381              		.thumb_func
+ 382              		.type	pwmAgitator_2_WriteCompare, %function
+ 383              	pwmAgitator_2_WriteCompare:
+ 384              	.LFB8:
+ 490:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 491:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_UseOneCompareMode)
+ 492:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 493:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 494:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 495:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_WriteCompare
+ 496:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 497:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 498:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 499:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This funtion is used to change the compare1 value when the PWM is in Dither
+ 500:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  mode. The compare output will reflect the new value on the next UDB clock.
+ 501:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  The compare output will be driven high when the present counter value is
+ 502:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  compared to the compare value based on the compare mode defined in
+ 503:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Dither Mode.
+ 504:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 505:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 506:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  compare:  New compare value.
+ 507:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 508:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 509:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 510:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 511:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Side Effects:
+ 512:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function is only available if the PWM mode parameter is set to
+ 513:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Dither Mode, Center Aligned Mode or One Output Mode
+ 514:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 515:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 516:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_WriteCompare(uint8 compare) \
+ 517:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                        
+ 518:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 385              		.loc 1 518 0
+ 386              		.cfi_startproc
+ 387              		@ args = 0, pretend = 0, frame = 8
+ 388              		@ frame_needed = 1, uses_anonymous_args = 0
+ 389              		@ link register save eliminated.
+ 390 0000 80B4     		push	{r7}
+ 391              		.cfi_def_cfa_offset 4
+ 392              		.cfi_offset 7, -4
+ 393 0002 83B0     		sub	sp, sp, #12
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 17
+
+
+ 394              		.cfi_def_cfa_offset 16
+ 395 0004 00AF     		add	r7, sp, #0
+ 396              		.cfi_def_cfa_register 7
+ 397 0006 0346     		mov	r3, r0
+ 398 0008 FB71     		strb	r3, [r7, #7]
+ 519:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(pwmAgitator_2_UsingFixedFunction)
+ 520:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG16(pwmAgitator_2_COMPARE1_LSB_PTR, (uint16)compare);
+ 521:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 522:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG8(pwmAgitator_2_COMPARE1_LSB_PTR, compare);
+ 399              		.loc 1 522 0
+ 400 000a 044B     		ldr	r3, .L28
+ 401 000c FA79     		ldrb	r2, [r7, #7]
+ 402 000e 1A70     		strb	r2, [r3]
+ 523:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 524:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 525:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if (pwmAgitator_2_PWMMode == pwmAgitator_2__B_PWM__DITHER)
+ 526:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #if(pwmAgitator_2_UsingFixedFunction)
+ 527:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 CY_SET_REG16(pwmAgitator_2_COMPARE2_LSB_PTR, (uint16)(compare + 1u));
+ 528:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #else
+ 529:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 CY_SET_REG8(pwmAgitator_2_COMPARE2_LSB_PTR, (compare + 1u));
+ 530:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 531:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_PWMMode == pwmAgitator_2__B_PWM__DITHER) */
+ 532:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 403              		.loc 1 532 0
+ 404 0010 0C37     		adds	r7, r7, #12
+ 405 0012 BD46     		mov	sp, r7
+ 406              		@ sp needed
+ 407 0014 5DF8047B 		ldr	r7, [sp], #4
+ 408 0018 7047     		bx	lr
+ 409              	.L29:
+ 410 001a 00BF     		.align	2
+ 411              	.L28:
+ 412 001c 25640040 		.word	1073767461
+ 413              		.cfi_endproc
+ 414              	.LFE8:
+ 415              		.size	pwmAgitator_2_WriteCompare, .-pwmAgitator_2_WriteCompare
+ 416              		.section	.text.pwmAgitator_2_SetInterruptMode,"ax",%progbits
+ 417              		.align	2
+ 418              		.global	pwmAgitator_2_SetInterruptMode
+ 419              		.thumb
+ 420              		.thumb_func
+ 421              		.type	pwmAgitator_2_SetInterruptMode, %function
+ 422              	pwmAgitator_2_SetInterruptMode:
+ 423              	.LFB9:
+ 533:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 534:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 535:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #else
+ 536:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 537:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 538:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 539:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_WriteCompare1
+ 540:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 541:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 542:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 543:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This funtion is used to change the compare1 value.  The compare output will
+ 544:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  reflect the new value on the next UDB clock.  The compare output will be
+ 545:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  driven high when the present counter value is less than or less than or
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 18
+
+
+ 546:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  equal to the compare register, depending on the mode.
+ 547:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 548:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 549:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  compare:  New compare value.
+ 550:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 551:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 552:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 553:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 554:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 555:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_WriteCompare1(uint8 compare) \
+ 556:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                         
+ 557:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 558:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(pwmAgitator_2_UsingFixedFunction)
+ 559:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG16(pwmAgitator_2_COMPARE1_LSB_PTR, (uint16)compare);
+ 560:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 561:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG8(pwmAgitator_2_COMPARE1_LSB_PTR, compare);
+ 562:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 563:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 564:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 565:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 566:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 567:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_WriteCompare2
+ 568:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 569:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 570:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 571:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This funtion is used to change the compare value, for compare1 output.
+ 572:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  The compare output will reflect the new value on the next UDB clock.
+ 573:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  The compare output will be driven high when the present counter value is
+ 574:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  less than or less than or equal to the compare register, depending on the
+ 575:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  mode.
+ 576:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 577:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 578:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  compare:  New compare value.
+ 579:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 580:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 581:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 582:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 583:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 584:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_WriteCompare2(uint8 compare) \
+ 585:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                         
+ 586:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 587:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(pwmAgitator_2_UsingFixedFunction)
+ 588:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG16(pwmAgitator_2_COMPARE2_LSB_PTR, compare);
+ 589:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 590:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG8(pwmAgitator_2_COMPARE2_LSB_PTR, compare);
+ 591:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 592:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 593:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* UseOneCompareMode */
+ 594:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 595:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_DeadBandUsed)
+ 596:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 597:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 598:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 599:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_WriteDeadTime
+ 600:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 601:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 602:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 19
+
+
+ 603:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function writes the dead-band counts to the corresponding register
+ 604:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 605:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 606:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  deadtime:  Number of counts for dead time
+ 607:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 608:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 609:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 610:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 611:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 612:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_WriteDeadTime(uint8 deadtime) 
+ 613:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 614:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* If using the Dead Band 1-255 mode then just write the register */
+ 615:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(!pwmAgitator_2_DeadBand2_4)
+ 616:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             CY_SET_REG8(pwmAgitator_2_DEADBAND_COUNT_PTR, deadtime);
+ 617:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 618:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Otherwise the data has to be masked and offset */
+ 619:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Clear existing data */
+ 620:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             pwmAgitator_2_DEADBAND_COUNT &= ((uint8)(~pwmAgitator_2_DEADBAND_COUNT_MASK));
+ 621:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 622:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Set new dead time */
+ 623:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #if(pwmAgitator_2_DEADBAND_COUNT_SHIFT)
+ 624:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_DEADBAND_COUNT |= ((uint8)((uint8)deadtime << pwmAgitator_2_DEADBAND_
+ 625:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                                     pwmAgitator_2_DEADBAND_COUNT_MASK;
+ 626:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #else
+ 627:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 pwmAgitator_2_DEADBAND_COUNT |= deadtime & pwmAgitator_2_DEADBAND_COUNT_MASK;
+ 628:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #endif /* (pwmAgitator_2_DEADBAND_COUNT_SHIFT) */
+ 629:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 630:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (!pwmAgitator_2_DeadBand2_4) */
+ 631:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 632:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 633:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 634:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 635:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadDeadTime
+ 636:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 637:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 638:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 639:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function reads the dead-band counts from the corresponding register
+ 640:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 641:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 642:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 643:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 644:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 645:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Dead Band Counts
+ 646:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 647:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 648:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadDeadTime(void) 
+ 649:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 650:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         /* If using the Dead Band 1-255 mode then just read the register */
+ 651:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(!pwmAgitator_2_DeadBand2_4)
+ 652:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             return (CY_GET_REG8(pwmAgitator_2_DEADBAND_COUNT_PTR));
+ 653:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 654:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 655:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             /* Otherwise the data has to be masked and offset */
+ 656:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #if(pwmAgitator_2_DEADBAND_COUNT_SHIFT)
+ 657:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 return ((uint8)(((uint8)(pwmAgitator_2_DEADBAND_COUNT & pwmAgitator_2_DEADBAND_COUN
+ 658:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                                                                            pwmAgitator_2_DEADBAND_C
+ 659:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #else
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 20
+
+
+ 660:.\Generated_Source\PSoC5/pwmAgitator_2.c ****                 return (pwmAgitator_2_DEADBAND_COUNT & pwmAgitator_2_DEADBAND_COUNT_MASK);
+ 661:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             #endif /* (pwmAgitator_2_DEADBAND_COUNT_SHIFT) */
+ 662:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (!pwmAgitator_2_DeadBand2_4) */
+ 663:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 664:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* DeadBandUsed */
+ 665:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 666:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_UseStatus || pwmAgitator_2_UsingFixedFunction)
+ 667:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 668:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 669:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 670:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_SetInterruptMode
+ 671:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 672:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 673:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 674:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function configures the interrupts mask control of theinterrupt
+ 675:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  source status register.
+ 676:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 677:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 678:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8 interruptMode: Bit field containing the interrupt sources enabled
+ 679:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 680:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 681:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 682:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 683:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 684:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_SetInterruptMode(uint8 interruptMode) 
+ 685:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 424              		.loc 1 685 0
+ 425              		.cfi_startproc
+ 426              		@ args = 0, pretend = 0, frame = 8
+ 427              		@ frame_needed = 1, uses_anonymous_args = 0
+ 428              		@ link register save eliminated.
+ 429 0000 80B4     		push	{r7}
+ 430              		.cfi_def_cfa_offset 4
+ 431              		.cfi_offset 7, -4
+ 432 0002 83B0     		sub	sp, sp, #12
+ 433              		.cfi_def_cfa_offset 16
+ 434 0004 00AF     		add	r7, sp, #0
+ 435              		.cfi_def_cfa_register 7
+ 436 0006 0346     		mov	r3, r0
+ 437 0008 FB71     		strb	r3, [r7, #7]
+ 686:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         CY_SET_REG8(pwmAgitator_2_STATUS_MASK_PTR, interruptMode);
+ 438              		.loc 1 686 0
+ 439 000a 044B     		ldr	r3, .L31
+ 440 000c FA79     		ldrb	r2, [r7, #7]
+ 441 000e 1A70     		strb	r2, [r3]
+ 687:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 442              		.loc 1 687 0
+ 443 0010 0C37     		adds	r7, r7, #12
+ 444 0012 BD46     		mov	sp, r7
+ 445              		@ sp needed
+ 446 0014 5DF8047B 		ldr	r7, [sp], #4
+ 447 0018 7047     		bx	lr
+ 448              	.L32:
+ 449 001a 00BF     		.align	2
+ 450              	.L31:
+ 451 001c 85640040 		.word	1073767557
+ 452              		.cfi_endproc
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 21
+
+
+ 453              	.LFE9:
+ 454              		.size	pwmAgitator_2_SetInterruptMode, .-pwmAgitator_2_SetInterruptMode
+ 455              		.section	.text.pwmAgitator_2_ReadStatusRegister,"ax",%progbits
+ 456              		.align	2
+ 457              		.global	pwmAgitator_2_ReadStatusRegister
+ 458              		.thumb
+ 459              		.thumb_func
+ 460              		.type	pwmAgitator_2_ReadStatusRegister, %function
+ 461              	pwmAgitator_2_ReadStatusRegister:
+ 462              	.LFB10:
+ 688:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 689:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 690:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 691:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadStatusRegister
+ 692:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 693:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 694:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 695:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  This function returns the current state of the status register.
+ 696:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 697:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 698:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 699:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 700:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 701:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8 : Current status register value. The status register bits are:
+ 702:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [7:6] : Unused(0)
+ 703:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [5]   : Kill event output
+ 704:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [4]   : FIFO not empty
+ 705:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [3]   : FIFO full
+ 706:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [2]   : Terminal count
+ 707:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [1]   : Compare output 2
+ 708:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [0]   : Compare output 1
+ 709:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 710:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 711:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadStatusRegister(void) 
+ 712:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 463              		.loc 1 712 0
+ 464              		.cfi_startproc
+ 465              		@ args = 0, pretend = 0, frame = 0
+ 466              		@ frame_needed = 1, uses_anonymous_args = 0
+ 467              		@ link register save eliminated.
+ 468 0000 80B4     		push	{r7}
+ 469              		.cfi_def_cfa_offset 4
+ 470              		.cfi_offset 7, -4
+ 471 0002 00AF     		add	r7, sp, #0
+ 472              		.cfi_def_cfa_register 7
+ 713:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (CY_GET_REG8(pwmAgitator_2_STATUS_PTR));
+ 473              		.loc 1 713 0
+ 474 0004 034B     		ldr	r3, .L35
+ 475 0006 1B78     		ldrb	r3, [r3]
+ 476 0008 DBB2     		uxtb	r3, r3
+ 714:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 477              		.loc 1 714 0
+ 478 000a 1846     		mov	r0, r3
+ 479 000c BD46     		mov	sp, r7
+ 480              		@ sp needed
+ 481 000e 5DF8047B 		ldr	r7, [sp], #4
+ 482 0012 7047     		bx	lr
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 22
+
+
+ 483              	.L36:
+ 484              		.align	2
+ 485              	.L35:
+ 486 0014 65640040 		.word	1073767525
+ 487              		.cfi_endproc
+ 488              	.LFE10:
+ 489              		.size	pwmAgitator_2_ReadStatusRegister, .-pwmAgitator_2_ReadStatusRegister
+ 490              		.section	.text.pwmAgitator_2_ReadControlRegister,"ax",%progbits
+ 491              		.align	2
+ 492              		.global	pwmAgitator_2_ReadControlRegister
+ 493              		.thumb
+ 494              		.thumb_func
+ 495              		.type	pwmAgitator_2_ReadControlRegister, %function
+ 496              	pwmAgitator_2_ReadControlRegister:
+ 497              	.LFB11:
+ 715:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 716:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* (pwmAgitator_2_UseStatus || pwmAgitator_2_UsingFixedFunction) */
+ 717:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 718:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 719:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_UseControl)
+ 720:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 721:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 722:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 723:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadControlRegister
+ 724:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 725:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 726:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 727:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Returns the current state of the control register. This API is available
+ 728:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  only if the control register is not removed.
+ 729:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 730:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 731:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 732:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 733:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 734:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8 : Current control register value
+ 735:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 736:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 737:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadControlRegister(void) 
+ 738:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 498              		.loc 1 738 0
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 8
+ 501              		@ frame_needed = 1, uses_anonymous_args = 0
+ 502              		@ link register save eliminated.
+ 503 0000 80B4     		push	{r7}
+ 504              		.cfi_def_cfa_offset 4
+ 505              		.cfi_offset 7, -4
+ 506 0002 83B0     		sub	sp, sp, #12
+ 507              		.cfi_def_cfa_offset 16
+ 508 0004 00AF     		add	r7, sp, #0
+ 509              		.cfi_def_cfa_register 7
+ 739:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         uint8 result;
+ 740:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 741:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         result = CY_GET_REG8(pwmAgitator_2_CONTROL_PTR);
+ 510              		.loc 1 741 0
+ 511 0006 054B     		ldr	r3, .L39
+ 512 0008 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 23
+
+
+ 513 000a FB71     		strb	r3, [r7, #7]
+ 742:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (result);
+ 514              		.loc 1 742 0
+ 515 000c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 743:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 516              		.loc 1 743 0
+ 517 000e 1846     		mov	r0, r3
+ 518 0010 0C37     		adds	r7, r7, #12
+ 519 0012 BD46     		mov	sp, r7
+ 520              		@ sp needed
+ 521 0014 5DF8047B 		ldr	r7, [sp], #4
+ 522 0018 7047     		bx	lr
+ 523              	.L40:
+ 524 001a 00BF     		.align	2
+ 525              	.L39:
+ 526 001c 75640040 		.word	1073767541
+ 527              		.cfi_endproc
+ 528              	.LFE11:
+ 529              		.size	pwmAgitator_2_ReadControlRegister, .-pwmAgitator_2_ReadControlRegister
+ 530              		.section	.text.pwmAgitator_2_WriteControlRegister,"ax",%progbits
+ 531              		.align	2
+ 532              		.global	pwmAgitator_2_WriteControlRegister
+ 533              		.thumb
+ 534              		.thumb_func
+ 535              		.type	pwmAgitator_2_WriteControlRegister, %function
+ 536              	pwmAgitator_2_WriteControlRegister:
+ 537              	.LFB12:
+ 744:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 745:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 746:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 747:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_WriteControlRegister
+ 748:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 749:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 750:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 751:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Sets the bit field of the control register. This API is available only if
+ 752:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  the control register is not removed.
+ 753:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 754:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 755:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8 control: Control register bit field, The status register bits are:
+ 756:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [7]   : PWM Enable
+ 757:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [6]   : Reset
+ 758:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [5:3] : Compare Mode2
+ 759:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  [2:0] : Compare Mode2
+ 760:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 761:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 762:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 763:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 764:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 765:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     void pwmAgitator_2_WriteControlRegister(uint8 control) 
+ 766:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 538              		.loc 1 766 0
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 8
+ 541              		@ frame_needed = 1, uses_anonymous_args = 0
+ 542              		@ link register save eliminated.
+ 543 0000 80B4     		push	{r7}
+ 544              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 24
+
+
+ 545              		.cfi_offset 7, -4
+ 546 0002 83B0     		sub	sp, sp, #12
+ 547              		.cfi_def_cfa_offset 16
+ 548 0004 00AF     		add	r7, sp, #0
+ 549              		.cfi_def_cfa_register 7
+ 550 0006 0346     		mov	r3, r0
+ 551 0008 FB71     		strb	r3, [r7, #7]
+ 767:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         CY_SET_REG8(pwmAgitator_2_CONTROL_PTR, control);
+ 552              		.loc 1 767 0
+ 553 000a 044B     		ldr	r3, .L42
+ 554 000c FA79     		ldrb	r2, [r7, #7]
+ 555 000e 1A70     		strb	r2, [r3]
+ 768:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 556              		.loc 1 768 0
+ 557 0010 0C37     		adds	r7, r7, #12
+ 558 0012 BD46     		mov	sp, r7
+ 559              		@ sp needed
+ 560 0014 5DF8047B 		ldr	r7, [sp], #4
+ 561 0018 7047     		bx	lr
+ 562              	.L43:
+ 563 001a 00BF     		.align	2
+ 564              	.L42:
+ 565 001c 75640040 		.word	1073767541
+ 566              		.cfi_endproc
+ 567              	.LFE12:
+ 568              		.size	pwmAgitator_2_WriteControlRegister, .-pwmAgitator_2_WriteControlRegister
+ 569              		.section	.text.pwmAgitator_2_ReadCapture,"ax",%progbits
+ 570              		.align	2
+ 571              		.global	pwmAgitator_2_ReadCapture
+ 572              		.thumb
+ 573              		.thumb_func
+ 574              		.type	pwmAgitator_2_ReadCapture, %function
+ 575              	pwmAgitator_2_ReadCapture:
+ 576              	.LFB13:
+ 769:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 770:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* (pwmAgitator_2_UseControl) */
+ 771:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 772:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 773:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (!pwmAgitator_2_UsingFixedFunction)
+ 774:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 775:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 776:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 777:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadCapture
+ 778:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 779:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 780:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 781:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Reads the capture value from the capture FIFO.
+ 782:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 783:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 784:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 785:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 786:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 787:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8/uint16: The current capture value
+ 788:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 789:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 790:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadCapture(void) 
+ 791:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 25
+
+
+ 577              		.loc 1 791 0
+ 578              		.cfi_startproc
+ 579              		@ args = 0, pretend = 0, frame = 0
+ 580              		@ frame_needed = 1, uses_anonymous_args = 0
+ 581              		@ link register save eliminated.
+ 582 0000 80B4     		push	{r7}
+ 583              		.cfi_def_cfa_offset 4
+ 584              		.cfi_offset 7, -4
+ 585 0002 00AF     		add	r7, sp, #0
+ 586              		.cfi_def_cfa_register 7
+ 792:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (CY_GET_REG8(pwmAgitator_2_CAPTURE_LSB_PTR));
+ 587              		.loc 1 792 0
+ 588 0004 034B     		ldr	r3, .L46
+ 589 0006 1B78     		ldrb	r3, [r3]
+ 590 0008 DBB2     		uxtb	r3, r3
+ 793:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 591              		.loc 1 793 0
+ 592 000a 1846     		mov	r0, r3
+ 593 000c BD46     		mov	sp, r7
+ 594              		@ sp needed
+ 595 000e 5DF8047B 		ldr	r7, [sp], #4
+ 596 0012 7047     		bx	lr
+ 597              	.L47:
+ 598              		.align	2
+ 599              	.L46:
+ 600 0014 55640040 		.word	1073767509
+ 601              		.cfi_endproc
+ 602              	.LFE13:
+ 603              		.size	pwmAgitator_2_ReadCapture, .-pwmAgitator_2_ReadCapture
+ 604              		.section	.text.pwmAgitator_2_ReadCompare,"ax",%progbits
+ 605              		.align	2
+ 606              		.global	pwmAgitator_2_ReadCompare
+ 607              		.thumb
+ 608              		.thumb_func
+ 609              		.type	pwmAgitator_2_ReadCompare, %function
+ 610              	pwmAgitator_2_ReadCompare:
+ 611              	.LFB14:
+ 794:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 795:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* (!pwmAgitator_2_UsingFixedFunction) */
+ 796:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 797:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 798:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #if (pwmAgitator_2_UseOneCompareMode)
+ 799:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 800:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 801:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 802:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadCompare
+ 803:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 804:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 805:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 806:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Reads the compare value for the compare output when the PWM Mode parameter is
+ 807:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  set to Dither mode, Center Aligned mode, or One Output mode.
+ 808:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 809:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 810:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 811:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 812:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 813:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8/uint16: Current compare value
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 26
+
+
+ 814:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 815:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 816:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadCompare(void) 
+ 817:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 612              		.loc 1 817 0
+ 613              		.cfi_startproc
+ 614              		@ args = 0, pretend = 0, frame = 0
+ 615              		@ frame_needed = 1, uses_anonymous_args = 0
+ 616              		@ link register save eliminated.
+ 617 0000 80B4     		push	{r7}
+ 618              		.cfi_def_cfa_offset 4
+ 619              		.cfi_offset 7, -4
+ 620 0002 00AF     		add	r7, sp, #0
+ 621              		.cfi_def_cfa_register 7
+ 818:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #if(pwmAgitator_2_UsingFixedFunction)
+ 819:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             return ((uint8)CY_GET_REG16(pwmAgitator_2_COMPARE1_LSB_PTR));
+ 820:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #else
+ 821:.\Generated_Source\PSoC5/pwmAgitator_2.c ****             return (CY_GET_REG8(pwmAgitator_2_COMPARE1_LSB_PTR));
+ 622              		.loc 1 821 0
+ 623 0004 034B     		ldr	r3, .L50
+ 624 0006 1B78     		ldrb	r3, [r3]
+ 625 0008 DBB2     		uxtb	r3, r3
+ 822:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 823:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 626              		.loc 1 823 0
+ 627 000a 1846     		mov	r0, r3
+ 628 000c BD46     		mov	sp, r7
+ 629              		@ sp needed
+ 630 000e 5DF8047B 		ldr	r7, [sp], #4
+ 631 0012 7047     		bx	lr
+ 632              	.L51:
+ 633              		.align	2
+ 634              	.L50:
+ 635 0014 25640040 		.word	1073767461
+ 636              		.cfi_endproc
+ 637              	.LFE14:
+ 638              		.size	pwmAgitator_2_ReadCompare, .-pwmAgitator_2_ReadCompare
+ 639              		.section	.text.pwmAgitator_2_ReadPeriod,"ax",%progbits
+ 640              		.align	2
+ 641              		.global	pwmAgitator_2_ReadPeriod
+ 642              		.thumb
+ 643              		.thumb_func
+ 644              		.type	pwmAgitator_2_ReadPeriod, %function
+ 645              	pwmAgitator_2_ReadPeriod:
+ 646              	.LFB15:
+ 824:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 825:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #else
+ 826:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 827:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 828:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 829:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadCompare1
+ 830:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 831:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 832:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 833:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Reads the compare value for the compare1 output.
+ 834:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 835:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 27
+
+
+ 836:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 837:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 838:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 839:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8/uint16: Current compare value.
+ 840:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 841:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 842:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadCompare1(void) 
+ 843:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 844:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (CY_GET_REG8(pwmAgitator_2_COMPARE1_LSB_PTR));
+ 845:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 846:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 847:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 848:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     /*******************************************************************************
+ 849:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Function Name: pwmAgitator_2_ReadCompare2
+ 850:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     ********************************************************************************
+ 851:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 852:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Summary:
+ 853:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  Reads the compare value for the compare2 output.
+ 854:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 855:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Parameters:
+ 856:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  None
+ 857:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 858:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     * Return:
+ 859:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *  uint8/uint16: Current compare value.
+ 860:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *
+ 861:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     *******************************************************************************/
+ 862:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     uint8 pwmAgitator_2_ReadCompare2(void) 
+ 863:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     {
+ 864:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (CY_GET_REG8(pwmAgitator_2_COMPARE2_LSB_PTR));
+ 865:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     }
+ 866:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 867:.\Generated_Source\PSoC5/pwmAgitator_2.c **** #endif /* (pwmAgitator_2_UseOneCompareMode) */
+ 868:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 869:.\Generated_Source\PSoC5/pwmAgitator_2.c **** 
+ 870:.\Generated_Source\PSoC5/pwmAgitator_2.c **** /*******************************************************************************
+ 871:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Function Name: pwmAgitator_2_ReadPeriod
+ 872:.\Generated_Source\PSoC5/pwmAgitator_2.c **** ********************************************************************************
+ 873:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 874:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Summary:
+ 875:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  Reads the period value used by the PWM hardware.
+ 876:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 877:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Parameters:
+ 878:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  None
+ 879:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 880:.\Generated_Source\PSoC5/pwmAgitator_2.c **** * Return:
+ 881:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *  uint8/16: Period value
+ 882:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *
+ 883:.\Generated_Source\PSoC5/pwmAgitator_2.c **** *******************************************************************************/
+ 884:.\Generated_Source\PSoC5/pwmAgitator_2.c **** uint8 pwmAgitator_2_ReadPeriod(void) 
+ 885:.\Generated_Source\PSoC5/pwmAgitator_2.c **** {
+ 647              		.loc 1 885 0
+ 648              		.cfi_startproc
+ 649              		@ args = 0, pretend = 0, frame = 0
+ 650              		@ frame_needed = 1, uses_anonymous_args = 0
+ 651              		@ link register save eliminated.
+ 652 0000 80B4     		push	{r7}
+ 653              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 28
+
+
+ 654              		.cfi_offset 7, -4
+ 655 0002 00AF     		add	r7, sp, #0
+ 656              		.cfi_def_cfa_register 7
+ 886:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #if(pwmAgitator_2_UsingFixedFunction)
+ 887:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return ((uint8)CY_GET_REG16(pwmAgitator_2_PERIOD_LSB_PTR));
+ 888:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #else
+ 889:.\Generated_Source\PSoC5/pwmAgitator_2.c ****         return (CY_GET_REG8(pwmAgitator_2_PERIOD_LSB_PTR));
+ 657              		.loc 1 889 0
+ 658 0004 034B     		ldr	r3, .L54
+ 659 0006 1B78     		ldrb	r3, [r3]
+ 660 0008 DBB2     		uxtb	r3, r3
+ 890:.\Generated_Source\PSoC5/pwmAgitator_2.c ****     #endif /* (pwmAgitator_2_UsingFixedFunction) */
+ 891:.\Generated_Source\PSoC5/pwmAgitator_2.c **** }
+ 661              		.loc 1 891 0
+ 662 000a 1846     		mov	r0, r3
+ 663 000c BD46     		mov	sp, r7
+ 664              		@ sp needed
+ 665 000e 5DF8047B 		ldr	r7, [sp], #4
+ 666 0012 7047     		bx	lr
+ 667              	.L55:
+ 668              		.align	2
+ 669              	.L54:
+ 670 0014 45640040 		.word	1073767493
+ 671              		.cfi_endproc
+ 672              	.LFE15:
+ 673              		.size	pwmAgitator_2_ReadPeriod, .-pwmAgitator_2_ReadPeriod
+ 674              		.text
+ 675              	.Letext0:
+ 676              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 677              		.section	.debug_info,"",%progbits
+ 678              	.Ldebug_info0:
+ 679 0000 7E020000 		.4byte	0x27e
+ 680 0004 0400     		.2byte	0x4
+ 681 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 682 000a 04       		.byte	0x4
+ 683 000b 01       		.uleb128 0x1
+ 684 000c 75010000 		.4byte	.LASF38
+ 685 0010 01       		.byte	0x1
+ 686 0011 47010000 		.4byte	.LASF39
+ 687 0015 30030000 		.4byte	.LASF40
+ 688 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 689 001d 00000000 		.4byte	0
+ 690 0021 00000000 		.4byte	.Ldebug_line0
+ 691 0025 02       		.uleb128 0x2
+ 692 0026 01       		.byte	0x1
+ 693 0027 06       		.byte	0x6
+ 694 0028 83030000 		.4byte	.LASF0
+ 695 002c 02       		.uleb128 0x2
+ 696 002d 01       		.byte	0x1
+ 697 002e 08       		.byte	0x8
+ 698 002f 3E020000 		.4byte	.LASF1
+ 699 0033 02       		.uleb128 0x2
+ 700 0034 02       		.byte	0x2
+ 701 0035 05       		.byte	0x5
+ 702 0036 18030000 		.4byte	.LASF2
+ 703 003a 02       		.uleb128 0x2
+ 704 003b 02       		.byte	0x2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 29
+
+
+ 705 003c 07       		.byte	0x7
+ 706 003d 91000000 		.4byte	.LASF3
+ 707 0041 02       		.uleb128 0x2
+ 708 0042 04       		.byte	0x4
+ 709 0043 05       		.byte	0x5
+ 710 0044 27030000 		.4byte	.LASF4
+ 711 0048 02       		.uleb128 0x2
+ 712 0049 04       		.byte	0x4
+ 713 004a 07       		.byte	0x7
+ 714 004b F1010000 		.4byte	.LASF5
+ 715 004f 02       		.uleb128 0x2
+ 716 0050 08       		.byte	0x8
+ 717 0051 05       		.byte	0x5
+ 718 0052 FC020000 		.4byte	.LASF6
+ 719 0056 02       		.uleb128 0x2
+ 720 0057 08       		.byte	0x8
+ 721 0058 07       		.byte	0x7
+ 722 0059 68020000 		.4byte	.LASF7
+ 723 005d 03       		.uleb128 0x3
+ 724 005e 04       		.byte	0x4
+ 725 005f 05       		.byte	0x5
+ 726 0060 696E7400 		.ascii	"int\000"
+ 727 0064 02       		.uleb128 0x2
+ 728 0065 04       		.byte	0x4
+ 729 0066 07       		.byte	0x7
+ 730 0067 5B020000 		.4byte	.LASF8
+ 731 006b 04       		.uleb128 0x4
+ 732 006c 03020000 		.4byte	.LASF12
+ 733 0070 02       		.byte	0x2
+ 734 0071 A1       		.byte	0xa1
+ 735 0072 2C000000 		.4byte	0x2c
+ 736 0076 02       		.uleb128 0x2
+ 737 0077 04       		.byte	0x4
+ 738 0078 04       		.byte	0x4
+ 739 0079 F6000000 		.4byte	.LASF9
+ 740 007d 02       		.uleb128 0x2
+ 741 007e 08       		.byte	0x8
+ 742 007f 04       		.byte	0x4
+ 743 0080 54020000 		.4byte	.LASF10
+ 744 0084 02       		.uleb128 0x2
+ 745 0085 01       		.byte	0x1
+ 746 0086 08       		.byte	0x8
+ 747 0087 1B000000 		.4byte	.LASF11
+ 748 008b 05       		.uleb128 0x5
+ 749 008c 70010000 		.4byte	.LASF13
+ 750 0090 02       		.byte	0x2
+ 751 0091 4B01     		.2byte	0x14b
+ 752 0093 97000000 		.4byte	0x97
+ 753 0097 06       		.uleb128 0x6
+ 754 0098 6B000000 		.4byte	0x6b
+ 755 009c 02       		.uleb128 0x2
+ 756 009d 04       		.byte	0x4
+ 757 009e 07       		.byte	0x7
+ 758 009f DE020000 		.4byte	.LASF14
+ 759 00a3 07       		.uleb128 0x7
+ 760 00a4 FC000000 		.4byte	.LASF17
+ 761 00a8 01       		.byte	0x1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 30
+
+
+ 762 00a9 37       		.byte	0x37
+ 763 00aa 00000000 		.4byte	.LFB0
+ 764 00ae 20000000 		.4byte	.LFE0-.LFB0
+ 765 00b2 01       		.uleb128 0x1
+ 766 00b3 9C       		.byte	0x9c
+ 767 00b4 08       		.uleb128 0x8
+ 768 00b5 A4000000 		.4byte	.LASF20
+ 769 00b9 01       		.byte	0x1
+ 770 00ba 54       		.byte	0x54
+ 771 00bb 00000000 		.4byte	.LFB1
+ 772 00bf 78000000 		.4byte	.LFE1-.LFB1
+ 773 00c3 01       		.uleb128 0x1
+ 774 00c4 9C       		.byte	0x9c
+ 775 00c5 E6000000 		.4byte	0xe6
+ 776 00c9 09       		.uleb128 0x9
+ 777 00ca 22030000 		.4byte	.LASF15
+ 778 00ce 01       		.byte	0x1
+ 779 00cf 57       		.byte	0x57
+ 780 00d0 6B000000 		.4byte	0x6b
+ 781 00d4 02       		.uleb128 0x2
+ 782 00d5 91       		.byte	0x91
+ 783 00d6 77       		.sleb128 -9
+ 784 00d7 09       		.uleb128 0x9
+ 785 00d8 D9000000 		.4byte	.LASF16
+ 786 00dc 01       		.byte	0x1
+ 787 00dd 5D       		.byte	0x5d
+ 788 00de 6B000000 		.4byte	0x6b
+ 789 00e2 02       		.uleb128 0x2
+ 790 00e3 91       		.byte	0x91
+ 791 00e4 76       		.sleb128 -10
+ 792 00e5 00       		.byte	0
+ 793 00e6 0A       		.uleb128 0xa
+ 794 00e7 E7020000 		.4byte	.LASF18
+ 795 00eb 01       		.byte	0x1
+ 796 00ec C7       		.byte	0xc7
+ 797 00ed 00000000 		.4byte	.LFB2
+ 798 00f1 20000000 		.4byte	.LFE2-.LFB2
+ 799 00f5 01       		.uleb128 0x1
+ 800 00f6 9C       		.byte	0x9c
+ 801 00f7 0A       		.uleb128 0xa
+ 802 00f8 11020000 		.4byte	.LASF19
+ 803 00fc 01       		.byte	0x1
+ 804 00fd E9       		.byte	0xe9
+ 805 00fe 00000000 		.4byte	.LFB3
+ 806 0102 20000000 		.4byte	.LFE3-.LFB3
+ 807 0106 01       		.uleb128 0x1
+ 808 0107 9C       		.byte	0x9c
+ 809 0108 0B       		.uleb128 0xb
+ 810 0109 00000000 		.4byte	.LASF21
+ 811 010d 01       		.byte	0x1
+ 812 010e 9301     		.2byte	0x193
+ 813 0110 00000000 		.4byte	.LFB4
+ 814 0114 20000000 		.4byte	.LFE4-.LFB4
+ 815 0118 01       		.uleb128 0x1
+ 816 0119 9C       		.byte	0x9c
+ 817 011a 2E010000 		.4byte	0x12e
+ 818 011e 0C       		.uleb128 0xc
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 31
+
+
+ 819 011f 4C020000 		.4byte	.LASF24
+ 820 0123 01       		.byte	0x1
+ 821 0124 9301     		.2byte	0x193
+ 822 0126 6B000000 		.4byte	0x6b
+ 823 012a 02       		.uleb128 0x2
+ 824 012b 91       		.byte	0x91
+ 825 012c 77       		.sleb128 -9
+ 826 012d 00       		.byte	0
+ 827 012e 0D       		.uleb128 0xd
+ 828 012f 24020000 		.4byte	.LASF30
+ 829 0133 01       		.byte	0x1
+ 830 0134 A901     		.2byte	0x1a9
+ 831 0136 6B000000 		.4byte	0x6b
+ 832 013a 00000000 		.4byte	.LFB5
+ 833 013e 20000000 		.4byte	.LFE5-.LFB5
+ 834 0142 01       		.uleb128 0x1
+ 835 0143 9C       		.byte	0x9c
+ 836 0144 0E       		.uleb128 0xe
+ 837 0145 2F010000 		.4byte	.LASF22
+ 838 0149 01       		.byte	0x1
+ 839 014a C501     		.2byte	0x1c5
+ 840 014c 00000000 		.4byte	.LFB6
+ 841 0150 1A000000 		.4byte	.LFE6-.LFB6
+ 842 0154 01       		.uleb128 0x1
+ 843 0155 9C       		.byte	0x9c
+ 844 0156 0B       		.uleb128 0xb
+ 845 0157 7F020000 		.4byte	.LASF23
+ 846 015b 01       		.byte	0x1
+ 847 015c E201     		.2byte	0x1e2
+ 848 015e 00000000 		.4byte	.LFB7
+ 849 0162 20000000 		.4byte	.LFE7-.LFB7
+ 850 0166 01       		.uleb128 0x1
+ 851 0167 9C       		.byte	0x9c
+ 852 0168 7C010000 		.4byte	0x17c
+ 853 016c 0C       		.uleb128 0xc
+ 854 016d 69000000 		.4byte	.LASF25
+ 855 0171 01       		.byte	0x1
+ 856 0172 E201     		.2byte	0x1e2
+ 857 0174 6B000000 		.4byte	0x6b
+ 858 0178 02       		.uleb128 0x2
+ 859 0179 91       		.byte	0x91
+ 860 017a 77       		.sleb128 -9
+ 861 017b 00       		.byte	0
+ 862 017c 0B       		.uleb128 0xb
+ 863 017d A0020000 		.4byte	.LASF26
+ 864 0181 01       		.byte	0x1
+ 865 0182 0402     		.2byte	0x204
+ 866 0184 00000000 		.4byte	.LFB8
+ 867 0188 20000000 		.4byte	.LFE8-.LFB8
+ 868 018c 01       		.uleb128 0x1
+ 869 018d 9C       		.byte	0x9c
+ 870 018e A2010000 		.4byte	0x1a2
+ 871 0192 0C       		.uleb128 0xc
+ 872 0193 8F030000 		.4byte	.LASF27
+ 873 0197 01       		.byte	0x1
+ 874 0198 0402     		.2byte	0x204
+ 875 019a 6B000000 		.4byte	0x6b
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 32
+
+
+ 876 019e 02       		.uleb128 0x2
+ 877 019f 91       		.byte	0x91
+ 878 01a0 77       		.sleb128 -9
+ 879 01a1 00       		.byte	0
+ 880 01a2 0B       		.uleb128 0xb
+ 881 01a3 10010000 		.4byte	.LASF28
+ 882 01a7 01       		.byte	0x1
+ 883 01a8 AC02     		.2byte	0x2ac
+ 884 01aa 00000000 		.4byte	.LFB9
+ 885 01ae 20000000 		.4byte	.LFE9-.LFB9
+ 886 01b2 01       		.uleb128 0x1
+ 887 01b3 9C       		.byte	0x9c
+ 888 01b4 C8010000 		.4byte	0x1c8
+ 889 01b8 0C       		.uleb128 0xc
+ 890 01b9 0A030000 		.4byte	.LASF29
+ 891 01bd 01       		.byte	0x1
+ 892 01be AC02     		.2byte	0x2ac
+ 893 01c0 6B000000 		.4byte	0x6b
+ 894 01c4 02       		.uleb128 0x2
+ 895 01c5 91       		.byte	0x91
+ 896 01c6 77       		.sleb128 -9
+ 897 01c7 00       		.byte	0
+ 898 01c8 0D       		.uleb128 0xd
+ 899 01c9 70000000 		.4byte	.LASF31
+ 900 01cd 01       		.byte	0x1
+ 901 01ce C702     		.2byte	0x2c7
+ 902 01d0 6B000000 		.4byte	0x6b
+ 903 01d4 00000000 		.4byte	.LFB10
+ 904 01d8 18000000 		.4byte	.LFE10-.LFB10
+ 905 01dc 01       		.uleb128 0x1
+ 906 01dd 9C       		.byte	0x9c
+ 907 01de 0F       		.uleb128 0xf
+ 908 01df B7000000 		.4byte	.LASF41
+ 909 01e3 01       		.byte	0x1
+ 910 01e4 E102     		.2byte	0x2e1
+ 911 01e6 6B000000 		.4byte	0x6b
+ 912 01ea 00000000 		.4byte	.LFB11
+ 913 01ee 20000000 		.4byte	.LFE11-.LFB11
+ 914 01f2 01       		.uleb128 0x1
+ 915 01f3 9C       		.byte	0x9c
+ 916 01f4 08020000 		.4byte	0x208
+ 917 01f8 10       		.uleb128 0x10
+ 918 01f9 99020000 		.4byte	.LASF32
+ 919 01fd 01       		.byte	0x1
+ 920 01fe E302     		.2byte	0x2e3
+ 921 0200 6B000000 		.4byte	0x6b
+ 922 0204 02       		.uleb128 0x2
+ 923 0205 91       		.byte	0x91
+ 924 0206 77       		.sleb128 -9
+ 925 0207 00       		.byte	0
+ 926 0208 0B       		.uleb128 0xb
+ 927 0209 BB020000 		.4byte	.LASF33
+ 928 020d 01       		.byte	0x1
+ 929 020e FD02     		.2byte	0x2fd
+ 930 0210 00000000 		.4byte	.LFB12
+ 931 0214 20000000 		.4byte	.LFE12-.LFB12
+ 932 0218 01       		.uleb128 0x1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 33
+
+
+ 933 0219 9C       		.byte	0x9c
+ 934 021a 2E020000 		.4byte	0x22e
+ 935 021e 0C       		.uleb128 0xc
+ 936 021f 09020000 		.4byte	.LASF34
+ 937 0223 01       		.byte	0x1
+ 938 0224 FD02     		.2byte	0x2fd
+ 939 0226 6B000000 		.4byte	0x6b
+ 940 022a 02       		.uleb128 0x2
+ 941 022b 91       		.byte	0x91
+ 942 022c 77       		.sleb128 -9
+ 943 022d 00       		.byte	0
+ 944 022e 0D       		.uleb128 0xd
+ 945 022f 69030000 		.4byte	.LASF35
+ 946 0233 01       		.byte	0x1
+ 947 0234 1603     		.2byte	0x316
+ 948 0236 6B000000 		.4byte	0x6b
+ 949 023a 00000000 		.4byte	.LFB13
+ 950 023e 18000000 		.4byte	.LFE13-.LFB13
+ 951 0242 01       		.uleb128 0x1
+ 952 0243 9C       		.byte	0x9c
+ 953 0244 0D       		.uleb128 0xd
+ 954 0245 20000000 		.4byte	.LASF36
+ 955 0249 01       		.byte	0x1
+ 956 024a 3003     		.2byte	0x330
+ 957 024c 6B000000 		.4byte	0x6b
+ 958 0250 00000000 		.4byte	.LFB14
+ 959 0254 18000000 		.4byte	.LFE14-.LFB14
+ 960 0258 01       		.uleb128 0x1
+ 961 0259 9C       		.byte	0x9c
+ 962 025a 0D       		.uleb128 0xd
+ 963 025b 50000000 		.4byte	.LASF37
+ 964 025f 01       		.byte	0x1
+ 965 0260 7403     		.2byte	0x374
+ 966 0262 6B000000 		.4byte	0x6b
+ 967 0266 00000000 		.4byte	.LFB15
+ 968 026a 18000000 		.4byte	.LFE15-.LFB15
+ 969 026e 01       		.uleb128 0x1
+ 970 026f 9C       		.byte	0x9c
+ 971 0270 11       		.uleb128 0x11
+ 972 0271 3A000000 		.4byte	.LASF42
+ 973 0275 01       		.byte	0x1
+ 974 0276 20       		.byte	0x20
+ 975 0277 6B000000 		.4byte	0x6b
+ 976 027b 05       		.uleb128 0x5
+ 977 027c 03       		.byte	0x3
+ 978 027d 00000000 		.4byte	pwmAgitator_2_initVar
+ 979 0281 00       		.byte	0
+ 980              		.section	.debug_abbrev,"",%progbits
+ 981              	.Ldebug_abbrev0:
+ 982 0000 01       		.uleb128 0x1
+ 983 0001 11       		.uleb128 0x11
+ 984 0002 01       		.byte	0x1
+ 985 0003 25       		.uleb128 0x25
+ 986 0004 0E       		.uleb128 0xe
+ 987 0005 13       		.uleb128 0x13
+ 988 0006 0B       		.uleb128 0xb
+ 989 0007 03       		.uleb128 0x3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 34
+
+
+ 990 0008 0E       		.uleb128 0xe
+ 991 0009 1B       		.uleb128 0x1b
+ 992 000a 0E       		.uleb128 0xe
+ 993 000b 55       		.uleb128 0x55
+ 994 000c 17       		.uleb128 0x17
+ 995 000d 11       		.uleb128 0x11
+ 996 000e 01       		.uleb128 0x1
+ 997 000f 10       		.uleb128 0x10
+ 998 0010 17       		.uleb128 0x17
+ 999 0011 00       		.byte	0
+ 1000 0012 00       		.byte	0
+ 1001 0013 02       		.uleb128 0x2
+ 1002 0014 24       		.uleb128 0x24
+ 1003 0015 00       		.byte	0
+ 1004 0016 0B       		.uleb128 0xb
+ 1005 0017 0B       		.uleb128 0xb
+ 1006 0018 3E       		.uleb128 0x3e
+ 1007 0019 0B       		.uleb128 0xb
+ 1008 001a 03       		.uleb128 0x3
+ 1009 001b 0E       		.uleb128 0xe
+ 1010 001c 00       		.byte	0
+ 1011 001d 00       		.byte	0
+ 1012 001e 03       		.uleb128 0x3
+ 1013 001f 24       		.uleb128 0x24
+ 1014 0020 00       		.byte	0
+ 1015 0021 0B       		.uleb128 0xb
+ 1016 0022 0B       		.uleb128 0xb
+ 1017 0023 3E       		.uleb128 0x3e
+ 1018 0024 0B       		.uleb128 0xb
+ 1019 0025 03       		.uleb128 0x3
+ 1020 0026 08       		.uleb128 0x8
+ 1021 0027 00       		.byte	0
+ 1022 0028 00       		.byte	0
+ 1023 0029 04       		.uleb128 0x4
+ 1024 002a 16       		.uleb128 0x16
+ 1025 002b 00       		.byte	0
+ 1026 002c 03       		.uleb128 0x3
+ 1027 002d 0E       		.uleb128 0xe
+ 1028 002e 3A       		.uleb128 0x3a
+ 1029 002f 0B       		.uleb128 0xb
+ 1030 0030 3B       		.uleb128 0x3b
+ 1031 0031 0B       		.uleb128 0xb
+ 1032 0032 49       		.uleb128 0x49
+ 1033 0033 13       		.uleb128 0x13
+ 1034 0034 00       		.byte	0
+ 1035 0035 00       		.byte	0
+ 1036 0036 05       		.uleb128 0x5
+ 1037 0037 16       		.uleb128 0x16
+ 1038 0038 00       		.byte	0
+ 1039 0039 03       		.uleb128 0x3
+ 1040 003a 0E       		.uleb128 0xe
+ 1041 003b 3A       		.uleb128 0x3a
+ 1042 003c 0B       		.uleb128 0xb
+ 1043 003d 3B       		.uleb128 0x3b
+ 1044 003e 05       		.uleb128 0x5
+ 1045 003f 49       		.uleb128 0x49
+ 1046 0040 13       		.uleb128 0x13
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 35
+
+
+ 1047 0041 00       		.byte	0
+ 1048 0042 00       		.byte	0
+ 1049 0043 06       		.uleb128 0x6
+ 1050 0044 35       		.uleb128 0x35
+ 1051 0045 00       		.byte	0
+ 1052 0046 49       		.uleb128 0x49
+ 1053 0047 13       		.uleb128 0x13
+ 1054 0048 00       		.byte	0
+ 1055 0049 00       		.byte	0
+ 1056 004a 07       		.uleb128 0x7
+ 1057 004b 2E       		.uleb128 0x2e
+ 1058 004c 00       		.byte	0
+ 1059 004d 3F       		.uleb128 0x3f
+ 1060 004e 19       		.uleb128 0x19
+ 1061 004f 03       		.uleb128 0x3
+ 1062 0050 0E       		.uleb128 0xe
+ 1063 0051 3A       		.uleb128 0x3a
+ 1064 0052 0B       		.uleb128 0xb
+ 1065 0053 3B       		.uleb128 0x3b
+ 1066 0054 0B       		.uleb128 0xb
+ 1067 0055 27       		.uleb128 0x27
+ 1068 0056 19       		.uleb128 0x19
+ 1069 0057 11       		.uleb128 0x11
+ 1070 0058 01       		.uleb128 0x1
+ 1071 0059 12       		.uleb128 0x12
+ 1072 005a 06       		.uleb128 0x6
+ 1073 005b 40       		.uleb128 0x40
+ 1074 005c 18       		.uleb128 0x18
+ 1075 005d 9642     		.uleb128 0x2116
+ 1076 005f 19       		.uleb128 0x19
+ 1077 0060 00       		.byte	0
+ 1078 0061 00       		.byte	0
+ 1079 0062 08       		.uleb128 0x8
+ 1080 0063 2E       		.uleb128 0x2e
+ 1081 0064 01       		.byte	0x1
+ 1082 0065 3F       		.uleb128 0x3f
+ 1083 0066 19       		.uleb128 0x19
+ 1084 0067 03       		.uleb128 0x3
+ 1085 0068 0E       		.uleb128 0xe
+ 1086 0069 3A       		.uleb128 0x3a
+ 1087 006a 0B       		.uleb128 0xb
+ 1088 006b 3B       		.uleb128 0x3b
+ 1089 006c 0B       		.uleb128 0xb
+ 1090 006d 27       		.uleb128 0x27
+ 1091 006e 19       		.uleb128 0x19
+ 1092 006f 11       		.uleb128 0x11
+ 1093 0070 01       		.uleb128 0x1
+ 1094 0071 12       		.uleb128 0x12
+ 1095 0072 06       		.uleb128 0x6
+ 1096 0073 40       		.uleb128 0x40
+ 1097 0074 18       		.uleb128 0x18
+ 1098 0075 9642     		.uleb128 0x2116
+ 1099 0077 19       		.uleb128 0x19
+ 1100 0078 01       		.uleb128 0x1
+ 1101 0079 13       		.uleb128 0x13
+ 1102 007a 00       		.byte	0
+ 1103 007b 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 36
+
+
+ 1104 007c 09       		.uleb128 0x9
+ 1105 007d 34       		.uleb128 0x34
+ 1106 007e 00       		.byte	0
+ 1107 007f 03       		.uleb128 0x3
+ 1108 0080 0E       		.uleb128 0xe
+ 1109 0081 3A       		.uleb128 0x3a
+ 1110 0082 0B       		.uleb128 0xb
+ 1111 0083 3B       		.uleb128 0x3b
+ 1112 0084 0B       		.uleb128 0xb
+ 1113 0085 49       		.uleb128 0x49
+ 1114 0086 13       		.uleb128 0x13
+ 1115 0087 02       		.uleb128 0x2
+ 1116 0088 18       		.uleb128 0x18
+ 1117 0089 00       		.byte	0
+ 1118 008a 00       		.byte	0
+ 1119 008b 0A       		.uleb128 0xa
+ 1120 008c 2E       		.uleb128 0x2e
+ 1121 008d 00       		.byte	0
+ 1122 008e 3F       		.uleb128 0x3f
+ 1123 008f 19       		.uleb128 0x19
+ 1124 0090 03       		.uleb128 0x3
+ 1125 0091 0E       		.uleb128 0xe
+ 1126 0092 3A       		.uleb128 0x3a
+ 1127 0093 0B       		.uleb128 0xb
+ 1128 0094 3B       		.uleb128 0x3b
+ 1129 0095 0B       		.uleb128 0xb
+ 1130 0096 27       		.uleb128 0x27
+ 1131 0097 19       		.uleb128 0x19
+ 1132 0098 11       		.uleb128 0x11
+ 1133 0099 01       		.uleb128 0x1
+ 1134 009a 12       		.uleb128 0x12
+ 1135 009b 06       		.uleb128 0x6
+ 1136 009c 40       		.uleb128 0x40
+ 1137 009d 18       		.uleb128 0x18
+ 1138 009e 9742     		.uleb128 0x2117
+ 1139 00a0 19       		.uleb128 0x19
+ 1140 00a1 00       		.byte	0
+ 1141 00a2 00       		.byte	0
+ 1142 00a3 0B       		.uleb128 0xb
+ 1143 00a4 2E       		.uleb128 0x2e
+ 1144 00a5 01       		.byte	0x1
+ 1145 00a6 3F       		.uleb128 0x3f
+ 1146 00a7 19       		.uleb128 0x19
+ 1147 00a8 03       		.uleb128 0x3
+ 1148 00a9 0E       		.uleb128 0xe
+ 1149 00aa 3A       		.uleb128 0x3a
+ 1150 00ab 0B       		.uleb128 0xb
+ 1151 00ac 3B       		.uleb128 0x3b
+ 1152 00ad 05       		.uleb128 0x5
+ 1153 00ae 27       		.uleb128 0x27
+ 1154 00af 19       		.uleb128 0x19
+ 1155 00b0 11       		.uleb128 0x11
+ 1156 00b1 01       		.uleb128 0x1
+ 1157 00b2 12       		.uleb128 0x12
+ 1158 00b3 06       		.uleb128 0x6
+ 1159 00b4 40       		.uleb128 0x40
+ 1160 00b5 18       		.uleb128 0x18
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 37
+
+
+ 1161 00b6 9742     		.uleb128 0x2117
+ 1162 00b8 19       		.uleb128 0x19
+ 1163 00b9 01       		.uleb128 0x1
+ 1164 00ba 13       		.uleb128 0x13
+ 1165 00bb 00       		.byte	0
+ 1166 00bc 00       		.byte	0
+ 1167 00bd 0C       		.uleb128 0xc
+ 1168 00be 05       		.uleb128 0x5
+ 1169 00bf 00       		.byte	0
+ 1170 00c0 03       		.uleb128 0x3
+ 1171 00c1 0E       		.uleb128 0xe
+ 1172 00c2 3A       		.uleb128 0x3a
+ 1173 00c3 0B       		.uleb128 0xb
+ 1174 00c4 3B       		.uleb128 0x3b
+ 1175 00c5 05       		.uleb128 0x5
+ 1176 00c6 49       		.uleb128 0x49
+ 1177 00c7 13       		.uleb128 0x13
+ 1178 00c8 02       		.uleb128 0x2
+ 1179 00c9 18       		.uleb128 0x18
+ 1180 00ca 00       		.byte	0
+ 1181 00cb 00       		.byte	0
+ 1182 00cc 0D       		.uleb128 0xd
+ 1183 00cd 2E       		.uleb128 0x2e
+ 1184 00ce 00       		.byte	0
+ 1185 00cf 3F       		.uleb128 0x3f
+ 1186 00d0 19       		.uleb128 0x19
+ 1187 00d1 03       		.uleb128 0x3
+ 1188 00d2 0E       		.uleb128 0xe
+ 1189 00d3 3A       		.uleb128 0x3a
+ 1190 00d4 0B       		.uleb128 0xb
+ 1191 00d5 3B       		.uleb128 0x3b
+ 1192 00d6 05       		.uleb128 0x5
+ 1193 00d7 27       		.uleb128 0x27
+ 1194 00d8 19       		.uleb128 0x19
+ 1195 00d9 49       		.uleb128 0x49
+ 1196 00da 13       		.uleb128 0x13
+ 1197 00db 11       		.uleb128 0x11
+ 1198 00dc 01       		.uleb128 0x1
+ 1199 00dd 12       		.uleb128 0x12
+ 1200 00de 06       		.uleb128 0x6
+ 1201 00df 40       		.uleb128 0x40
+ 1202 00e0 18       		.uleb128 0x18
+ 1203 00e1 9742     		.uleb128 0x2117
+ 1204 00e3 19       		.uleb128 0x19
+ 1205 00e4 00       		.byte	0
+ 1206 00e5 00       		.byte	0
+ 1207 00e6 0E       		.uleb128 0xe
+ 1208 00e7 2E       		.uleb128 0x2e
+ 1209 00e8 00       		.byte	0
+ 1210 00e9 3F       		.uleb128 0x3f
+ 1211 00ea 19       		.uleb128 0x19
+ 1212 00eb 03       		.uleb128 0x3
+ 1213 00ec 0E       		.uleb128 0xe
+ 1214 00ed 3A       		.uleb128 0x3a
+ 1215 00ee 0B       		.uleb128 0xb
+ 1216 00ef 3B       		.uleb128 0x3b
+ 1217 00f0 05       		.uleb128 0x5
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 38
+
+
+ 1218 00f1 27       		.uleb128 0x27
+ 1219 00f2 19       		.uleb128 0x19
+ 1220 00f3 11       		.uleb128 0x11
+ 1221 00f4 01       		.uleb128 0x1
+ 1222 00f5 12       		.uleb128 0x12
+ 1223 00f6 06       		.uleb128 0x6
+ 1224 00f7 40       		.uleb128 0x40
+ 1225 00f8 18       		.uleb128 0x18
+ 1226 00f9 9642     		.uleb128 0x2116
+ 1227 00fb 19       		.uleb128 0x19
+ 1228 00fc 00       		.byte	0
+ 1229 00fd 00       		.byte	0
+ 1230 00fe 0F       		.uleb128 0xf
+ 1231 00ff 2E       		.uleb128 0x2e
+ 1232 0100 01       		.byte	0x1
+ 1233 0101 3F       		.uleb128 0x3f
+ 1234 0102 19       		.uleb128 0x19
+ 1235 0103 03       		.uleb128 0x3
+ 1236 0104 0E       		.uleb128 0xe
+ 1237 0105 3A       		.uleb128 0x3a
+ 1238 0106 0B       		.uleb128 0xb
+ 1239 0107 3B       		.uleb128 0x3b
+ 1240 0108 05       		.uleb128 0x5
+ 1241 0109 27       		.uleb128 0x27
+ 1242 010a 19       		.uleb128 0x19
+ 1243 010b 49       		.uleb128 0x49
+ 1244 010c 13       		.uleb128 0x13
+ 1245 010d 11       		.uleb128 0x11
+ 1246 010e 01       		.uleb128 0x1
+ 1247 010f 12       		.uleb128 0x12
+ 1248 0110 06       		.uleb128 0x6
+ 1249 0111 40       		.uleb128 0x40
+ 1250 0112 18       		.uleb128 0x18
+ 1251 0113 9742     		.uleb128 0x2117
+ 1252 0115 19       		.uleb128 0x19
+ 1253 0116 01       		.uleb128 0x1
+ 1254 0117 13       		.uleb128 0x13
+ 1255 0118 00       		.byte	0
+ 1256 0119 00       		.byte	0
+ 1257 011a 10       		.uleb128 0x10
+ 1258 011b 34       		.uleb128 0x34
+ 1259 011c 00       		.byte	0
+ 1260 011d 03       		.uleb128 0x3
+ 1261 011e 0E       		.uleb128 0xe
+ 1262 011f 3A       		.uleb128 0x3a
+ 1263 0120 0B       		.uleb128 0xb
+ 1264 0121 3B       		.uleb128 0x3b
+ 1265 0122 05       		.uleb128 0x5
+ 1266 0123 49       		.uleb128 0x49
+ 1267 0124 13       		.uleb128 0x13
+ 1268 0125 02       		.uleb128 0x2
+ 1269 0126 18       		.uleb128 0x18
+ 1270 0127 00       		.byte	0
+ 1271 0128 00       		.byte	0
+ 1272 0129 11       		.uleb128 0x11
+ 1273 012a 34       		.uleb128 0x34
+ 1274 012b 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 39
+
+
+ 1275 012c 03       		.uleb128 0x3
+ 1276 012d 0E       		.uleb128 0xe
+ 1277 012e 3A       		.uleb128 0x3a
+ 1278 012f 0B       		.uleb128 0xb
+ 1279 0130 3B       		.uleb128 0x3b
+ 1280 0131 0B       		.uleb128 0xb
+ 1281 0132 49       		.uleb128 0x49
+ 1282 0133 13       		.uleb128 0x13
+ 1283 0134 3F       		.uleb128 0x3f
+ 1284 0135 19       		.uleb128 0x19
+ 1285 0136 02       		.uleb128 0x2
+ 1286 0137 18       		.uleb128 0x18
+ 1287 0138 00       		.byte	0
+ 1288 0139 00       		.byte	0
+ 1289 013a 00       		.byte	0
+ 1290              		.section	.debug_aranges,"",%progbits
+ 1291 0000 94000000 		.4byte	0x94
+ 1292 0004 0200     		.2byte	0x2
+ 1293 0006 00000000 		.4byte	.Ldebug_info0
+ 1294 000a 04       		.byte	0x4
+ 1295 000b 00       		.byte	0
+ 1296 000c 0000     		.2byte	0
+ 1297 000e 0000     		.2byte	0
+ 1298 0010 00000000 		.4byte	.LFB0
+ 1299 0014 20000000 		.4byte	.LFE0-.LFB0
+ 1300 0018 00000000 		.4byte	.LFB1
+ 1301 001c 78000000 		.4byte	.LFE1-.LFB1
+ 1302 0020 00000000 		.4byte	.LFB2
+ 1303 0024 20000000 		.4byte	.LFE2-.LFB2
+ 1304 0028 00000000 		.4byte	.LFB3
+ 1305 002c 20000000 		.4byte	.LFE3-.LFB3
+ 1306 0030 00000000 		.4byte	.LFB4
+ 1307 0034 20000000 		.4byte	.LFE4-.LFB4
+ 1308 0038 00000000 		.4byte	.LFB5
+ 1309 003c 20000000 		.4byte	.LFE5-.LFB5
+ 1310 0040 00000000 		.4byte	.LFB6
+ 1311 0044 1A000000 		.4byte	.LFE6-.LFB6
+ 1312 0048 00000000 		.4byte	.LFB7
+ 1313 004c 20000000 		.4byte	.LFE7-.LFB7
+ 1314 0050 00000000 		.4byte	.LFB8
+ 1315 0054 20000000 		.4byte	.LFE8-.LFB8
+ 1316 0058 00000000 		.4byte	.LFB9
+ 1317 005c 20000000 		.4byte	.LFE9-.LFB9
+ 1318 0060 00000000 		.4byte	.LFB10
+ 1319 0064 18000000 		.4byte	.LFE10-.LFB10
+ 1320 0068 00000000 		.4byte	.LFB11
+ 1321 006c 20000000 		.4byte	.LFE11-.LFB11
+ 1322 0070 00000000 		.4byte	.LFB12
+ 1323 0074 20000000 		.4byte	.LFE12-.LFB12
+ 1324 0078 00000000 		.4byte	.LFB13
+ 1325 007c 18000000 		.4byte	.LFE13-.LFB13
+ 1326 0080 00000000 		.4byte	.LFB14
+ 1327 0084 18000000 		.4byte	.LFE14-.LFB14
+ 1328 0088 00000000 		.4byte	.LFB15
+ 1329 008c 18000000 		.4byte	.LFE15-.LFB15
+ 1330 0090 00000000 		.4byte	0
+ 1331 0094 00000000 		.4byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 40
+
+
+ 1332              		.section	.debug_ranges,"",%progbits
+ 1333              	.Ldebug_ranges0:
+ 1334 0000 00000000 		.4byte	.LFB0
+ 1335 0004 20000000 		.4byte	.LFE0
+ 1336 0008 00000000 		.4byte	.LFB1
+ 1337 000c 78000000 		.4byte	.LFE1
+ 1338 0010 00000000 		.4byte	.LFB2
+ 1339 0014 20000000 		.4byte	.LFE2
+ 1340 0018 00000000 		.4byte	.LFB3
+ 1341 001c 20000000 		.4byte	.LFE3
+ 1342 0020 00000000 		.4byte	.LFB4
+ 1343 0024 20000000 		.4byte	.LFE4
+ 1344 0028 00000000 		.4byte	.LFB5
+ 1345 002c 20000000 		.4byte	.LFE5
+ 1346 0030 00000000 		.4byte	.LFB6
+ 1347 0034 1A000000 		.4byte	.LFE6
+ 1348 0038 00000000 		.4byte	.LFB7
+ 1349 003c 20000000 		.4byte	.LFE7
+ 1350 0040 00000000 		.4byte	.LFB8
+ 1351 0044 20000000 		.4byte	.LFE8
+ 1352 0048 00000000 		.4byte	.LFB9
+ 1353 004c 20000000 		.4byte	.LFE9
+ 1354 0050 00000000 		.4byte	.LFB10
+ 1355 0054 18000000 		.4byte	.LFE10
+ 1356 0058 00000000 		.4byte	.LFB11
+ 1357 005c 20000000 		.4byte	.LFE11
+ 1358 0060 00000000 		.4byte	.LFB12
+ 1359 0064 20000000 		.4byte	.LFE12
+ 1360 0068 00000000 		.4byte	.LFB13
+ 1361 006c 18000000 		.4byte	.LFE13
+ 1362 0070 00000000 		.4byte	.LFB14
+ 1363 0074 18000000 		.4byte	.LFE14
+ 1364 0078 00000000 		.4byte	.LFB15
+ 1365 007c 18000000 		.4byte	.LFE15
+ 1366 0080 00000000 		.4byte	0
+ 1367 0084 00000000 		.4byte	0
+ 1368              		.section	.debug_line,"",%progbits
+ 1369              	.Ldebug_line0:
+ 1370 0000 90010000 		.section	.debug_str,"MS",%progbits,1
+ 1370      02004C00 
+ 1370      00000201 
+ 1370      FB0E0D00 
+ 1370      01010101 
+ 1371              	.LASF21:
+ 1372 0000 70776D41 		.ascii	"pwmAgitator_2_WriteCounter\000"
+ 1372      67697461 
+ 1372      746F725F 
+ 1372      325F5772 
+ 1372      69746543 
+ 1373              	.LASF11:
+ 1374 001b 63686172 		.ascii	"char\000"
+ 1374      00
+ 1375              	.LASF36:
+ 1376 0020 70776D41 		.ascii	"pwmAgitator_2_ReadCompare\000"
+ 1376      67697461 
+ 1376      746F725F 
+ 1376      325F5265 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 41
+
+
+ 1376      6164436F 
+ 1377              	.LASF42:
+ 1378 003a 70776D41 		.ascii	"pwmAgitator_2_initVar\000"
+ 1378      67697461 
+ 1378      746F725F 
+ 1378      325F696E 
+ 1378      69745661 
+ 1379              	.LASF37:
+ 1380 0050 70776D41 		.ascii	"pwmAgitator_2_ReadPeriod\000"
+ 1380      67697461 
+ 1380      746F725F 
+ 1380      325F5265 
+ 1380      61645065 
+ 1381              	.LASF25:
+ 1382 0069 70657269 		.ascii	"period\000"
+ 1382      6F6400
+ 1383              	.LASF31:
+ 1384 0070 70776D41 		.ascii	"pwmAgitator_2_ReadStatusRegister\000"
+ 1384      67697461 
+ 1384      746F725F 
+ 1384      325F5265 
+ 1384      61645374 
+ 1385              	.LASF3:
+ 1386 0091 73686F72 		.ascii	"short unsigned int\000"
+ 1386      7420756E 
+ 1386      7369676E 
+ 1386      65642069 
+ 1386      6E7400
+ 1387              	.LASF20:
+ 1388 00a4 70776D41 		.ascii	"pwmAgitator_2_Init\000"
+ 1388      67697461 
+ 1388      746F725F 
+ 1388      325F496E 
+ 1388      697400
+ 1389              	.LASF41:
+ 1390 00b7 70776D41 		.ascii	"pwmAgitator_2_ReadControlRegister\000"
+ 1390      67697461 
+ 1390      746F725F 
+ 1390      325F5265 
+ 1390      6164436F 
+ 1391              	.LASF16:
+ 1392 00d9 70776D41 		.ascii	"pwmAgitator_2_interruptState\000"
+ 1392      67697461 
+ 1392      746F725F 
+ 1392      325F696E 
+ 1392      74657272 
+ 1393              	.LASF9:
+ 1394 00f6 666C6F61 		.ascii	"float\000"
+ 1394      7400
+ 1395              	.LASF17:
+ 1396 00fc 70776D41 		.ascii	"pwmAgitator_2_Start\000"
+ 1396      67697461 
+ 1396      746F725F 
+ 1396      325F5374 
+ 1396      61727400 
+ 1397              	.LASF28:
+ 1398 0110 70776D41 		.ascii	"pwmAgitator_2_SetInterruptMode\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 42
+
+
+ 1398      67697461 
+ 1398      746F725F 
+ 1398      325F5365 
+ 1398      74496E74 
+ 1399              	.LASF22:
+ 1400 012f 70776D41 		.ascii	"pwmAgitator_2_ClearFIFO\000"
+ 1400      67697461 
+ 1400      746F725F 
+ 1400      325F436C 
+ 1400      65617246 
+ 1401              	.LASF39:
+ 1402 0147 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\pwmAgitator_2.c\000"
+ 1402      6E657261 
+ 1402      7465645F 
+ 1402      536F7572 
+ 1402      63655C50 
+ 1403              	.LASF13:
+ 1404 0170 72656738 		.ascii	"reg8\000"
+ 1404      00
+ 1405              	.LASF38:
+ 1406 0175 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 1406      4320342E 
+ 1406      382E3420 
+ 1406      32303134 
+ 1406      30353236 
+ 1407 01a8 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m3 -mthumb -g -O"
+ 1407      20726576 
+ 1407      6973696F 
+ 1407      6E203231 
+ 1407      31333538 
+ 1408 01db 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 1408      66756E63 
+ 1408      74696F6E 
+ 1408      2D736563 
+ 1408      74696F6E 
+ 1409              	.LASF5:
+ 1410 01f1 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1410      20756E73 
+ 1410      69676E65 
+ 1410      6420696E 
+ 1410      7400
+ 1411              	.LASF12:
+ 1412 0203 75696E74 		.ascii	"uint8\000"
+ 1412      3800
+ 1413              	.LASF34:
+ 1414 0209 636F6E74 		.ascii	"control\000"
+ 1414      726F6C00 
+ 1415              	.LASF19:
+ 1416 0211 70776D41 		.ascii	"pwmAgitator_2_Stop\000"
+ 1416      67697461 
+ 1416      746F725F 
+ 1416      325F5374 
+ 1416      6F7000
+ 1417              	.LASF30:
+ 1418 0224 70776D41 		.ascii	"pwmAgitator_2_ReadCounter\000"
+ 1418      67697461 
+ 1418      746F725F 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 43
+
+
+ 1418      325F5265 
+ 1418      6164436F 
+ 1419              	.LASF1:
+ 1420 023e 756E7369 		.ascii	"unsigned char\000"
+ 1420      676E6564 
+ 1420      20636861 
+ 1420      7200
+ 1421              	.LASF24:
+ 1422 024c 636F756E 		.ascii	"counter\000"
+ 1422      74657200 
+ 1423              	.LASF10:
+ 1424 0254 646F7562 		.ascii	"double\000"
+ 1424      6C6500
+ 1425              	.LASF8:
+ 1426 025b 756E7369 		.ascii	"unsigned int\000"
+ 1426      676E6564 
+ 1426      20696E74 
+ 1426      00
+ 1427              	.LASF7:
+ 1428 0268 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1428      206C6F6E 
+ 1428      6720756E 
+ 1428      7369676E 
+ 1428      65642069 
+ 1429              	.LASF23:
+ 1430 027f 70776D41 		.ascii	"pwmAgitator_2_WritePeriod\000"
+ 1430      67697461 
+ 1430      746F725F 
+ 1430      325F5772 
+ 1430      69746550 
+ 1431              	.LASF32:
+ 1432 0299 72657375 		.ascii	"result\000"
+ 1432      6C7400
+ 1433              	.LASF26:
+ 1434 02a0 70776D41 		.ascii	"pwmAgitator_2_WriteCompare\000"
+ 1434      67697461 
+ 1434      746F725F 
+ 1434      325F5772 
+ 1434      69746543 
+ 1435              	.LASF33:
+ 1436 02bb 70776D41 		.ascii	"pwmAgitator_2_WriteControlRegister\000"
+ 1436      67697461 
+ 1436      746F725F 
+ 1436      325F5772 
+ 1436      69746543 
+ 1437              	.LASF14:
+ 1438 02de 73697A65 		.ascii	"sizetype\000"
+ 1438      74797065 
+ 1438      00
+ 1439              	.LASF18:
+ 1440 02e7 70776D41 		.ascii	"pwmAgitator_2_Enable\000"
+ 1440      67697461 
+ 1440      746F725F 
+ 1440      325F456E 
+ 1440      61626C65 
+ 1441              	.LASF6:
+ 1442 02fc 6C6F6E67 		.ascii	"long long int\000"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccichfSZ.s 			page 44
+
+
+ 1442      206C6F6E 
+ 1442      6720696E 
+ 1442      7400
+ 1443              	.LASF29:
+ 1444 030a 696E7465 		.ascii	"interruptMode\000"
+ 1444      72727570 
+ 1444      744D6F64 
+ 1444      6500
+ 1445              	.LASF2:
+ 1446 0318 73686F72 		.ascii	"short int\000"
+ 1446      7420696E 
+ 1446      7400
+ 1447              	.LASF15:
+ 1448 0322 6374726C 		.ascii	"ctrl\000"
+ 1448      00
+ 1449              	.LASF4:
+ 1450 0327 6C6F6E67 		.ascii	"long int\000"
+ 1450      20696E74 
+ 1450      00
+ 1451              	.LASF40:
+ 1452 0330 433A5C55 		.ascii	"C:\\Users\\plod1602\\Desktop\\TAC_2015-09-18\\TAC_P"
+ 1452      73657273 
+ 1452      5C706C6F 
+ 1452      64313630 
+ 1452      325C4465 
+ 1453 035e 534F4335 		.ascii	"SOC5.cydsn\000"
+ 1453      2E637964 
+ 1453      736E00
+ 1454              	.LASF35:
+ 1455 0369 70776D41 		.ascii	"pwmAgitator_2_ReadCapture\000"
+ 1455      67697461 
+ 1455      746F725F 
+ 1455      325F5265 
+ 1455      61644361 
+ 1456              	.LASF0:
+ 1457 0383 7369676E 		.ascii	"signed char\000"
+ 1457      65642063 
+ 1457      68617200 
+ 1458              	.LASF27:
+ 1459 038f 636F6D70 		.ascii	"compare\000"
+ 1459      61726500 
+ 1460              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br

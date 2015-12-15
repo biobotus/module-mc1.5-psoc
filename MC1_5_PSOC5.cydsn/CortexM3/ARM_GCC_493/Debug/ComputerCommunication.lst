@@ -1,0 +1,1325 @@
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"ComputerCommunication.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.sendTemperatureToCAN,"ax",%progbits
+  19              		.align	2
+  20              		.global	sendTemperatureToCAN
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	sendTemperatureToCAN, %function
+  24              	sendTemperatureToCAN:
+  25              	.LFB56:
+  26              		.file 1 ".\\ComputerCommunication.c"
+   1:.\ComputerCommunication.c **** /* ========================================
+   2:.\ComputerCommunication.c ****  *
+   3:.\ComputerCommunication.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\ComputerCommunication.c ****  * All Rights Reserved
+   5:.\ComputerCommunication.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\ComputerCommunication.c ****  *
+   7:.\ComputerCommunication.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\ComputerCommunication.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\ComputerCommunication.c ****  *
+  10:.\ComputerCommunication.c ****  * ========================================
+  11:.\ComputerCommunication.c **** */
+  12:.\ComputerCommunication.c **** 
+  13:.\ComputerCommunication.c **** #include "ComputerCommunication.h"
+  14:.\ComputerCommunication.c **** 
+  15:.\ComputerCommunication.c **** 
+  16:.\ComputerCommunication.c **** 
+  17:.\ComputerCommunication.c **** void sendTemperatureToCAN(uint8 module, uint16 temperature, int8 command )
+  18:.\ComputerCommunication.c **** {
+  27              		.loc 1 18 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 24
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 86B0     		sub	sp, sp, #24
+  36              		.cfi_def_cfa_offset 32
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  39 0006 0346     		mov	r3, r0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 2
+
+
+  40 0008 FB71     		strb	r3, [r7, #7]
+  41 000a 0B46     		mov	r3, r1	@ movhi
+  42 000c BB80     		strh	r3, [r7, #4]	@ movhi
+  43 000e 1346     		mov	r3, r2
+  44 0010 BB71     		strb	r3, [r7, #6]
+  19:.\ComputerCommunication.c ****     CAN_MSG msgToSendBack = {{GET_CURRENT_TEMPERATURE,module,HARDWARE_CAN_ID,0,0,0,0,0},{8},{0xFF}}
+  45              		.loc 1 19 0
+  46 0012 0023     		movs	r3, #0
+  47 0014 3B72     		strb	r3, [r7, #8]
+  48 0016 FB79     		ldrb	r3, [r7, #7]
+  49 0018 7B72     		strb	r3, [r7, #9]
+  50 001a 7023     		movs	r3, #112
+  51 001c BB72     		strb	r3, [r7, #10]
+  52 001e 0023     		movs	r3, #0
+  53 0020 FB72     		strb	r3, [r7, #11]
+  54 0022 0023     		movs	r3, #0
+  55 0024 3B73     		strb	r3, [r7, #12]
+  56 0026 0023     		movs	r3, #0
+  57 0028 7B73     		strb	r3, [r7, #13]
+  58 002a 0023     		movs	r3, #0
+  59 002c BB73     		strb	r3, [r7, #14]
+  60 002e 0023     		movs	r3, #0
+  61 0030 FB73     		strb	r3, [r7, #15]
+  62 0032 0823     		movs	r3, #8
+  63 0034 3B74     		strb	r3, [r7, #16]
+  64 0036 FF23     		movs	r3, #255
+  65 0038 7B61     		str	r3, [r7, #20]
+  20:.\ComputerCommunication.c **** 
+  21:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[4] = (uint8)temperature;
+  66              		.loc 1 21 0
+  67 003a BB88     		ldrh	r3, [r7, #4]	@ movhi
+  68 003c DBB2     		uxtb	r3, r3
+  69 003e 3B73     		strb	r3, [r7, #12]
+  22:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[5] = (uint8)(temperature>>8);
+  70              		.loc 1 22 0
+  71 0040 BB88     		ldrh	r3, [r7, #4]
+  72 0042 1B0A     		lsrs	r3, r3, #8
+  73 0044 9BB2     		uxth	r3, r3
+  74 0046 DBB2     		uxtb	r3, r3
+  75 0048 7B73     		strb	r3, [r7, #13]
+  23:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[6] = command;
+  76              		.loc 1 23 0
+  77 004a BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+  78 004c BB73     		strb	r3, [r7, #14]
+  24:.\ComputerCommunication.c ****     sendMessage(&msgToSendBack,0xFF);  
+  79              		.loc 1 24 0
+  80 004e 07F10803 		add	r3, r7, #8
+  81 0052 1846     		mov	r0, r3
+  82 0054 FF21     		movs	r1, #255
+  83 0056 FFF7FEFF 		bl	sendMessage
+  25:.\ComputerCommunication.c **** }
+  84              		.loc 1 25 0
+  85 005a 1837     		adds	r7, r7, #24
+  86              		.cfi_def_cfa_offset 8
+  87 005c BD46     		mov	sp, r7
+  88              		.cfi_def_cfa_register 13
+  89              		@ sp needed
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 3
+
+
+  90 005e 80BD     		pop	{r7, pc}
+  91              		.cfi_endproc
+  92              	.LFE56:
+  93              		.size	sendTemperatureToCAN, .-sendTemperatureToCAN
+  94              		.section	.text.sendDataToCAN,"ax",%progbits
+  95              		.align	2
+  96              		.global	sendDataToCAN
+  97              		.thumb
+  98              		.thumb_func
+  99              		.type	sendDataToCAN, %function
+ 100              	sendDataToCAN:
+ 101              	.LFB57:
+  26:.\ComputerCommunication.c **** 
+  27:.\ComputerCommunication.c **** 
+  28:.\ComputerCommunication.c **** void sendDataToCAN(uint8 instruction, uint8 module, uint8 byte3, uint8 byte4, uint8 byte5, uint8 by
+  29:.\ComputerCommunication.c **** {
+ 102              		.loc 1 29 0
+ 103              		.cfi_startproc
+ 104              		@ args = 12, pretend = 0, frame = 24
+ 105              		@ frame_needed = 1, uses_anonymous_args = 0
+ 106 0000 90B5     		push	{r4, r7, lr}
+ 107              		.cfi_def_cfa_offset 12
+ 108              		.cfi_offset 4, -12
+ 109              		.cfi_offset 7, -8
+ 110              		.cfi_offset 14, -4
+ 111 0002 87B0     		sub	sp, sp, #28
+ 112              		.cfi_def_cfa_offset 40
+ 113 0004 00AF     		add	r7, sp, #0
+ 114              		.cfi_def_cfa_register 7
+ 115 0006 0446     		mov	r4, r0
+ 116 0008 0846     		mov	r0, r1
+ 117 000a 1146     		mov	r1, r2
+ 118 000c 1A46     		mov	r2, r3
+ 119 000e 2346     		mov	r3, r4
+ 120 0010 FB71     		strb	r3, [r7, #7]
+ 121 0012 0346     		mov	r3, r0
+ 122 0014 BB71     		strb	r3, [r7, #6]
+ 123 0016 0B46     		mov	r3, r1
+ 124 0018 7B71     		strb	r3, [r7, #5]
+ 125 001a 1346     		mov	r3, r2
+ 126 001c 3B71     		strb	r3, [r7, #4]
+  30:.\ComputerCommunication.c ****     CAN_MSG msg = {{instruction,module,HARDWARE_CAN_ID,byte3,byte4,byte5,byte6,byte7},{8},{0xFF}}; 
+ 127              		.loc 1 30 0
+ 128 001e FB79     		ldrb	r3, [r7, #7]
+ 129 0020 3B72     		strb	r3, [r7, #8]
+ 130 0022 BB79     		ldrb	r3, [r7, #6]
+ 131 0024 7B72     		strb	r3, [r7, #9]
+ 132 0026 7023     		movs	r3, #112
+ 133 0028 BB72     		strb	r3, [r7, #10]
+ 134 002a 7B79     		ldrb	r3, [r7, #5]
+ 135 002c FB72     		strb	r3, [r7, #11]
+ 136 002e 3B79     		ldrb	r3, [r7, #4]
+ 137 0030 3B73     		strb	r3, [r7, #12]
+ 138 0032 97F82830 		ldrb	r3, [r7, #40]
+ 139 0036 7B73     		strb	r3, [r7, #13]
+ 140 0038 97F82C30 		ldrb	r3, [r7, #44]
+ 141 003c BB73     		strb	r3, [r7, #14]
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 4
+
+
+ 142 003e 97F83030 		ldrb	r3, [r7, #48]
+ 143 0042 FB73     		strb	r3, [r7, #15]
+ 144 0044 0823     		movs	r3, #8
+ 145 0046 3B74     		strb	r3, [r7, #16]
+ 146 0048 FF23     		movs	r3, #255
+ 147 004a 7B61     		str	r3, [r7, #20]
+  31:.\ComputerCommunication.c ****     sendMessage(&msg,0xF); 
+ 148              		.loc 1 31 0
+ 149 004c 07F10803 		add	r3, r7, #8
+ 150 0050 1846     		mov	r0, r3
+ 151 0052 0F21     		movs	r1, #15
+ 152 0054 FFF7FEFF 		bl	sendMessage
+  32:.\ComputerCommunication.c **** }
+ 153              		.loc 1 32 0
+ 154 0058 1C37     		adds	r7, r7, #28
+ 155              		.cfi_def_cfa_offset 12
+ 156 005a BD46     		mov	sp, r7
+ 157              		.cfi_def_cfa_register 13
+ 158              		@ sp needed
+ 159 005c 90BD     		pop	{r4, r7, pc}
+ 160              		.cfi_endproc
+ 161              	.LFE57:
+ 162              		.size	sendDataToCAN, .-sendDataToCAN
+ 163 005e 00BF     		.section	.text.sendDataToCAN2,"ax",%progbits
+ 164              		.align	2
+ 165              		.global	sendDataToCAN2
+ 166              		.thumb
+ 167              		.thumb_func
+ 168              		.type	sendDataToCAN2, %function
+ 169              	sendDataToCAN2:
+ 170              	.LFB58:
+  33:.\ComputerCommunication.c **** 
+  34:.\ComputerCommunication.c **** void sendDataToCAN2(uint8 instruction, uint8 byte1, uint8 byte2, uint8 byte3, uint8 byte4, uint8 by
+  35:.\ComputerCommunication.c **** {
+ 171              		.loc 1 35 0
+ 172              		.cfi_startproc
+ 173              		@ args = 16, pretend = 0, frame = 24
+ 174              		@ frame_needed = 1, uses_anonymous_args = 0
+ 175 0000 90B5     		push	{r4, r7, lr}
+ 176              		.cfi_def_cfa_offset 12
+ 177              		.cfi_offset 4, -12
+ 178              		.cfi_offset 7, -8
+ 179              		.cfi_offset 14, -4
+ 180 0002 87B0     		sub	sp, sp, #28
+ 181              		.cfi_def_cfa_offset 40
+ 182 0004 00AF     		add	r7, sp, #0
+ 183              		.cfi_def_cfa_register 7
+ 184 0006 0446     		mov	r4, r0
+ 185 0008 0846     		mov	r0, r1
+ 186 000a 1146     		mov	r1, r2
+ 187 000c 1A46     		mov	r2, r3
+ 188 000e 2346     		mov	r3, r4
+ 189 0010 FB71     		strb	r3, [r7, #7]
+ 190 0012 0346     		mov	r3, r0
+ 191 0014 BB71     		strb	r3, [r7, #6]
+ 192 0016 0B46     		mov	r3, r1
+ 193 0018 7B71     		strb	r3, [r7, #5]
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 5
+
+
+ 194 001a 1346     		mov	r3, r2
+ 195 001c 3B71     		strb	r3, [r7, #4]
+  36:.\ComputerCommunication.c ****     CAN_MSG msg = {{  instruction,
+ 196              		.loc 1 36 0
+ 197 001e FB79     		ldrb	r3, [r7, #7]
+ 198 0020 3B72     		strb	r3, [r7, #8]
+ 199 0022 BB79     		ldrb	r3, [r7, #6]
+ 200 0024 7B72     		strb	r3, [r7, #9]
+ 201 0026 7B79     		ldrb	r3, [r7, #5]
+ 202 0028 BB72     		strb	r3, [r7, #10]
+ 203 002a 3B79     		ldrb	r3, [r7, #4]
+ 204 002c FB72     		strb	r3, [r7, #11]
+ 205 002e 97F82830 		ldrb	r3, [r7, #40]
+ 206 0032 3B73     		strb	r3, [r7, #12]
+ 207 0034 97F82C30 		ldrb	r3, [r7, #44]
+ 208 0038 7B73     		strb	r3, [r7, #13]
+ 209 003a 97F83030 		ldrb	r3, [r7, #48]
+ 210 003e BB73     		strb	r3, [r7, #14]
+ 211 0040 97F83430 		ldrb	r3, [r7, #52]
+ 212 0044 FB73     		strb	r3, [r7, #15]
+ 213 0046 0823     		movs	r3, #8
+ 214 0048 3B74     		strb	r3, [r7, #16]
+ 215 004a FF23     		movs	r3, #255
+ 216 004c 7B61     		str	r3, [r7, #20]
+  37:.\ComputerCommunication.c ****                       byte1,byte2,byte3,byte4,byte5,byte6,byte7},
+  38:.\ComputerCommunication.c ****                       {8},{0xFF}}; // Sets the first bytes of the message.
+  39:.\ComputerCommunication.c **** 
+  40:.\ComputerCommunication.c ****     sendMessage(&msg,0xFF);  
+ 217              		.loc 1 40 0
+ 218 004e 07F10803 		add	r3, r7, #8
+ 219 0052 1846     		mov	r0, r3
+ 220 0054 FF21     		movs	r1, #255
+ 221 0056 FFF7FEFF 		bl	sendMessage
+  41:.\ComputerCommunication.c **** }
+ 222              		.loc 1 41 0
+ 223 005a 1C37     		adds	r7, r7, #28
+ 224              		.cfi_def_cfa_offset 12
+ 225 005c BD46     		mov	sp, r7
+ 226              		.cfi_def_cfa_register 13
+ 227              		@ sp needed
+ 228 005e 90BD     		pop	{r4, r7, pc}
+ 229              		.cfi_endproc
+ 230              	.LFE58:
+ 231              		.size	sendDataToCAN2, .-sendDataToCAN2
+ 232              		.section	.text.sendFloatToCAN,"ax",%progbits
+ 233              		.align	2
+ 234              		.global	sendFloatToCAN
+ 235              		.thumb
+ 236              		.thumb_func
+ 237              		.type	sendFloatToCAN, %function
+ 238              	sendFloatToCAN:
+ 239              	.LFB59:
+  42:.\ComputerCommunication.c **** 
+  43:.\ComputerCommunication.c **** void sendFloatToCAN(uint8 instruction, uint8 module, float *datafloat)
+  44:.\ComputerCommunication.c **** {
+ 240              		.loc 1 44 0
+ 241              		.cfi_startproc
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 6
+
+
+ 242              		@ args = 0, pretend = 0, frame = 32
+ 243              		@ frame_needed = 1, uses_anonymous_args = 0
+ 244 0000 80B5     		push	{r7, lr}
+ 245              		.cfi_def_cfa_offset 8
+ 246              		.cfi_offset 7, -8
+ 247              		.cfi_offset 14, -4
+ 248 0002 88B0     		sub	sp, sp, #32
+ 249              		.cfi_def_cfa_offset 40
+ 250 0004 00AF     		add	r7, sp, #0
+ 251              		.cfi_def_cfa_register 7
+ 252 0006 0346     		mov	r3, r0
+ 253 0008 3A60     		str	r2, [r7]
+ 254 000a FB71     		strb	r3, [r7, #7]
+ 255 000c 0B46     		mov	r3, r1
+ 256 000e BB71     		strb	r3, [r7, #6]
+  45:.\ComputerCommunication.c ****     CAN_MSG msgToSendBack = {{instruction,module,HARDWARE_CAN_ID,0,0,0,0},{8},{0xFF}}; // Sets the 
+ 257              		.loc 1 45 0
+ 258 0010 07F11003 		add	r3, r7, #16
+ 259 0014 0022     		movs	r2, #0
+ 260 0016 1A60     		str	r2, [r3]
+ 261 0018 0433     		adds	r3, r3, #4
+ 262 001a 0022     		movs	r2, #0
+ 263 001c 1A60     		str	r2, [r3]
+ 264 001e 0433     		adds	r3, r3, #4
+ 265 0020 0022     		movs	r2, #0
+ 266 0022 1A60     		str	r2, [r3]
+ 267 0024 0433     		adds	r3, r3, #4
+ 268 0026 0022     		movs	r2, #0
+ 269 0028 1A60     		str	r2, [r3]
+ 270 002a 0433     		adds	r3, r3, #4
+ 271 002c FB79     		ldrb	r3, [r7, #7]
+ 272 002e 3B74     		strb	r3, [r7, #16]
+ 273 0030 BB79     		ldrb	r3, [r7, #6]
+ 274 0032 7B74     		strb	r3, [r7, #17]
+ 275 0034 7023     		movs	r3, #112
+ 276 0036 BB74     		strb	r3, [r7, #18]
+ 277 0038 0823     		movs	r3, #8
+ 278 003a 3B76     		strb	r3, [r7, #24]
+ 279 003c FF23     		movs	r3, #255
+ 280 003e FB61     		str	r3, [r7, #28]
+  46:.\ComputerCommunication.c **** 
+  47:.\ComputerCommunication.c **** 	uint8 d[4];
+  48:.\ComputerCommunication.c ****     memcpy(d, datafloat, 4);
+ 281              		.loc 1 48 0
+ 282 0040 07F10C03 		add	r3, r7, #12
+ 283 0044 1846     		mov	r0, r3
+ 284 0046 3968     		ldr	r1, [r7]
+ 285 0048 0422     		movs	r2, #4
+ 286 004a FFF7FEFF 		bl	memcpy
+  49:.\ComputerCommunication.c **** 	
+  50:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[4] = d[0];
+ 287              		.loc 1 50 0
+ 288 004e 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 289 0050 3B75     		strb	r3, [r7, #20]
+  51:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[5] = d[1];
+ 290              		.loc 1 51 0
+ 291 0052 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 7
+
+
+ 292 0054 7B75     		strb	r3, [r7, #21]
+  52:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[6] = d[2];
+ 293              		.loc 1 52 0
+ 294 0056 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 295 0058 BB75     		strb	r3, [r7, #22]
+  53:.\ComputerCommunication.c ****     msgToSendBack.msgBytes.byte[7] = d[3];
+ 296              		.loc 1 53 0
+ 297 005a FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 298 005c FB75     		strb	r3, [r7, #23]
+  54:.\ComputerCommunication.c ****     sendMessage(&msgToSendBack,0xFF); 
+ 299              		.loc 1 54 0
+ 300 005e 07F11003 		add	r3, r7, #16
+ 301 0062 1846     		mov	r0, r3
+ 302 0064 FF21     		movs	r1, #255
+ 303 0066 FFF7FEFF 		bl	sendMessage
+  55:.\ComputerCommunication.c **** }
+ 304              		.loc 1 55 0
+ 305 006a 2037     		adds	r7, r7, #32
+ 306              		.cfi_def_cfa_offset 8
+ 307 006c BD46     		mov	sp, r7
+ 308              		.cfi_def_cfa_register 13
+ 309              		@ sp needed
+ 310 006e 80BD     		pop	{r7, pc}
+ 311              		.cfi_endproc
+ 312              	.LFE59:
+ 313              		.size	sendFloatToCAN, .-sendFloatToCAN
+ 314              		.text
+ 315              	.Letext0:
+ 316              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 317              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 318              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 319              		.file 5 "Generated_Source\\PSoC5/CAN_1.h"
+ 320              		.file 6 ".\\CAN_Communication.h"
+ 321              		.file 7 "Generated_Source\\PSoC5/core_cm3.h"
+ 322              		.section	.debug_info,"",%progbits
+ 323              	.Ldebug_info0:
+ 324 0000 1E030000 		.4byte	0x31e
+ 325 0004 0400     		.2byte	0x4
+ 326 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 327 000a 04       		.byte	0x4
+ 328 000b 01       		.uleb128 0x1
+ 329 000c 26000000 		.4byte	.LASF42
+ 330 0010 01       		.byte	0x1
+ 331 0011 13020000 		.4byte	.LASF43
+ 332 0015 C8000000 		.4byte	.LASF44
+ 333 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 334 001d 00000000 		.4byte	0
+ 335 0021 00000000 		.4byte	.Ldebug_line0
+ 336 0025 02       		.uleb128 0x2
+ 337 0026 01       		.byte	0x1
+ 338 0027 06       		.byte	0x6
+ 339 0028 76020000 		.4byte	.LASF0
+ 340 002c 02       		.uleb128 0x2
+ 341 002d 01       		.byte	0x1
+ 342 002e 08       		.byte	0x8
+ 343 002f 0C010000 		.4byte	.LASF1
+ 344 0033 02       		.uleb128 0x2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 8
+
+
+ 345 0034 02       		.byte	0x2
+ 346 0035 05       		.byte	0x5
+ 347 0036 36020000 		.4byte	.LASF2
+ 348 003a 02       		.uleb128 0x2
+ 349 003b 02       		.byte	0x2
+ 350 003c 07       		.byte	0x7
+ 351 003d 82020000 		.4byte	.LASF3
+ 352 0041 03       		.uleb128 0x3
+ 353 0042 1C000000 		.4byte	.LASF9
+ 354 0046 02       		.byte	0x2
+ 355 0047 3F       		.byte	0x3f
+ 356 0048 4C000000 		.4byte	0x4c
+ 357 004c 02       		.uleb128 0x2
+ 358 004d 04       		.byte	0x4
+ 359 004e 05       		.byte	0x5
+ 360 004f 61020000 		.4byte	.LASF4
+ 361 0053 02       		.uleb128 0x2
+ 362 0054 04       		.byte	0x4
+ 363 0055 07       		.byte	0x7
+ 364 0056 2F010000 		.4byte	.LASF5
+ 365 005a 02       		.uleb128 0x2
+ 366 005b 08       		.byte	0x8
+ 367 005c 05       		.byte	0x5
+ 368 005d EB010000 		.4byte	.LASF6
+ 369 0061 02       		.uleb128 0x2
+ 370 0062 08       		.byte	0x8
+ 371 0063 07       		.byte	0x7
+ 372 0064 A8010000 		.4byte	.LASF7
+ 373 0068 04       		.uleb128 0x4
+ 374 0069 04       		.byte	0x4
+ 375 006a 05       		.byte	0x5
+ 376 006b 696E7400 		.ascii	"int\000"
+ 377 006f 02       		.uleb128 0x2
+ 378 0070 04       		.byte	0x4
+ 379 0071 07       		.byte	0x7
+ 380 0072 9B010000 		.4byte	.LASF8
+ 381 0076 03       		.uleb128 0x3
+ 382 0077 DA010000 		.4byte	.LASF10
+ 383 007b 03       		.byte	0x3
+ 384 007c 2C       		.byte	0x2c
+ 385 007d 41000000 		.4byte	0x41
+ 386 0081 03       		.uleb128 0x3
+ 387 0082 40020000 		.4byte	.LASF11
+ 388 0086 04       		.byte	0x4
+ 389 0087 A1       		.byte	0xa1
+ 390 0088 2C000000 		.4byte	0x2c
+ 391 008c 03       		.uleb128 0x3
+ 392 008d 72010000 		.4byte	.LASF12
+ 393 0091 04       		.byte	0x4
+ 394 0092 A2       		.byte	0xa2
+ 395 0093 3A000000 		.4byte	0x3a
+ 396 0097 03       		.uleb128 0x3
+ 397 0098 7E010000 		.4byte	.LASF13
+ 398 009c 04       		.byte	0x4
+ 399 009d A3       		.byte	0xa3
+ 400 009e 53000000 		.4byte	0x53
+ 401 00a2 03       		.uleb128 0x3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 9
+
+
+ 402 00a3 79010000 		.4byte	.LASF14
+ 403 00a7 04       		.byte	0x4
+ 404 00a8 A4       		.byte	0xa4
+ 405 00a9 25000000 		.4byte	0x25
+ 406 00ad 02       		.uleb128 0x2
+ 407 00ae 04       		.byte	0x4
+ 408 00af 04       		.byte	0x4
+ 409 00b0 16000000 		.4byte	.LASF15
+ 410 00b4 02       		.uleb128 0x2
+ 411 00b5 08       		.byte	0x8
+ 412 00b6 04       		.byte	0x4
+ 413 00b7 6B010000 		.4byte	.LASF16
+ 414 00bb 02       		.uleb128 0x2
+ 415 00bc 01       		.byte	0x1
+ 416 00bd 08       		.byte	0x8
+ 417 00be F9010000 		.4byte	.LASF17
+ 418 00c2 02       		.uleb128 0x2
+ 419 00c3 04       		.byte	0x4
+ 420 00c4 07       		.byte	0x7
+ 421 00c5 E2010000 		.4byte	.LASF18
+ 422 00c9 05       		.uleb128 0x5
+ 423 00ca 81000000 		.4byte	0x81
+ 424 00ce D9000000 		.4byte	0xd9
+ 425 00d2 06       		.uleb128 0x6
+ 426 00d3 C2000000 		.4byte	0xc2
+ 427 00d7 03       		.byte	0x3
+ 428 00d8 00       		.byte	0
+ 429 00d9 02       		.uleb128 0x2
+ 430 00da 08       		.byte	0x8
+ 431 00db 04       		.byte	0x4
+ 432 00dc 6A020000 		.4byte	.LASF19
+ 433 00e0 07       		.uleb128 0x7
+ 434 00e1 08       		.byte	0x8
+ 435 00e2 05       		.byte	0x5
+ 436 00e3 6F       		.byte	0x6f
+ 437 00e4 F5000000 		.4byte	0xf5
+ 438 00e8 08       		.uleb128 0x8
+ 439 00e9 BC000000 		.4byte	.LASF21
+ 440 00ed 05       		.byte	0x5
+ 441 00ee 71       		.byte	0x71
+ 442 00ef F5000000 		.4byte	0xf5
+ 443 00f3 00       		.byte	0
+ 444 00f4 00       		.byte	0
+ 445 00f5 05       		.uleb128 0x5
+ 446 00f6 81000000 		.4byte	0x81
+ 447 00fa 05010000 		.4byte	0x105
+ 448 00fe 06       		.uleb128 0x6
+ 449 00ff C2000000 		.4byte	0xc2
+ 450 0103 07       		.byte	0x7
+ 451 0104 00       		.byte	0
+ 452 0105 03       		.uleb128 0x3
+ 453 0106 FE010000 		.4byte	.LASF20
+ 454 010a 05       		.byte	0x5
+ 455 010b 72       		.byte	0x72
+ 456 010c E0000000 		.4byte	0xe0
+ 457 0110 07       		.uleb128 0x7
+ 458 0111 10       		.byte	0x10
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 10
+
+
+ 459 0112 06       		.byte	0x6
+ 460 0113 2A       		.byte	0x2a
+ 461 0114 3D010000 		.4byte	0x13d
+ 462 0118 08       		.uleb128 0x8
+ 463 0119 2D020000 		.4byte	.LASF22
+ 464 011d 06       		.byte	0x6
+ 465 011e 2F       		.byte	0x2f
+ 466 011f 05010000 		.4byte	0x105
+ 467 0123 00       		.byte	0
+ 468 0124 09       		.uleb128 0x9
+ 469 0125 444C4300 		.ascii	"DLC\000"
+ 470 0129 06       		.byte	0x6
+ 471 012a 30       		.byte	0x30
+ 472 012b 81000000 		.4byte	0x81
+ 473 012f 08       		.byte	0x8
+ 474 0130 08       		.uleb128 0x8
+ 475 0131 94010000 		.4byte	.LASF23
+ 476 0135 06       		.byte	0x6
+ 477 0136 31       		.byte	0x31
+ 478 0137 97000000 		.4byte	0x97
+ 479 013b 0C       		.byte	0xc
+ 480 013c 00       		.byte	0
+ 481 013d 03       		.uleb128 0x3
+ 482 013e 00000000 		.4byte	.LASF24
+ 483 0142 06       		.byte	0x6
+ 484 0143 32       		.byte	0x32
+ 485 0144 10010000 		.4byte	0x110
+ 486 0148 0A       		.uleb128 0xa
+ 487 0149 1A010000 		.4byte	.LASF28
+ 488 014d 01       		.byte	0x1
+ 489 014e 11       		.byte	0x11
+ 490 014f 00000000 		.4byte	.LFB56
+ 491 0153 60000000 		.4byte	.LFE56-.LFB56
+ 492 0157 01       		.uleb128 0x1
+ 493 0158 9C       		.byte	0x9c
+ 494 0159 96010000 		.4byte	0x196
+ 495 015d 0B       		.uleb128 0xb
+ 496 015e C1000000 		.4byte	.LASF25
+ 497 0162 01       		.byte	0x1
+ 498 0163 11       		.byte	0x11
+ 499 0164 81000000 		.4byte	0x81
+ 500 0168 02       		.uleb128 0x2
+ 501 0169 91       		.byte	0x91
+ 502 016a 67       		.sleb128 -25
+ 503 016b 0B       		.uleb128 0xb
+ 504 016c F6000000 		.4byte	.LASF26
+ 505 0170 01       		.byte	0x1
+ 506 0171 11       		.byte	0x11
+ 507 0172 8C000000 		.4byte	0x8c
+ 508 0176 02       		.uleb128 0x2
+ 509 0177 91       		.byte	0x91
+ 510 0178 64       		.sleb128 -28
+ 511 0179 0B       		.uleb128 0xb
+ 512 017a B4000000 		.4byte	.LASF27
+ 513 017e 01       		.byte	0x1
+ 514 017f 11       		.byte	0x11
+ 515 0180 A2000000 		.4byte	0xa2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 11
+
+
+ 516 0184 02       		.uleb128 0x2
+ 517 0185 91       		.byte	0x91
+ 518 0186 66       		.sleb128 -26
+ 519 0187 0C       		.uleb128 0xc
+ 520 0188 08000000 		.4byte	.LASF36
+ 521 018c 01       		.byte	0x1
+ 522 018d 13       		.byte	0x13
+ 523 018e 3D010000 		.4byte	0x13d
+ 524 0192 02       		.uleb128 0x2
+ 525 0193 91       		.byte	0x91
+ 526 0194 68       		.sleb128 -24
+ 527 0195 00       		.byte	0
+ 528 0196 0A       		.uleb128 0xa
+ 529 0197 CC010000 		.4byte	.LASF29
+ 530 019b 01       		.byte	0x1
+ 531 019c 1C       		.byte	0x1c
+ 532 019d 00000000 		.4byte	.LFB57
+ 533 01a1 5E000000 		.4byte	.LFE57-.LFB57
+ 534 01a5 01       		.uleb128 0x1
+ 535 01a6 9C       		.byte	0x9c
+ 536 01a7 1C020000 		.4byte	0x21c
+ 537 01ab 0B       		.uleb128 0xb
+ 538 01ac 55020000 		.4byte	.LASF30
+ 539 01b0 01       		.byte	0x1
+ 540 01b1 1C       		.byte	0x1c
+ 541 01b2 81000000 		.4byte	0x81
+ 542 01b6 02       		.uleb128 0x2
+ 543 01b7 91       		.byte	0x91
+ 544 01b8 5F       		.sleb128 -33
+ 545 01b9 0B       		.uleb128 0xb
+ 546 01ba C1000000 		.4byte	.LASF25
+ 547 01be 01       		.byte	0x1
+ 548 01bf 1C       		.byte	0x1c
+ 549 01c0 81000000 		.4byte	0x81
+ 550 01c4 02       		.uleb128 0x2
+ 551 01c5 91       		.byte	0x91
+ 552 01c6 5E       		.sleb128 -34
+ 553 01c7 0B       		.uleb128 0xb
+ 554 01c8 4D010000 		.4byte	.LASF31
+ 555 01cc 01       		.byte	0x1
+ 556 01cd 1C       		.byte	0x1c
+ 557 01ce 81000000 		.4byte	0x81
+ 558 01d2 02       		.uleb128 0x2
+ 559 01d3 91       		.byte	0x91
+ 560 01d4 5D       		.sleb128 -35
+ 561 01d5 0B       		.uleb128 0xb
+ 562 01d6 53010000 		.4byte	.LASF32
+ 563 01da 01       		.byte	0x1
+ 564 01db 1C       		.byte	0x1c
+ 565 01dc 81000000 		.4byte	0x81
+ 566 01e0 02       		.uleb128 0x2
+ 567 01e1 91       		.byte	0x91
+ 568 01e2 5C       		.sleb128 -36
+ 569 01e3 0B       		.uleb128 0xb
+ 570 01e4 59010000 		.4byte	.LASF33
+ 571 01e8 01       		.byte	0x1
+ 572 01e9 1C       		.byte	0x1c
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 12
+
+
+ 573 01ea 81000000 		.4byte	0x81
+ 574 01ee 02       		.uleb128 0x2
+ 575 01ef 91       		.byte	0x91
+ 576 01f0 00       		.sleb128 0
+ 577 01f1 0B       		.uleb128 0xb
+ 578 01f2 5F010000 		.4byte	.LASF34
+ 579 01f6 01       		.byte	0x1
+ 580 01f7 1C       		.byte	0x1c
+ 581 01f8 81000000 		.4byte	0x81
+ 582 01fc 02       		.uleb128 0x2
+ 583 01fd 91       		.byte	0x91
+ 584 01fe 04       		.sleb128 4
+ 585 01ff 0B       		.uleb128 0xb
+ 586 0200 65010000 		.4byte	.LASF35
+ 587 0204 01       		.byte	0x1
+ 588 0205 1C       		.byte	0x1c
+ 589 0206 81000000 		.4byte	0x81
+ 590 020a 02       		.uleb128 0x2
+ 591 020b 91       		.byte	0x91
+ 592 020c 08       		.sleb128 8
+ 593 020d 0D       		.uleb128 0xd
+ 594 020e 6D736700 		.ascii	"msg\000"
+ 595 0212 01       		.byte	0x1
+ 596 0213 1E       		.byte	0x1e
+ 597 0214 3D010000 		.4byte	0x13d
+ 598 0218 02       		.uleb128 0x2
+ 599 0219 91       		.byte	0x91
+ 600 021a 60       		.sleb128 -32
+ 601 021b 00       		.byte	0
+ 602 021c 0A       		.uleb128 0xa
+ 603 021d 46020000 		.4byte	.LASF37
+ 604 0221 01       		.byte	0x1
+ 605 0222 22       		.byte	0x22
+ 606 0223 00000000 		.4byte	.LFB58
+ 607 0227 60000000 		.4byte	.LFE58-.LFB58
+ 608 022b 01       		.uleb128 0x1
+ 609 022c 9C       		.byte	0x9c
+ 610 022d B0020000 		.4byte	0x2b0
+ 611 0231 0B       		.uleb128 0xb
+ 612 0232 55020000 		.4byte	.LASF30
+ 613 0236 01       		.byte	0x1
+ 614 0237 22       		.byte	0x22
+ 615 0238 81000000 		.4byte	0x81
+ 616 023c 02       		.uleb128 0x2
+ 617 023d 91       		.byte	0x91
+ 618 023e 5F       		.sleb128 -33
+ 619 023f 0B       		.uleb128 0xb
+ 620 0240 41010000 		.4byte	.LASF38
+ 621 0244 01       		.byte	0x1
+ 622 0245 22       		.byte	0x22
+ 623 0246 81000000 		.4byte	0x81
+ 624 024a 02       		.uleb128 0x2
+ 625 024b 91       		.byte	0x91
+ 626 024c 5E       		.sleb128 -34
+ 627 024d 0B       		.uleb128 0xb
+ 628 024e 47010000 		.4byte	.LASF39
+ 629 0252 01       		.byte	0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 13
+
+
+ 630 0253 22       		.byte	0x22
+ 631 0254 81000000 		.4byte	0x81
+ 632 0258 02       		.uleb128 0x2
+ 633 0259 91       		.byte	0x91
+ 634 025a 5D       		.sleb128 -35
+ 635 025b 0B       		.uleb128 0xb
+ 636 025c 4D010000 		.4byte	.LASF31
+ 637 0260 01       		.byte	0x1
+ 638 0261 22       		.byte	0x22
+ 639 0262 81000000 		.4byte	0x81
+ 640 0266 02       		.uleb128 0x2
+ 641 0267 91       		.byte	0x91
+ 642 0268 5C       		.sleb128 -36
+ 643 0269 0B       		.uleb128 0xb
+ 644 026a 53010000 		.4byte	.LASF32
+ 645 026e 01       		.byte	0x1
+ 646 026f 22       		.byte	0x22
+ 647 0270 81000000 		.4byte	0x81
+ 648 0274 02       		.uleb128 0x2
+ 649 0275 91       		.byte	0x91
+ 650 0276 00       		.sleb128 0
+ 651 0277 0B       		.uleb128 0xb
+ 652 0278 59010000 		.4byte	.LASF33
+ 653 027c 01       		.byte	0x1
+ 654 027d 22       		.byte	0x22
+ 655 027e 81000000 		.4byte	0x81
+ 656 0282 02       		.uleb128 0x2
+ 657 0283 91       		.byte	0x91
+ 658 0284 04       		.sleb128 4
+ 659 0285 0B       		.uleb128 0xb
+ 660 0286 5F010000 		.4byte	.LASF34
+ 661 028a 01       		.byte	0x1
+ 662 028b 22       		.byte	0x22
+ 663 028c 81000000 		.4byte	0x81
+ 664 0290 02       		.uleb128 0x2
+ 665 0291 91       		.byte	0x91
+ 666 0292 08       		.sleb128 8
+ 667 0293 0B       		.uleb128 0xb
+ 668 0294 65010000 		.4byte	.LASF35
+ 669 0298 01       		.byte	0x1
+ 670 0299 22       		.byte	0x22
+ 671 029a 81000000 		.4byte	0x81
+ 672 029e 02       		.uleb128 0x2
+ 673 029f 91       		.byte	0x91
+ 674 02a0 0C       		.sleb128 12
+ 675 02a1 0D       		.uleb128 0xd
+ 676 02a2 6D736700 		.ascii	"msg\000"
+ 677 02a6 01       		.byte	0x1
+ 678 02a7 24       		.byte	0x24
+ 679 02a8 3D010000 		.4byte	0x13d
+ 680 02ac 02       		.uleb128 0x2
+ 681 02ad 91       		.byte	0x91
+ 682 02ae 60       		.sleb128 -32
+ 683 02af 00       		.byte	0
+ 684 02b0 0A       		.uleb128 0xa
+ 685 02b1 85010000 		.4byte	.LASF40
+ 686 02b5 01       		.byte	0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 14
+
+
+ 687 02b6 2B       		.byte	0x2b
+ 688 02b7 00000000 		.4byte	.LFB59
+ 689 02bb 70000000 		.4byte	.LFE59-.LFB59
+ 690 02bf 01       		.uleb128 0x1
+ 691 02c0 9C       		.byte	0x9c
+ 692 02c1 0A030000 		.4byte	0x30a
+ 693 02c5 0B       		.uleb128 0xb
+ 694 02c6 55020000 		.4byte	.LASF30
+ 695 02ca 01       		.byte	0x1
+ 696 02cb 2B       		.byte	0x2b
+ 697 02cc 81000000 		.4byte	0x81
+ 698 02d0 02       		.uleb128 0x2
+ 699 02d1 91       		.byte	0x91
+ 700 02d2 5F       		.sleb128 -33
+ 701 02d3 0B       		.uleb128 0xb
+ 702 02d4 C1000000 		.4byte	.LASF25
+ 703 02d8 01       		.byte	0x1
+ 704 02d9 2B       		.byte	0x2b
+ 705 02da 81000000 		.4byte	0x81
+ 706 02de 02       		.uleb128 0x2
+ 707 02df 91       		.byte	0x91
+ 708 02e0 5E       		.sleb128 -34
+ 709 02e1 0B       		.uleb128 0xb
+ 710 02e2 02010000 		.4byte	.LASF41
+ 711 02e6 01       		.byte	0x1
+ 712 02e7 2B       		.byte	0x2b
+ 713 02e8 0A030000 		.4byte	0x30a
+ 714 02ec 02       		.uleb128 0x2
+ 715 02ed 91       		.byte	0x91
+ 716 02ee 58       		.sleb128 -40
+ 717 02ef 0C       		.uleb128 0xc
+ 718 02f0 08000000 		.4byte	.LASF36
+ 719 02f4 01       		.byte	0x1
+ 720 02f5 2D       		.byte	0x2d
+ 721 02f6 3D010000 		.4byte	0x13d
+ 722 02fa 02       		.uleb128 0x2
+ 723 02fb 91       		.byte	0x91
+ 724 02fc 68       		.sleb128 -24
+ 725 02fd 0D       		.uleb128 0xd
+ 726 02fe 6400     		.ascii	"d\000"
+ 727 0300 01       		.byte	0x1
+ 728 0301 2F       		.byte	0x2f
+ 729 0302 C9000000 		.4byte	0xc9
+ 730 0306 02       		.uleb128 0x2
+ 731 0307 91       		.byte	0x91
+ 732 0308 64       		.sleb128 -28
+ 733 0309 00       		.byte	0
+ 734 030a 0E       		.uleb128 0xe
+ 735 030b 04       		.byte	0x4
+ 736 030c AD000000 		.4byte	0xad
+ 737 0310 0F       		.uleb128 0xf
+ 738 0311 BF010000 		.4byte	.LASF45
+ 739 0315 07       		.byte	0x7
+ 740 0316 1606     		.2byte	0x616
+ 741 0318 1C030000 		.4byte	0x31c
+ 742 031c 10       		.uleb128 0x10
+ 743 031d 76000000 		.4byte	0x76
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 15
+
+
+ 744 0321 00       		.byte	0
+ 745              		.section	.debug_abbrev,"",%progbits
+ 746              	.Ldebug_abbrev0:
+ 747 0000 01       		.uleb128 0x1
+ 748 0001 11       		.uleb128 0x11
+ 749 0002 01       		.byte	0x1
+ 750 0003 25       		.uleb128 0x25
+ 751 0004 0E       		.uleb128 0xe
+ 752 0005 13       		.uleb128 0x13
+ 753 0006 0B       		.uleb128 0xb
+ 754 0007 03       		.uleb128 0x3
+ 755 0008 0E       		.uleb128 0xe
+ 756 0009 1B       		.uleb128 0x1b
+ 757 000a 0E       		.uleb128 0xe
+ 758 000b 55       		.uleb128 0x55
+ 759 000c 17       		.uleb128 0x17
+ 760 000d 11       		.uleb128 0x11
+ 761 000e 01       		.uleb128 0x1
+ 762 000f 10       		.uleb128 0x10
+ 763 0010 17       		.uleb128 0x17
+ 764 0011 00       		.byte	0
+ 765 0012 00       		.byte	0
+ 766 0013 02       		.uleb128 0x2
+ 767 0014 24       		.uleb128 0x24
+ 768 0015 00       		.byte	0
+ 769 0016 0B       		.uleb128 0xb
+ 770 0017 0B       		.uleb128 0xb
+ 771 0018 3E       		.uleb128 0x3e
+ 772 0019 0B       		.uleb128 0xb
+ 773 001a 03       		.uleb128 0x3
+ 774 001b 0E       		.uleb128 0xe
+ 775 001c 00       		.byte	0
+ 776 001d 00       		.byte	0
+ 777 001e 03       		.uleb128 0x3
+ 778 001f 16       		.uleb128 0x16
+ 779 0020 00       		.byte	0
+ 780 0021 03       		.uleb128 0x3
+ 781 0022 0E       		.uleb128 0xe
+ 782 0023 3A       		.uleb128 0x3a
+ 783 0024 0B       		.uleb128 0xb
+ 784 0025 3B       		.uleb128 0x3b
+ 785 0026 0B       		.uleb128 0xb
+ 786 0027 49       		.uleb128 0x49
+ 787 0028 13       		.uleb128 0x13
+ 788 0029 00       		.byte	0
+ 789 002a 00       		.byte	0
+ 790 002b 04       		.uleb128 0x4
+ 791 002c 24       		.uleb128 0x24
+ 792 002d 00       		.byte	0
+ 793 002e 0B       		.uleb128 0xb
+ 794 002f 0B       		.uleb128 0xb
+ 795 0030 3E       		.uleb128 0x3e
+ 796 0031 0B       		.uleb128 0xb
+ 797 0032 03       		.uleb128 0x3
+ 798 0033 08       		.uleb128 0x8
+ 799 0034 00       		.byte	0
+ 800 0035 00       		.byte	0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 16
+
+
+ 801 0036 05       		.uleb128 0x5
+ 802 0037 01       		.uleb128 0x1
+ 803 0038 01       		.byte	0x1
+ 804 0039 49       		.uleb128 0x49
+ 805 003a 13       		.uleb128 0x13
+ 806 003b 01       		.uleb128 0x1
+ 807 003c 13       		.uleb128 0x13
+ 808 003d 00       		.byte	0
+ 809 003e 00       		.byte	0
+ 810 003f 06       		.uleb128 0x6
+ 811 0040 21       		.uleb128 0x21
+ 812 0041 00       		.byte	0
+ 813 0042 49       		.uleb128 0x49
+ 814 0043 13       		.uleb128 0x13
+ 815 0044 2F       		.uleb128 0x2f
+ 816 0045 0B       		.uleb128 0xb
+ 817 0046 00       		.byte	0
+ 818 0047 00       		.byte	0
+ 819 0048 07       		.uleb128 0x7
+ 820 0049 13       		.uleb128 0x13
+ 821 004a 01       		.byte	0x1
+ 822 004b 0B       		.uleb128 0xb
+ 823 004c 0B       		.uleb128 0xb
+ 824 004d 3A       		.uleb128 0x3a
+ 825 004e 0B       		.uleb128 0xb
+ 826 004f 3B       		.uleb128 0x3b
+ 827 0050 0B       		.uleb128 0xb
+ 828 0051 01       		.uleb128 0x1
+ 829 0052 13       		.uleb128 0x13
+ 830 0053 00       		.byte	0
+ 831 0054 00       		.byte	0
+ 832 0055 08       		.uleb128 0x8
+ 833 0056 0D       		.uleb128 0xd
+ 834 0057 00       		.byte	0
+ 835 0058 03       		.uleb128 0x3
+ 836 0059 0E       		.uleb128 0xe
+ 837 005a 3A       		.uleb128 0x3a
+ 838 005b 0B       		.uleb128 0xb
+ 839 005c 3B       		.uleb128 0x3b
+ 840 005d 0B       		.uleb128 0xb
+ 841 005e 49       		.uleb128 0x49
+ 842 005f 13       		.uleb128 0x13
+ 843 0060 38       		.uleb128 0x38
+ 844 0061 0B       		.uleb128 0xb
+ 845 0062 00       		.byte	0
+ 846 0063 00       		.byte	0
+ 847 0064 09       		.uleb128 0x9
+ 848 0065 0D       		.uleb128 0xd
+ 849 0066 00       		.byte	0
+ 850 0067 03       		.uleb128 0x3
+ 851 0068 08       		.uleb128 0x8
+ 852 0069 3A       		.uleb128 0x3a
+ 853 006a 0B       		.uleb128 0xb
+ 854 006b 3B       		.uleb128 0x3b
+ 855 006c 0B       		.uleb128 0xb
+ 856 006d 49       		.uleb128 0x49
+ 857 006e 13       		.uleb128 0x13
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 17
+
+
+ 858 006f 38       		.uleb128 0x38
+ 859 0070 0B       		.uleb128 0xb
+ 860 0071 00       		.byte	0
+ 861 0072 00       		.byte	0
+ 862 0073 0A       		.uleb128 0xa
+ 863 0074 2E       		.uleb128 0x2e
+ 864 0075 01       		.byte	0x1
+ 865 0076 3F       		.uleb128 0x3f
+ 866 0077 19       		.uleb128 0x19
+ 867 0078 03       		.uleb128 0x3
+ 868 0079 0E       		.uleb128 0xe
+ 869 007a 3A       		.uleb128 0x3a
+ 870 007b 0B       		.uleb128 0xb
+ 871 007c 3B       		.uleb128 0x3b
+ 872 007d 0B       		.uleb128 0xb
+ 873 007e 27       		.uleb128 0x27
+ 874 007f 19       		.uleb128 0x19
+ 875 0080 11       		.uleb128 0x11
+ 876 0081 01       		.uleb128 0x1
+ 877 0082 12       		.uleb128 0x12
+ 878 0083 06       		.uleb128 0x6
+ 879 0084 40       		.uleb128 0x40
+ 880 0085 18       		.uleb128 0x18
+ 881 0086 9642     		.uleb128 0x2116
+ 882 0088 19       		.uleb128 0x19
+ 883 0089 01       		.uleb128 0x1
+ 884 008a 13       		.uleb128 0x13
+ 885 008b 00       		.byte	0
+ 886 008c 00       		.byte	0
+ 887 008d 0B       		.uleb128 0xb
+ 888 008e 05       		.uleb128 0x5
+ 889 008f 00       		.byte	0
+ 890 0090 03       		.uleb128 0x3
+ 891 0091 0E       		.uleb128 0xe
+ 892 0092 3A       		.uleb128 0x3a
+ 893 0093 0B       		.uleb128 0xb
+ 894 0094 3B       		.uleb128 0x3b
+ 895 0095 0B       		.uleb128 0xb
+ 896 0096 49       		.uleb128 0x49
+ 897 0097 13       		.uleb128 0x13
+ 898 0098 02       		.uleb128 0x2
+ 899 0099 18       		.uleb128 0x18
+ 900 009a 00       		.byte	0
+ 901 009b 00       		.byte	0
+ 902 009c 0C       		.uleb128 0xc
+ 903 009d 34       		.uleb128 0x34
+ 904 009e 00       		.byte	0
+ 905 009f 03       		.uleb128 0x3
+ 906 00a0 0E       		.uleb128 0xe
+ 907 00a1 3A       		.uleb128 0x3a
+ 908 00a2 0B       		.uleb128 0xb
+ 909 00a3 3B       		.uleb128 0x3b
+ 910 00a4 0B       		.uleb128 0xb
+ 911 00a5 49       		.uleb128 0x49
+ 912 00a6 13       		.uleb128 0x13
+ 913 00a7 02       		.uleb128 0x2
+ 914 00a8 18       		.uleb128 0x18
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 18
+
+
+ 915 00a9 00       		.byte	0
+ 916 00aa 00       		.byte	0
+ 917 00ab 0D       		.uleb128 0xd
+ 918 00ac 34       		.uleb128 0x34
+ 919 00ad 00       		.byte	0
+ 920 00ae 03       		.uleb128 0x3
+ 921 00af 08       		.uleb128 0x8
+ 922 00b0 3A       		.uleb128 0x3a
+ 923 00b1 0B       		.uleb128 0xb
+ 924 00b2 3B       		.uleb128 0x3b
+ 925 00b3 0B       		.uleb128 0xb
+ 926 00b4 49       		.uleb128 0x49
+ 927 00b5 13       		.uleb128 0x13
+ 928 00b6 02       		.uleb128 0x2
+ 929 00b7 18       		.uleb128 0x18
+ 930 00b8 00       		.byte	0
+ 931 00b9 00       		.byte	0
+ 932 00ba 0E       		.uleb128 0xe
+ 933 00bb 0F       		.uleb128 0xf
+ 934 00bc 00       		.byte	0
+ 935 00bd 0B       		.uleb128 0xb
+ 936 00be 0B       		.uleb128 0xb
+ 937 00bf 49       		.uleb128 0x49
+ 938 00c0 13       		.uleb128 0x13
+ 939 00c1 00       		.byte	0
+ 940 00c2 00       		.byte	0
+ 941 00c3 0F       		.uleb128 0xf
+ 942 00c4 34       		.uleb128 0x34
+ 943 00c5 00       		.byte	0
+ 944 00c6 03       		.uleb128 0x3
+ 945 00c7 0E       		.uleb128 0xe
+ 946 00c8 3A       		.uleb128 0x3a
+ 947 00c9 0B       		.uleb128 0xb
+ 948 00ca 3B       		.uleb128 0x3b
+ 949 00cb 05       		.uleb128 0x5
+ 950 00cc 49       		.uleb128 0x49
+ 951 00cd 13       		.uleb128 0x13
+ 952 00ce 3F       		.uleb128 0x3f
+ 953 00cf 19       		.uleb128 0x19
+ 954 00d0 3C       		.uleb128 0x3c
+ 955 00d1 19       		.uleb128 0x19
+ 956 00d2 00       		.byte	0
+ 957 00d3 00       		.byte	0
+ 958 00d4 10       		.uleb128 0x10
+ 959 00d5 35       		.uleb128 0x35
+ 960 00d6 00       		.byte	0
+ 961 00d7 49       		.uleb128 0x49
+ 962 00d8 13       		.uleb128 0x13
+ 963 00d9 00       		.byte	0
+ 964 00da 00       		.byte	0
+ 965 00db 00       		.byte	0
+ 966              		.section	.debug_aranges,"",%progbits
+ 967 0000 34000000 		.4byte	0x34
+ 968 0004 0200     		.2byte	0x2
+ 969 0006 00000000 		.4byte	.Ldebug_info0
+ 970 000a 04       		.byte	0x4
+ 971 000b 00       		.byte	0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 19
+
+
+ 972 000c 0000     		.2byte	0
+ 973 000e 0000     		.2byte	0
+ 974 0010 00000000 		.4byte	.LFB56
+ 975 0014 60000000 		.4byte	.LFE56-.LFB56
+ 976 0018 00000000 		.4byte	.LFB57
+ 977 001c 5E000000 		.4byte	.LFE57-.LFB57
+ 978 0020 00000000 		.4byte	.LFB58
+ 979 0024 60000000 		.4byte	.LFE58-.LFB58
+ 980 0028 00000000 		.4byte	.LFB59
+ 981 002c 70000000 		.4byte	.LFE59-.LFB59
+ 982 0030 00000000 		.4byte	0
+ 983 0034 00000000 		.4byte	0
+ 984              		.section	.debug_ranges,"",%progbits
+ 985              	.Ldebug_ranges0:
+ 986 0000 00000000 		.4byte	.LFB56
+ 987 0004 60000000 		.4byte	.LFE56
+ 988 0008 00000000 		.4byte	.LFB57
+ 989 000c 5E000000 		.4byte	.LFE57
+ 990 0010 00000000 		.4byte	.LFB58
+ 991 0014 60000000 		.4byte	.LFE58
+ 992 0018 00000000 		.4byte	.LFB59
+ 993 001c 70000000 		.4byte	.LFE59
+ 994 0020 00000000 		.4byte	0
+ 995 0024 00000000 		.4byte	0
+ 996              		.section	.debug_line,"",%progbits
+ 997              	.Ldebug_line0:
+ 998 0000 D8010000 		.section	.debug_str,"MS",%progbits,1
+ 998      02007E01 
+ 998      00000201 
+ 998      FB0E0D00 
+ 998      01010101 
+ 999              	.LASF24:
+ 1000 0000 43414E5F 		.ascii	"CAN_MSG\000"
+ 1000      4D534700 
+ 1001              	.LASF36:
+ 1002 0008 6D736754 		.ascii	"msgToSendBack\000"
+ 1002      6F53656E 
+ 1002      64426163 
+ 1002      6B00
+ 1003              	.LASF15:
+ 1004 0016 666C6F61 		.ascii	"float\000"
+ 1004      7400
+ 1005              	.LASF9:
+ 1006 001c 5F5F696E 		.ascii	"__int32_t\000"
+ 1006      7433325F 
+ 1006      7400
+ 1007              	.LASF42:
+ 1008 0026 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1008      4320342E 
+ 1008      392E3320 
+ 1008      32303135 
+ 1008      30333033 
+ 1009 0059 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1009      20726576 
+ 1009      6973696F 
+ 1009      6E203232 
+ 1009      31323230 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 20
+
+
+ 1010 008c 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1010      66756E63 
+ 1010      74696F6E 
+ 1010      2D736563 
+ 1010      74696F6E 
+ 1011              	.LASF27:
+ 1012 00b4 636F6D6D 		.ascii	"command\000"
+ 1012      616E6400 
+ 1013              	.LASF21:
+ 1014 00bc 62797465 		.ascii	"byte\000"
+ 1014      00
+ 1015              	.LASF25:
+ 1016 00c1 6D6F6475 		.ascii	"module\000"
+ 1016      6C6500
+ 1017              	.LASF44:
+ 1018 00c8 433A5C55 		.ascii	"C:\\Users\\Lois\\Desktop\\MC1_5\\MC1_5_PSOC5.cydsn\000"
+ 1018      73657273 
+ 1018      5C4C6F69 
+ 1018      735C4465 
+ 1018      736B746F 
+ 1019              	.LASF26:
+ 1020 00f6 74656D70 		.ascii	"temperature\000"
+ 1020      65726174 
+ 1020      75726500 
+ 1021              	.LASF41:
+ 1022 0102 64617461 		.ascii	"datafloat\000"
+ 1022      666C6F61 
+ 1022      7400
+ 1023              	.LASF1:
+ 1024 010c 756E7369 		.ascii	"unsigned char\000"
+ 1024      676E6564 
+ 1024      20636861 
+ 1024      7200
+ 1025              	.LASF28:
+ 1026 011a 73656E64 		.ascii	"sendTemperatureToCAN\000"
+ 1026      54656D70 
+ 1026      65726174 
+ 1026      75726554 
+ 1026      6F43414E 
+ 1027              	.LASF5:
+ 1028 012f 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1028      20756E73 
+ 1028      69676E65 
+ 1028      6420696E 
+ 1028      7400
+ 1029              	.LASF38:
+ 1030 0141 62797465 		.ascii	"byte1\000"
+ 1030      3100
+ 1031              	.LASF39:
+ 1032 0147 62797465 		.ascii	"byte2\000"
+ 1032      3200
+ 1033              	.LASF31:
+ 1034 014d 62797465 		.ascii	"byte3\000"
+ 1034      3300
+ 1035              	.LASF32:
+ 1036 0153 62797465 		.ascii	"byte4\000"
+ 1036      3400
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 21
+
+
+ 1037              	.LASF33:
+ 1038 0159 62797465 		.ascii	"byte5\000"
+ 1038      3500
+ 1039              	.LASF34:
+ 1040 015f 62797465 		.ascii	"byte6\000"
+ 1040      3600
+ 1041              	.LASF35:
+ 1042 0165 62797465 		.ascii	"byte7\000"
+ 1042      3700
+ 1043              	.LASF16:
+ 1044 016b 646F7562 		.ascii	"double\000"
+ 1044      6C6500
+ 1045              	.LASF12:
+ 1046 0172 75696E74 		.ascii	"uint16\000"
+ 1046      313600
+ 1047              	.LASF14:
+ 1048 0179 696E7438 		.ascii	"int8\000"
+ 1048      00
+ 1049              	.LASF13:
+ 1050 017e 75696E74 		.ascii	"uint32\000"
+ 1050      333200
+ 1051              	.LASF40:
+ 1052 0185 73656E64 		.ascii	"sendFloatToCAN\000"
+ 1052      466C6F61 
+ 1052      74546F43 
+ 1052      414E00
+ 1053              	.LASF23:
+ 1054 0194 43414E5F 		.ascii	"CAN_ID\000"
+ 1054      494400
+ 1055              	.LASF8:
+ 1056 019b 756E7369 		.ascii	"unsigned int\000"
+ 1056      676E6564 
+ 1056      20696E74 
+ 1056      00
+ 1057              	.LASF7:
+ 1058 01a8 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1058      206C6F6E 
+ 1058      6720756E 
+ 1058      7369676E 
+ 1058      65642069 
+ 1059              	.LASF45:
+ 1060 01bf 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1060      52784275 
+ 1060      66666572 
+ 1060      00
+ 1061              	.LASF29:
+ 1062 01cc 73656E64 		.ascii	"sendDataToCAN\000"
+ 1062      44617461 
+ 1062      546F4341 
+ 1062      4E00
+ 1063              	.LASF10:
+ 1064 01da 696E7433 		.ascii	"int32_t\000"
+ 1064      325F7400 
+ 1065              	.LASF18:
+ 1066 01e2 73697A65 		.ascii	"sizetype\000"
+ 1066      74797065 
+ 1066      00
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 22
+
+
+ 1067              	.LASF6:
+ 1068 01eb 6C6F6E67 		.ascii	"long long int\000"
+ 1068      206C6F6E 
+ 1068      6720696E 
+ 1068      7400
+ 1069              	.LASF17:
+ 1070 01f9 63686172 		.ascii	"char\000"
+ 1070      00
+ 1071              	.LASF20:
+ 1072 01fe 43414E5F 		.ascii	"CAN_1_DATA_BYTES_MSG\000"
+ 1072      315F4441 
+ 1072      54415F42 
+ 1072      59544553 
+ 1072      5F4D5347 
+ 1073              	.LASF43:
+ 1074 0213 2E5C436F 		.ascii	".\\ComputerCommunication.c\000"
+ 1074      6D707574 
+ 1074      6572436F 
+ 1074      6D6D756E 
+ 1074      69636174 
+ 1075              	.LASF22:
+ 1076 022d 6D736742 		.ascii	"msgBytes\000"
+ 1076      79746573 
+ 1076      00
+ 1077              	.LASF2:
+ 1078 0236 73686F72 		.ascii	"short int\000"
+ 1078      7420696E 
+ 1078      7400
+ 1079              	.LASF11:
+ 1080 0240 75696E74 		.ascii	"uint8\000"
+ 1080      3800
+ 1081              	.LASF37:
+ 1082 0246 73656E64 		.ascii	"sendDataToCAN2\000"
+ 1082      44617461 
+ 1082      546F4341 
+ 1082      4E3200
+ 1083              	.LASF30:
+ 1084 0255 696E7374 		.ascii	"instruction\000"
+ 1084      72756374 
+ 1084      696F6E00 
+ 1085              	.LASF4:
+ 1086 0261 6C6F6E67 		.ascii	"long int\000"
+ 1086      20696E74 
+ 1086      00
+ 1087              	.LASF19:
+ 1088 026a 6C6F6E67 		.ascii	"long double\000"
+ 1088      20646F75 
+ 1088      626C6500 
+ 1089              	.LASF0:
+ 1090 0276 7369676E 		.ascii	"signed char\000"
+ 1090      65642063 
+ 1090      68617200 
+ 1091              	.LASF3:
+ 1092 0282 73686F72 		.ascii	"short unsigned int\000"
+ 1092      7420756E 
+ 1092      7369676E 
+ 1092      65642069 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccjnaYvE.s 			page 23
+
+
+ 1092      6E7400
+ 1093              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

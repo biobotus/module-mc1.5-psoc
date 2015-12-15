@@ -1,0 +1,2929 @@
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"TAC_Submodule.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	__aeabi_i2d
+  19              		.global	__aeabi_ddiv
+  20              		.global	__aeabi_dmul
+  21              		.global	__aeabi_dadd
+  22              		.global	__aeabi_dcmpgt
+  23              		.global	__aeabi_dcmpge
+  24              		.global	__aeabi_dcmple
+  25              		.section	.text.updatePeltierOutput,"ax",%progbits
+  26              		.align	2
+  27              		.global	updatePeltierOutput
+  28              		.thumb
+  29              		.thumb_func
+  30              		.type	updatePeltierOutput, %function
+  31              	updatePeltierOutput:
+  32              	.LFB56:
+  33              		.file 1 ".\\TAC_Submodule.c"
+   1:.\TAC_Submodule.c **** /* ========================================
+   2:.\TAC_Submodule.c ****  *
+   3:.\TAC_Submodule.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\TAC_Submodule.c ****  * All Rights Reserved
+   5:.\TAC_Submodule.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\TAC_Submodule.c ****  *
+   7:.\TAC_Submodule.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\TAC_Submodule.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\TAC_Submodule.c ****  *
+  10:.\TAC_Submodule.c ****  * ========================================
+  11:.\TAC_Submodule.c **** */
+  12:.\TAC_Submodule.c **** #include "TAC_Submodule.h"
+  13:.\TAC_Submodule.c **** #include "PeltierCalibration.h"
+  14:.\TAC_Submodule.c **** 
+  15:.\TAC_Submodule.c **** 
+  16:.\TAC_Submodule.c **** 
+  17:.\TAC_Submodule.c **** void updatePeltierOutput(Tac_Submodule* TACPtr, double CycleTime)//, int16 currentTemp)
+  18:.\TAC_Submodule.c **** {
+  34              		.loc 1 18 0
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 48
+  37              		@ frame_needed = 1, uses_anonymous_args = 0
+  38 0000 2DE9B043 		push	{r4, r5, r7, r8, r9, lr}
+  39              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 2
+
+
+  40              		.cfi_offset 4, -24
+  41              		.cfi_offset 5, -20
+  42              		.cfi_offset 7, -16
+  43              		.cfi_offset 8, -12
+  44              		.cfi_offset 9, -8
+  45              		.cfi_offset 14, -4
+  46 0004 8CB0     		sub	sp, sp, #48
+  47              		.cfi_def_cfa_offset 72
+  48 0006 00AF     		add	r7, sp, #0
+  49              		.cfi_def_cfa_register 7
+  50 0008 F860     		str	r0, [r7, #12]
+  51 000a C7E90023 		strd	r2, [r7]
+  19:.\TAC_Submodule.c ****     // Updates current temperature of the Peltier element by reading the corresponding thermistor.
+  20:.\TAC_Submodule.c ****     TACPtr->currentTemperature = getThermistorTemp(TACPtr);   
+  52              		.loc 1 20 0
+  53 000e F868     		ldr	r0, [r7, #12]
+  54 0010 FFF7FEFF 		bl	getThermistorTemp
+  55 0014 0346     		mov	r3, r0
+  56 0016 1A46     		mov	r2, r3
+  57 0018 FB68     		ldr	r3, [r7, #12]
+  58 001a 1A81     		strh	r2, [r3, #8]	@ movhi
+  21:.\TAC_Submodule.c ****     
+  22:.\TAC_Submodule.c ****     //Filling Error and error tab
+  23:.\TAC_Submodule.c ****     int16 tempErr = TACPtr->targetTemperature-TACPtr->currentTemperature;
+  59              		.loc 1 23 0
+  60 001c FB68     		ldr	r3, [r7, #12]
+  61 001e DB88     		ldrh	r3, [r3, #6]
+  62 0020 9AB2     		uxth	r2, r3
+  63 0022 FB68     		ldr	r3, [r7, #12]
+  64 0024 1B89     		ldrh	r3, [r3, #8]
+  65 0026 9BB2     		uxth	r3, r3
+  66 0028 D31A     		subs	r3, r2, r3
+  67 002a 9BB2     		uxth	r3, r3
+  68 002c FB84     		strh	r3, [r7, #38]	@ movhi
+  24:.\TAC_Submodule.c ****     double diffErr=0;
+  69              		.loc 1 24 0
+  70 002e 4FF00002 		mov	r2, #0
+  71 0032 4FF00003 		mov	r3, #0
+  72 0036 C7E90A23 		strd	r2, [r7, #40]
+  25:.\TAC_Submodule.c ****     double intErr=0;
+  73              		.loc 1 25 0
+  74 003a 4FF00002 		mov	r2, #0
+  75 003e 4FF00003 		mov	r3, #0
+  76 0042 C7E90623 		strd	r2, [r7, #24]
+  26:.\TAC_Submodule.c ****     if (*TACPtr->errorTabCounter>=NB_OF_ACC_ERROR)
+  77              		.loc 1 26 0
+  78 0046 FB68     		ldr	r3, [r7, #12]
+  79 0048 DB6A     		ldr	r3, [r3, #44]
+  80 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  81 004c 042B     		cmp	r3, #4
+  82 004e 03D9     		bls	.L2
+  27:.\TAC_Submodule.c ****     {
+  28:.\TAC_Submodule.c ****         *TACPtr->errorTabCounter=0;
+  83              		.loc 1 28 0
+  84 0050 FB68     		ldr	r3, [r7, #12]
+  85 0052 DB6A     		ldr	r3, [r3, #44]
+  86 0054 0022     		movs	r2, #0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 3
+
+
+  87 0056 1A70     		strb	r2, [r3]
+  88              	.L2:
+  29:.\TAC_Submodule.c ****     }
+  30:.\TAC_Submodule.c **** 
+  31:.\TAC_Submodule.c ****     TACPtr->errorTabPtr[*TACPtr->errorTabCounter]=tempErr;
+  89              		.loc 1 31 0
+  90 0058 FB68     		ldr	r3, [r7, #12]
+  91 005a 9A6A     		ldr	r2, [r3, #40]
+  92 005c FB68     		ldr	r3, [r7, #12]
+  93 005e DB6A     		ldr	r3, [r3, #44]
+  94 0060 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  95 0062 5B00     		lsls	r3, r3, #1
+  96 0064 1344     		add	r3, r3, r2
+  97 0066 FA8C     		ldrh	r2, [r7, #38]	@ movhi
+  98 0068 1A80     		strh	r2, [r3]	@ movhi
+  32:.\TAC_Submodule.c ****     
+  33:.\TAC_Submodule.c ****     if (*TACPtr->errorTabCounter==0)
+  99              		.loc 1 33 0
+ 100 006a FB68     		ldr	r3, [r7, #12]
+ 101 006c DB6A     		ldr	r3, [r3, #44]
+ 102 006e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 103 0070 002B     		cmp	r3, #0
+ 104 0072 17D1     		bne	.L3
+  34:.\TAC_Submodule.c ****     {
+  35:.\TAC_Submodule.c ****         diffErr=(tempErr-TACPtr->errorTabPtr[NB_OF_ACC_ERROR-1])/CycleTime;
+ 105              		.loc 1 35 0
+ 106 0074 B7F92620 		ldrsh	r2, [r7, #38]
+ 107 0078 FB68     		ldr	r3, [r7, #12]
+ 108 007a 9B6A     		ldr	r3, [r3, #40]
+ 109 007c 0833     		adds	r3, r3, #8
+ 110 007e 1B88     		ldrh	r3, [r3]
+ 111 0080 1BB2     		sxth	r3, r3
+ 112 0082 D31A     		subs	r3, r2, r3
+ 113 0084 1846     		mov	r0, r3
+ 114 0086 FFF7FEFF 		bl	__aeabi_i2d
+ 115 008a 0246     		mov	r2, r0
+ 116 008c 0B46     		mov	r3, r1
+ 117 008e 1046     		mov	r0, r2
+ 118 0090 1946     		mov	r1, r3
+ 119 0092 D7E90023 		ldrd	r2, [r7]
+ 120 0096 FFF7FEFF 		bl	__aeabi_ddiv
+ 121 009a 0246     		mov	r2, r0
+ 122 009c 0B46     		mov	r3, r1
+ 123 009e C7E90A23 		strd	r2, [r7, #40]
+ 124 00a2 1DE0     		b	.L4
+ 125              	.L3:
+  36:.\TAC_Submodule.c ****     }
+  37:.\TAC_Submodule.c ****     else
+  38:.\TAC_Submodule.c ****     {
+  39:.\TAC_Submodule.c ****         diffErr=(tempErr-TACPtr->errorTabPtr[*TACPtr->errorTabCounter-1])/CycleTime;
+ 126              		.loc 1 39 0
+ 127 00a4 B7F92620 		ldrsh	r2, [r7, #38]
+ 128 00a8 FB68     		ldr	r3, [r7, #12]
+ 129 00aa 996A     		ldr	r1, [r3, #40]
+ 130 00ac FB68     		ldr	r3, [r7, #12]
+ 131 00ae DB6A     		ldr	r3, [r3, #44]
+ 132 00b0 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 4
+
+
+ 133 00b2 03F10043 		add	r3, r3, #-2147483648
+ 134 00b6 013B     		subs	r3, r3, #1
+ 135 00b8 5B00     		lsls	r3, r3, #1
+ 136 00ba 0B44     		add	r3, r3, r1
+ 137 00bc 1B88     		ldrh	r3, [r3]
+ 138 00be 1BB2     		sxth	r3, r3
+ 139 00c0 D31A     		subs	r3, r2, r3
+ 140 00c2 1846     		mov	r0, r3
+ 141 00c4 FFF7FEFF 		bl	__aeabi_i2d
+ 142 00c8 0246     		mov	r2, r0
+ 143 00ca 0B46     		mov	r3, r1
+ 144 00cc 1046     		mov	r0, r2
+ 145 00ce 1946     		mov	r1, r3
+ 146 00d0 D7E90023 		ldrd	r2, [r7]
+ 147 00d4 FFF7FEFF 		bl	__aeabi_ddiv
+ 148 00d8 0246     		mov	r2, r0
+ 149 00da 0B46     		mov	r3, r1
+ 150 00dc C7E90A23 		strd	r2, [r7, #40]
+ 151              	.L4:
+  40:.\TAC_Submodule.c ****     }
+  41:.\TAC_Submodule.c ****     *TACPtr->errorTabCounter+=1;
+ 152              		.loc 1 41 0
+ 153 00e0 FB68     		ldr	r3, [r7, #12]
+ 154 00e2 DB6A     		ldr	r3, [r3, #44]
+ 155 00e4 FA68     		ldr	r2, [r7, #12]
+ 156 00e6 D26A     		ldr	r2, [r2, #44]
+ 157 00e8 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 158 00ea 0132     		adds	r2, r2, #1
+ 159 00ec D2B2     		uxtb	r2, r2
+ 160 00ee 1A70     		strb	r2, [r3]
+  42:.\TAC_Submodule.c ****     intErr=getArraySum(&TACPtr->errorTabPtr[0], NB_OF_ACC_ERROR);
+ 161              		.loc 1 42 0
+ 162 00f0 FB68     		ldr	r3, [r7, #12]
+ 163 00f2 9B6A     		ldr	r3, [r3, #40]
+ 164 00f4 1846     		mov	r0, r3
+ 165 00f6 0521     		movs	r1, #5
+ 166 00f8 FFF7FEFF 		bl	getArraySum
+ 167 00fc C7E90601 		strd	r0, [r7, #24]
+  43:.\TAC_Submodule.c ****     
+  44:.\TAC_Submodule.c ****     
+  45:.\TAC_Submodule.c ****     
+  46:.\TAC_Submodule.c ****     
+  47:.\TAC_Submodule.c ****     
+  48:.\TAC_Submodule.c ****     // If the module is in waiting mode and the peltier is still on, we shut it off.
+  49:.\TAC_Submodule.c ****     if (TACPtr->temperatureMode == Waiting && TACPtr->peltierState == peltierEnabled)
+ 168              		.loc 1 49 0
+ 169 0100 FB68     		ldr	r3, [r7, #12]
+ 170 0102 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 171 0104 042B     		cmp	r3, #4
+ 172 0106 0AD1     		bne	.L5
+ 173              		.loc 1 49 0 is_stmt 0 discriminator 1
+ 174 0108 FB68     		ldr	r3, [r7, #12]
+ 175 010a 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 176 010c 012B     		cmp	r3, #1
+ 177 010e 06D1     		bne	.L5
+ 178              	.LBB2:
+  50:.\TAC_Submodule.c ****     {
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 5
+
+
+  51:.\TAC_Submodule.c ****         changePeltierModuleState(peltierDisabled,TACPtr->subModuleId);
+ 179              		.loc 1 51 0 is_stmt 1
+ 180 0110 FB68     		ldr	r3, [r7, #12]
+ 181 0112 1B88     		ldrh	r3, [r3]
+ 182 0114 0020     		movs	r0, #0
+ 183 0116 1946     		mov	r1, r3
+ 184 0118 FFF7FEFF 		bl	changePeltierModuleState
+ 185              	.LBE2:
+  50:.\TAC_Submodule.c ****     {
+ 186              		.loc 1 50 0
+ 187 011c 0DE0     		b	.L6
+ 188              	.L5:
+  52:.\TAC_Submodule.c ****     }
+  53:.\TAC_Submodule.c ****     // Else, if the module is not in waiting mode but the peltier is off, we put it on.
+  54:.\TAC_Submodule.c ****     else if (TACPtr->temperatureMode != Waiting && TACPtr->peltierState == peltierDisabled)
+ 189              		.loc 1 54 0
+ 190 011e FB68     		ldr	r3, [r7, #12]
+ 191 0120 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 192 0122 042B     		cmp	r3, #4
+ 193 0124 09D0     		beq	.L6
+ 194              		.loc 1 54 0 is_stmt 0 discriminator 1
+ 195 0126 FB68     		ldr	r3, [r7, #12]
+ 196 0128 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 197 012a 002B     		cmp	r3, #0
+ 198 012c 05D1     		bne	.L6
+ 199              	.LBB3:
+  55:.\TAC_Submodule.c ****     {
+  56:.\TAC_Submodule.c ****         changePeltierModuleState(peltierEnabled,TACPtr->subModuleId);
+ 200              		.loc 1 56 0 is_stmt 1
+ 201 012e FB68     		ldr	r3, [r7, #12]
+ 202 0130 1B88     		ldrh	r3, [r3]
+ 203 0132 0120     		movs	r0, #1
+ 204 0134 1946     		mov	r1, r3
+ 205 0136 FFF7FEFF 		bl	changePeltierModuleState
+ 206              	.L6:
+ 207              	.LBE3:
+  57:.\TAC_Submodule.c ****     }
+  58:.\TAC_Submodule.c ****     
+  59:.\TAC_Submodule.c ****     double PID_Result = P*tempErr+I*intErr+D*diffErr;
+ 208              		.loc 1 59 0
+ 209 013a B7F92630 		ldrsh	r3, [r7, #38]
+ 210 013e 1846     		mov	r0, r3
+ 211 0140 FFF7FEFF 		bl	__aeabi_i2d
+ 212 0144 0246     		mov	r2, r0
+ 213 0146 0B46     		mov	r3, r1
+ 214 0148 1046     		mov	r0, r2
+ 215 014a 1946     		mov	r1, r3
+ 216 014c 4FF00002 		mov	r2, #0
+ 217 0150 5F4B     		ldr	r3, .L28+8
+ 218 0152 FFF7FEFF 		bl	__aeabi_dmul
+ 219 0156 0246     		mov	r2, r0
+ 220 0158 0B46     		mov	r3, r1
+ 221 015a 9046     		mov	r8, r2
+ 222 015c 9946     		mov	r9, r3
+ 223 015e D7E90601 		ldrd	r0, [r7, #24]
+ 224 0162 59A3     		adr	r3, .L28
+ 225 0164 D3E90023 		ldrd	r2, [r3]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 6
+
+
+ 226 0168 FFF7FEFF 		bl	__aeabi_dmul
+ 227 016c 0246     		mov	r2, r0
+ 228 016e 0B46     		mov	r3, r1
+ 229 0170 4046     		mov	r0, r8
+ 230 0172 4946     		mov	r1, r9
+ 231 0174 FFF7FEFF 		bl	__aeabi_dadd
+ 232 0178 0246     		mov	r2, r0
+ 233 017a 0B46     		mov	r3, r1
+ 234 017c 9046     		mov	r8, r2
+ 235 017e 9946     		mov	r9, r3
+ 236 0180 D7E90A01 		ldrd	r0, [r7, #40]
+ 237 0184 4FF00002 		mov	r2, #0
+ 238 0188 4FF00003 		mov	r3, #0
+ 239 018c FFF7FEFF 		bl	__aeabi_dmul
+ 240 0190 0246     		mov	r2, r0
+ 241 0192 0B46     		mov	r3, r1
+ 242 0194 4046     		mov	r0, r8
+ 243 0196 4946     		mov	r1, r9
+ 244 0198 FFF7FEFF 		bl	__aeabi_dadd
+ 245 019c 0246     		mov	r2, r0
+ 246 019e 0B46     		mov	r3, r1
+ 247 01a0 C7E90423 		strd	r2, [r7, #16]
+  60:.\TAC_Submodule.c ****      
+  61:.\TAC_Submodule.c ****     
+  62:.\TAC_Submodule.c ****     // Verify if the user asked to stop temperature maintain Or temperature is between tolerance
+  63:.\TAC_Submodule.c ****     //  If not, go ahead with temperature control
+  64:.\TAC_Submodule.c ****     if (TACPtr->temperatureMode!= Waiting && (tempErr>TEMP_TOLERANCE || tempErr<-TEMP_TOLERANCE))
+ 248              		.loc 1 64 0
+ 249 01a4 FB68     		ldr	r3, [r7, #12]
+ 250 01a6 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 251 01a8 042B     		cmp	r3, #4
+ 252 01aa 7FD0     		beq	.L7
+ 253              		.loc 1 64 0 is_stmt 0 discriminator 1
+ 254 01ac B7F92630 		ldrsh	r3, [r7, #38]
+ 255 01b0 032B     		cmp	r3, #3
+ 256 01b2 04DC     		bgt	.L8
+ 257              		.loc 1 64 0 discriminator 2
+ 258 01b4 B7F92630 		ldrsh	r3, [r7, #38]
+ 259 01b8 13F1030F 		cmn	r3, #3
+ 260 01bc 76DA     		bge	.L7
+ 261              	.L8:
+  65:.\TAC_Submodule.c ****     { 
+  66:.\TAC_Submodule.c ****         // If we are in temperature control mode, we make sure the fan runs at 100% of its speed.
+  67:.\TAC_Submodule.c ****         if (TACPtr->fanState != fanEnabled || TACPtr->fanSpeedPercentage != 100)
+ 262              		.loc 1 67 0 is_stmt 1
+ 263 01be FB68     		ldr	r3, [r7, #12]
+ 264 01c0 1B7E     		ldrb	r3, [r3, #24]	@ zero_extendqisi2
+ 265 01c2 012B     		cmp	r3, #1
+ 266 01c4 03D1     		bne	.L9
+ 267              		.loc 1 67 0 is_stmt 0 discriminator 1
+ 268 01c6 FB68     		ldr	r3, [r7, #12]
+ 269 01c8 DB7D     		ldrb	r3, [r3, #23]	@ zero_extendqisi2
+ 270 01ca 642B     		cmp	r3, #100
+ 271 01cc 0BD0     		beq	.L10
+ 272              	.L9:
+ 273              	.LBB4:
+  68:.\TAC_Submodule.c ****         {
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 7
+
+
+  69:.\TAC_Submodule.c ****             changeFanState(fanEnabled, TACPtr->subModuleId);
+ 274              		.loc 1 69 0 is_stmt 1
+ 275 01ce FB68     		ldr	r3, [r7, #12]
+ 276 01d0 1B88     		ldrh	r3, [r3]
+ 277 01d2 0120     		movs	r0, #1
+ 278 01d4 1946     		mov	r1, r3
+ 279 01d6 FFF7FEFF 		bl	changeFanState
+  70:.\TAC_Submodule.c ****             changeFanSpeed(100,TACPtr->subModuleId);
+ 280              		.loc 1 70 0
+ 281 01da FB68     		ldr	r3, [r7, #12]
+ 282 01dc 1B88     		ldrh	r3, [r3]
+ 283 01de 6420     		movs	r0, #100
+ 284 01e0 1946     		mov	r1, r3
+ 285 01e2 FFF7FEFF 		bl	changeFanSpeed
+ 286              	.L10:
+ 287              	.LBE4:
+  71:.\TAC_Submodule.c ****         } 
+  72:.\TAC_Submodule.c ****         // Heating
+  73:.\TAC_Submodule.c ****         if(PID_Result>0)
+ 288              		.loc 1 73 0
+ 289 01e6 D7E90401 		ldrd	r0, [r7, #16]
+ 290 01ea 4FF00002 		mov	r2, #0
+ 291 01ee 4FF00003 		mov	r3, #0
+ 292 01f2 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 293 01f6 0346     		mov	r3, r0
+ 294 01f8 002B     		cmp	r3, #0
+ 295 01fa 23D0     		beq	.L25
+  74:.\TAC_Submodule.c ****         {
+  75:.\TAC_Submodule.c ****             // Make sure that the direction of the current is set to heat
+  76:.\TAC_Submodule.c ****             if(TACPtr->currentDirection != Heating)
+ 296              		.loc 1 76 0
+ 297 01fc FB68     		ldr	r3, [r7, #12]
+ 298 01fe 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 299 0200 002B     		cmp	r3, #0
+ 300 0202 06D0     		beq	.L13
+ 301              	.LBB5:
+  77:.\TAC_Submodule.c ****             {
+  78:.\TAC_Submodule.c ****                 TACPtr->temperatureMode = Maintaining_heat;
+ 302              		.loc 1 78 0
+ 303 0204 FB68     		ldr	r3, [r7, #12]
+ 304 0206 0022     		movs	r2, #0
+ 305 0208 1A73     		strb	r2, [r3, #12]
+  79:.\TAC_Submodule.c ****                 changePeltierModuleCurrentDirection(Heating, TACPtr);                
+ 306              		.loc 1 79 0
+ 307 020a 0020     		movs	r0, #0
+ 308 020c F968     		ldr	r1, [r7, #12]
+ 309 020e FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 310              	.L13:
+ 311              	.LBE5:
+  80:.\TAC_Submodule.c ****             }  
+  81:.\TAC_Submodule.c ****             if(PID_Result>=BEST_HEATING_PWM_PERCENTAGE)
+ 312              		.loc 1 81 0
+ 313 0212 D7E90401 		ldrd	r0, [r7, #16]
+ 314 0216 4FF00002 		mov	r2, #0
+ 315 021a 2E4B     		ldr	r3, .L28+12
+ 316 021c FFF7FEFF 		bl	__aeabi_dcmpge
+ 317 0220 0346     		mov	r3, r0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 8
+
+
+ 318 0222 002B     		cmp	r3, #0
+ 319 0224 06D0     		beq	.L26
+ 320              	.LBB6:
+  82:.\TAC_Submodule.c ****             {
+  83:.\TAC_Submodule.c ****                 changePeltierPWMValue(BEST_HEATING_PWM_PERCENTAGE,TACPtr->subModuleId);
+ 321              		.loc 1 83 0
+ 322 0226 FB68     		ldr	r3, [r7, #12]
+ 323 0228 1B88     		ldrh	r3, [r3]
+ 324 022a 6420     		movs	r0, #100
+ 325 022c 1946     		mov	r1, r3
+ 326 022e FFF7FEFF 		bl	changePeltierPWMValue
+ 327              	.LBE6:
+ 328 0232 3AE0     		b	.L17
+ 329              	.L26:
+ 330              	.LBB7:
+  84:.\TAC_Submodule.c ****             }
+  85:.\TAC_Submodule.c ****             else
+  86:.\TAC_Submodule.c ****             {
+  87:.\TAC_Submodule.c ****                 changePeltierPWMValue(PID_Result,TACPtr->subModuleId);
+ 331              		.loc 1 87 0
+ 332 0234 FB68     		ldr	r3, [r7, #12]
+ 333 0236 1B88     		ldrh	r3, [r3]
+ 334 0238 D7E90401 		ldrd	r0, [r7, #16]
+ 335 023c 1A46     		mov	r2, r3
+ 336 023e FFF7FEFF 		bl	changePeltierPWMValue
+ 337              	.LBE7:
+  73:.\TAC_Submodule.c ****         {
+ 338              		.loc 1 73 0
+ 339 0242 3CE0     		b	.L1
+ 340              	.L25:
+  88:.\TAC_Submodule.c ****             }               
+  89:.\TAC_Submodule.c ****         }
+  90:.\TAC_Submodule.c ****         //Cooling
+  91:.\TAC_Submodule.c ****         else
+  92:.\TAC_Submodule.c ****         {
+  93:.\TAC_Submodule.c ****             //Compensate for the power difference betwwen heating and cooling
+  94:.\TAC_Submodule.c ****             PID_Result= PID_Result*3;
+ 341              		.loc 1 94 0
+ 342 0244 D7E90401 		ldrd	r0, [r7, #16]
+ 343 0248 4FF00002 		mov	r2, #0
+ 344 024c 224B     		ldr	r3, .L28+16
+ 345 024e FFF7FEFF 		bl	__aeabi_dmul
+ 346 0252 0246     		mov	r2, r0
+ 347 0254 0B46     		mov	r3, r1
+ 348 0256 C7E90423 		strd	r2, [r7, #16]
+  95:.\TAC_Submodule.c ****             // Make sure that the direction of the current is set to cool
+  96:.\TAC_Submodule.c ****             if(TACPtr->currentDirection != Cooling)
+ 349              		.loc 1 96 0
+ 350 025a FB68     		ldr	r3, [r7, #12]
+ 351 025c 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 352 025e 012B     		cmp	r3, #1
+ 353 0260 06D0     		beq	.L18
+ 354              	.LBB8:
+  97:.\TAC_Submodule.c ****             {
+  98:.\TAC_Submodule.c ****                 TACPtr->temperatureMode = Maintaining_cool;
+ 355              		.loc 1 98 0
+ 356 0262 FB68     		ldr	r3, [r7, #12]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 9
+
+
+ 357 0264 0222     		movs	r2, #2
+ 358 0266 1A73     		strb	r2, [r3, #12]
+  99:.\TAC_Submodule.c ****                 changePeltierModuleCurrentDirection(Cooling, TACPtr);                
+ 359              		.loc 1 99 0
+ 360 0268 0120     		movs	r0, #1
+ 361 026a F968     		ldr	r1, [r7, #12]
+ 362 026c FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 363              	.L18:
+ 364              	.LBE8:
+ 100:.\TAC_Submodule.c ****             }  
+ 101:.\TAC_Submodule.c ****             if(PID_Result<=-BEST_COOLING_PWM_PERCENTAGE)
+ 365              		.loc 1 101 0
+ 366 0270 D7E90401 		ldrd	r0, [r7, #16]
+ 367 0274 4FF00002 		mov	r2, #0
+ 368 0278 184B     		ldr	r3, .L28+20
+ 369 027a FFF7FEFF 		bl	__aeabi_dcmple
+ 370 027e 0346     		mov	r3, r0
+ 371 0280 002B     		cmp	r3, #0
+ 372 0282 06D0     		beq	.L27
+ 373              	.LBB9:
+ 102:.\TAC_Submodule.c ****             {
+ 103:.\TAC_Submodule.c ****                 changePeltierPWMValue(BEST_COOLING_PWM_PERCENTAGE,TACPtr->subModuleId);
+ 374              		.loc 1 103 0
+ 375 0284 FB68     		ldr	r3, [r7, #12]
+ 376 0286 1B88     		ldrh	r3, [r3]
+ 377 0288 5020     		movs	r0, #80
+ 378 028a 1946     		mov	r1, r3
+ 379 028c FFF7FEFF 		bl	changePeltierPWMValue
+ 380              	.LBE9:
+ 381 0290 0BE0     		b	.L17
+ 382              	.L27:
+ 383              	.LBB10:
+ 104:.\TAC_Submodule.c ****             }
+ 105:.\TAC_Submodule.c ****             else
+ 106:.\TAC_Submodule.c ****             {
+ 107:.\TAC_Submodule.c ****                 changePeltierPWMValue(-PID_Result,TACPtr->subModuleId);
+ 384              		.loc 1 107 0
+ 385 0292 3C69     		ldr	r4, [r7, #16]
+ 386 0294 7B69     		ldr	r3, [r7, #20]
+ 387 0296 83F00045 		eor	r5, r3, #-2147483648
+ 388 029a FB68     		ldr	r3, [r7, #12]
+ 389 029c 1B88     		ldrh	r3, [r3]
+ 390 029e 2046     		mov	r0, r4
+ 391 02a0 2946     		mov	r1, r5
+ 392 02a2 1A46     		mov	r2, r3
+ 393 02a4 FFF7FEFF 		bl	changePeltierPWMValue
+ 394              	.LBE10:
+  73:.\TAC_Submodule.c ****         {
+ 395              		.loc 1 73 0
+ 396 02a8 09E0     		b	.L1
+ 397              	.L17:
+  73:.\TAC_Submodule.c ****         {
+ 398              		.loc 1 73 0 is_stmt 0 discriminator 1
+ 399 02aa 08E0     		b	.L1
+ 400              	.L7:
+ 401              	.LBB11:
+ 108:.\TAC_Submodule.c ****             } 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 10
+
+
+ 109:.\TAC_Submodule.c ****         }
+ 110:.\TAC_Submodule.c ****     }
+ 111:.\TAC_Submodule.c ****     // Switch peltier to wait overshoot
+ 112:.\TAC_Submodule.c ****     else
+ 113:.\TAC_Submodule.c ****     {
+ 114:.\TAC_Submodule.c ****         TACPtr->temperatureMode = Waiting_overshoot;
+ 402              		.loc 1 114 0 is_stmt 1
+ 403 02ac FB68     		ldr	r3, [r7, #12]
+ 404 02ae 0322     		movs	r2, #3
+ 405 02b0 1A73     		strb	r2, [r3, #12]
+ 115:.\TAC_Submodule.c ****         changePeltierModuleState(peltierDisabled,TACPtr->subModuleId);
+ 406              		.loc 1 115 0
+ 407 02b2 FB68     		ldr	r3, [r7, #12]
+ 408 02b4 1B88     		ldrh	r3, [r3]
+ 409 02b6 0020     		movs	r0, #0
+ 410 02b8 1946     		mov	r1, r3
+ 411 02ba FFF7FEFF 		bl	changePeltierModuleState
+ 412              	.L1:
+ 413              	.LBE11:
+ 116:.\TAC_Submodule.c ****     }
+ 117:.\TAC_Submodule.c ****     
+ 118:.\TAC_Submodule.c ****    
+ 119:.\TAC_Submodule.c **** }
+ 414              		.loc 1 119 0
+ 415 02be 3037     		adds	r7, r7, #48
+ 416              		.cfi_def_cfa_offset 24
+ 417 02c0 BD46     		mov	sp, r7
+ 418              		.cfi_def_cfa_register 13
+ 419              		@ sp needed
+ 420 02c2 BDE8B083 		pop	{r4, r5, r7, r8, r9, pc}
+ 421              	.L29:
+ 422 02c6 00BF     		.align	3
+ 423              	.L28:
+ 424 02c8 9A999999 		.word	-1717986918
+ 425 02cc 9999C93F 		.word	1070176665
+ 426 02d0 0000E83F 		.word	1072168960
+ 427 02d4 00005940 		.word	1079574528
+ 428 02d8 00000840 		.word	1074266112
+ 429 02dc 000054C0 		.word	-1068236800
+ 430              		.cfi_endproc
+ 431              	.LFE56:
+ 432              		.size	updatePeltierOutput, .-updatePeltierOutput
+ 433              		.global	__aeabi_dcmplt
+ 434              		.global	__aeabi_d2iz
+ 435              		.section	.text.updatePwmValueFromCalibrationTable,"ax",%progbits
+ 436              		.align	2
+ 437              		.global	updatePwmValueFromCalibrationTable
+ 438              		.thumb
+ 439              		.thumb_func
+ 440              		.type	updatePwmValueFromCalibrationTable, %function
+ 441              	updatePwmValueFromCalibrationTable:
+ 442              	.LFB57:
+ 120:.\TAC_Submodule.c **** 
+ 121:.\TAC_Submodule.c **** void updatePwmValueFromCalibrationTable(Tac_Submodule* TACPtr)
+ 122:.\TAC_Submodule.c **** {
+ 443              		.loc 1 122 0
+ 444              		.cfi_startproc
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 11
+
+
+ 445              		@ args = 0, pretend = 0, frame = 64
+ 446              		@ frame_needed = 1, uses_anonymous_args = 0
+ 447 0000 B0B5     		push	{r4, r5, r7, lr}
+ 448              		.cfi_def_cfa_offset 16
+ 449              		.cfi_offset 4, -16
+ 450              		.cfi_offset 5, -12
+ 451              		.cfi_offset 7, -8
+ 452              		.cfi_offset 14, -4
+ 453 0002 90B0     		sub	sp, sp, #64
+ 454              		.cfi_def_cfa_offset 80
+ 455 0004 00AF     		add	r7, sp, #0
+ 456              		.cfi_def_cfa_register 7
+ 457 0006 7860     		str	r0, [r7, #4]
+ 123:.\TAC_Submodule.c ****     boolean goodToGo = TACPtr->areCalibrationValuesRetrieved;
+ 458              		.loc 1 123 0
+ 459 0008 7B68     		ldr	r3, [r7, #4]
+ 460 000a 93F82430 		ldrb	r3, [r3, #36]
+ 461 000e 87F83F30 		strb	r3, [r7, #63]
+ 124:.\TAC_Submodule.c ****     
+ 125:.\TAC_Submodule.c ****     // Make sure to get the datas from the calibration table before starting :
+ 126:.\TAC_Submodule.c ****     if (goodToGo == False && TACPtr->areCalibrationValuesAvailable == True)
+ 462              		.loc 1 126 0
+ 463 0012 97F83F30 		ldrb	r3, [r7, #63]	@ zero_extendqisi2
+ 464 0016 002B     		cmp	r3, #0
+ 465 0018 0AD1     		bne	.L31
+ 466              		.loc 1 126 0 is_stmt 0 discriminator 1
+ 467 001a 7B68     		ldr	r3, [r7, #4]
+ 468 001c 93F82530 		ldrb	r3, [r3, #37]	@ zero_extendqisi2
+ 469 0020 012B     		cmp	r3, #1
+ 470 0022 05D1     		bne	.L31
+ 127:.\TAC_Submodule.c ****     {
+ 128:.\TAC_Submodule.c ****         goodToGo = getCalibrationTable(TACPtr);            
+ 471              		.loc 1 128 0 is_stmt 1
+ 472 0024 7868     		ldr	r0, [r7, #4]
+ 473 0026 FFF7FEFF 		bl	getCalibrationTable
+ 474 002a 0346     		mov	r3, r0
+ 475 002c 87F83F30 		strb	r3, [r7, #63]
+ 476              	.L31:
+ 129:.\TAC_Submodule.c ****     }    
+ 130:.\TAC_Submodule.c ****     
+ 131:.\TAC_Submodule.c ****     if (goodToGo == True)
+ 477              		.loc 1 131 0
+ 478 0030 97F83F30 		ldrb	r3, [r7, #63]	@ zero_extendqisi2
+ 479 0034 012B     		cmp	r3, #1
+ 480 0036 40F0AE80 		bne	.L30
+ 481              	.LBB12:
+ 132:.\TAC_Submodule.c ****     {
+ 133:.\TAC_Submodule.c ****         int x = 0;
+ 482              		.loc 1 133 0
+ 483 003a 0023     		movs	r3, #0
+ 484 003c BB63     		str	r3, [r7, #56]
+ 134:.\TAC_Submodule.c ****         int bestMatchIndex;
+ 135:.\TAC_Submodule.c ****         
+ 136:.\TAC_Submodule.c ****         int diffFromTarget = 0;
+ 485              		.loc 1 136 0
+ 486 003e 0023     		movs	r3, #0
+ 487 0040 3B63     		str	r3, [r7, #48]
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 12
+
+
+ 137:.\TAC_Submodule.c ****         int precedingDiffFromTarget = 10000000;
+ 488              		.loc 1 137 0
+ 489 0042 564B     		ldr	r3, .L42
+ 490 0044 FB62     		str	r3, [r7, #44]
+ 138:.\TAC_Submodule.c ****         
+ 139:.\TAC_Submodule.c ****         int indexWhenOver = 0;
+ 491              		.loc 1 139 0
+ 492 0046 0023     		movs	r3, #0
+ 493 0048 7B63     		str	r3, [r7, #52]
+ 140:.\TAC_Submodule.c ****         
+ 141:.\TAC_Submodule.c ****         for (x=0; x<CALIBRATION_TABLE_SIZE; x++)
+ 494              		.loc 1 141 0
+ 495 004a 0023     		movs	r3, #0
+ 496 004c BB63     		str	r3, [r7, #56]
+ 497 004e 11E0     		b	.L33
+ 498              	.L36:
+ 142:.\TAC_Submodule.c ****         {
+ 143:.\TAC_Submodule.c ****             if (TACPtr->calibrationValuesPtr[x] > TACPtr->targetTemperature)
+ 499              		.loc 1 143 0
+ 500 0050 7B68     		ldr	r3, [r7, #4]
+ 501 0052 DA69     		ldr	r2, [r3, #28]
+ 502 0054 BB6B     		ldr	r3, [r7, #56]
+ 503 0056 5B00     		lsls	r3, r3, #1
+ 504 0058 1344     		add	r3, r3, r2
+ 505 005a 1A88     		ldrh	r2, [r3]
+ 506 005c 7B68     		ldr	r3, [r7, #4]
+ 507 005e DB88     		ldrh	r3, [r3, #6]
+ 508 0060 12B2     		sxth	r2, r2
+ 509 0062 1BB2     		sxth	r3, r3
+ 510 0064 9A42     		cmp	r2, r3
+ 511 0066 02DD     		ble	.L34
+ 144:.\TAC_Submodule.c ****             {
+ 145:.\TAC_Submodule.c ****                 indexWhenOver = x;
+ 512              		.loc 1 145 0
+ 513 0068 BB6B     		ldr	r3, [r7, #56]
+ 514 006a 7B63     		str	r3, [r7, #52]
+ 146:.\TAC_Submodule.c ****                 break;
+ 515              		.loc 1 146 0
+ 516 006c 05E0     		b	.L35
+ 517              	.L34:
+ 141:.\TAC_Submodule.c ****         {
+ 518              		.loc 1 141 0 discriminator 2
+ 519 006e BB6B     		ldr	r3, [r7, #56]
+ 520 0070 0133     		adds	r3, r3, #1
+ 521 0072 BB63     		str	r3, [r7, #56]
+ 522              	.L33:
+ 141:.\TAC_Submodule.c ****         {
+ 523              		.loc 1 141 0 is_stmt 0 discriminator 1
+ 524 0074 BB6B     		ldr	r3, [r7, #56]
+ 525 0076 632B     		cmp	r3, #99
+ 526 0078 EADD     		ble	.L36
+ 527              	.L35:
+ 147:.\TAC_Submodule.c ****             }
+ 148:.\TAC_Submodule.c ****         }
+ 149:.\TAC_Submodule.c ****         
+ 150:.\TAC_Submodule.c ****         double diffWithPrecedentValue = TACPtr->targetTemperature - TACPtr->calibrationValuesPtr[in
+ 528              		.loc 1 150 0 is_stmt 1
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 13
+
+
+ 529 007a 7B68     		ldr	r3, [r7, #4]
+ 530 007c DB88     		ldrh	r3, [r3, #6]
+ 531 007e 1AB2     		sxth	r2, r3
+ 532 0080 7B68     		ldr	r3, [r7, #4]
+ 533 0082 D969     		ldr	r1, [r3, #28]
+ 534 0084 7B6B     		ldr	r3, [r7, #52]
+ 535 0086 03F10043 		add	r3, r3, #-2147483648
+ 536 008a 013B     		subs	r3, r3, #1
+ 537 008c 5B00     		lsls	r3, r3, #1
+ 538 008e 0B44     		add	r3, r3, r1
+ 539 0090 1B88     		ldrh	r3, [r3]
+ 540 0092 1BB2     		sxth	r3, r3
+ 541 0094 D31A     		subs	r3, r2, r3
+ 542 0096 1846     		mov	r0, r3
+ 543 0098 FFF7FEFF 		bl	__aeabi_i2d
+ 544 009c 0246     		mov	r2, r0
+ 545 009e 0B46     		mov	r3, r1
+ 546 00a0 C7E90823 		strd	r2, [r7, #32]
+ 151:.\TAC_Submodule.c ****         double ratio = diffWithPrecedentValue/(TACPtr->calibrationValuesPtr[indexWhenOver] - TACPtr
+ 547              		.loc 1 151 0
+ 548 00a4 7B68     		ldr	r3, [r7, #4]
+ 549 00a6 DA69     		ldr	r2, [r3, #28]
+ 550 00a8 7B6B     		ldr	r3, [r7, #52]
+ 551 00aa 5B00     		lsls	r3, r3, #1
+ 552 00ac 1344     		add	r3, r3, r2
+ 553 00ae 1B88     		ldrh	r3, [r3]
+ 554 00b0 1AB2     		sxth	r2, r3
+ 555 00b2 7B68     		ldr	r3, [r7, #4]
+ 556 00b4 D969     		ldr	r1, [r3, #28]
+ 557 00b6 7B6B     		ldr	r3, [r7, #52]
+ 558 00b8 03F10043 		add	r3, r3, #-2147483648
+ 559 00bc 013B     		subs	r3, r3, #1
+ 560 00be 5B00     		lsls	r3, r3, #1
+ 561 00c0 0B44     		add	r3, r3, r1
+ 562 00c2 1B88     		ldrh	r3, [r3]
+ 563 00c4 1BB2     		sxth	r3, r3
+ 564 00c6 D31A     		subs	r3, r2, r3
+ 565 00c8 1846     		mov	r0, r3
+ 566 00ca FFF7FEFF 		bl	__aeabi_i2d
+ 567 00ce 0246     		mov	r2, r0
+ 568 00d0 0B46     		mov	r3, r1
+ 569 00d2 D7E90801 		ldrd	r0, [r7, #32]
+ 570 00d6 FFF7FEFF 		bl	__aeabi_ddiv
+ 571 00da 0246     		mov	r2, r0
+ 572 00dc 0B46     		mov	r3, r1
+ 573 00de C7E90623 		strd	r2, [r7, #24]
+ 152:.\TAC_Submodule.c ****         double percentageToSaveDouble = TACPtr->percentageValuesPtr[indexWhenOver-1] + ratio*(TACPt
+ 574              		.loc 1 152 0
+ 575 00e2 7B68     		ldr	r3, [r7, #4]
+ 576 00e4 1A6A     		ldr	r2, [r3, #32]
+ 577 00e6 7B6B     		ldr	r3, [r7, #52]
+ 578 00e8 013B     		subs	r3, r3, #1
+ 579 00ea 1344     		add	r3, r3, r2
+ 580 00ec 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 581 00ee 5BB2     		sxtb	r3, r3
+ 582 00f0 1846     		mov	r0, r3
+ 583 00f2 FFF7FEFF 		bl	__aeabi_i2d
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 14
+
+
+ 584 00f6 0446     		mov	r4, r0
+ 585 00f8 0D46     		mov	r5, r1
+ 586 00fa 7B68     		ldr	r3, [r7, #4]
+ 587 00fc 1A6A     		ldr	r2, [r3, #32]
+ 588 00fe 7B6B     		ldr	r3, [r7, #52]
+ 589 0100 1344     		add	r3, r3, r2
+ 590 0102 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 591 0104 5AB2     		sxtb	r2, r3
+ 592 0106 7B68     		ldr	r3, [r7, #4]
+ 593 0108 196A     		ldr	r1, [r3, #32]
+ 594 010a 7B6B     		ldr	r3, [r7, #52]
+ 595 010c 013B     		subs	r3, r3, #1
+ 596 010e 0B44     		add	r3, r3, r1
+ 597 0110 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 598 0112 5BB2     		sxtb	r3, r3
+ 599 0114 D31A     		subs	r3, r2, r3
+ 600 0116 1846     		mov	r0, r3
+ 601 0118 FFF7FEFF 		bl	__aeabi_i2d
+ 602 011c 0246     		mov	r2, r0
+ 603 011e 0B46     		mov	r3, r1
+ 604 0120 1046     		mov	r0, r2
+ 605 0122 1946     		mov	r1, r3
+ 606 0124 D7E90623 		ldrd	r2, [r7, #24]
+ 607 0128 FFF7FEFF 		bl	__aeabi_dmul
+ 608 012c 0246     		mov	r2, r0
+ 609 012e 0B46     		mov	r3, r1
+ 610 0130 2046     		mov	r0, r4
+ 611 0132 2946     		mov	r1, r5
+ 612 0134 FFF7FEFF 		bl	__aeabi_dadd
+ 613 0138 0246     		mov	r2, r0
+ 614 013a 0B46     		mov	r3, r1
+ 615 013c C7E90423 		strd	r2, [r7, #16]
+ 153:.\TAC_Submodule.c ****         
+ 154:.\TAC_Submodule.c ****         if (percentageToSaveDouble<0)
+ 616              		.loc 1 154 0
+ 617 0140 D7E90401 		ldrd	r0, [r7, #16]
+ 618 0144 4FF00002 		mov	r2, #0
+ 619 0148 4FF00003 		mov	r3, #0
+ 620 014c FFF7FEFF 		bl	__aeabi_dcmplt
+ 621 0150 0346     		mov	r3, r0
+ 622 0152 002B     		cmp	r3, #0
+ 623 0154 07D0     		beq	.L41
+ 624              	.LBB13:
+ 155:.\TAC_Submodule.c ****         {
+ 156:.\TAC_Submodule.c ****             TACPtr->temperatureMode = Maintaining_cool;
+ 625              		.loc 1 156 0
+ 626 0156 7B68     		ldr	r3, [r7, #4]
+ 627 0158 0222     		movs	r2, #2
+ 628 015a 1A73     		strb	r2, [r3, #12]
+ 157:.\TAC_Submodule.c ****             changePeltierModuleCurrentDirection(Cooling, TACPtr);
+ 629              		.loc 1 157 0
+ 630 015c 0120     		movs	r0, #1
+ 631 015e 7968     		ldr	r1, [r7, #4]
+ 632 0160 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 633              	.LBE13:
+ 634 0164 06E0     		b	.L39
+ 635              	.L41:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 15
+
+
+ 636              	.LBB14:
+ 158:.\TAC_Submodule.c ****         }
+ 159:.\TAC_Submodule.c ****         else
+ 160:.\TAC_Submodule.c ****         {
+ 161:.\TAC_Submodule.c ****             TACPtr->temperatureMode = Maintaining_heat;
+ 637              		.loc 1 161 0
+ 638 0166 7B68     		ldr	r3, [r7, #4]
+ 639 0168 0022     		movs	r2, #0
+ 640 016a 1A73     		strb	r2, [r3, #12]
+ 162:.\TAC_Submodule.c ****             changePeltierModuleCurrentDirection(Heating, TACPtr);
+ 641              		.loc 1 162 0
+ 642 016c 0020     		movs	r0, #0
+ 643 016e 7968     		ldr	r1, [r7, #4]
+ 644 0170 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+ 645              	.L39:
+ 646              	.LBE14:
+ 163:.\TAC_Submodule.c ****         }        
+ 164:.\TAC_Submodule.c ****         
+ 165:.\TAC_Submodule.c ****         uint8 percentageToSave = abs((int8)percentageToSaveDouble);  
+ 647              		.loc 1 165 0
+ 648 0174 D7E90401 		ldrd	r0, [r7, #16]
+ 649 0178 FFF7FEFF 		bl	__aeabi_d2iz
+ 650 017c 0346     		mov	r3, r0
+ 651 017e DBB2     		uxtb	r3, r3
+ 652 0180 5BB2     		sxtb	r3, r3
+ 653 0182 002B     		cmp	r3, #0
+ 654 0184 B8BF     		it	lt
+ 655 0186 5B42     		rsblt	r3, r3, #0
+ 656 0188 FB73     		strb	r3, [r7, #15]
+ 166:.\TAC_Submodule.c ****         TACPtr->desiredPwmPercentage = percentageToSave;
+ 657              		.loc 1 166 0
+ 658 018a 7B68     		ldr	r3, [r7, #4]
+ 659 018c FA7B     		ldrb	r2, [r7, #15]
+ 660 018e 1A74     		strb	r2, [r3, #16]
+ 167:.\TAC_Submodule.c ****         TACPtr->pwmValueFromCalibration = UpToDate;
+ 661              		.loc 1 167 0
+ 662 0190 7B68     		ldr	r3, [r7, #4]
+ 663 0192 0122     		movs	r2, #1
+ 664 0194 1A75     		strb	r2, [r3, #20]
+ 665              	.L30:
+ 666              	.LBE12:
+ 168:.\TAC_Submodule.c ****         
+ 169:.\TAC_Submodule.c ****     }
+ 170:.\TAC_Submodule.c **** }
+ 667              		.loc 1 170 0
+ 668 0196 4037     		adds	r7, r7, #64
+ 669              		.cfi_def_cfa_offset 16
+ 670 0198 BD46     		mov	sp, r7
+ 671              		.cfi_def_cfa_register 13
+ 672              		@ sp needed
+ 673 019a B0BD     		pop	{r4, r5, r7, pc}
+ 674              	.L43:
+ 675              		.align	2
+ 676              	.L42:
+ 677 019c 80969800 		.word	10000000
+ 678              		.cfi_endproc
+ 679              	.LFE57:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 16
+
+
+ 680              		.size	updatePwmValueFromCalibrationTable, .-updatePwmValueFromCalibrationTable
+ 681              		.section	.text.areCalibrationValuesAvailable,"ax",%progbits
+ 682              		.align	2
+ 683              		.global	areCalibrationValuesAvailable
+ 684              		.thumb
+ 685              		.thumb_func
+ 686              		.type	areCalibrationValuesAvailable, %function
+ 687              	areCalibrationValuesAvailable:
+ 688              	.LFB58:
+ 171:.\TAC_Submodule.c **** 
+ 172:.\TAC_Submodule.c **** boolean areCalibrationValuesAvailable(Tac_Submodule* TACPtr)
+ 173:.\TAC_Submodule.c **** {
+ 689              		.loc 1 173 0
+ 690              		.cfi_startproc
+ 691              		@ args = 0, pretend = 0, frame = 24
+ 692              		@ frame_needed = 1, uses_anonymous_args = 0
+ 693              		@ link register save eliminated.
+ 694 0000 80B4     		push	{r7}
+ 695              		.cfi_def_cfa_offset 4
+ 696              		.cfi_offset 7, -4
+ 697 0002 87B0     		sub	sp, sp, #28
+ 698              		.cfi_def_cfa_offset 32
+ 699 0004 00AF     		add	r7, sp, #0
+ 700              		.cfi_def_cfa_register 7
+ 701 0006 7860     		str	r0, [r7, #4]
+ 174:.\TAC_Submodule.c ****     int i;
+ 175:.\TAC_Submodule.c ****     int mean;
+ 176:.\TAC_Submodule.c ****     int sum = 0;
+ 702              		.loc 1 176 0
+ 703 0008 0023     		movs	r3, #0
+ 704 000a 3B61     		str	r3, [r7, #16]
+ 177:.\TAC_Submodule.c ****     
+ 178:.\TAC_Submodule.c ****     for (i=0; i<10; i++)
+ 705              		.loc 1 178 0
+ 706 000c 0023     		movs	r3, #0
+ 707 000e 7B61     		str	r3, [r7, #20]
+ 708 0010 0CE0     		b	.L45
+ 709              	.L46:
+ 179:.\TAC_Submodule.c ****     {        
+ 180:.\TAC_Submodule.c ****         sum += TACPtr->calibrationValuesPtr[i];        
+ 710              		.loc 1 180 0 discriminator 3
+ 711 0012 7B68     		ldr	r3, [r7, #4]
+ 712 0014 DA69     		ldr	r2, [r3, #28]
+ 713 0016 7B69     		ldr	r3, [r7, #20]
+ 714 0018 5B00     		lsls	r3, r3, #1
+ 715 001a 1344     		add	r3, r3, r2
+ 716 001c 1B88     		ldrh	r3, [r3]
+ 717 001e 1BB2     		sxth	r3, r3
+ 718 0020 3A69     		ldr	r2, [r7, #16]
+ 719 0022 1344     		add	r3, r3, r2
+ 720 0024 3B61     		str	r3, [r7, #16]
+ 178:.\TAC_Submodule.c ****     {        
+ 721              		.loc 1 178 0 discriminator 3
+ 722 0026 7B69     		ldr	r3, [r7, #20]
+ 723 0028 0133     		adds	r3, r3, #1
+ 724 002a 7B61     		str	r3, [r7, #20]
+ 725              	.L45:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 17
+
+
+ 178:.\TAC_Submodule.c ****     {        
+ 726              		.loc 1 178 0 is_stmt 0 discriminator 1
+ 727 002c 7B69     		ldr	r3, [r7, #20]
+ 728 002e 092B     		cmp	r3, #9
+ 729 0030 EFDD     		ble	.L46
+ 181:.\TAC_Submodule.c ****     }
+ 182:.\TAC_Submodule.c ****     mean = sum/10;
+ 730              		.loc 1 182 0 is_stmt 1
+ 731 0032 3B69     		ldr	r3, [r7, #16]
+ 732 0034 0D4A     		ldr	r2, .L49
+ 733 0036 82FB0312 		smull	r1, r2, r2, r3
+ 734 003a 9210     		asrs	r2, r2, #2
+ 735 003c DB17     		asrs	r3, r3, #31
+ 736 003e D31A     		subs	r3, r2, r3
+ 737 0040 FB60     		str	r3, [r7, #12]
+ 183:.\TAC_Submodule.c ****     
+ 184:.\TAC_Submodule.c ****     if (mean==0)
+ 738              		.loc 1 184 0
+ 739 0042 FB68     		ldr	r3, [r7, #12]
+ 740 0044 002B     		cmp	r3, #0
+ 741 0046 05D1     		bne	.L47
+ 185:.\TAC_Submodule.c ****     {
+ 186:.\TAC_Submodule.c ****         TACPtr->areCalibrationValuesAvailable = False;
+ 742              		.loc 1 186 0
+ 743 0048 7B68     		ldr	r3, [r7, #4]
+ 744 004a 0022     		movs	r2, #0
+ 745 004c 83F82520 		strb	r2, [r3, #37]
+ 187:.\TAC_Submodule.c ****         return False;
+ 746              		.loc 1 187 0
+ 747 0050 0023     		movs	r3, #0
+ 748 0052 04E0     		b	.L48
+ 749              	.L47:
+ 188:.\TAC_Submodule.c ****     }
+ 189:.\TAC_Submodule.c ****     else
+ 190:.\TAC_Submodule.c ****     {
+ 191:.\TAC_Submodule.c ****         TACPtr->areCalibrationValuesAvailable = True;
+ 750              		.loc 1 191 0
+ 751 0054 7B68     		ldr	r3, [r7, #4]
+ 752 0056 0122     		movs	r2, #1
+ 753 0058 83F82520 		strb	r2, [r3, #37]
+ 192:.\TAC_Submodule.c ****         return True;
+ 754              		.loc 1 192 0
+ 755 005c 0123     		movs	r3, #1
+ 756              	.L48:
+ 193:.\TAC_Submodule.c ****     }
+ 194:.\TAC_Submodule.c **** }
+ 757              		.loc 1 194 0
+ 758 005e 1846     		mov	r0, r3
+ 759 0060 1C37     		adds	r7, r7, #28
+ 760              		.cfi_def_cfa_offset 4
+ 761 0062 BD46     		mov	sp, r7
+ 762              		.cfi_def_cfa_register 13
+ 763              		@ sp needed
+ 764 0064 5DF8047B 		ldr	r7, [sp], #4
+ 765              		.cfi_restore 7
+ 766              		.cfi_def_cfa_offset 0
+ 767 0068 7047     		bx	lr
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 18
+
+
+ 768              	.L50:
+ 769 006a 00BF     		.align	2
+ 770              	.L49:
+ 771 006c 67666666 		.word	1717986919
+ 772              		.cfi_endproc
+ 773              	.LFE58:
+ 774              		.size	areCalibrationValuesAvailable, .-areCalibrationValuesAvailable
+ 775              		.section	.text.getArraySum,"ax",%progbits
+ 776              		.align	2
+ 777              		.global	getArraySum
+ 778              		.thumb
+ 779              		.thumb_func
+ 780              		.type	getArraySum, %function
+ 781              	getArraySum:
+ 782              	.LFB59:
+ 195:.\TAC_Submodule.c **** 
+ 196:.\TAC_Submodule.c **** // Returns the mean value of all data found in "tab"
+ 197:.\TAC_Submodule.c **** 
+ 198:.\TAC_Submodule.c **** double getArraySum(int16* tab, int16 size)
+ 199:.\TAC_Submodule.c **** {
+ 783              		.loc 1 199 0
+ 784              		.cfi_startproc
+ 785              		@ args = 0, pretend = 0, frame = 24
+ 786              		@ frame_needed = 1, uses_anonymous_args = 0
+ 787 0000 80B5     		push	{r7, lr}
+ 788              		.cfi_def_cfa_offset 8
+ 789              		.cfi_offset 7, -8
+ 790              		.cfi_offset 14, -4
+ 791 0002 86B0     		sub	sp, sp, #24
+ 792              		.cfi_def_cfa_offset 32
+ 793 0004 00AF     		add	r7, sp, #0
+ 794              		.cfi_def_cfa_register 7
+ 795 0006 7860     		str	r0, [r7, #4]
+ 796 0008 0B46     		mov	r3, r1
+ 797 000a 7B80     		strh	r3, [r7, #2]	@ movhi
+ 200:.\TAC_Submodule.c ****     int i = 0;
+ 798              		.loc 1 200 0
+ 799 000c 0023     		movs	r3, #0
+ 800 000e 7B61     		str	r3, [r7, #20]
+ 201:.\TAC_Submodule.c ****     double sum = 0;
+ 801              		.loc 1 201 0
+ 802 0010 4FF00002 		mov	r2, #0
+ 803 0014 4FF00003 		mov	r3, #0
+ 804 0018 C7E90223 		strd	r2, [r7, #8]
+ 202:.\TAC_Submodule.c ****     for(i = 0; i < size; i++)
+ 805              		.loc 1 202 0
+ 806 001c 0023     		movs	r3, #0
+ 807 001e 7B61     		str	r3, [r7, #20]
+ 808 0020 15E0     		b	.L52
+ 809              	.L53:
+ 203:.\TAC_Submodule.c ****     {
+ 204:.\TAC_Submodule.c ****         sum += tab[i];
+ 810              		.loc 1 204 0 discriminator 3
+ 811 0022 7B69     		ldr	r3, [r7, #20]
+ 812 0024 5B00     		lsls	r3, r3, #1
+ 813 0026 7A68     		ldr	r2, [r7, #4]
+ 814 0028 1344     		add	r3, r3, r2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 19
+
+
+ 815 002a 1B88     		ldrh	r3, [r3]
+ 816 002c 1BB2     		sxth	r3, r3
+ 817 002e 1846     		mov	r0, r3
+ 818 0030 FFF7FEFF 		bl	__aeabi_i2d
+ 819 0034 0246     		mov	r2, r0
+ 820 0036 0B46     		mov	r3, r1
+ 821 0038 D7E90201 		ldrd	r0, [r7, #8]
+ 822 003c FFF7FEFF 		bl	__aeabi_dadd
+ 823 0040 0246     		mov	r2, r0
+ 824 0042 0B46     		mov	r3, r1
+ 825 0044 C7E90223 		strd	r2, [r7, #8]
+ 202:.\TAC_Submodule.c ****     for(i = 0; i < size; i++)
+ 826              		.loc 1 202 0 discriminator 3
+ 827 0048 7B69     		ldr	r3, [r7, #20]
+ 828 004a 0133     		adds	r3, r3, #1
+ 829 004c 7B61     		str	r3, [r7, #20]
+ 830              	.L52:
+ 202:.\TAC_Submodule.c ****     for(i = 0; i < size; i++)
+ 831              		.loc 1 202 0 is_stmt 0 discriminator 1
+ 832 004e B7F90220 		ldrsh	r2, [r7, #2]
+ 833 0052 7B69     		ldr	r3, [r7, #20]
+ 834 0054 9A42     		cmp	r2, r3
+ 835 0056 E4DC     		bgt	.L53
+ 205:.\TAC_Submodule.c ****     }
+ 206:.\TAC_Submodule.c ****     return sum; 
+ 836              		.loc 1 206 0 is_stmt 1
+ 837 0058 D7E90223 		ldrd	r2, [r7, #8]
+ 207:.\TAC_Submodule.c **** }
+ 838              		.loc 1 207 0
+ 839 005c 1046     		mov	r0, r2
+ 840 005e 1946     		mov	r1, r3
+ 841 0060 1837     		adds	r7, r7, #24
+ 842              		.cfi_def_cfa_offset 8
+ 843 0062 BD46     		mov	sp, r7
+ 844              		.cfi_def_cfa_register 13
+ 845              		@ sp needed
+ 846 0064 80BD     		pop	{r7, pc}
+ 847              		.cfi_endproc
+ 848              	.LFE59:
+ 849              		.size	getArraySum, .-getArraySum
+ 850 0066 00BF     		.text
+ 851              	.Letext0:
+ 852              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 853              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 854              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 855              		.file 5 "./Defines.h"
+ 856              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 857              		.section	.debug_info,"",%progbits
+ 858              	.Ldebug_info0:
+ 859 0000 51060000 		.4byte	0x651
+ 860 0004 0400     		.2byte	0x4
+ 861 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 862 000a 04       		.byte	0x4
+ 863 000b 01       		.uleb128 0x1
+ 864 000c 25020000 		.4byte	.LASF96
+ 865 0010 01       		.byte	0x1
+ 866 0011 18000000 		.4byte	.LASF97
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 20
+
+
+ 867 0015 F3010000 		.4byte	.LASF98
+ 868 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 869 001d 00000000 		.4byte	0
+ 870 0021 00000000 		.4byte	.Ldebug_line0
+ 871 0025 02       		.uleb128 0x2
+ 872 0026 01       		.byte	0x1
+ 873 0027 06       		.byte	0x6
+ 874 0028 8B010000 		.4byte	.LASF0
+ 875 002c 02       		.uleb128 0x2
+ 876 002d 01       		.byte	0x1
+ 877 002e 08       		.byte	0x8
+ 878 002f 33030000 		.4byte	.LASF1
+ 879 0033 02       		.uleb128 0x2
+ 880 0034 02       		.byte	0x2
+ 881 0035 05       		.byte	0x5
+ 882 0036 8B000000 		.4byte	.LASF2
+ 883 003a 02       		.uleb128 0x2
+ 884 003b 02       		.byte	0x2
+ 885 003c 07       		.byte	0x7
+ 886 003d 1C040000 		.4byte	.LASF3
+ 887 0041 03       		.uleb128 0x3
+ 888 0042 9B050000 		.4byte	.LASF9
+ 889 0046 02       		.byte	0x2
+ 890 0047 3F       		.byte	0x3f
+ 891 0048 4C000000 		.4byte	0x4c
+ 892 004c 02       		.uleb128 0x2
+ 893 004d 04       		.byte	0x4
+ 894 004e 05       		.byte	0x5
+ 895 004f 01010000 		.4byte	.LASF4
+ 896 0053 02       		.uleb128 0x2
+ 897 0054 04       		.byte	0x4
+ 898 0055 07       		.byte	0x7
+ 899 0056 E6030000 		.4byte	.LASF5
+ 900 005a 02       		.uleb128 0x2
+ 901 005b 08       		.byte	0x8
+ 902 005c 05       		.byte	0x5
+ 903 005d BB010000 		.4byte	.LASF6
+ 904 0061 02       		.uleb128 0x2
+ 905 0062 08       		.byte	0x8
+ 906 0063 07       		.byte	0x7
+ 907 0064 A5030000 		.4byte	.LASF7
+ 908 0068 04       		.uleb128 0x4
+ 909 0069 04       		.byte	0x4
+ 910 006a 05       		.byte	0x5
+ 911 006b 696E7400 		.ascii	"int\000"
+ 912 006f 02       		.uleb128 0x2
+ 913 0070 04       		.byte	0x4
+ 914 0071 07       		.byte	0x7
+ 915 0072 CD030000 		.4byte	.LASF8
+ 916 0076 03       		.uleb128 0x3
+ 917 0077 6A040000 		.4byte	.LASF10
+ 918 007b 03       		.byte	0x3
+ 919 007c 2C       		.byte	0x2c
+ 920 007d 41000000 		.4byte	0x41
+ 921 0081 03       		.uleb128 0x3
+ 922 0082 50010000 		.4byte	.LASF11
+ 923 0086 04       		.byte	0x4
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 21
+
+
+ 924 0087 A1       		.byte	0xa1
+ 925 0088 2C000000 		.4byte	0x2c
+ 926 008c 03       		.uleb128 0x3
+ 927 008d 28010000 		.4byte	.LASF12
+ 928 0091 04       		.byte	0x4
+ 929 0092 A2       		.byte	0xa2
+ 930 0093 3A000000 		.4byte	0x3a
+ 931 0097 03       		.uleb128 0x3
+ 932 0098 CF010000 		.4byte	.LASF13
+ 933 009c 04       		.byte	0x4
+ 934 009d A4       		.byte	0xa4
+ 935 009e 25000000 		.4byte	0x25
+ 936 00a2 03       		.uleb128 0x3
+ 937 00a3 3B010000 		.4byte	.LASF14
+ 938 00a7 04       		.byte	0x4
+ 939 00a8 A5       		.byte	0xa5
+ 940 00a9 33000000 		.4byte	0x33
+ 941 00ad 02       		.uleb128 0x2
+ 942 00ae 04       		.byte	0x4
+ 943 00af 04       		.byte	0x4
+ 944 00b0 AA010000 		.4byte	.LASF15
+ 945 00b4 02       		.uleb128 0x2
+ 946 00b5 08       		.byte	0x8
+ 947 00b6 04       		.byte	0x4
+ 948 00b7 3C050000 		.4byte	.LASF16
+ 949 00bb 02       		.uleb128 0x2
+ 950 00bc 01       		.byte	0x1
+ 951 00bd 08       		.byte	0x8
+ 952 00be 4B040000 		.4byte	.LASF17
+ 953 00c2 02       		.uleb128 0x2
+ 954 00c3 04       		.byte	0x4
+ 955 00c4 07       		.byte	0x7
+ 956 00c5 A3000000 		.4byte	.LASF18
+ 957 00c9 02       		.uleb128 0x2
+ 958 00ca 08       		.byte	0x8
+ 959 00cb 04       		.byte	0x4
+ 960 00cc 27030000 		.4byte	.LASF19
+ 961 00d0 05       		.uleb128 0x5
+ 962 00d1 01       		.byte	0x1
+ 963 00d2 05       		.byte	0x5
+ 964 00d3 6A       		.byte	0x6a
+ 965 00d4 E5000000 		.4byte	0xe5
+ 966 00d8 06       		.uleb128 0x6
+ 967 00d9 B3020000 		.4byte	.LASF20
+ 968 00dd 00       		.sleb128 0
+ 969 00de 06       		.uleb128 0x6
+ 970 00df D4010000 		.4byte	.LASF21
+ 971 00e3 01       		.sleb128 1
+ 972 00e4 00       		.byte	0
+ 973 00e5 03       		.uleb128 0x3
+ 974 00e6 97010000 		.4byte	.LASF22
+ 975 00ea 05       		.byte	0x5
+ 976 00eb 6A       		.byte	0x6a
+ 977 00ec D0000000 		.4byte	0xd0
+ 978 00f0 05       		.uleb128 0x5
+ 979 00f1 01       		.byte	0x1
+ 980 00f2 05       		.byte	0x5
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 22
+
+
+ 981 00f3 6B       		.byte	0x6b
+ 982 00f4 05010000 		.4byte	0x105
+ 983 00f8 06       		.uleb128 0x6
+ 984 00f9 2F010000 		.4byte	.LASF23
+ 985 00fd 00       		.sleb128 0
+ 986 00fe 06       		.uleb128 0x6
+ 987 00ff 1C030000 		.4byte	.LASF24
+ 988 0103 01       		.sleb128 1
+ 989 0104 00       		.byte	0
+ 990 0105 03       		.uleb128 0x3
+ 991 0106 80050000 		.4byte	.LASF25
+ 992 010a 05       		.byte	0x5
+ 993 010b 6B       		.byte	0x6b
+ 994 010c F0000000 		.4byte	0xf0
+ 995 0110 05       		.uleb128 0x5
+ 996 0111 01       		.byte	0x1
+ 997 0112 05       		.byte	0x5
+ 998 0113 6C       		.byte	0x6c
+ 999 0114 25010000 		.4byte	0x125
+ 1000 0118 06       		.uleb128 0x6
+ 1001 0119 BB050000 		.4byte	.LASF26
+ 1002 011d 00       		.sleb128 0
+ 1003 011e 06       		.uleb128 0x6
+ 1004 011f 72040000 		.4byte	.LASF27
+ 1005 0123 01       		.sleb128 1
+ 1006 0124 00       		.byte	0
+ 1007 0125 03       		.uleb128 0x3
+ 1008 0126 70030000 		.4byte	.LASF28
+ 1009 012a 05       		.byte	0x5
+ 1010 012b 6C       		.byte	0x6c
+ 1011 012c 10010000 		.4byte	0x110
+ 1012 0130 05       		.uleb128 0x5
+ 1013 0131 01       		.byte	0x1
+ 1014 0132 05       		.byte	0x5
+ 1015 0133 6D       		.byte	0x6d
+ 1016 0134 57010000 		.4byte	0x157
+ 1017 0138 06       		.uleb128 0x6
+ 1018 0139 BC030000 		.4byte	.LASF29
+ 1019 013d 00       		.sleb128 0
+ 1020 013e 06       		.uleb128 0x6
+ 1021 013f 0F060000 		.4byte	.LASF30
+ 1022 0143 01       		.sleb128 1
+ 1023 0144 06       		.uleb128 0x6
+ 1024 0145 6A050000 		.4byte	.LASF31
+ 1025 0149 02       		.sleb128 2
+ 1026 014a 06       		.uleb128 0x6
+ 1027 014b 58040000 		.4byte	.LASF32
+ 1028 014f 03       		.sleb128 3
+ 1029 0150 06       		.uleb128 0x6
+ 1030 0151 BA000000 		.4byte	.LASF33
+ 1031 0155 04       		.sleb128 4
+ 1032 0156 00       		.byte	0
+ 1033 0157 03       		.uleb128 0x3
+ 1034 0158 D8020000 		.4byte	.LASF34
+ 1035 015c 05       		.byte	0x5
+ 1036 015d 6D       		.byte	0x6d
+ 1037 015e 30010000 		.4byte	0x130
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 23
+
+
+ 1038 0162 05       		.uleb128 0x5
+ 1039 0163 01       		.byte	0x1
+ 1040 0164 05       		.byte	0x5
+ 1041 0165 6E       		.byte	0x6e
+ 1042 0166 7D010000 		.4byte	0x17d
+ 1043 016a 06       		.uleb128 0x6
+ 1044 016b 84000000 		.4byte	.LASF35
+ 1045 016f 02       		.sleb128 2
+ 1046 0170 06       		.uleb128 0x6
+ 1047 0171 CA000000 		.4byte	.LASF36
+ 1048 0175 01       		.sleb128 1
+ 1049 0176 06       		.uleb128 0x6
+ 1050 0177 06040000 		.4byte	.LASF37
+ 1051 017b 00       		.sleb128 0
+ 1052 017c 00       		.byte	0
+ 1053 017d 03       		.uleb128 0x3
+ 1054 017e A5050000 		.4byte	.LASF38
+ 1055 0182 05       		.byte	0x5
+ 1056 0183 6E       		.byte	0x6e
+ 1057 0184 62010000 		.4byte	0x162
+ 1058 0188 05       		.uleb128 0x5
+ 1059 0189 01       		.byte	0x1
+ 1060 018a 05       		.byte	0x5
+ 1061 018b 6F       		.byte	0x6f
+ 1062 018c 9D010000 		.4byte	0x19d
+ 1063 0190 06       		.uleb128 0x6
+ 1064 0191 13030000 		.4byte	.LASF39
+ 1065 0195 00       		.sleb128 0
+ 1066 0196 06       		.uleb128 0x6
+ 1067 0197 82010000 		.4byte	.LASF40
+ 1068 019b 01       		.sleb128 1
+ 1069 019c 00       		.byte	0
+ 1070 019d 03       		.uleb128 0x3
+ 1071 019e 0A010000 		.4byte	.LASF41
+ 1072 01a2 05       		.byte	0x5
+ 1073 01a3 6F       		.byte	0x6f
+ 1074 01a4 88010000 		.4byte	0x188
+ 1075 01a8 05       		.uleb128 0x5
+ 1076 01a9 01       		.byte	0x1
+ 1077 01aa 05       		.byte	0x5
+ 1078 01ab 70       		.byte	0x70
+ 1079 01ac BD010000 		.4byte	0x1bd
+ 1080 01b0 06       		.uleb128 0x6
+ 1081 01b1 C9010000 		.4byte	.LASF42
+ 1082 01b5 00       		.sleb128 0
+ 1083 01b6 06       		.uleb128 0x6
+ 1084 01b7 E9050000 		.4byte	.LASF43
+ 1085 01bb 01       		.sleb128 1
+ 1086 01bc 00       		.byte	0
+ 1087 01bd 03       		.uleb128 0x3
+ 1088 01be 67060000 		.4byte	.LASF44
+ 1089 01c2 05       		.byte	0x5
+ 1090 01c3 70       		.byte	0x70
+ 1091 01c4 A8010000 		.4byte	0x1a8
+ 1092 01c8 05       		.uleb128 0x5
+ 1093 01c9 01       		.byte	0x1
+ 1094 01ca 05       		.byte	0x5
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 24
+
+
+ 1095 01cb 71       		.byte	0x71
+ 1096 01cc DD010000 		.4byte	0x1dd
+ 1097 01d0 06       		.uleb128 0x6
+ 1098 01d1 DA050000 		.4byte	.LASF45
+ 1099 01d5 00       		.sleb128 0
+ 1100 01d6 06       		.uleb128 0x6
+ 1101 01d7 F5000000 		.4byte	.LASF46
+ 1102 01db 01       		.sleb128 1
+ 1103 01dc 00       		.byte	0
+ 1104 01dd 03       		.uleb128 0x3
+ 1105 01de 53050000 		.4byte	.LASF47
+ 1106 01e2 05       		.byte	0x5
+ 1107 01e3 71       		.byte	0x71
+ 1108 01e4 C8010000 		.4byte	0x1c8
+ 1109 01e8 07       		.uleb128 0x7
+ 1110 01e9 30       		.byte	0x30
+ 1111 01ea 05       		.byte	0x5
+ 1112 01eb 74       		.byte	0x74
+ 1113 01ec 11030000 		.4byte	0x311
+ 1114 01f0 08       		.uleb128 0x8
+ 1115 01f1 56010000 		.4byte	.LASF48
+ 1116 01f5 05       		.byte	0x5
+ 1117 01f6 76       		.byte	0x76
+ 1118 01f7 8C000000 		.4byte	0x8c
+ 1119 01fb 00       		.byte	0
+ 1120 01fc 08       		.uleb128 0x8
+ 1121 01fd 90040000 		.4byte	.LASF49
+ 1122 0201 05       		.byte	0x5
+ 1123 0202 77       		.byte	0x77
+ 1124 0203 8C000000 		.4byte	0x8c
+ 1125 0207 02       		.byte	0x2
+ 1126 0208 08       		.uleb128 0x8
+ 1127 0209 8E050000 		.4byte	.LASF50
+ 1128 020d 05       		.byte	0x5
+ 1129 020e 79       		.byte	0x79
+ 1130 020f 25010000 		.4byte	0x125
+ 1131 0213 04       		.byte	0x4
+ 1132 0214 08       		.uleb128 0x8
+ 1133 0215 A8040000 		.4byte	.LASF51
+ 1134 0219 05       		.byte	0x5
+ 1135 021a 7B       		.byte	0x7b
+ 1136 021b A2000000 		.4byte	0xa2
+ 1137 021f 06       		.byte	0x6
+ 1138 0220 08       		.uleb128 0x8
+ 1139 0221 E2000000 		.4byte	.LASF52
+ 1140 0225 05       		.byte	0x5
+ 1141 0226 7C       		.byte	0x7c
+ 1142 0227 A2000000 		.4byte	0xa2
+ 1143 022b 08       		.byte	0x8
+ 1144 022c 08       		.uleb128 0x8
+ 1145 022d 52060000 		.4byte	.LASF53
+ 1146 0231 05       		.byte	0x5
+ 1147 0232 7D       		.byte	0x7d
+ 1148 0233 A2000000 		.4byte	0xa2
+ 1149 0237 0A       		.byte	0xa
+ 1150 0238 08       		.uleb128 0x8
+ 1151 0239 43050000 		.4byte	.LASF54
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 25
+
+
+ 1152 023d 05       		.byte	0x5
+ 1153 023e 7E       		.byte	0x7e
+ 1154 023f 57010000 		.4byte	0x157
+ 1155 0243 0C       		.byte	0xc
+ 1156 0244 08       		.uleb128 0x8
+ 1157 0245 ED020000 		.4byte	.LASF55
+ 1158 0249 05       		.byte	0x5
+ 1159 024a 7F       		.byte	0x7f
+ 1160 024b 7D010000 		.4byte	0x17d
+ 1161 024f 0D       		.byte	0xd
+ 1162 0250 08       		.uleb128 0x8
+ 1163 0251 FF050000 		.4byte	.LASF56
+ 1164 0255 05       		.byte	0x5
+ 1165 0256 81       		.byte	0x81
+ 1166 0257 8C000000 		.4byte	0x8c
+ 1167 025b 0E       		.byte	0xe
+ 1168 025c 08       		.uleb128 0x8
+ 1169 025d FE020000 		.4byte	.LASF57
+ 1170 0261 05       		.byte	0x5
+ 1171 0262 82       		.byte	0x82
+ 1172 0263 81000000 		.4byte	0x81
+ 1173 0267 10       		.byte	0x10
+ 1174 0268 08       		.uleb128 0x8
+ 1175 0269 C4020000 		.4byte	.LASF58
+ 1176 026d 05       		.byte	0x5
+ 1177 026e 83       		.byte	0x83
+ 1178 026f 81000000 		.4byte	0x81
+ 1179 0273 11       		.byte	0x11
+ 1180 0274 08       		.uleb128 0x8
+ 1181 0275 EE040000 		.4byte	.LASF59
+ 1182 0279 05       		.byte	0x5
+ 1183 027a 84       		.byte	0x84
+ 1184 027b 8C000000 		.4byte	0x8c
+ 1185 027f 12       		.byte	0x12
+ 1186 0280 08       		.uleb128 0x8
+ 1187 0281 00000000 		.4byte	.LASF60
+ 1188 0285 05       		.byte	0x5
+ 1189 0286 85       		.byte	0x85
+ 1190 0287 9D010000 		.4byte	0x19d
+ 1191 028b 14       		.byte	0x14
+ 1192 028c 08       		.uleb128 0x8
+ 1193 028d 0E040000 		.4byte	.LASF61
+ 1194 0291 05       		.byte	0x5
+ 1195 0292 87       		.byte	0x87
+ 1196 0293 81000000 		.4byte	0x81
+ 1197 0297 15       		.byte	0x15
+ 1198 0298 08       		.uleb128 0x8
+ 1199 0299 95000000 		.4byte	.LASF62
+ 1200 029d 05       		.byte	0x5
+ 1201 029e 88       		.byte	0x88
+ 1202 029f E5000000 		.4byte	0xe5
+ 1203 02a3 16       		.byte	0x16
+ 1204 02a4 08       		.uleb128 0x8
+ 1205 02a5 DB040000 		.4byte	.LASF63
+ 1206 02a9 05       		.byte	0x5
+ 1207 02aa 8A       		.byte	0x8a
+ 1208 02ab 81000000 		.4byte	0x81
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 26
+
+
+ 1209 02af 17       		.byte	0x17
+ 1210 02b0 08       		.uleb128 0x8
+ 1211 02b1 49060000 		.4byte	.LASF64
+ 1212 02b5 05       		.byte	0x5
+ 1213 02b6 8B       		.byte	0x8b
+ 1214 02b7 05010000 		.4byte	0x105
+ 1215 02bb 18       		.byte	0x18
+ 1216 02bc 08       		.uleb128 0x8
+ 1217 02bd FD040000 		.4byte	.LASF65
+ 1218 02c1 05       		.byte	0x5
+ 1219 02c2 8D       		.byte	0x8d
+ 1220 02c3 11030000 		.4byte	0x311
+ 1221 02c7 1C       		.byte	0x1c
+ 1222 02c8 08       		.uleb128 0x8
+ 1223 02c9 6E010000 		.4byte	.LASF66
+ 1224 02cd 05       		.byte	0x5
+ 1225 02ce 8E       		.byte	0x8e
+ 1226 02cf 17030000 		.4byte	0x317
+ 1227 02d3 20       		.byte	0x20
+ 1228 02d4 08       		.uleb128 0x8
+ 1229 02d5 42000000 		.4byte	.LASF67
+ 1230 02d9 05       		.byte	0x5
+ 1231 02da 8F       		.byte	0x8f
+ 1232 02db BD010000 		.4byte	0x1bd
+ 1233 02df 24       		.byte	0x24
+ 1234 02e0 08       		.uleb128 0x8
+ 1235 02e1 12050000 		.4byte	.LASF68
+ 1236 02e5 05       		.byte	0x5
+ 1237 02e6 90       		.byte	0x90
+ 1238 02e7 BD010000 		.4byte	0x1bd
+ 1239 02eb 25       		.byte	0x25
+ 1240 02ec 08       		.uleb128 0x8
+ 1241 02ed 39040000 		.4byte	.LASF69
+ 1242 02f1 05       		.byte	0x5
+ 1243 02f2 92       		.byte	0x92
+ 1244 02f3 DD010000 		.4byte	0x1dd
+ 1245 02f7 26       		.byte	0x26
+ 1246 02f8 08       		.uleb128 0x8
+ 1247 02f9 62010000 		.4byte	.LASF70
+ 1248 02fd 05       		.byte	0x5
+ 1249 02fe 94       		.byte	0x94
+ 1250 02ff 11030000 		.4byte	0x311
+ 1251 0303 28       		.byte	0x28
+ 1252 0304 08       		.uleb128 0x8
+ 1253 0305 D2000000 		.4byte	.LASF71
+ 1254 0309 05       		.byte	0x5
+ 1255 030a 95       		.byte	0x95
+ 1256 030b 1D030000 		.4byte	0x31d
+ 1257 030f 2C       		.byte	0x2c
+ 1258 0310 00       		.byte	0
+ 1259 0311 09       		.uleb128 0x9
+ 1260 0312 04       		.byte	0x4
+ 1261 0313 A2000000 		.4byte	0xa2
+ 1262 0317 09       		.uleb128 0x9
+ 1263 0318 04       		.byte	0x4
+ 1264 0319 97000000 		.4byte	0x97
+ 1265 031d 09       		.uleb128 0x9
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 27
+
+
+ 1266 031e 04       		.byte	0x4
+ 1267 031f 81000000 		.4byte	0x81
+ 1268 0323 03       		.uleb128 0x3
+ 1269 0324 AC000000 		.4byte	.LASF72
+ 1270 0328 05       		.byte	0x5
+ 1271 0329 97       		.byte	0x97
+ 1272 032a E8010000 		.4byte	0x1e8
+ 1273 032e 0A       		.uleb128 0xa
+ 1274 032f BA040000 		.4byte	.LASF83
+ 1275 0333 01       		.byte	0x1
+ 1276 0334 11       		.byte	0x11
+ 1277 0335 00000000 		.4byte	.LFB56
+ 1278 0339 E0020000 		.4byte	.LFE56-.LFB56
+ 1279 033d 01       		.uleb128 0x1
+ 1280 033e 9C       		.byte	0x9c
+ 1281 033f B4040000 		.4byte	0x4b4
+ 1282 0343 0B       		.uleb128 0xb
+ 1283 0344 DF030000 		.4byte	.LASF73
+ 1284 0348 01       		.byte	0x1
+ 1285 0349 11       		.byte	0x11
+ 1286 034a B4040000 		.4byte	0x4b4
+ 1287 034e 02       		.uleb128 0x2
+ 1288 034f 91       		.byte	0x91
+ 1289 0350 44       		.sleb128 -60
+ 1290 0351 0B       		.uleb128 0xb
+ 1291 0352 2F040000 		.4byte	.LASF74
+ 1292 0356 01       		.byte	0x1
+ 1293 0357 11       		.byte	0x11
+ 1294 0358 B4000000 		.4byte	0xb4
+ 1295 035c 03       		.uleb128 0x3
+ 1296 035d 91       		.byte	0x91
+ 1297 035e B87F     		.sleb128 -72
+ 1298 0360 0C       		.uleb128 0xc
+ 1299 0361 C2000000 		.4byte	.LASF75
+ 1300 0365 01       		.byte	0x1
+ 1301 0366 17       		.byte	0x17
+ 1302 0367 A2000000 		.4byte	0xa2
+ 1303 036b 02       		.uleb128 0x2
+ 1304 036c 91       		.byte	0x91
+ 1305 036d 5E       		.sleb128 -34
+ 1306 036e 0C       		.uleb128 0xc
+ 1307 036f 50040000 		.4byte	.LASF76
+ 1308 0373 01       		.byte	0x1
+ 1309 0374 18       		.byte	0x18
+ 1310 0375 B4000000 		.4byte	0xb4
+ 1311 0379 02       		.uleb128 0x2
+ 1312 037a 91       		.byte	0x91
+ 1313 037b 60       		.sleb128 -32
+ 1314 037c 0C       		.uleb128 0xc
+ 1315 037d D4040000 		.4byte	.LASF77
+ 1316 0381 01       		.byte	0x1
+ 1317 0382 19       		.byte	0x19
+ 1318 0383 B4000000 		.4byte	0xb4
+ 1319 0387 02       		.uleb128 0x2
+ 1320 0388 91       		.byte	0x91
+ 1321 0389 50       		.sleb128 -48
+ 1322 038a 0C       		.uleb128 0xc
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 28
+
+
+ 1323 038b B0010000 		.4byte	.LASF78
+ 1324 038f 01       		.byte	0x1
+ 1325 0390 3B       		.byte	0x3b
+ 1326 0391 B4000000 		.4byte	0xb4
+ 1327 0395 02       		.uleb128 0x2
+ 1328 0396 91       		.byte	0x91
+ 1329 0397 48       		.sleb128 -56
+ 1330 0398 0D       		.uleb128 0xd
+ 1331 0399 10010000 		.4byte	.LBB2
+ 1332 039d 0C000000 		.4byte	.LBE2-.LBB2
+ 1333 03a1 B3030000 		.4byte	0x3b3
+ 1334 03a5 0E       		.uleb128 0xe
+ 1335 03a6 57030000 		.4byte	.LASF79
+ 1336 03aa 01       		.byte	0x1
+ 1337 03ab 33       		.byte	0x33
+ 1338 03ac 68000000 		.4byte	0x68
+ 1339 03b0 0F       		.uleb128 0xf
+ 1340 03b1 00       		.byte	0
+ 1341 03b2 00       		.byte	0
+ 1342 03b3 0D       		.uleb128 0xd
+ 1343 03b4 2E010000 		.4byte	.LBB3
+ 1344 03b8 0C000000 		.4byte	.LBE3-.LBB3
+ 1345 03bc CE030000 		.4byte	0x3ce
+ 1346 03c0 0E       		.uleb128 0xe
+ 1347 03c1 57030000 		.4byte	.LASF79
+ 1348 03c5 01       		.byte	0x1
+ 1349 03c6 33       		.byte	0x33
+ 1350 03c7 68000000 		.4byte	0x68
+ 1351 03cb 0F       		.uleb128 0xf
+ 1352 03cc 00       		.byte	0
+ 1353 03cd 00       		.byte	0
+ 1354 03ce 0D       		.uleb128 0xd
+ 1355 03cf CE010000 		.4byte	.LBB4
+ 1356 03d3 18000000 		.4byte	.LBE4-.LBB4
+ 1357 03d7 FA030000 		.4byte	0x3fa
+ 1358 03db 10       		.uleb128 0x10
+ 1359 03dc E4010000 		.4byte	.LASF99
+ 1360 03e0 01       		.byte	0x1
+ 1361 03e1 45       		.byte	0x45
+ 1362 03e2 68000000 		.4byte	0x68
+ 1363 03e6 EC030000 		.4byte	0x3ec
+ 1364 03ea 0F       		.uleb128 0xf
+ 1365 03eb 00       		.byte	0
+ 1366 03ec 0E       		.uleb128 0xe
+ 1367 03ed CB050000 		.4byte	.LASF80
+ 1368 03f1 01       		.byte	0x1
+ 1369 03f2 46       		.byte	0x46
+ 1370 03f3 68000000 		.4byte	0x68
+ 1371 03f7 0F       		.uleb128 0xf
+ 1372 03f8 00       		.byte	0
+ 1373 03f9 00       		.byte	0
+ 1374 03fa 0D       		.uleb128 0xd
+ 1375 03fb 04020000 		.4byte	.LBB5
+ 1376 03ff 0E000000 		.4byte	.LBE5-.LBB5
+ 1377 0403 15040000 		.4byte	0x415
+ 1378 0407 0E       		.uleb128 0xe
+ 1379 0408 60000000 		.4byte	.LASF81
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 29
+
+
+ 1380 040c 01       		.byte	0x1
+ 1381 040d 4F       		.byte	0x4f
+ 1382 040e 68000000 		.4byte	0x68
+ 1383 0412 0F       		.uleb128 0xf
+ 1384 0413 00       		.byte	0
+ 1385 0414 00       		.byte	0
+ 1386 0415 0D       		.uleb128 0xd
+ 1387 0416 26020000 		.4byte	.LBB6
+ 1388 041a 0C000000 		.4byte	.LBE6-.LBB6
+ 1389 041e 30040000 		.4byte	0x430
+ 1390 0422 0E       		.uleb128 0xe
+ 1391 0423 41030000 		.4byte	.LASF82
+ 1392 0427 01       		.byte	0x1
+ 1393 0428 53       		.byte	0x53
+ 1394 0429 68000000 		.4byte	0x68
+ 1395 042d 0F       		.uleb128 0xf
+ 1396 042e 00       		.byte	0
+ 1397 042f 00       		.byte	0
+ 1398 0430 0D       		.uleb128 0xd
+ 1399 0431 34020000 		.4byte	.LBB7
+ 1400 0435 0E000000 		.4byte	.LBE7-.LBB7
+ 1401 0439 4B040000 		.4byte	0x44b
+ 1402 043d 0E       		.uleb128 0xe
+ 1403 043e 41030000 		.4byte	.LASF82
+ 1404 0442 01       		.byte	0x1
+ 1405 0443 53       		.byte	0x53
+ 1406 0444 68000000 		.4byte	0x68
+ 1407 0448 0F       		.uleb128 0xf
+ 1408 0449 00       		.byte	0
+ 1409 044a 00       		.byte	0
+ 1410 044b 0D       		.uleb128 0xd
+ 1411 044c 62020000 		.4byte	.LBB8
+ 1412 0450 0E000000 		.4byte	.LBE8-.LBB8
+ 1413 0454 66040000 		.4byte	0x466
+ 1414 0458 0E       		.uleb128 0xe
+ 1415 0459 60000000 		.4byte	.LASF81
+ 1416 045d 01       		.byte	0x1
+ 1417 045e 4F       		.byte	0x4f
+ 1418 045f 68000000 		.4byte	0x68
+ 1419 0463 0F       		.uleb128 0xf
+ 1420 0464 00       		.byte	0
+ 1421 0465 00       		.byte	0
+ 1422 0466 0D       		.uleb128 0xd
+ 1423 0467 84020000 		.4byte	.LBB9
+ 1424 046b 0C000000 		.4byte	.LBE9-.LBB9
+ 1425 046f 81040000 		.4byte	0x481
+ 1426 0473 0E       		.uleb128 0xe
+ 1427 0474 41030000 		.4byte	.LASF82
+ 1428 0478 01       		.byte	0x1
+ 1429 0479 53       		.byte	0x53
+ 1430 047a 68000000 		.4byte	0x68
+ 1431 047e 0F       		.uleb128 0xf
+ 1432 047f 00       		.byte	0
+ 1433 0480 00       		.byte	0
+ 1434 0481 0D       		.uleb128 0xd
+ 1435 0482 92020000 		.4byte	.LBB10
+ 1436 0486 16000000 		.4byte	.LBE10-.LBB10
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 30
+
+
+ 1437 048a 9C040000 		.4byte	0x49c
+ 1438 048e 0E       		.uleb128 0xe
+ 1439 048f 41030000 		.4byte	.LASF82
+ 1440 0493 01       		.byte	0x1
+ 1441 0494 53       		.byte	0x53
+ 1442 0495 68000000 		.4byte	0x68
+ 1443 0499 0F       		.uleb128 0xf
+ 1444 049a 00       		.byte	0
+ 1445 049b 00       		.byte	0
+ 1446 049c 11       		.uleb128 0x11
+ 1447 049d AC020000 		.4byte	.LBB11
+ 1448 04a1 12000000 		.4byte	.LBE11-.LBB11
+ 1449 04a5 0E       		.uleb128 0xe
+ 1450 04a6 57030000 		.4byte	.LASF79
+ 1451 04aa 01       		.byte	0x1
+ 1452 04ab 33       		.byte	0x33
+ 1453 04ac 68000000 		.4byte	0x68
+ 1454 04b0 0F       		.uleb128 0xf
+ 1455 04b1 00       		.byte	0
+ 1456 04b2 00       		.byte	0
+ 1457 04b3 00       		.byte	0
+ 1458 04b4 09       		.uleb128 0x9
+ 1459 04b5 04       		.byte	0x4
+ 1460 04b6 23030000 		.4byte	0x323
+ 1461 04ba 0A       		.uleb128 0xa
+ 1462 04bb 82030000 		.4byte	.LASF84
+ 1463 04bf 01       		.byte	0x1
+ 1464 04c0 79       		.byte	0x79
+ 1465 04c1 00000000 		.4byte	.LFB57
+ 1466 04c5 A0010000 		.4byte	.LFE57-.LFB57
+ 1467 04c9 01       		.uleb128 0x1
+ 1468 04ca 9C       		.byte	0x9c
+ 1469 04cb A3050000 		.4byte	0x5a3
+ 1470 04cf 0B       		.uleb128 0xb
+ 1471 04d0 DF030000 		.4byte	.LASF73
+ 1472 04d4 01       		.byte	0x1
+ 1473 04d5 79       		.byte	0x79
+ 1474 04d6 B4040000 		.4byte	0x4b4
+ 1475 04da 03       		.uleb128 0x3
+ 1476 04db 91       		.byte	0x91
+ 1477 04dc B47F     		.sleb128 -76
+ 1478 04de 0C       		.uleb128 0xc
+ 1479 04df 1C060000 		.4byte	.LASF85
+ 1480 04e3 01       		.byte	0x1
+ 1481 04e4 7B       		.byte	0x7b
+ 1482 04e5 BD010000 		.4byte	0x1bd
+ 1483 04e9 02       		.uleb128 0x2
+ 1484 04ea 91       		.byte	0x91
+ 1485 04eb 6F       		.sleb128 -17
+ 1486 04ec 11       		.uleb128 0x11
+ 1487 04ed 3A000000 		.4byte	.LBB12
+ 1488 04f1 5C010000 		.4byte	.LBE12-.LBB12
+ 1489 04f5 12       		.uleb128 0x12
+ 1490 04f6 7800     		.ascii	"x\000"
+ 1491 04f8 01       		.byte	0x1
+ 1492 04f9 85       		.byte	0x85
+ 1493 04fa 68000000 		.4byte	0x68
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 31
+
+
+ 1494 04fe 02       		.uleb128 0x2
+ 1495 04ff 91       		.byte	0x91
+ 1496 0500 68       		.sleb128 -24
+ 1497 0501 13       		.uleb128 0x13
+ 1498 0502 41010000 		.4byte	.LASF100
+ 1499 0506 01       		.byte	0x1
+ 1500 0507 86       		.byte	0x86
+ 1501 0508 68000000 		.4byte	0x68
+ 1502 050c 0C       		.uleb128 0xc
+ 1503 050d 81040000 		.4byte	.LASF86
+ 1504 0511 01       		.byte	0x1
+ 1505 0512 88       		.byte	0x88
+ 1506 0513 68000000 		.4byte	0x68
+ 1507 0517 02       		.uleb128 0x2
+ 1508 0518 91       		.byte	0x91
+ 1509 0519 60       		.sleb128 -32
+ 1510 051a 0C       		.uleb128 0xc
+ 1511 051b 2A000000 		.4byte	.LASF87
+ 1512 051f 01       		.byte	0x1
+ 1513 0520 89       		.byte	0x89
+ 1514 0521 68000000 		.4byte	0x68
+ 1515 0525 02       		.uleb128 0x2
+ 1516 0526 91       		.byte	0x91
+ 1517 0527 5C       		.sleb128 -36
+ 1518 0528 0C       		.uleb128 0xc
+ 1519 0529 F8030000 		.4byte	.LASF88
+ 1520 052d 01       		.byte	0x1
+ 1521 052e 8B       		.byte	0x8b
+ 1522 052f 68000000 		.4byte	0x68
+ 1523 0533 02       		.uleb128 0x2
+ 1524 0534 91       		.byte	0x91
+ 1525 0535 64       		.sleb128 -28
+ 1526 0536 0C       		.uleb128 0xc
+ 1527 0537 32060000 		.4byte	.LASF89
+ 1528 053b 01       		.byte	0x1
+ 1529 053c 96       		.byte	0x96
+ 1530 053d B4000000 		.4byte	0xb4
+ 1531 0541 02       		.uleb128 0x2
+ 1532 0542 91       		.byte	0x91
+ 1533 0543 50       		.sleb128 -48
+ 1534 0544 0C       		.uleb128 0xc
+ 1535 0545 CE040000 		.4byte	.LASF90
+ 1536 0549 01       		.byte	0x1
+ 1537 054a 97       		.byte	0x97
+ 1538 054b B4000000 		.4byte	0xb4
+ 1539 054f 02       		.uleb128 0x2
+ 1540 0550 91       		.byte	0x91
+ 1541 0551 48       		.sleb128 -56
+ 1542 0552 0C       		.uleb128 0xc
+ 1543 0553 6F060000 		.4byte	.LASF91
+ 1544 0557 01       		.byte	0x1
+ 1545 0558 98       		.byte	0x98
+ 1546 0559 B4000000 		.4byte	0xb4
+ 1547 055d 02       		.uleb128 0x2
+ 1548 055e 91       		.byte	0x91
+ 1549 055f 40       		.sleb128 -64
+ 1550 0560 0C       		.uleb128 0xc
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 32
+
+
+ 1551 0561 EE050000 		.4byte	.LASF92
+ 1552 0565 01       		.byte	0x1
+ 1553 0566 A5       		.byte	0xa5
+ 1554 0567 81000000 		.4byte	0x81
+ 1555 056b 03       		.uleb128 0x3
+ 1556 056c 91       		.byte	0x91
+ 1557 056d BF7F     		.sleb128 -65
+ 1558 056f 0D       		.uleb128 0xd
+ 1559 0570 56010000 		.4byte	.LBB13
+ 1560 0574 0E000000 		.4byte	.LBE13-.LBB13
+ 1561 0578 8A050000 		.4byte	0x58a
+ 1562 057c 0E       		.uleb128 0xe
+ 1563 057d 60000000 		.4byte	.LASF81
+ 1564 0581 01       		.byte	0x1
+ 1565 0582 4F       		.byte	0x4f
+ 1566 0583 68000000 		.4byte	0x68
+ 1567 0587 0F       		.uleb128 0xf
+ 1568 0588 00       		.byte	0
+ 1569 0589 00       		.byte	0
+ 1570 058a 11       		.uleb128 0x11
+ 1571 058b 66010000 		.4byte	.LBB14
+ 1572 058f 0E000000 		.4byte	.LBE14-.LBB14
+ 1573 0593 0E       		.uleb128 0xe
+ 1574 0594 60000000 		.4byte	.LASF81
+ 1575 0598 01       		.byte	0x1
+ 1576 0599 4F       		.byte	0x4f
+ 1577 059a 68000000 		.4byte	0x68
+ 1578 059e 0F       		.uleb128 0xf
+ 1579 059f 00       		.byte	0
+ 1580 05a0 00       		.byte	0
+ 1581 05a1 00       		.byte	0
+ 1582 05a2 00       		.byte	0
+ 1583 05a3 14       		.uleb128 0x14
+ 1584 05a4 12050000 		.4byte	.LASF68
+ 1585 05a8 01       		.byte	0x1
+ 1586 05a9 AC       		.byte	0xac
+ 1587 05aa BD010000 		.4byte	0x1bd
+ 1588 05ae 00000000 		.4byte	.LFB58
+ 1589 05b2 70000000 		.4byte	.LFE58-.LFB58
+ 1590 05b6 01       		.uleb128 0x1
+ 1591 05b7 9C       		.byte	0x9c
+ 1592 05b8 F3050000 		.4byte	0x5f3
+ 1593 05bc 0B       		.uleb128 0xb
+ 1594 05bd DF030000 		.4byte	.LASF73
+ 1595 05c1 01       		.byte	0x1
+ 1596 05c2 AC       		.byte	0xac
+ 1597 05c3 B4040000 		.4byte	0x4b4
+ 1598 05c7 02       		.uleb128 0x2
+ 1599 05c8 91       		.byte	0x91
+ 1600 05c9 64       		.sleb128 -28
+ 1601 05ca 12       		.uleb128 0x12
+ 1602 05cb 6900     		.ascii	"i\000"
+ 1603 05cd 01       		.byte	0x1
+ 1604 05ce AE       		.byte	0xae
+ 1605 05cf 68000000 		.4byte	0x68
+ 1606 05d3 02       		.uleb128 0x2
+ 1607 05d4 91       		.byte	0x91
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 33
+
+
+ 1608 05d5 74       		.sleb128 -12
+ 1609 05d6 0C       		.uleb128 0xc
+ 1610 05d7 DA030000 		.4byte	.LASF93
+ 1611 05db 01       		.byte	0x1
+ 1612 05dc AF       		.byte	0xaf
+ 1613 05dd 68000000 		.4byte	0x68
+ 1614 05e1 02       		.uleb128 0x2
+ 1615 05e2 91       		.byte	0x91
+ 1616 05e3 6C       		.sleb128 -20
+ 1617 05e4 12       		.uleb128 0x12
+ 1618 05e5 73756D00 		.ascii	"sum\000"
+ 1619 05e9 01       		.byte	0x1
+ 1620 05ea B0       		.byte	0xb0
+ 1621 05eb 68000000 		.4byte	0x68
+ 1622 05ef 02       		.uleb128 0x2
+ 1623 05f0 91       		.byte	0x91
+ 1624 05f1 70       		.sleb128 -16
+ 1625 05f2 00       		.byte	0
+ 1626 05f3 15       		.uleb128 0x15
+ 1627 05f4 30050000 		.4byte	.LASF94
+ 1628 05f8 01       		.byte	0x1
+ 1629 05f9 C6       		.byte	0xc6
+ 1630 05fa B4000000 		.4byte	0xb4
+ 1631 05fe 00000000 		.4byte	.LFB59
+ 1632 0602 66000000 		.4byte	.LFE59-.LFB59
+ 1633 0606 01       		.uleb128 0x1
+ 1634 0607 9C       		.byte	0x9c
+ 1635 0608 43060000 		.4byte	0x643
+ 1636 060c 16       		.uleb128 0x16
+ 1637 060d 74616200 		.ascii	"tab\000"
+ 1638 0611 01       		.byte	0x1
+ 1639 0612 C6       		.byte	0xc6
+ 1640 0613 11030000 		.4byte	0x311
+ 1641 0617 02       		.uleb128 0x2
+ 1642 0618 91       		.byte	0x91
+ 1643 0619 64       		.sleb128 -28
+ 1644 061a 0B       		.uleb128 0xb
+ 1645 061b 7B050000 		.4byte	.LASF95
+ 1646 061f 01       		.byte	0x1
+ 1647 0620 C6       		.byte	0xc6
+ 1648 0621 A2000000 		.4byte	0xa2
+ 1649 0625 02       		.uleb128 0x2
+ 1650 0626 91       		.byte	0x91
+ 1651 0627 62       		.sleb128 -30
+ 1652 0628 12       		.uleb128 0x12
+ 1653 0629 6900     		.ascii	"i\000"
+ 1654 062b 01       		.byte	0x1
+ 1655 062c C8       		.byte	0xc8
+ 1656 062d 68000000 		.4byte	0x68
+ 1657 0631 02       		.uleb128 0x2
+ 1658 0632 91       		.byte	0x91
+ 1659 0633 74       		.sleb128 -12
+ 1660 0634 12       		.uleb128 0x12
+ 1661 0635 73756D00 		.ascii	"sum\000"
+ 1662 0639 01       		.byte	0x1
+ 1663 063a C9       		.byte	0xc9
+ 1664 063b B4000000 		.4byte	0xb4
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 34
+
+
+ 1665 063f 02       		.uleb128 0x2
+ 1666 0640 91       		.byte	0x91
+ 1667 0641 68       		.sleb128 -24
+ 1668 0642 00       		.byte	0
+ 1669 0643 17       		.uleb128 0x17
+ 1670 0644 25060000 		.4byte	.LASF101
+ 1671 0648 06       		.byte	0x6
+ 1672 0649 1606     		.2byte	0x616
+ 1673 064b 4F060000 		.4byte	0x64f
+ 1674 064f 18       		.uleb128 0x18
+ 1675 0650 76000000 		.4byte	0x76
+ 1676 0654 00       		.byte	0
+ 1677              		.section	.debug_abbrev,"",%progbits
+ 1678              	.Ldebug_abbrev0:
+ 1679 0000 01       		.uleb128 0x1
+ 1680 0001 11       		.uleb128 0x11
+ 1681 0002 01       		.byte	0x1
+ 1682 0003 25       		.uleb128 0x25
+ 1683 0004 0E       		.uleb128 0xe
+ 1684 0005 13       		.uleb128 0x13
+ 1685 0006 0B       		.uleb128 0xb
+ 1686 0007 03       		.uleb128 0x3
+ 1687 0008 0E       		.uleb128 0xe
+ 1688 0009 1B       		.uleb128 0x1b
+ 1689 000a 0E       		.uleb128 0xe
+ 1690 000b 55       		.uleb128 0x55
+ 1691 000c 17       		.uleb128 0x17
+ 1692 000d 11       		.uleb128 0x11
+ 1693 000e 01       		.uleb128 0x1
+ 1694 000f 10       		.uleb128 0x10
+ 1695 0010 17       		.uleb128 0x17
+ 1696 0011 00       		.byte	0
+ 1697 0012 00       		.byte	0
+ 1698 0013 02       		.uleb128 0x2
+ 1699 0014 24       		.uleb128 0x24
+ 1700 0015 00       		.byte	0
+ 1701 0016 0B       		.uleb128 0xb
+ 1702 0017 0B       		.uleb128 0xb
+ 1703 0018 3E       		.uleb128 0x3e
+ 1704 0019 0B       		.uleb128 0xb
+ 1705 001a 03       		.uleb128 0x3
+ 1706 001b 0E       		.uleb128 0xe
+ 1707 001c 00       		.byte	0
+ 1708 001d 00       		.byte	0
+ 1709 001e 03       		.uleb128 0x3
+ 1710 001f 16       		.uleb128 0x16
+ 1711 0020 00       		.byte	0
+ 1712 0021 03       		.uleb128 0x3
+ 1713 0022 0E       		.uleb128 0xe
+ 1714 0023 3A       		.uleb128 0x3a
+ 1715 0024 0B       		.uleb128 0xb
+ 1716 0025 3B       		.uleb128 0x3b
+ 1717 0026 0B       		.uleb128 0xb
+ 1718 0027 49       		.uleb128 0x49
+ 1719 0028 13       		.uleb128 0x13
+ 1720 0029 00       		.byte	0
+ 1721 002a 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 35
+
+
+ 1722 002b 04       		.uleb128 0x4
+ 1723 002c 24       		.uleb128 0x24
+ 1724 002d 00       		.byte	0
+ 1725 002e 0B       		.uleb128 0xb
+ 1726 002f 0B       		.uleb128 0xb
+ 1727 0030 3E       		.uleb128 0x3e
+ 1728 0031 0B       		.uleb128 0xb
+ 1729 0032 03       		.uleb128 0x3
+ 1730 0033 08       		.uleb128 0x8
+ 1731 0034 00       		.byte	0
+ 1732 0035 00       		.byte	0
+ 1733 0036 05       		.uleb128 0x5
+ 1734 0037 04       		.uleb128 0x4
+ 1735 0038 01       		.byte	0x1
+ 1736 0039 0B       		.uleb128 0xb
+ 1737 003a 0B       		.uleb128 0xb
+ 1738 003b 3A       		.uleb128 0x3a
+ 1739 003c 0B       		.uleb128 0xb
+ 1740 003d 3B       		.uleb128 0x3b
+ 1741 003e 0B       		.uleb128 0xb
+ 1742 003f 01       		.uleb128 0x1
+ 1743 0040 13       		.uleb128 0x13
+ 1744 0041 00       		.byte	0
+ 1745 0042 00       		.byte	0
+ 1746 0043 06       		.uleb128 0x6
+ 1747 0044 28       		.uleb128 0x28
+ 1748 0045 00       		.byte	0
+ 1749 0046 03       		.uleb128 0x3
+ 1750 0047 0E       		.uleb128 0xe
+ 1751 0048 1C       		.uleb128 0x1c
+ 1752 0049 0D       		.uleb128 0xd
+ 1753 004a 00       		.byte	0
+ 1754 004b 00       		.byte	0
+ 1755 004c 07       		.uleb128 0x7
+ 1756 004d 13       		.uleb128 0x13
+ 1757 004e 01       		.byte	0x1
+ 1758 004f 0B       		.uleb128 0xb
+ 1759 0050 0B       		.uleb128 0xb
+ 1760 0051 3A       		.uleb128 0x3a
+ 1761 0052 0B       		.uleb128 0xb
+ 1762 0053 3B       		.uleb128 0x3b
+ 1763 0054 0B       		.uleb128 0xb
+ 1764 0055 01       		.uleb128 0x1
+ 1765 0056 13       		.uleb128 0x13
+ 1766 0057 00       		.byte	0
+ 1767 0058 00       		.byte	0
+ 1768 0059 08       		.uleb128 0x8
+ 1769 005a 0D       		.uleb128 0xd
+ 1770 005b 00       		.byte	0
+ 1771 005c 03       		.uleb128 0x3
+ 1772 005d 0E       		.uleb128 0xe
+ 1773 005e 3A       		.uleb128 0x3a
+ 1774 005f 0B       		.uleb128 0xb
+ 1775 0060 3B       		.uleb128 0x3b
+ 1776 0061 0B       		.uleb128 0xb
+ 1777 0062 49       		.uleb128 0x49
+ 1778 0063 13       		.uleb128 0x13
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 36
+
+
+ 1779 0064 38       		.uleb128 0x38
+ 1780 0065 0B       		.uleb128 0xb
+ 1781 0066 00       		.byte	0
+ 1782 0067 00       		.byte	0
+ 1783 0068 09       		.uleb128 0x9
+ 1784 0069 0F       		.uleb128 0xf
+ 1785 006a 00       		.byte	0
+ 1786 006b 0B       		.uleb128 0xb
+ 1787 006c 0B       		.uleb128 0xb
+ 1788 006d 49       		.uleb128 0x49
+ 1789 006e 13       		.uleb128 0x13
+ 1790 006f 00       		.byte	0
+ 1791 0070 00       		.byte	0
+ 1792 0071 0A       		.uleb128 0xa
+ 1793 0072 2E       		.uleb128 0x2e
+ 1794 0073 01       		.byte	0x1
+ 1795 0074 3F       		.uleb128 0x3f
+ 1796 0075 19       		.uleb128 0x19
+ 1797 0076 03       		.uleb128 0x3
+ 1798 0077 0E       		.uleb128 0xe
+ 1799 0078 3A       		.uleb128 0x3a
+ 1800 0079 0B       		.uleb128 0xb
+ 1801 007a 3B       		.uleb128 0x3b
+ 1802 007b 0B       		.uleb128 0xb
+ 1803 007c 27       		.uleb128 0x27
+ 1804 007d 19       		.uleb128 0x19
+ 1805 007e 11       		.uleb128 0x11
+ 1806 007f 01       		.uleb128 0x1
+ 1807 0080 12       		.uleb128 0x12
+ 1808 0081 06       		.uleb128 0x6
+ 1809 0082 40       		.uleb128 0x40
+ 1810 0083 18       		.uleb128 0x18
+ 1811 0084 9642     		.uleb128 0x2116
+ 1812 0086 19       		.uleb128 0x19
+ 1813 0087 01       		.uleb128 0x1
+ 1814 0088 13       		.uleb128 0x13
+ 1815 0089 00       		.byte	0
+ 1816 008a 00       		.byte	0
+ 1817 008b 0B       		.uleb128 0xb
+ 1818 008c 05       		.uleb128 0x5
+ 1819 008d 00       		.byte	0
+ 1820 008e 03       		.uleb128 0x3
+ 1821 008f 0E       		.uleb128 0xe
+ 1822 0090 3A       		.uleb128 0x3a
+ 1823 0091 0B       		.uleb128 0xb
+ 1824 0092 3B       		.uleb128 0x3b
+ 1825 0093 0B       		.uleb128 0xb
+ 1826 0094 49       		.uleb128 0x49
+ 1827 0095 13       		.uleb128 0x13
+ 1828 0096 02       		.uleb128 0x2
+ 1829 0097 18       		.uleb128 0x18
+ 1830 0098 00       		.byte	0
+ 1831 0099 00       		.byte	0
+ 1832 009a 0C       		.uleb128 0xc
+ 1833 009b 34       		.uleb128 0x34
+ 1834 009c 00       		.byte	0
+ 1835 009d 03       		.uleb128 0x3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 37
+
+
+ 1836 009e 0E       		.uleb128 0xe
+ 1837 009f 3A       		.uleb128 0x3a
+ 1838 00a0 0B       		.uleb128 0xb
+ 1839 00a1 3B       		.uleb128 0x3b
+ 1840 00a2 0B       		.uleb128 0xb
+ 1841 00a3 49       		.uleb128 0x49
+ 1842 00a4 13       		.uleb128 0x13
+ 1843 00a5 02       		.uleb128 0x2
+ 1844 00a6 18       		.uleb128 0x18
+ 1845 00a7 00       		.byte	0
+ 1846 00a8 00       		.byte	0
+ 1847 00a9 0D       		.uleb128 0xd
+ 1848 00aa 0B       		.uleb128 0xb
+ 1849 00ab 01       		.byte	0x1
+ 1850 00ac 11       		.uleb128 0x11
+ 1851 00ad 01       		.uleb128 0x1
+ 1852 00ae 12       		.uleb128 0x12
+ 1853 00af 06       		.uleb128 0x6
+ 1854 00b0 01       		.uleb128 0x1
+ 1855 00b1 13       		.uleb128 0x13
+ 1856 00b2 00       		.byte	0
+ 1857 00b3 00       		.byte	0
+ 1858 00b4 0E       		.uleb128 0xe
+ 1859 00b5 2E       		.uleb128 0x2e
+ 1860 00b6 01       		.byte	0x1
+ 1861 00b7 3F       		.uleb128 0x3f
+ 1862 00b8 19       		.uleb128 0x19
+ 1863 00b9 03       		.uleb128 0x3
+ 1864 00ba 0E       		.uleb128 0xe
+ 1865 00bb 3A       		.uleb128 0x3a
+ 1866 00bc 0B       		.uleb128 0xb
+ 1867 00bd 3B       		.uleb128 0x3b
+ 1868 00be 0B       		.uleb128 0xb
+ 1869 00bf 49       		.uleb128 0x49
+ 1870 00c0 13       		.uleb128 0x13
+ 1871 00c1 3C       		.uleb128 0x3c
+ 1872 00c2 19       		.uleb128 0x19
+ 1873 00c3 00       		.byte	0
+ 1874 00c4 00       		.byte	0
+ 1875 00c5 0F       		.uleb128 0xf
+ 1876 00c6 18       		.uleb128 0x18
+ 1877 00c7 00       		.byte	0
+ 1878 00c8 00       		.byte	0
+ 1879 00c9 00       		.byte	0
+ 1880 00ca 10       		.uleb128 0x10
+ 1881 00cb 2E       		.uleb128 0x2e
+ 1882 00cc 01       		.byte	0x1
+ 1883 00cd 3F       		.uleb128 0x3f
+ 1884 00ce 19       		.uleb128 0x19
+ 1885 00cf 03       		.uleb128 0x3
+ 1886 00d0 0E       		.uleb128 0xe
+ 1887 00d1 3A       		.uleb128 0x3a
+ 1888 00d2 0B       		.uleb128 0xb
+ 1889 00d3 3B       		.uleb128 0x3b
+ 1890 00d4 0B       		.uleb128 0xb
+ 1891 00d5 49       		.uleb128 0x49
+ 1892 00d6 13       		.uleb128 0x13
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 38
+
+
+ 1893 00d7 3C       		.uleb128 0x3c
+ 1894 00d8 19       		.uleb128 0x19
+ 1895 00d9 01       		.uleb128 0x1
+ 1896 00da 13       		.uleb128 0x13
+ 1897 00db 00       		.byte	0
+ 1898 00dc 00       		.byte	0
+ 1899 00dd 11       		.uleb128 0x11
+ 1900 00de 0B       		.uleb128 0xb
+ 1901 00df 01       		.byte	0x1
+ 1902 00e0 11       		.uleb128 0x11
+ 1903 00e1 01       		.uleb128 0x1
+ 1904 00e2 12       		.uleb128 0x12
+ 1905 00e3 06       		.uleb128 0x6
+ 1906 00e4 00       		.byte	0
+ 1907 00e5 00       		.byte	0
+ 1908 00e6 12       		.uleb128 0x12
+ 1909 00e7 34       		.uleb128 0x34
+ 1910 00e8 00       		.byte	0
+ 1911 00e9 03       		.uleb128 0x3
+ 1912 00ea 08       		.uleb128 0x8
+ 1913 00eb 3A       		.uleb128 0x3a
+ 1914 00ec 0B       		.uleb128 0xb
+ 1915 00ed 3B       		.uleb128 0x3b
+ 1916 00ee 0B       		.uleb128 0xb
+ 1917 00ef 49       		.uleb128 0x49
+ 1918 00f0 13       		.uleb128 0x13
+ 1919 00f1 02       		.uleb128 0x2
+ 1920 00f2 18       		.uleb128 0x18
+ 1921 00f3 00       		.byte	0
+ 1922 00f4 00       		.byte	0
+ 1923 00f5 13       		.uleb128 0x13
+ 1924 00f6 34       		.uleb128 0x34
+ 1925 00f7 00       		.byte	0
+ 1926 00f8 03       		.uleb128 0x3
+ 1927 00f9 0E       		.uleb128 0xe
+ 1928 00fa 3A       		.uleb128 0x3a
+ 1929 00fb 0B       		.uleb128 0xb
+ 1930 00fc 3B       		.uleb128 0x3b
+ 1931 00fd 0B       		.uleb128 0xb
+ 1932 00fe 49       		.uleb128 0x49
+ 1933 00ff 13       		.uleb128 0x13
+ 1934 0100 00       		.byte	0
+ 1935 0101 00       		.byte	0
+ 1936 0102 14       		.uleb128 0x14
+ 1937 0103 2E       		.uleb128 0x2e
+ 1938 0104 01       		.byte	0x1
+ 1939 0105 3F       		.uleb128 0x3f
+ 1940 0106 19       		.uleb128 0x19
+ 1941 0107 03       		.uleb128 0x3
+ 1942 0108 0E       		.uleb128 0xe
+ 1943 0109 3A       		.uleb128 0x3a
+ 1944 010a 0B       		.uleb128 0xb
+ 1945 010b 3B       		.uleb128 0x3b
+ 1946 010c 0B       		.uleb128 0xb
+ 1947 010d 27       		.uleb128 0x27
+ 1948 010e 19       		.uleb128 0x19
+ 1949 010f 49       		.uleb128 0x49
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 39
+
+
+ 1950 0110 13       		.uleb128 0x13
+ 1951 0111 11       		.uleb128 0x11
+ 1952 0112 01       		.uleb128 0x1
+ 1953 0113 12       		.uleb128 0x12
+ 1954 0114 06       		.uleb128 0x6
+ 1955 0115 40       		.uleb128 0x40
+ 1956 0116 18       		.uleb128 0x18
+ 1957 0117 9742     		.uleb128 0x2117
+ 1958 0119 19       		.uleb128 0x19
+ 1959 011a 01       		.uleb128 0x1
+ 1960 011b 13       		.uleb128 0x13
+ 1961 011c 00       		.byte	0
+ 1962 011d 00       		.byte	0
+ 1963 011e 15       		.uleb128 0x15
+ 1964 011f 2E       		.uleb128 0x2e
+ 1965 0120 01       		.byte	0x1
+ 1966 0121 3F       		.uleb128 0x3f
+ 1967 0122 19       		.uleb128 0x19
+ 1968 0123 03       		.uleb128 0x3
+ 1969 0124 0E       		.uleb128 0xe
+ 1970 0125 3A       		.uleb128 0x3a
+ 1971 0126 0B       		.uleb128 0xb
+ 1972 0127 3B       		.uleb128 0x3b
+ 1973 0128 0B       		.uleb128 0xb
+ 1974 0129 27       		.uleb128 0x27
+ 1975 012a 19       		.uleb128 0x19
+ 1976 012b 49       		.uleb128 0x49
+ 1977 012c 13       		.uleb128 0x13
+ 1978 012d 11       		.uleb128 0x11
+ 1979 012e 01       		.uleb128 0x1
+ 1980 012f 12       		.uleb128 0x12
+ 1981 0130 06       		.uleb128 0x6
+ 1982 0131 40       		.uleb128 0x40
+ 1983 0132 18       		.uleb128 0x18
+ 1984 0133 9642     		.uleb128 0x2116
+ 1985 0135 19       		.uleb128 0x19
+ 1986 0136 01       		.uleb128 0x1
+ 1987 0137 13       		.uleb128 0x13
+ 1988 0138 00       		.byte	0
+ 1989 0139 00       		.byte	0
+ 1990 013a 16       		.uleb128 0x16
+ 1991 013b 05       		.uleb128 0x5
+ 1992 013c 00       		.byte	0
+ 1993 013d 03       		.uleb128 0x3
+ 1994 013e 08       		.uleb128 0x8
+ 1995 013f 3A       		.uleb128 0x3a
+ 1996 0140 0B       		.uleb128 0xb
+ 1997 0141 3B       		.uleb128 0x3b
+ 1998 0142 0B       		.uleb128 0xb
+ 1999 0143 49       		.uleb128 0x49
+ 2000 0144 13       		.uleb128 0x13
+ 2001 0145 02       		.uleb128 0x2
+ 2002 0146 18       		.uleb128 0x18
+ 2003 0147 00       		.byte	0
+ 2004 0148 00       		.byte	0
+ 2005 0149 17       		.uleb128 0x17
+ 2006 014a 34       		.uleb128 0x34
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 40
+
+
+ 2007 014b 00       		.byte	0
+ 2008 014c 03       		.uleb128 0x3
+ 2009 014d 0E       		.uleb128 0xe
+ 2010 014e 3A       		.uleb128 0x3a
+ 2011 014f 0B       		.uleb128 0xb
+ 2012 0150 3B       		.uleb128 0x3b
+ 2013 0151 05       		.uleb128 0x5
+ 2014 0152 49       		.uleb128 0x49
+ 2015 0153 13       		.uleb128 0x13
+ 2016 0154 3F       		.uleb128 0x3f
+ 2017 0155 19       		.uleb128 0x19
+ 2018 0156 3C       		.uleb128 0x3c
+ 2019 0157 19       		.uleb128 0x19
+ 2020 0158 00       		.byte	0
+ 2021 0159 00       		.byte	0
+ 2022 015a 18       		.uleb128 0x18
+ 2023 015b 35       		.uleb128 0x35
+ 2024 015c 00       		.byte	0
+ 2025 015d 49       		.uleb128 0x49
+ 2026 015e 13       		.uleb128 0x13
+ 2027 015f 00       		.byte	0
+ 2028 0160 00       		.byte	0
+ 2029 0161 00       		.byte	0
+ 2030              		.section	.debug_aranges,"",%progbits
+ 2031 0000 34000000 		.4byte	0x34
+ 2032 0004 0200     		.2byte	0x2
+ 2033 0006 00000000 		.4byte	.Ldebug_info0
+ 2034 000a 04       		.byte	0x4
+ 2035 000b 00       		.byte	0
+ 2036 000c 0000     		.2byte	0
+ 2037 000e 0000     		.2byte	0
+ 2038 0010 00000000 		.4byte	.LFB56
+ 2039 0014 E0020000 		.4byte	.LFE56-.LFB56
+ 2040 0018 00000000 		.4byte	.LFB57
+ 2041 001c A0010000 		.4byte	.LFE57-.LFB57
+ 2042 0020 00000000 		.4byte	.LFB58
+ 2043 0024 70000000 		.4byte	.LFE58-.LFB58
+ 2044 0028 00000000 		.4byte	.LFB59
+ 2045 002c 66000000 		.4byte	.LFE59-.LFB59
+ 2046 0030 00000000 		.4byte	0
+ 2047 0034 00000000 		.4byte	0
+ 2048              		.section	.debug_ranges,"",%progbits
+ 2049              	.Ldebug_ranges0:
+ 2050 0000 00000000 		.4byte	.LFB56
+ 2051 0004 E0020000 		.4byte	.LFE56
+ 2052 0008 00000000 		.4byte	.LFB57
+ 2053 000c A0010000 		.4byte	.LFE57
+ 2054 0010 00000000 		.4byte	.LFB58
+ 2055 0014 70000000 		.4byte	.LFE58
+ 2056 0018 00000000 		.4byte	.LFB59
+ 2057 001c 66000000 		.4byte	.LFE59
+ 2058 0020 00000000 		.4byte	0
+ 2059 0024 00000000 		.4byte	0
+ 2060              		.section	.debug_line,"",%progbits
+ 2061              	.Ldebug_line0:
+ 2062 0000 64020000 		.section	.debug_str,"MS",%progbits,1
+ 2062      02006101 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 41
+
+
+ 2062      00000201 
+ 2062      FB0E0D00 
+ 2062      01010101 
+ 2063              	.LASF60:
+ 2064 0000 70776D56 		.ascii	"pwmValueFromCalibration\000"
+ 2064      616C7565 
+ 2064      46726F6D 
+ 2064      43616C69 
+ 2064      62726174 
+ 2065              	.LASF97:
+ 2066 0018 2E5C5441 		.ascii	".\\TAC_Submodule.c\000"
+ 2066      435F5375 
+ 2066      626D6F64 
+ 2066      756C652E 
+ 2066      6300
+ 2067              	.LASF87:
+ 2068 002a 70726563 		.ascii	"precedingDiffFromTarget\000"
+ 2068      6564696E 
+ 2068      67446966 
+ 2068      6646726F 
+ 2068      6D546172 
+ 2069              	.LASF67:
+ 2070 0042 61726543 		.ascii	"areCalibrationValuesRetrieved\000"
+ 2070      616C6962 
+ 2070      72617469 
+ 2070      6F6E5661 
+ 2070      6C756573 
+ 2071              	.LASF81:
+ 2072 0060 6368616E 		.ascii	"changePeltierModuleCurrentDirection\000"
+ 2072      67655065 
+ 2072      6C746965 
+ 2072      724D6F64 
+ 2072      756C6543 
+ 2073              	.LASF35:
+ 2074 0084 4E6F7453 		.ascii	"NotSet\000"
+ 2074      657400
+ 2075              	.LASF2:
+ 2076 008b 73686F72 		.ascii	"short int\000"
+ 2076      7420696E 
+ 2076      7400
+ 2077              	.LASF62:
+ 2078 0095 61676974 		.ascii	"agitatorState\000"
+ 2078      61746F72 
+ 2078      53746174 
+ 2078      6500
+ 2079              	.LASF18:
+ 2080 00a3 73697A65 		.ascii	"sizetype\000"
+ 2080      74797065 
+ 2080      00
+ 2081              	.LASF72:
+ 2082 00ac 5461635F 		.ascii	"Tac_Submodule\000"
+ 2082      5375626D 
+ 2082      6F64756C 
+ 2082      6500
+ 2083              	.LASF33:
+ 2084 00ba 57616974 		.ascii	"Waiting\000"
+ 2084      696E6700 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 42
+
+
+ 2085              	.LASF75:
+ 2086 00c2 74656D70 		.ascii	"tempErr\000"
+ 2086      45727200 
+ 2087              	.LASF36:
+ 2088 00ca 436F6F6C 		.ascii	"Cooling\000"
+ 2088      696E6700 
+ 2089              	.LASF71:
+ 2090 00d2 6572726F 		.ascii	"errorTabCounter\000"
+ 2090      72546162 
+ 2090      436F756E 
+ 2090      74657200 
+ 2091              	.LASF52:
+ 2092 00e2 63757272 		.ascii	"currentTemperature\000"
+ 2092      656E7454 
+ 2092      656D7065 
+ 2092      72617475 
+ 2092      726500
+ 2093              	.LASF46:
+ 2094 00f5 43616C69 		.ascii	"Calibrating\000"
+ 2094      62726174 
+ 2094      696E6700 
+ 2095              	.LASF4:
+ 2096 0101 6C6F6E67 		.ascii	"long int\000"
+ 2096      20696E74 
+ 2096      00
+ 2097              	.LASF41:
+ 2098 010a 70776D46 		.ascii	"pwmFromCalibrationStatus_type\000"
+ 2098      726F6D43 
+ 2098      616C6962 
+ 2098      72617469 
+ 2098      6F6E5374 
+ 2099              	.LASF12:
+ 2100 0128 75696E74 		.ascii	"uint16\000"
+ 2100      313600
+ 2101              	.LASF23:
+ 2102 012f 66616E44 		.ascii	"fanDisabled\000"
+ 2102      69736162 
+ 2102      6C656400 
+ 2103              	.LASF14:
+ 2104 013b 696E7431 		.ascii	"int16\000"
+ 2104      3600
+ 2105              	.LASF100:
+ 2106 0141 62657374 		.ascii	"bestMatchIndex\000"
+ 2106      4D617463 
+ 2106      68496E64 
+ 2106      657800
+ 2107              	.LASF11:
+ 2108 0150 75696E74 		.ascii	"uint8\000"
+ 2108      3800
+ 2109              	.LASF48:
+ 2110 0156 7375624D 		.ascii	"subModuleId\000"
+ 2110      6F64756C 
+ 2110      65496400 
+ 2111              	.LASF70:
+ 2112 0162 6572726F 		.ascii	"errorTabPtr\000"
+ 2112      72546162 
+ 2112      50747200 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 43
+
+
+ 2113              	.LASF66:
+ 2114 016e 70657263 		.ascii	"percentageValuesPtr\000"
+ 2114      656E7461 
+ 2114      67655661 
+ 2114      6C756573 
+ 2114      50747200 
+ 2115              	.LASF40:
+ 2116 0182 5570546F 		.ascii	"UpToDate\000"
+ 2116      44617465 
+ 2116      00
+ 2117              	.LASF0:
+ 2118 018b 7369676E 		.ascii	"signed char\000"
+ 2118      65642063 
+ 2118      68617200 
+ 2119              	.LASF22:
+ 2120 0197 61676974 		.ascii	"agitatorState_type\000"
+ 2120      61746F72 
+ 2120      53746174 
+ 2120      655F7479 
+ 2120      706500
+ 2121              	.LASF15:
+ 2122 01aa 666C6F61 		.ascii	"float\000"
+ 2122      7400
+ 2123              	.LASF78:
+ 2124 01b0 5049445F 		.ascii	"PID_Result\000"
+ 2124      52657375 
+ 2124      6C7400
+ 2125              	.LASF6:
+ 2126 01bb 6C6F6E67 		.ascii	"long long int\000"
+ 2126      206C6F6E 
+ 2126      6720696E 
+ 2126      7400
+ 2127              	.LASF42:
+ 2128 01c9 46616C73 		.ascii	"False\000"
+ 2128      6500
+ 2129              	.LASF13:
+ 2130 01cf 696E7438 		.ascii	"int8\000"
+ 2130      00
+ 2131              	.LASF21:
+ 2132 01d4 61676974 		.ascii	"agitatorEnabled\000"
+ 2132      61746F72 
+ 2132      456E6162 
+ 2132      6C656400 
+ 2133              	.LASF99:
+ 2134 01e4 6368616E 		.ascii	"changeFanState\000"
+ 2134      67654661 
+ 2134      6E537461 
+ 2134      746500
+ 2135              	.LASF98:
+ 2136 01f3 433A5C55 		.ascii	"C:\\Users\\plod1602\\Desktop\\TAC_PID\\TAC_PSOC5.cy"
+ 2136      73657273 
+ 2136      5C706C6F 
+ 2136      64313630 
+ 2136      325C4465 
+ 2137 0221 64736E00 		.ascii	"dsn\000"
+ 2138              	.LASF96:
+ 2139 0225 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 44
+
+
+ 2139      4320342E 
+ 2139      392E3320 
+ 2139      32303135 
+ 2139      30333033 
+ 2140 0258 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2140      20726576 
+ 2140      6973696F 
+ 2140      6E203232 
+ 2140      31323230 
+ 2141 028b 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 2141      66756E63 
+ 2141      74696F6E 
+ 2141      2D736563 
+ 2141      74696F6E 
+ 2142              	.LASF20:
+ 2143 02b3 61676974 		.ascii	"agitatorDisabled\000"
+ 2143      61746F72 
+ 2143      44697361 
+ 2143      626C6564 
+ 2143      00
+ 2144              	.LASF58:
+ 2145 02c4 61637475 		.ascii	"actualPwmPercentage\000"
+ 2145      616C5077 
+ 2145      6D506572 
+ 2145      63656E74 
+ 2145      61676500 
+ 2146              	.LASF34:
+ 2147 02d8 74656D70 		.ascii	"temperatureMode_type\000"
+ 2147      65726174 
+ 2147      7572654D 
+ 2147      6F64655F 
+ 2147      74797065 
+ 2148              	.LASF55:
+ 2149 02ed 63757272 		.ascii	"currentDirection\000"
+ 2149      656E7444 
+ 2149      69726563 
+ 2149      74696F6E 
+ 2149      00
+ 2150              	.LASF57:
+ 2151 02fe 64657369 		.ascii	"desiredPwmPercentage\000"
+ 2151      72656450 
+ 2151      776D5065 
+ 2151      7263656E 
+ 2151      74616765 
+ 2152              	.LASF39:
+ 2153 0313 4F757444 		.ascii	"OutDated\000"
+ 2153      61746564 
+ 2153      00
+ 2154              	.LASF24:
+ 2155 031c 66616E45 		.ascii	"fanEnabled\000"
+ 2155      6E61626C 
+ 2155      656400
+ 2156              	.LASF19:
+ 2157 0327 6C6F6E67 		.ascii	"long double\000"
+ 2157      20646F75 
+ 2157      626C6500 
+ 2158              	.LASF1:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 45
+
+
+ 2159 0333 756E7369 		.ascii	"unsigned char\000"
+ 2159      676E6564 
+ 2159      20636861 
+ 2159      7200
+ 2160              	.LASF82:
+ 2161 0341 6368616E 		.ascii	"changePeltierPWMValue\000"
+ 2161      67655065 
+ 2161      6C746965 
+ 2161      7250574D 
+ 2161      56616C75 
+ 2162              	.LASF79:
+ 2163 0357 6368616E 		.ascii	"changePeltierModuleState\000"
+ 2163      67655065 
+ 2163      6C746965 
+ 2163      724D6F64 
+ 2163      756C6553 
+ 2164              	.LASF28:
+ 2165 0370 70656C74 		.ascii	"peltierState_type\000"
+ 2165      69657253 
+ 2165      74617465 
+ 2165      5F747970 
+ 2165      6500
+ 2166              	.LASF84:
+ 2167 0382 75706461 		.ascii	"updatePwmValueFromCalibrationTable\000"
+ 2167      74655077 
+ 2167      6D56616C 
+ 2167      75654672 
+ 2167      6F6D4361 
+ 2168              	.LASF7:
+ 2169 03a5 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2169      206C6F6E 
+ 2169      6720756E 
+ 2169      7369676E 
+ 2169      65642069 
+ 2170              	.LASF29:
+ 2171 03bc 4D61696E 		.ascii	"Maintaining_heat\000"
+ 2171      7461696E 
+ 2171      696E675F 
+ 2171      68656174 
+ 2171      00
+ 2172              	.LASF8:
+ 2173 03cd 756E7369 		.ascii	"unsigned int\000"
+ 2173      676E6564 
+ 2173      20696E74 
+ 2173      00
+ 2174              	.LASF93:
+ 2175 03da 6D65616E 		.ascii	"mean\000"
+ 2175      00
+ 2176              	.LASF73:
+ 2177 03df 54414350 		.ascii	"TACPtr\000"
+ 2177      747200
+ 2178              	.LASF5:
+ 2179 03e6 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2179      20756E73 
+ 2179      69676E65 
+ 2179      6420696E 
+ 2179      7400
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 46
+
+
+ 2180              	.LASF88:
+ 2181 03f8 696E6465 		.ascii	"indexWhenOver\000"
+ 2181      78576865 
+ 2181      6E4F7665 
+ 2181      7200
+ 2182              	.LASF37:
+ 2183 0406 48656174 		.ascii	"Heating\000"
+ 2183      696E6700 
+ 2184              	.LASF61:
+ 2185 040e 61676974 		.ascii	"agitatorSpeed\000"
+ 2185      61746F72 
+ 2185      53706565 
+ 2185      6400
+ 2186              	.LASF3:
+ 2187 041c 73686F72 		.ascii	"short unsigned int\000"
+ 2187      7420756E 
+ 2187      7369676E 
+ 2187      65642069 
+ 2187      6E7400
+ 2188              	.LASF74:
+ 2189 042f 4379636C 		.ascii	"CycleTime\000"
+ 2189      6554696D 
+ 2189      6500
+ 2190              	.LASF69:
+ 2191 0439 63616C69 		.ascii	"calibratingStatus\000"
+ 2191      62726174 
+ 2191      696E6753 
+ 2191      74617475 
+ 2191      7300
+ 2192              	.LASF17:
+ 2193 044b 63686172 		.ascii	"char\000"
+ 2193      00
+ 2194              	.LASF76:
+ 2195 0450 64696666 		.ascii	"diffErr\000"
+ 2195      45727200 
+ 2196              	.LASF32:
+ 2197 0458 57616974 		.ascii	"Waiting_overshoot\000"
+ 2197      696E675F 
+ 2197      6F766572 
+ 2197      73686F6F 
+ 2197      7400
+ 2198              	.LASF10:
+ 2199 046a 696E7433 		.ascii	"int32_t\000"
+ 2199      325F7400 
+ 2200              	.LASF27:
+ 2201 0472 70656C74 		.ascii	"peltierEnabled\000"
+ 2201      69657245 
+ 2201      6E61626C 
+ 2201      656400
+ 2202              	.LASF86:
+ 2203 0481 64696666 		.ascii	"diffFromTarget\000"
+ 2203      46726F6D 
+ 2203      54617267 
+ 2203      657400
+ 2204              	.LASF49:
+ 2205 0490 6D617854 		.ascii	"maxTemperatureDeviation\000"
+ 2205      656D7065 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 47
+
+
+ 2205      72617475 
+ 2205      72654465 
+ 2205      76696174 
+ 2206              	.LASF51:
+ 2207 04a8 74617267 		.ascii	"targetTemperature\000"
+ 2207      65745465 
+ 2207      6D706572 
+ 2207      61747572 
+ 2207      6500
+ 2208              	.LASF83:
+ 2209 04ba 75706461 		.ascii	"updatePeltierOutput\000"
+ 2209      74655065 
+ 2209      6C746965 
+ 2209      724F7574 
+ 2209      70757400 
+ 2210              	.LASF90:
+ 2211 04ce 72617469 		.ascii	"ratio\000"
+ 2211      6F00
+ 2212              	.LASF77:
+ 2213 04d4 696E7445 		.ascii	"intErr\000"
+ 2213      727200
+ 2214              	.LASF63:
+ 2215 04db 66616E53 		.ascii	"fanSpeedPercentage\000"
+ 2215      70656564 
+ 2215      50657263 
+ 2215      656E7461 
+ 2215      676500
+ 2216              	.LASF59:
+ 2217 04ee 70776D50 		.ascii	"pwmPeriodValue\000"
+ 2217      6572696F 
+ 2217      6456616C 
+ 2217      756500
+ 2218              	.LASF65:
+ 2219 04fd 63616C69 		.ascii	"calibrationValuesPtr\000"
+ 2219      62726174 
+ 2219      696F6E56 
+ 2219      616C7565 
+ 2219      73507472 
+ 2220              	.LASF68:
+ 2221 0512 61726543 		.ascii	"areCalibrationValuesAvailable\000"
+ 2221      616C6962 
+ 2221      72617469 
+ 2221      6F6E5661 
+ 2221      6C756573 
+ 2222              	.LASF94:
+ 2223 0530 67657441 		.ascii	"getArraySum\000"
+ 2223      72726179 
+ 2223      53756D00 
+ 2224              	.LASF16:
+ 2225 053c 646F7562 		.ascii	"double\000"
+ 2225      6C6500
+ 2226              	.LASF54:
+ 2227 0543 74656D70 		.ascii	"temperatureMode\000"
+ 2227      65726174 
+ 2227      7572654D 
+ 2227      6F646500 
+ 2228              	.LASF47:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 48
+
+
+ 2229 0553 63616C69 		.ascii	"calibratingStatus_type\000"
+ 2229      62726174 
+ 2229      696E6753 
+ 2229      74617475 
+ 2229      735F7479 
+ 2230              	.LASF31:
+ 2231 056a 4D61696E 		.ascii	"Maintaining_cool\000"
+ 2231      7461696E 
+ 2231      696E675F 
+ 2231      636F6F6C 
+ 2231      00
+ 2232              	.LASF95:
+ 2233 057b 73697A65 		.ascii	"size\000"
+ 2233      00
+ 2234              	.LASF25:
+ 2235 0580 66616E53 		.ascii	"fanState_type\000"
+ 2235      74617465 
+ 2235      5F747970 
+ 2235      6500
+ 2236              	.LASF50:
+ 2237 058e 70656C74 		.ascii	"peltierState\000"
+ 2237      69657253 
+ 2237      74617465 
+ 2237      00
+ 2238              	.LASF9:
+ 2239 059b 5F5F696E 		.ascii	"__int32_t\000"
+ 2239      7433325F 
+ 2239      7400
+ 2240              	.LASF38:
+ 2241 05a5 63757272 		.ascii	"currentDirection_type\000"
+ 2241      656E7444 
+ 2241      69726563 
+ 2241      74696F6E 
+ 2241      5F747970 
+ 2242              	.LASF26:
+ 2243 05bb 70656C74 		.ascii	"peltierDisabled\000"
+ 2243      69657244 
+ 2243      69736162 
+ 2243      6C656400 
+ 2244              	.LASF80:
+ 2245 05cb 6368616E 		.ascii	"changeFanSpeed\000"
+ 2245      67654661 
+ 2245      6E537065 
+ 2245      656400
+ 2246              	.LASF45:
+ 2247 05da 4E6F7443 		.ascii	"NotCalibrating\000"
+ 2247      616C6962 
+ 2247      72617469 
+ 2247      6E6700
+ 2248              	.LASF43:
+ 2249 05e9 54727565 		.ascii	"True\000"
+ 2249      00
+ 2250              	.LASF92:
+ 2251 05ee 70657263 		.ascii	"percentageToSave\000"
+ 2251      656E7461 
+ 2251      6765546F 
+ 2251      53617665 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\cciCkG6V.s 			page 49
+
+
+ 2251      00
+ 2252              	.LASF56:
+ 2253 05ff 70776D43 		.ascii	"pwmCompareValue\000"
+ 2253      6F6D7061 
+ 2253      72655661 
+ 2253      6C756500 
+ 2254              	.LASF30:
+ 2255 060f 57616974 		.ascii	"Waiting_drop\000"
+ 2255      696E675F 
+ 2255      64726F70 
+ 2255      00
+ 2256              	.LASF85:
+ 2257 061c 676F6F64 		.ascii	"goodToGo\000"
+ 2257      546F476F 
+ 2257      00
+ 2258              	.LASF101:
+ 2259 0625 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2259      52784275 
+ 2259      66666572 
+ 2259      00
+ 2260              	.LASF89:
+ 2261 0632 64696666 		.ascii	"diffWithPrecedentValue\000"
+ 2261      57697468 
+ 2261      50726563 
+ 2261      6564656E 
+ 2261      7456616C 
+ 2262              	.LASF64:
+ 2263 0649 66616E53 		.ascii	"fanState\000"
+ 2263      74617465 
+ 2263      00
+ 2264              	.LASF53:
+ 2265 0652 6D617854 		.ascii	"maxTargetTemperature\000"
+ 2265      61726765 
+ 2265      7454656D 
+ 2265      70657261 
+ 2265      74757265 
+ 2266              	.LASF44:
+ 2267 0667 626F6F6C 		.ascii	"boolean\000"
+ 2267      65616E00 
+ 2268              	.LASF91:
+ 2269 066f 70657263 		.ascii	"percentageToSaveDouble\000"
+ 2269      656E7461 
+ 2269      6765546F 
+ 2269      53617665 
+ 2269      446F7562 
+ 2270              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

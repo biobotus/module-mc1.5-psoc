@@ -1,0 +1,2465 @@
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"memory.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.init_eeprom,"ax",%progbits
+  19              		.align	2
+  20              		.global	init_eeprom
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	init_eeprom, %function
+  24              	init_eeprom:
+  25              	.LFB56:
+  26              		.file 1 ".\\memory.c"
+   1:.\memory.c    **** /* ========================================
+   2:.\memory.c    ****  *
+   3:.\memory.c    ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\memory.c    ****  * All Rights Reserved
+   5:.\memory.c    ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\memory.c    ****  *
+   7:.\memory.c    ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\memory.c    ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\memory.c    ****  *
+  10:.\memory.c    ****  * ========================================
+  11:.\memory.c    **** */
+  12:.\memory.c    **** #include "memory.h"
+  13:.\memory.c    **** 
+  14:.\memory.c    **** 
+  15:.\memory.c    **** void saveUINT16(uint8 startAddress, uint16 value);
+  16:.\memory.c    **** uint16 loadUINT16(uint8 startAdress);
+  17:.\memory.c    **** 
+  18:.\memory.c    **** void saveFLOAT(uint8 startAdress, float value);
+  19:.\memory.c    **** float loadFLOAT(uint8 startAdress);
+  20:.\memory.c    **** 
+  21:.\memory.c    **** void saveINT(uint8 startAdress, int value);
+  22:.\memory.c    **** int loadINT(uint8 startAdress);
+  23:.\memory.c    **** 
+  24:.\memory.c    **** 
+  25:.\memory.c    **** void init_eeprom()
+  26:.\memory.c    **** {
+  27              		.loc 1 26 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 2
+
+
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  27:.\memory.c    ****     EEPROM_Start();
+  37              		.loc 1 27 0
+  38 0004 FFF7FEFF 		bl	EEPROM_Start
+  28:.\memory.c    ****     CyDelayUs(5); // the EEPROM needs 5 μS to start
+  39              		.loc 1 28 0
+  40 0008 0520     		movs	r0, #5
+  41 000a FFF7FEFF 		bl	CyDelayUs
+  29:.\memory.c    ****     
+  30:.\memory.c    ****     /*
+  31:.\memory.c    ****     It is necessary to acquire the die temperature by calling the EEPROM_UpdateTemperature() 
+  32:.\memory.c    ****     function before a series of EEPROM write operations. The EEPROM_UpdateTemperature() 
+  33:.\memory.c    ****     function queries SPC for the die temperature and stores it in a global variable, 
+  34:.\memory.c    ****     which is used while performing EEPROM write operations. If the application is used 
+  35:.\memory.c    ****     in an environment where the die temperature changes 10° C or more, the temperature 
+  36:.\memory.c    ****     should be refreshed to adjust the write times for the optimal performance.
+  37:.\memory.c    ****     */
+  38:.\memory.c    ****     EEPROM_UpdateTemperature();
+  42              		.loc 1 38 0
+  43 000e FFF7FEFF 		bl	EEPROM_UpdateTemperature
+  39:.\memory.c    **** }
+  44              		.loc 1 39 0
+  45 0012 80BD     		pop	{r7, pc}
+  46              		.cfi_endproc
+  47              	.LFE56:
+  48              		.size	init_eeprom, .-init_eeprom
+  49              		.section	.text.savePIDToEEPROM,"ax",%progbits
+  50              		.align	2
+  51              		.global	savePIDToEEPROM
+  52              		.thumb
+  53              		.thumb_func
+  54              		.type	savePIDToEEPROM, %function
+  55              	savePIDToEEPROM:
+  56              	.LFB57:
+  40:.\memory.c    **** 
+  41:.\memory.c    **** 
+  42:.\memory.c    **** 
+  43:.\memory.c    **** void savePIDToEEPROM(uint8 module, float kp, float ki, float kd)
+  44:.\memory.c    **** {
+  57              		.loc 1 44 0
+  58              		.cfi_startproc
+  59              		@ args = 0, pretend = 0, frame = 24
+  60              		@ frame_needed = 1, uses_anonymous_args = 0
+  61 0000 80B5     		push	{r7, lr}
+  62              		.cfi_def_cfa_offset 8
+  63              		.cfi_offset 7, -8
+  64              		.cfi_offset 14, -4
+  65 0002 86B0     		sub	sp, sp, #24
+  66              		.cfi_def_cfa_offset 32
+  67 0004 00AF     		add	r7, sp, #0
+  68              		.cfi_def_cfa_register 7
+  69 0006 B960     		str	r1, [r7, #8]	@ float
+  70 0008 7A60     		str	r2, [r7, #4]	@ float
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 3
+
+
+  71 000a 3B60     		str	r3, [r7]	@ float
+  72 000c 0346     		mov	r3, r0
+  73 000e FB73     		strb	r3, [r7, #15]
+  45:.\memory.c    ****     uint8 startAdress;
+  46:.\memory.c    **** 
+  47:.\memory.c    ****     if(module == 0)
+  74              		.loc 1 47 0
+  75 0010 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  76 0012 002B     		cmp	r3, #0
+  77 0014 02D1     		bne	.L3
+  48:.\memory.c    ****         startAdress = EEPROM_MODULE0_ADRESS_KP;
+  78              		.loc 1 48 0
+  79 0016 0023     		movs	r3, #0
+  80 0018 FB75     		strb	r3, [r7, #23]
+  81 001a 01E0     		b	.L4
+  82              	.L3:
+  49:.\memory.c    ****     else
+  50:.\memory.c    ****         startAdress = EEPROM_MODULE1_ADRESS_KP;
+  83              		.loc 1 50 0
+  84 001c 1623     		movs	r3, #22
+  85 001e FB75     		strb	r3, [r7, #23]
+  86              	.L4:
+  51:.\memory.c    ****     
+  52:.\memory.c    ****     saveFLOAT(startAdress, kp);
+  87              		.loc 1 52 0
+  88 0020 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+  89 0022 1846     		mov	r0, r3
+  90 0024 B968     		ldr	r1, [r7, #8]	@ float
+  91 0026 FFF7FEFF 		bl	saveFLOAT
+  53:.\memory.c    ****     saveFLOAT(startAdress+4, ki);
+  92              		.loc 1 53 0
+  93 002a FB7D     		ldrb	r3, [r7, #23]
+  94 002c 0433     		adds	r3, r3, #4
+  95 002e DBB2     		uxtb	r3, r3
+  96 0030 1846     		mov	r0, r3
+  97 0032 7968     		ldr	r1, [r7, #4]	@ float
+  98 0034 FFF7FEFF 		bl	saveFLOAT
+  54:.\memory.c    ****     saveFLOAT(startAdress+8, kd);
+  99              		.loc 1 54 0
+ 100 0038 FB7D     		ldrb	r3, [r7, #23]
+ 101 003a 0833     		adds	r3, r3, #8
+ 102 003c DBB2     		uxtb	r3, r3
+ 103 003e 1846     		mov	r0, r3
+ 104 0040 3968     		ldr	r1, [r7]	@ float
+ 105 0042 FFF7FEFF 		bl	saveFLOAT
+  55:.\memory.c    **** }
+ 106              		.loc 1 55 0
+ 107 0046 1837     		adds	r7, r7, #24
+ 108              		.cfi_def_cfa_offset 8
+ 109 0048 BD46     		mov	sp, r7
+ 110              		.cfi_def_cfa_register 13
+ 111              		@ sp needed
+ 112 004a 80BD     		pop	{r7, pc}
+ 113              		.cfi_endproc
+ 114              	.LFE57:
+ 115              		.size	savePIDToEEPROM, .-savePIDToEEPROM
+ 116              		.section	.text.loadPIDFromEEPROM,"ax",%progbits
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 4
+
+
+ 117              		.align	2
+ 118              		.global	loadPIDFromEEPROM
+ 119              		.thumb
+ 120              		.thumb_func
+ 121              		.type	loadPIDFromEEPROM, %function
+ 122              	loadPIDFromEEPROM:
+ 123              	.LFB58:
+  56:.\memory.c    **** 
+  57:.\memory.c    **** void loadPIDFromEEPROM(uint8 module, float *kp, float *ki, float *kd)
+  58:.\memory.c    **** {
+ 124              		.loc 1 58 0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 24
+ 127              		@ frame_needed = 1, uses_anonymous_args = 0
+ 128 0000 80B5     		push	{r7, lr}
+ 129              		.cfi_def_cfa_offset 8
+ 130              		.cfi_offset 7, -8
+ 131              		.cfi_offset 14, -4
+ 132 0002 86B0     		sub	sp, sp, #24
+ 133              		.cfi_def_cfa_offset 32
+ 134 0004 00AF     		add	r7, sp, #0
+ 135              		.cfi_def_cfa_register 7
+ 136 0006 B960     		str	r1, [r7, #8]
+ 137 0008 7A60     		str	r2, [r7, #4]
+ 138 000a 3B60     		str	r3, [r7]
+ 139 000c 0346     		mov	r3, r0
+ 140 000e FB73     		strb	r3, [r7, #15]
+  59:.\memory.c    ****     uint8 startAdress;
+  60:.\memory.c    **** 
+  61:.\memory.c    ****     if(module == 0)
+ 141              		.loc 1 61 0
+ 142 0010 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 143 0012 002B     		cmp	r3, #0
+ 144 0014 02D1     		bne	.L6
+  62:.\memory.c    ****         startAdress = EEPROM_MODULE0_ADRESS_KP;
+ 145              		.loc 1 62 0
+ 146 0016 0023     		movs	r3, #0
+ 147 0018 FB75     		strb	r3, [r7, #23]
+ 148 001a 01E0     		b	.L7
+ 149              	.L6:
+  63:.\memory.c    ****     else
+  64:.\memory.c    ****         startAdress = EEPROM_MODULE1_ADRESS_KP;
+ 150              		.loc 1 64 0
+ 151 001c 1623     		movs	r3, #22
+ 152 001e FB75     		strb	r3, [r7, #23]
+ 153              	.L7:
+  65:.\memory.c    ****     
+  66:.\memory.c    ****     *kp = loadFLOAT(startAdress);
+ 154              		.loc 1 66 0
+ 155 0020 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 156 0022 1846     		mov	r0, r3
+ 157 0024 FFF7FEFF 		bl	loadFLOAT
+ 158 0028 0246     		mov	r2, r0
+ 159 002a BB68     		ldr	r3, [r7, #8]
+ 160 002c 1A60     		str	r2, [r3]	@ float
+  67:.\memory.c    ****     *ki = loadFLOAT(startAdress+4);
+ 161              		.loc 1 67 0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 5
+
+
+ 162 002e FB7D     		ldrb	r3, [r7, #23]
+ 163 0030 0433     		adds	r3, r3, #4
+ 164 0032 DBB2     		uxtb	r3, r3
+ 165 0034 1846     		mov	r0, r3
+ 166 0036 FFF7FEFF 		bl	loadFLOAT
+ 167 003a 0246     		mov	r2, r0
+ 168 003c 7B68     		ldr	r3, [r7, #4]
+ 169 003e 1A60     		str	r2, [r3]	@ float
+  68:.\memory.c    ****     *kd = loadFLOAT(startAdress+8);
+ 170              		.loc 1 68 0
+ 171 0040 FB7D     		ldrb	r3, [r7, #23]
+ 172 0042 0833     		adds	r3, r3, #8
+ 173 0044 DBB2     		uxtb	r3, r3
+ 174 0046 1846     		mov	r0, r3
+ 175 0048 FFF7FEFF 		bl	loadFLOAT
+ 176 004c 0246     		mov	r2, r0
+ 177 004e 3B68     		ldr	r3, [r7]
+ 178 0050 1A60     		str	r2, [r3]	@ float
+  69:.\memory.c    **** }
+ 179              		.loc 1 69 0
+ 180 0052 1837     		adds	r7, r7, #24
+ 181              		.cfi_def_cfa_offset 8
+ 182 0054 BD46     		mov	sp, r7
+ 183              		.cfi_def_cfa_register 13
+ 184              		@ sp needed
+ 185 0056 80BD     		pop	{r7, pc}
+ 186              		.cfi_endproc
+ 187              	.LFE58:
+ 188              		.size	loadPIDFromEEPROM, .-loadPIDFromEEPROM
+ 189              		.section	.text.saveTemperatureLimitHighToEEPROM,"ax",%progbits
+ 190              		.align	2
+ 191              		.global	saveTemperatureLimitHighToEEPROM
+ 192              		.thumb
+ 193              		.thumb_func
+ 194              		.type	saveTemperatureLimitHighToEEPROM, %function
+ 195              	saveTemperatureLimitHighToEEPROM:
+ 196              	.LFB59:
+  70:.\memory.c    **** 
+  71:.\memory.c    **** 
+  72:.\memory.c    **** void saveTemperatureLimitHighToEEPROM(uint8 module,uint16 limit)
+  73:.\memory.c    **** {
+ 197              		.loc 1 73 0
+ 198              		.cfi_startproc
+ 199              		@ args = 0, pretend = 0, frame = 8
+ 200              		@ frame_needed = 1, uses_anonymous_args = 0
+ 201 0000 80B5     		push	{r7, lr}
+ 202              		.cfi_def_cfa_offset 8
+ 203              		.cfi_offset 7, -8
+ 204              		.cfi_offset 14, -4
+ 205 0002 82B0     		sub	sp, sp, #8
+ 206              		.cfi_def_cfa_offset 16
+ 207 0004 00AF     		add	r7, sp, #0
+ 208              		.cfi_def_cfa_register 7
+ 209 0006 0346     		mov	r3, r0
+ 210 0008 0A46     		mov	r2, r1
+ 211 000a FB71     		strb	r3, [r7, #7]
+ 212 000c 1346     		mov	r3, r2	@ movhi
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 6
+
+
+ 213 000e BB80     		strh	r3, [r7, #4]	@ movhi
+  74:.\memory.c    ****     if(module == 0)
+ 214              		.loc 1 74 0
+ 215 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 216 0012 002B     		cmp	r3, #0
+ 217 0014 05D1     		bne	.L9
+  75:.\memory.c    ****         saveUINT16(EEPROM_MODULE0_ADRESS_TEMPERATURE_LIMIT_HIGH, limit);
+ 218              		.loc 1 75 0
+ 219 0016 BB88     		ldrh	r3, [r7, #4]
+ 220 0018 0E20     		movs	r0, #14
+ 221 001a 1946     		mov	r1, r3
+ 222 001c FFF7FEFF 		bl	saveUINT16
+ 223 0020 04E0     		b	.L8
+ 224              	.L9:
+  76:.\memory.c    ****     else
+  77:.\memory.c    ****         saveUINT16(EEPROM_MODULE1_ADRESS_TEMPERATURE_LIMIT_HIGH, limit);
+ 225              		.loc 1 77 0
+ 226 0022 BB88     		ldrh	r3, [r7, #4]
+ 227 0024 2420     		movs	r0, #36
+ 228 0026 1946     		mov	r1, r3
+ 229 0028 FFF7FEFF 		bl	saveUINT16
+ 230              	.L8:
+  78:.\memory.c    **** }
+ 231              		.loc 1 78 0
+ 232 002c 0837     		adds	r7, r7, #8
+ 233              		.cfi_def_cfa_offset 8
+ 234 002e BD46     		mov	sp, r7
+ 235              		.cfi_def_cfa_register 13
+ 236              		@ sp needed
+ 237 0030 80BD     		pop	{r7, pc}
+ 238              		.cfi_endproc
+ 239              	.LFE59:
+ 240              		.size	saveTemperatureLimitHighToEEPROM, .-saveTemperatureLimitHighToEEPROM
+ 241 0032 00BF     		.section	.text.loadTemperatureLimitHighFromEEPROM,"ax",%progbits
+ 242              		.align	2
+ 243              		.global	loadTemperatureLimitHighFromEEPROM
+ 244              		.thumb
+ 245              		.thumb_func
+ 246              		.type	loadTemperatureLimitHighFromEEPROM, %function
+ 247              	loadTemperatureLimitHighFromEEPROM:
+ 248              	.LFB60:
+  79:.\memory.c    **** 
+  80:.\memory.c    **** uint16 loadTemperatureLimitHighFromEEPROM(uint8 module)
+  81:.\memory.c    **** {
+ 249              		.loc 1 81 0
+ 250              		.cfi_startproc
+ 251              		@ args = 0, pretend = 0, frame = 8
+ 252              		@ frame_needed = 1, uses_anonymous_args = 0
+ 253 0000 80B5     		push	{r7, lr}
+ 254              		.cfi_def_cfa_offset 8
+ 255              		.cfi_offset 7, -8
+ 256              		.cfi_offset 14, -4
+ 257 0002 82B0     		sub	sp, sp, #8
+ 258              		.cfi_def_cfa_offset 16
+ 259 0004 00AF     		add	r7, sp, #0
+ 260              		.cfi_def_cfa_register 7
+ 261 0006 0346     		mov	r3, r0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 7
+
+
+ 262 0008 FB71     		strb	r3, [r7, #7]
+  82:.\memory.c    ****     if(module == 0)
+ 263              		.loc 1 82 0
+ 264 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 265 000c 002B     		cmp	r3, #0
+ 266 000e 04D1     		bne	.L12
+  83:.\memory.c    ****         return loadUINT16(EEPROM_MODULE0_ADRESS_TEMPERATURE_LIMIT_HIGH);
+ 267              		.loc 1 83 0
+ 268 0010 0E20     		movs	r0, #14
+ 269 0012 FFF7FEFF 		bl	loadUINT16
+ 270 0016 0346     		mov	r3, r0
+ 271 0018 03E0     		b	.L13
+ 272              	.L12:
+  84:.\memory.c    ****     else
+  85:.\memory.c    ****         return loadUINT16(EEPROM_MODULE1_ADRESS_TEMPERATURE_LIMIT_HIGH);
+ 273              		.loc 1 85 0
+ 274 001a 2420     		movs	r0, #36
+ 275 001c FFF7FEFF 		bl	loadUINT16
+ 276 0020 0346     		mov	r3, r0
+ 277              	.L13:
+  86:.\memory.c    **** }
+ 278              		.loc 1 86 0
+ 279 0022 1846     		mov	r0, r3
+ 280 0024 0837     		adds	r7, r7, #8
+ 281              		.cfi_def_cfa_offset 8
+ 282 0026 BD46     		mov	sp, r7
+ 283              		.cfi_def_cfa_register 13
+ 284              		@ sp needed
+ 285 0028 80BD     		pop	{r7, pc}
+ 286              		.cfi_endproc
+ 287              	.LFE60:
+ 288              		.size	loadTemperatureLimitHighFromEEPROM, .-loadTemperatureLimitHighFromEEPROM
+ 289 002a 00BF     		.section	.text.saveTemperatureLimitLowToEEPROM,"ax",%progbits
+ 290              		.align	2
+ 291              		.global	saveTemperatureLimitLowToEEPROM
+ 292              		.thumb
+ 293              		.thumb_func
+ 294              		.type	saveTemperatureLimitLowToEEPROM, %function
+ 295              	saveTemperatureLimitLowToEEPROM:
+ 296              	.LFB61:
+  87:.\memory.c    **** 
+  88:.\memory.c    **** void saveTemperatureLimitLowToEEPROM(uint8 module,uint16 limit)
+  89:.\memory.c    **** {
+ 297              		.loc 1 89 0
+ 298              		.cfi_startproc
+ 299              		@ args = 0, pretend = 0, frame = 8
+ 300              		@ frame_needed = 1, uses_anonymous_args = 0
+ 301 0000 80B5     		push	{r7, lr}
+ 302              		.cfi_def_cfa_offset 8
+ 303              		.cfi_offset 7, -8
+ 304              		.cfi_offset 14, -4
+ 305 0002 82B0     		sub	sp, sp, #8
+ 306              		.cfi_def_cfa_offset 16
+ 307 0004 00AF     		add	r7, sp, #0
+ 308              		.cfi_def_cfa_register 7
+ 309 0006 0346     		mov	r3, r0
+ 310 0008 0A46     		mov	r2, r1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 8
+
+
+ 311 000a FB71     		strb	r3, [r7, #7]
+ 312 000c 1346     		mov	r3, r2	@ movhi
+ 313 000e BB80     		strh	r3, [r7, #4]	@ movhi
+  90:.\memory.c    ****     if(module == 0)
+ 314              		.loc 1 90 0
+ 315 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 316 0012 002B     		cmp	r3, #0
+ 317 0014 05D1     		bne	.L15
+  91:.\memory.c    ****         saveUINT16(EEPROM_MODULE0_ADRESS_TEMPERATURE_LIMIT_LOW, limit);
+ 318              		.loc 1 91 0
+ 319 0016 BB88     		ldrh	r3, [r7, #4]
+ 320 0018 0C20     		movs	r0, #12
+ 321 001a 1946     		mov	r1, r3
+ 322 001c FFF7FEFF 		bl	saveUINT16
+ 323 0020 04E0     		b	.L14
+ 324              	.L15:
+  92:.\memory.c    ****     else
+  93:.\memory.c    ****         saveUINT16(EEPROM_MODULE1_ADRESS_TEMPERATURE_LIMIT_LOW, limit);
+ 325              		.loc 1 93 0
+ 326 0022 BB88     		ldrh	r3, [r7, #4]
+ 327 0024 2220     		movs	r0, #34
+ 328 0026 1946     		mov	r1, r3
+ 329 0028 FFF7FEFF 		bl	saveUINT16
+ 330              	.L14:
+  94:.\memory.c    **** }
+ 331              		.loc 1 94 0
+ 332 002c 0837     		adds	r7, r7, #8
+ 333              		.cfi_def_cfa_offset 8
+ 334 002e BD46     		mov	sp, r7
+ 335              		.cfi_def_cfa_register 13
+ 336              		@ sp needed
+ 337 0030 80BD     		pop	{r7, pc}
+ 338              		.cfi_endproc
+ 339              	.LFE61:
+ 340              		.size	saveTemperatureLimitLowToEEPROM, .-saveTemperatureLimitLowToEEPROM
+ 341 0032 00BF     		.section	.text.loadTemperatureLimitLowFromEEPROM,"ax",%progbits
+ 342              		.align	2
+ 343              		.global	loadTemperatureLimitLowFromEEPROM
+ 344              		.thumb
+ 345              		.thumb_func
+ 346              		.type	loadTemperatureLimitLowFromEEPROM, %function
+ 347              	loadTemperatureLimitLowFromEEPROM:
+ 348              	.LFB62:
+  95:.\memory.c    **** 
+  96:.\memory.c    **** uint16 loadTemperatureLimitLowFromEEPROM(uint8 module)
+  97:.\memory.c    **** {
+ 349              		.loc 1 97 0
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 8
+ 352              		@ frame_needed = 1, uses_anonymous_args = 0
+ 353 0000 80B5     		push	{r7, lr}
+ 354              		.cfi_def_cfa_offset 8
+ 355              		.cfi_offset 7, -8
+ 356              		.cfi_offset 14, -4
+ 357 0002 82B0     		sub	sp, sp, #8
+ 358              		.cfi_def_cfa_offset 16
+ 359 0004 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 9
+
+
+ 360              		.cfi_def_cfa_register 7
+ 361 0006 0346     		mov	r3, r0
+ 362 0008 FB71     		strb	r3, [r7, #7]
+  98:.\memory.c    ****     if(module == 0)
+ 363              		.loc 1 98 0
+ 364 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 365 000c 002B     		cmp	r3, #0
+ 366 000e 04D1     		bne	.L18
+  99:.\memory.c    ****         return loadUINT16(EEPROM_MODULE0_ADRESS_TEMPERATURE_LIMIT_LOW);
+ 367              		.loc 1 99 0
+ 368 0010 0C20     		movs	r0, #12
+ 369 0012 FFF7FEFF 		bl	loadUINT16
+ 370 0016 0346     		mov	r3, r0
+ 371 0018 03E0     		b	.L19
+ 372              	.L18:
+ 100:.\memory.c    ****     else
+ 101:.\memory.c    ****         return loadUINT16(EEPROM_MODULE1_ADRESS_TEMPERATURE_LIMIT_LOW);
+ 373              		.loc 1 101 0
+ 374 001a 2220     		movs	r0, #34
+ 375 001c FFF7FEFF 		bl	loadUINT16
+ 376 0020 0346     		mov	r3, r0
+ 377              	.L19:
+ 102:.\memory.c    **** }
+ 378              		.loc 1 102 0
+ 379 0022 1846     		mov	r0, r3
+ 380 0024 0837     		adds	r7, r7, #8
+ 381              		.cfi_def_cfa_offset 8
+ 382 0026 BD46     		mov	sp, r7
+ 383              		.cfi_def_cfa_register 13
+ 384              		@ sp needed
+ 385 0028 80BD     		pop	{r7, pc}
+ 386              		.cfi_endproc
+ 387              	.LFE62:
+ 388              		.size	loadTemperatureLimitLowFromEEPROM, .-loadTemperatureLimitLowFromEEPROM
+ 389 002a 00BF     		.section	.text.saveTargetTemperatureToEEPROM,"ax",%progbits
+ 390              		.align	2
+ 391              		.global	saveTargetTemperatureToEEPROM
+ 392              		.thumb
+ 393              		.thumb_func
+ 394              		.type	saveTargetTemperatureToEEPROM, %function
+ 395              	saveTargetTemperatureToEEPROM:
+ 396              	.LFB63:
+ 103:.\memory.c    **** 
+ 104:.\memory.c    **** void saveTargetTemperatureToEEPROM(uint8 module, uint16 target)
+ 105:.\memory.c    **** {
+ 397              		.loc 1 105 0
+ 398              		.cfi_startproc
+ 399              		@ args = 0, pretend = 0, frame = 8
+ 400              		@ frame_needed = 1, uses_anonymous_args = 0
+ 401 0000 80B5     		push	{r7, lr}
+ 402              		.cfi_def_cfa_offset 8
+ 403              		.cfi_offset 7, -8
+ 404              		.cfi_offset 14, -4
+ 405 0002 82B0     		sub	sp, sp, #8
+ 406              		.cfi_def_cfa_offset 16
+ 407 0004 00AF     		add	r7, sp, #0
+ 408              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 10
+
+
+ 409 0006 0346     		mov	r3, r0
+ 410 0008 0A46     		mov	r2, r1
+ 411 000a FB71     		strb	r3, [r7, #7]
+ 412 000c 1346     		mov	r3, r2	@ movhi
+ 413 000e BB80     		strh	r3, [r7, #4]	@ movhi
+ 106:.\memory.c    ****     if(module == 0)
+ 414              		.loc 1 106 0
+ 415 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 416 0012 002B     		cmp	r3, #0
+ 417 0014 05D1     		bne	.L21
+ 107:.\memory.c    ****         saveUINT16(EEPROM_MODULE0_ADRESS_TEMPERATURE_TARGET, target);
+ 418              		.loc 1 107 0
+ 419 0016 BB88     		ldrh	r3, [r7, #4]
+ 420 0018 1020     		movs	r0, #16
+ 421 001a 1946     		mov	r1, r3
+ 422 001c FFF7FEFF 		bl	saveUINT16
+ 423 0020 04E0     		b	.L20
+ 424              	.L21:
+ 108:.\memory.c    ****     else
+ 109:.\memory.c    ****         saveUINT16(EEPROM_MODULE1_ADRESS_TEMPERATURE_TARGET, target);
+ 425              		.loc 1 109 0
+ 426 0022 BB88     		ldrh	r3, [r7, #4]
+ 427 0024 2620     		movs	r0, #38
+ 428 0026 1946     		mov	r1, r3
+ 429 0028 FFF7FEFF 		bl	saveUINT16
+ 430              	.L20:
+ 110:.\memory.c    **** }
+ 431              		.loc 1 110 0
+ 432 002c 0837     		adds	r7, r7, #8
+ 433              		.cfi_def_cfa_offset 8
+ 434 002e BD46     		mov	sp, r7
+ 435              		.cfi_def_cfa_register 13
+ 436              		@ sp needed
+ 437 0030 80BD     		pop	{r7, pc}
+ 438              		.cfi_endproc
+ 439              	.LFE63:
+ 440              		.size	saveTargetTemperatureToEEPROM, .-saveTargetTemperatureToEEPROM
+ 441 0032 00BF     		.section	.text.loadTargetTemperatureFromEEPROM,"ax",%progbits
+ 442              		.align	2
+ 443              		.global	loadTargetTemperatureFromEEPROM
+ 444              		.thumb
+ 445              		.thumb_func
+ 446              		.type	loadTargetTemperatureFromEEPROM, %function
+ 447              	loadTargetTemperatureFromEEPROM:
+ 448              	.LFB64:
+ 111:.\memory.c    **** 
+ 112:.\memory.c    **** uint16 loadTargetTemperatureFromEEPROM(uint8 module)
+ 113:.\memory.c    **** {
+ 449              		.loc 1 113 0
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 8
+ 452              		@ frame_needed = 1, uses_anonymous_args = 0
+ 453 0000 80B5     		push	{r7, lr}
+ 454              		.cfi_def_cfa_offset 8
+ 455              		.cfi_offset 7, -8
+ 456              		.cfi_offset 14, -4
+ 457 0002 82B0     		sub	sp, sp, #8
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 11
+
+
+ 458              		.cfi_def_cfa_offset 16
+ 459 0004 00AF     		add	r7, sp, #0
+ 460              		.cfi_def_cfa_register 7
+ 461 0006 0346     		mov	r3, r0
+ 462 0008 FB71     		strb	r3, [r7, #7]
+ 114:.\memory.c    ****     if(module == 0)
+ 463              		.loc 1 114 0
+ 464 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 465 000c 002B     		cmp	r3, #0
+ 466 000e 04D1     		bne	.L24
+ 115:.\memory.c    ****         return loadUINT16(EEPROM_MODULE0_ADRESS_TEMPERATURE_TARGET);
+ 467              		.loc 1 115 0
+ 468 0010 1020     		movs	r0, #16
+ 469 0012 FFF7FEFF 		bl	loadUINT16
+ 470 0016 0346     		mov	r3, r0
+ 471 0018 03E0     		b	.L25
+ 472              	.L24:
+ 116:.\memory.c    ****     else
+ 117:.\memory.c    ****         return loadUINT16(EEPROM_MODULE1_ADRESS_TEMPERATURE_TARGET);
+ 473              		.loc 1 117 0
+ 474 001a 2620     		movs	r0, #38
+ 475 001c FFF7FEFF 		bl	loadUINT16
+ 476 0020 0346     		mov	r3, r0
+ 477              	.L25:
+ 118:.\memory.c    **** }
+ 478              		.loc 1 118 0
+ 479 0022 1846     		mov	r0, r3
+ 480 0024 0837     		adds	r7, r7, #8
+ 481              		.cfi_def_cfa_offset 8
+ 482 0026 BD46     		mov	sp, r7
+ 483              		.cfi_def_cfa_register 13
+ 484              		@ sp needed
+ 485 0028 80BD     		pop	{r7, pc}
+ 486              		.cfi_endproc
+ 487              	.LFE64:
+ 488              		.size	loadTargetTemperatureFromEEPROM, .-loadTargetTemperatureFromEEPROM
+ 489 002a 00BF     		.section	.text.saveStepperPositionToEEPROM,"ax",%progbits
+ 490              		.align	2
+ 491              		.global	saveStepperPositionToEEPROM
+ 492              		.thumb
+ 493              		.thumb_func
+ 494              		.type	saveStepperPositionToEEPROM, %function
+ 495              	saveStepperPositionToEEPROM:
+ 496              	.LFB65:
+ 119:.\memory.c    **** 
+ 120:.\memory.c    **** void saveStepperPositionToEEPROM(uint8 module, int position)
+ 121:.\memory.c    **** {
+ 497              		.loc 1 121 0
+ 498              		.cfi_startproc
+ 499              		@ args = 0, pretend = 0, frame = 8
+ 500              		@ frame_needed = 1, uses_anonymous_args = 0
+ 501 0000 80B5     		push	{r7, lr}
+ 502              		.cfi_def_cfa_offset 8
+ 503              		.cfi_offset 7, -8
+ 504              		.cfi_offset 14, -4
+ 505 0002 82B0     		sub	sp, sp, #8
+ 506              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 12
+
+
+ 507 0004 00AF     		add	r7, sp, #0
+ 508              		.cfi_def_cfa_register 7
+ 509 0006 0346     		mov	r3, r0
+ 510 0008 3960     		str	r1, [r7]
+ 511 000a FB71     		strb	r3, [r7, #7]
+ 122:.\memory.c    ****     if(module == 0)
+ 512              		.loc 1 122 0
+ 513 000c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 514 000e 002B     		cmp	r3, #0
+ 515 0010 04D1     		bne	.L27
+ 123:.\memory.c    ****         saveINT(EEPROM_MODULE0_ADRESS_STEPPER_POS, position);
+ 516              		.loc 1 123 0
+ 517 0012 1220     		movs	r0, #18
+ 518 0014 3968     		ldr	r1, [r7]
+ 519 0016 FFF7FEFF 		bl	saveINT
+ 520 001a 03E0     		b	.L26
+ 521              	.L27:
+ 124:.\memory.c    ****     else
+ 125:.\memory.c    ****         saveINT(EEPROM_MODULE1_ADRESS_STEPPER_POS, position);
+ 522              		.loc 1 125 0
+ 523 001c 2820     		movs	r0, #40
+ 524 001e 3968     		ldr	r1, [r7]
+ 525 0020 FFF7FEFF 		bl	saveINT
+ 526              	.L26:
+ 126:.\memory.c    **** }
+ 527              		.loc 1 126 0
+ 528 0024 0837     		adds	r7, r7, #8
+ 529              		.cfi_def_cfa_offset 8
+ 530 0026 BD46     		mov	sp, r7
+ 531              		.cfi_def_cfa_register 13
+ 532              		@ sp needed
+ 533 0028 80BD     		pop	{r7, pc}
+ 534              		.cfi_endproc
+ 535              	.LFE65:
+ 536              		.size	saveStepperPositionToEEPROM, .-saveStepperPositionToEEPROM
+ 537 002a 00BF     		.section	.text.loadStepperPositionFromEEPROM,"ax",%progbits
+ 538              		.align	2
+ 539              		.global	loadStepperPositionFromEEPROM
+ 540              		.thumb
+ 541              		.thumb_func
+ 542              		.type	loadStepperPositionFromEEPROM, %function
+ 543              	loadStepperPositionFromEEPROM:
+ 544              	.LFB66:
+ 127:.\memory.c    **** 
+ 128:.\memory.c    **** int loadStepperPositionFromEEPROM(uint8 module)
+ 129:.\memory.c    **** {
+ 545              		.loc 1 129 0
+ 546              		.cfi_startproc
+ 547              		@ args = 0, pretend = 0, frame = 8
+ 548              		@ frame_needed = 1, uses_anonymous_args = 0
+ 549 0000 80B5     		push	{r7, lr}
+ 550              		.cfi_def_cfa_offset 8
+ 551              		.cfi_offset 7, -8
+ 552              		.cfi_offset 14, -4
+ 553 0002 82B0     		sub	sp, sp, #8
+ 554              		.cfi_def_cfa_offset 16
+ 555 0004 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 13
+
+
+ 556              		.cfi_def_cfa_register 7
+ 557 0006 0346     		mov	r3, r0
+ 558 0008 FB71     		strb	r3, [r7, #7]
+ 130:.\memory.c    ****     if(module == 0)
+ 559              		.loc 1 130 0
+ 560 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 561 000c 002B     		cmp	r3, #0
+ 562 000e 04D1     		bne	.L30
+ 131:.\memory.c    ****         return loadINT(EEPROM_MODULE0_ADRESS_STEPPER_POS);
+ 563              		.loc 1 131 0
+ 564 0010 1220     		movs	r0, #18
+ 565 0012 FFF7FEFF 		bl	loadINT
+ 566 0016 0346     		mov	r3, r0
+ 567 0018 03E0     		b	.L31
+ 568              	.L30:
+ 132:.\memory.c    ****     else
+ 133:.\memory.c    ****         return loadINT(EEPROM_MODULE1_ADRESS_STEPPER_POS);
+ 569              		.loc 1 133 0
+ 570 001a 2820     		movs	r0, #40
+ 571 001c FFF7FEFF 		bl	loadINT
+ 572 0020 0346     		mov	r3, r0
+ 573              	.L31:
+ 134:.\memory.c    **** }
+ 574              		.loc 1 134 0
+ 575 0022 1846     		mov	r0, r3
+ 576 0024 0837     		adds	r7, r7, #8
+ 577              		.cfi_def_cfa_offset 8
+ 578 0026 BD46     		mov	sp, r7
+ 579              		.cfi_def_cfa_register 13
+ 580              		@ sp needed
+ 581 0028 80BD     		pop	{r7, pc}
+ 582              		.cfi_endproc
+ 583              	.LFE66:
+ 584              		.size	loadStepperPositionFromEEPROM, .-loadStepperPositionFromEEPROM
+ 585 002a 00BF     		.section	.text.saveUINT16,"ax",%progbits
+ 586              		.align	2
+ 587              		.global	saveUINT16
+ 588              		.thumb
+ 589              		.thumb_func
+ 590              		.type	saveUINT16, %function
+ 591              	saveUINT16:
+ 592              	.LFB67:
+ 135:.\memory.c    **** 
+ 136:.\memory.c    **** 
+ 137:.\memory.c    **** // HELPER FUNCTION
+ 138:.\memory.c    **** 
+ 139:.\memory.c    **** void saveUINT16(uint8 startAdress, uint16 value)
+ 140:.\memory.c    **** {
+ 593              		.loc 1 140 0
+ 594              		.cfi_startproc
+ 595              		@ args = 0, pretend = 0, frame = 8
+ 596              		@ frame_needed = 1, uses_anonymous_args = 0
+ 597 0000 80B5     		push	{r7, lr}
+ 598              		.cfi_def_cfa_offset 8
+ 599              		.cfi_offset 7, -8
+ 600              		.cfi_offset 14, -4
+ 601 0002 82B0     		sub	sp, sp, #8
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 14
+
+
+ 602              		.cfi_def_cfa_offset 16
+ 603 0004 00AF     		add	r7, sp, #0
+ 604              		.cfi_def_cfa_register 7
+ 605 0006 0346     		mov	r3, r0
+ 606 0008 0A46     		mov	r2, r1
+ 607 000a FB71     		strb	r3, [r7, #7]
+ 608 000c 1346     		mov	r3, r2	@ movhi
+ 609 000e BB80     		strh	r3, [r7, #4]	@ movhi
+ 141:.\memory.c    ****     EEPROM_WriteByte((int8)value, startAdress);
+ 610              		.loc 1 141 0
+ 611 0010 BB88     		ldrh	r3, [r7, #4]	@ movhi
+ 612 0012 DAB2     		uxtb	r2, r3
+ 613 0014 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 614 0016 9BB2     		uxth	r3, r3
+ 615 0018 1046     		mov	r0, r2
+ 616 001a 1946     		mov	r1, r3
+ 617 001c FFF7FEFF 		bl	EEPROM_WriteByte
+ 142:.\memory.c    ****     EEPROM_WriteByte((int8)(value>>8), startAdress+1);
+ 618              		.loc 1 142 0
+ 619 0020 BB88     		ldrh	r3, [r7, #4]
+ 620 0022 1B0A     		lsrs	r3, r3, #8
+ 621 0024 9BB2     		uxth	r3, r3
+ 622 0026 DAB2     		uxtb	r2, r3
+ 623 0028 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 624 002a 9BB2     		uxth	r3, r3
+ 625 002c 0133     		adds	r3, r3, #1
+ 626 002e 9BB2     		uxth	r3, r3
+ 627 0030 1046     		mov	r0, r2
+ 628 0032 1946     		mov	r1, r3
+ 629 0034 FFF7FEFF 		bl	EEPROM_WriteByte
+ 143:.\memory.c    **** }
+ 630              		.loc 1 143 0
+ 631 0038 0837     		adds	r7, r7, #8
+ 632              		.cfi_def_cfa_offset 8
+ 633 003a BD46     		mov	sp, r7
+ 634              		.cfi_def_cfa_register 13
+ 635              		@ sp needed
+ 636 003c 80BD     		pop	{r7, pc}
+ 637              		.cfi_endproc
+ 638              	.LFE67:
+ 639              		.size	saveUINT16, .-saveUINT16
+ 640 003e 00BF     		.section	.text.loadUINT16,"ax",%progbits
+ 641              		.align	2
+ 642              		.global	loadUINT16
+ 643              		.thumb
+ 644              		.thumb_func
+ 645              		.type	loadUINT16, %function
+ 646              	loadUINT16:
+ 647              	.LFB68:
+ 144:.\memory.c    **** 
+ 145:.\memory.c    **** uint16 loadUINT16(uint8 startAdress)
+ 146:.\memory.c    **** {
+ 648              		.loc 1 146 0
+ 649              		.cfi_startproc
+ 650              		@ args = 0, pretend = 0, frame = 16
+ 651              		@ frame_needed = 1, uses_anonymous_args = 0
+ 652 0000 90B5     		push	{r4, r7, lr}
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 15
+
+
+ 653              		.cfi_def_cfa_offset 12
+ 654              		.cfi_offset 4, -12
+ 655              		.cfi_offset 7, -8
+ 656              		.cfi_offset 14, -4
+ 657 0002 85B0     		sub	sp, sp, #20
+ 658              		.cfi_def_cfa_offset 32
+ 659 0004 00AF     		add	r7, sp, #0
+ 660              		.cfi_def_cfa_register 7
+ 661 0006 0346     		mov	r3, r0
+ 662 0008 FB71     		strb	r3, [r7, #7]
+ 147:.\memory.c    ****     uint16 value;
+ 148:.\memory.c    ****     
+ 149:.\memory.c    ****     value = EEPROM_ReadByte(startAdress+1);
+ 663              		.loc 1 149 0
+ 664 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 665 000c 9BB2     		uxth	r3, r3
+ 666 000e 0133     		adds	r3, r3, #1
+ 667 0010 9BB2     		uxth	r3, r3
+ 668 0012 1846     		mov	r0, r3
+ 669 0014 FFF7FEFF 		bl	EEPROM_ReadByte
+ 670 0018 0346     		mov	r3, r0
+ 671 001a FB81     		strh	r3, [r7, #14]	@ movhi
+ 150:.\memory.c    ****     value = (value<<8) + EEPROM_ReadByte(startAdress);
+ 672              		.loc 1 150 0
+ 673 001c FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 674 001e 1B02     		lsls	r3, r3, #8
+ 675 0020 9CB2     		uxth	r4, r3
+ 676 0022 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 677 0024 9BB2     		uxth	r3, r3
+ 678 0026 1846     		mov	r0, r3
+ 679 0028 FFF7FEFF 		bl	EEPROM_ReadByte
+ 680 002c 0346     		mov	r3, r0
+ 681 002e 9BB2     		uxth	r3, r3
+ 682 0030 2344     		add	r3, r3, r4
+ 683 0032 FB81     		strh	r3, [r7, #14]	@ movhi
+ 151:.\memory.c    ****     
+ 152:.\memory.c    ****     return value;
+ 684              		.loc 1 152 0
+ 685 0034 FB89     		ldrh	r3, [r7, #14]
+ 153:.\memory.c    **** }
+ 686              		.loc 1 153 0
+ 687 0036 1846     		mov	r0, r3
+ 688 0038 1437     		adds	r7, r7, #20
+ 689              		.cfi_def_cfa_offset 12
+ 690 003a BD46     		mov	sp, r7
+ 691              		.cfi_def_cfa_register 13
+ 692              		@ sp needed
+ 693 003c 90BD     		pop	{r4, r7, pc}
+ 694              		.cfi_endproc
+ 695              	.LFE68:
+ 696              		.size	loadUINT16, .-loadUINT16
+ 697 003e 00BF     		.section	.text.saveFLOAT,"ax",%progbits
+ 698              		.align	2
+ 699              		.global	saveFLOAT
+ 700              		.thumb
+ 701              		.thumb_func
+ 702              		.type	saveFLOAT, %function
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 16
+
+
+ 703              	saveFLOAT:
+ 704              	.LFB69:
+ 154:.\memory.c    **** 
+ 155:.\memory.c    **** void saveFLOAT(uint8 startAdress, float value)
+ 156:.\memory.c    **** {
+ 705              		.loc 1 156 0
+ 706              		.cfi_startproc
+ 707              		@ args = 0, pretend = 0, frame = 16
+ 708              		@ frame_needed = 1, uses_anonymous_args = 0
+ 709 0000 80B5     		push	{r7, lr}
+ 710              		.cfi_def_cfa_offset 8
+ 711              		.cfi_offset 7, -8
+ 712              		.cfi_offset 14, -4
+ 713 0002 84B0     		sub	sp, sp, #16
+ 714              		.cfi_def_cfa_offset 24
+ 715 0004 00AF     		add	r7, sp, #0
+ 716              		.cfi_def_cfa_register 7
+ 717 0006 0346     		mov	r3, r0
+ 718 0008 3960     		str	r1, [r7]	@ float
+ 719 000a FB71     		strb	r3, [r7, #7]
+ 157:.\memory.c    ****     uint8 i;
+ 158:.\memory.c    ****     uint8 k[4];
+ 159:.\memory.c    **** 
+ 160:.\memory.c    ****     memcpy(k, &value, sizeof(float));
+ 720              		.loc 1 160 0
+ 721 000c 3B68     		ldr	r3, [r7]
+ 722 000e BB60     		str	r3, [r7, #8]
+ 161:.\memory.c    ****     for( i=0; i<4; i++)
+ 723              		.loc 1 161 0
+ 724 0010 0023     		movs	r3, #0
+ 725 0012 FB73     		strb	r3, [r7, #15]
+ 726 0014 12E0     		b	.L36
+ 727              	.L37:
+ 162:.\memory.c    ****         EEPROM_WriteByte(k[i], startAdress+i);
+ 728              		.loc 1 162 0 discriminator 3
+ 729 0016 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 730 0018 07F11002 		add	r2, r7, #16
+ 731 001c 1344     		add	r3, r3, r2
+ 732 001e 13F8081C 		ldrb	r1, [r3, #-8]	@ zero_extendqisi2
+ 733 0022 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 734 0024 9AB2     		uxth	r2, r3
+ 735 0026 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 736 0028 9BB2     		uxth	r3, r3
+ 737 002a 1344     		add	r3, r3, r2
+ 738 002c 9BB2     		uxth	r3, r3
+ 739 002e 0846     		mov	r0, r1
+ 740 0030 1946     		mov	r1, r3
+ 741 0032 FFF7FEFF 		bl	EEPROM_WriteByte
+ 161:.\memory.c    ****     for( i=0; i<4; i++)
+ 742              		.loc 1 161 0 discriminator 3
+ 743 0036 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 744 0038 0133     		adds	r3, r3, #1
+ 745 003a FB73     		strb	r3, [r7, #15]
+ 746              	.L36:
+ 161:.\memory.c    ****     for( i=0; i<4; i++)
+ 747              		.loc 1 161 0 is_stmt 0 discriminator 1
+ 748 003c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 17
+
+
+ 749 003e 032B     		cmp	r3, #3
+ 750 0040 E9D9     		bls	.L37
+ 163:.\memory.c    **** }
+ 751              		.loc 1 163 0 is_stmt 1
+ 752 0042 1037     		adds	r7, r7, #16
+ 753              		.cfi_def_cfa_offset 8
+ 754 0044 BD46     		mov	sp, r7
+ 755              		.cfi_def_cfa_register 13
+ 756              		@ sp needed
+ 757 0046 80BD     		pop	{r7, pc}
+ 758              		.cfi_endproc
+ 759              	.LFE69:
+ 760              		.size	saveFLOAT, .-saveFLOAT
+ 761              		.section	.text.loadFLOAT,"ax",%progbits
+ 762              		.align	2
+ 763              		.global	loadFLOAT
+ 764              		.thumb
+ 765              		.thumb_func
+ 766              		.type	loadFLOAT, %function
+ 767              	loadFLOAT:
+ 768              	.LFB70:
+ 164:.\memory.c    **** 
+ 165:.\memory.c    **** float loadFLOAT(uint8 startAdress)
+ 166:.\memory.c    **** {
+ 769              		.loc 1 166 0
+ 770              		.cfi_startproc
+ 771              		@ args = 0, pretend = 0, frame = 24
+ 772              		@ frame_needed = 1, uses_anonymous_args = 0
+ 773 0000 90B5     		push	{r4, r7, lr}
+ 774              		.cfi_def_cfa_offset 12
+ 775              		.cfi_offset 4, -12
+ 776              		.cfi_offset 7, -8
+ 777              		.cfi_offset 14, -4
+ 778 0002 87B0     		sub	sp, sp, #28
+ 779              		.cfi_def_cfa_offset 40
+ 780 0004 00AF     		add	r7, sp, #0
+ 781              		.cfi_def_cfa_register 7
+ 782 0006 0346     		mov	r3, r0
+ 783 0008 FB71     		strb	r3, [r7, #7]
+ 167:.\memory.c    ****     uint8 i;
+ 168:.\memory.c    ****     uint8 k[4];
+ 169:.\memory.c    ****     float value;
+ 170:.\memory.c    ****     
+ 171:.\memory.c    ****     for( i=0; i<4; i++)
+ 784              		.loc 1 171 0
+ 785 000a 0023     		movs	r3, #0
+ 786 000c FB75     		strb	r3, [r7, #23]
+ 787 000e 13E0     		b	.L39
+ 788              	.L40:
+ 172:.\memory.c    ****         k[i] = EEPROM_ReadByte(startAdress+i);
+ 789              		.loc 1 172 0 discriminator 3
+ 790 0010 FC7D     		ldrb	r4, [r7, #23]	@ zero_extendqisi2
+ 791 0012 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 792 0014 9AB2     		uxth	r2, r3
+ 793 0016 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 794 0018 9BB2     		uxth	r3, r3
+ 795 001a 1344     		add	r3, r3, r2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 18
+
+
+ 796 001c 9BB2     		uxth	r3, r3
+ 797 001e 1846     		mov	r0, r3
+ 798 0020 FFF7FEFF 		bl	EEPROM_ReadByte
+ 799 0024 0346     		mov	r3, r0
+ 800 0026 1A46     		mov	r2, r3
+ 801 0028 07F11803 		add	r3, r7, #24
+ 802 002c 2344     		add	r3, r3, r4
+ 803 002e 03F8082C 		strb	r2, [r3, #-8]
+ 171:.\memory.c    ****         k[i] = EEPROM_ReadByte(startAdress+i);
+ 804              		.loc 1 171 0 discriminator 3
+ 805 0032 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 806 0034 0133     		adds	r3, r3, #1
+ 807 0036 FB75     		strb	r3, [r7, #23]
+ 808              	.L39:
+ 171:.\memory.c    ****         k[i] = EEPROM_ReadByte(startAdress+i);
+ 809              		.loc 1 171 0 is_stmt 0 discriminator 1
+ 810 0038 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 811 003a 032B     		cmp	r3, #3
+ 812 003c E8D9     		bls	.L40
+ 173:.\memory.c    ****         
+ 174:.\memory.c    ****     memcpy(&value, k, sizeof(float));
+ 813              		.loc 1 174 0 is_stmt 1
+ 814 003e 07F10C02 		add	r2, r7, #12
+ 815 0042 07F11003 		add	r3, r7, #16
+ 816 0046 1046     		mov	r0, r2
+ 817 0048 1946     		mov	r1, r3
+ 818 004a 0422     		movs	r2, #4
+ 819 004c FFF7FEFF 		bl	memcpy
+ 175:.\memory.c    ****     
+ 176:.\memory.c    ****     return value;
+ 820              		.loc 1 176 0
+ 821 0050 FB68     		ldr	r3, [r7, #12]	@ float
+ 177:.\memory.c    **** }
+ 822              		.loc 1 177 0
+ 823 0052 1846     		mov	r0, r3
+ 824 0054 1C37     		adds	r7, r7, #28
+ 825              		.cfi_def_cfa_offset 12
+ 826 0056 BD46     		mov	sp, r7
+ 827              		.cfi_def_cfa_register 13
+ 828              		@ sp needed
+ 829 0058 90BD     		pop	{r4, r7, pc}
+ 830              		.cfi_endproc
+ 831              	.LFE70:
+ 832              		.size	loadFLOAT, .-loadFLOAT
+ 833 005a 00BF     		.section	.text.saveINT,"ax",%progbits
+ 834              		.align	2
+ 835              		.global	saveINT
+ 836              		.thumb
+ 837              		.thumb_func
+ 838              		.type	saveINT, %function
+ 839              	saveINT:
+ 840              	.LFB71:
+ 178:.\memory.c    **** 
+ 179:.\memory.c    **** void saveINT(uint8 startAdress, int value)
+ 180:.\memory.c    **** {
+ 841              		.loc 1 180 0
+ 842              		.cfi_startproc
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 19
+
+
+ 843              		@ args = 0, pretend = 0, frame = 8
+ 844              		@ frame_needed = 1, uses_anonymous_args = 0
+ 845 0000 80B5     		push	{r7, lr}
+ 846              		.cfi_def_cfa_offset 8
+ 847              		.cfi_offset 7, -8
+ 848              		.cfi_offset 14, -4
+ 849 0002 82B0     		sub	sp, sp, #8
+ 850              		.cfi_def_cfa_offset 16
+ 851 0004 00AF     		add	r7, sp, #0
+ 852              		.cfi_def_cfa_register 7
+ 853 0006 0346     		mov	r3, r0
+ 854 0008 3960     		str	r1, [r7]
+ 855 000a FB71     		strb	r3, [r7, #7]
+ 181:.\memory.c    ****     EEPROM_WriteByte((int8)value, startAdress);
+ 856              		.loc 1 181 0
+ 857 000c 3B68     		ldr	r3, [r7]
+ 858 000e DAB2     		uxtb	r2, r3
+ 859 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 860 0012 9BB2     		uxth	r3, r3
+ 861 0014 1046     		mov	r0, r2
+ 862 0016 1946     		mov	r1, r3
+ 863 0018 FFF7FEFF 		bl	EEPROM_WriteByte
+ 182:.\memory.c    ****     EEPROM_WriteByte((int8)(value>>8), startAdress+1);
+ 864              		.loc 1 182 0
+ 865 001c 3B68     		ldr	r3, [r7]
+ 866 001e 1B12     		asrs	r3, r3, #8
+ 867 0020 DAB2     		uxtb	r2, r3
+ 868 0022 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 869 0024 9BB2     		uxth	r3, r3
+ 870 0026 0133     		adds	r3, r3, #1
+ 871 0028 9BB2     		uxth	r3, r3
+ 872 002a 1046     		mov	r0, r2
+ 873 002c 1946     		mov	r1, r3
+ 874 002e FFF7FEFF 		bl	EEPROM_WriteByte
+ 183:.\memory.c    ****     EEPROM_WriteByte((int8)(value>>16), startAdress+2);
+ 875              		.loc 1 183 0
+ 876 0032 3B68     		ldr	r3, [r7]
+ 877 0034 1B14     		asrs	r3, r3, #16
+ 878 0036 DAB2     		uxtb	r2, r3
+ 879 0038 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 880 003a 9BB2     		uxth	r3, r3
+ 881 003c 0233     		adds	r3, r3, #2
+ 882 003e 9BB2     		uxth	r3, r3
+ 883 0040 1046     		mov	r0, r2
+ 884 0042 1946     		mov	r1, r3
+ 885 0044 FFF7FEFF 		bl	EEPROM_WriteByte
+ 184:.\memory.c    ****     EEPROM_WriteByte((int8)(value>>24), startAdress+3);
+ 886              		.loc 1 184 0
+ 887 0048 3B68     		ldr	r3, [r7]
+ 888 004a 1B16     		asrs	r3, r3, #24
+ 889 004c DAB2     		uxtb	r2, r3
+ 890 004e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 891 0050 9BB2     		uxth	r3, r3
+ 892 0052 0333     		adds	r3, r3, #3
+ 893 0054 9BB2     		uxth	r3, r3
+ 894 0056 1046     		mov	r0, r2
+ 895 0058 1946     		mov	r1, r3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 20
+
+
+ 896 005a FFF7FEFF 		bl	EEPROM_WriteByte
+ 185:.\memory.c    **** }
+ 897              		.loc 1 185 0
+ 898 005e 0837     		adds	r7, r7, #8
+ 899              		.cfi_def_cfa_offset 8
+ 900 0060 BD46     		mov	sp, r7
+ 901              		.cfi_def_cfa_register 13
+ 902              		@ sp needed
+ 903 0062 80BD     		pop	{r7, pc}
+ 904              		.cfi_endproc
+ 905              	.LFE71:
+ 906              		.size	saveINT, .-saveINT
+ 907              		.section	.text.loadINT,"ax",%progbits
+ 908              		.align	2
+ 909              		.global	loadINT
+ 910              		.thumb
+ 911              		.thumb_func
+ 912              		.type	loadINT, %function
+ 913              	loadINT:
+ 914              	.LFB72:
+ 186:.\memory.c    **** int loadINT(uint8 startAdress)
+ 187:.\memory.c    **** {
+ 915              		.loc 1 187 0
+ 916              		.cfi_startproc
+ 917              		@ args = 0, pretend = 0, frame = 16
+ 918              		@ frame_needed = 1, uses_anonymous_args = 0
+ 919 0000 80B5     		push	{r7, lr}
+ 920              		.cfi_def_cfa_offset 8
+ 921              		.cfi_offset 7, -8
+ 922              		.cfi_offset 14, -4
+ 923 0002 84B0     		sub	sp, sp, #16
+ 924              		.cfi_def_cfa_offset 24
+ 925 0004 00AF     		add	r7, sp, #0
+ 926              		.cfi_def_cfa_register 7
+ 927 0006 0346     		mov	r3, r0
+ 928 0008 FB71     		strb	r3, [r7, #7]
+ 188:.\memory.c    ****     int value;  
+ 189:.\memory.c    ****     uint8 k[4];
+ 190:.\memory.c    ****     k[0] = EEPROM_ReadByte(startAdress);
+ 929              		.loc 1 190 0
+ 930 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 931 000c 9BB2     		uxth	r3, r3
+ 932 000e 1846     		mov	r0, r3
+ 933 0010 FFF7FEFF 		bl	EEPROM_ReadByte
+ 934 0014 0346     		mov	r3, r0
+ 935 0016 3B72     		strb	r3, [r7, #8]
+ 191:.\memory.c    ****     k[1] = EEPROM_ReadByte(startAdress+1);
+ 936              		.loc 1 191 0
+ 937 0018 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 938 001a 9BB2     		uxth	r3, r3
+ 939 001c 0133     		adds	r3, r3, #1
+ 940 001e 9BB2     		uxth	r3, r3
+ 941 0020 1846     		mov	r0, r3
+ 942 0022 FFF7FEFF 		bl	EEPROM_ReadByte
+ 943 0026 0346     		mov	r3, r0
+ 944 0028 7B72     		strb	r3, [r7, #9]
+ 192:.\memory.c    ****     k[2] = EEPROM_ReadByte(startAdress+2);
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 21
+
+
+ 945              		.loc 1 192 0
+ 946 002a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 947 002c 9BB2     		uxth	r3, r3
+ 948 002e 0233     		adds	r3, r3, #2
+ 949 0030 9BB2     		uxth	r3, r3
+ 950 0032 1846     		mov	r0, r3
+ 951 0034 FFF7FEFF 		bl	EEPROM_ReadByte
+ 952 0038 0346     		mov	r3, r0
+ 953 003a BB72     		strb	r3, [r7, #10]
+ 193:.\memory.c    ****     k[3] = EEPROM_ReadByte(startAdress+3);
+ 954              		.loc 1 193 0
+ 955 003c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 956 003e 9BB2     		uxth	r3, r3
+ 957 0040 0333     		adds	r3, r3, #3
+ 958 0042 9BB2     		uxth	r3, r3
+ 959 0044 1846     		mov	r0, r3
+ 960 0046 FFF7FEFF 		bl	EEPROM_ReadByte
+ 961 004a 0346     		mov	r3, r0
+ 962 004c FB72     		strb	r3, [r7, #11]
+ 194:.\memory.c    ****     
+ 195:.\memory.c    ****     memcpy(&value, k, sizeof(int));
+ 963              		.loc 1 195 0
+ 964 004e 07F10C02 		add	r2, r7, #12
+ 965 0052 07F10803 		add	r3, r7, #8
+ 966 0056 1046     		mov	r0, r2
+ 967 0058 1946     		mov	r1, r3
+ 968 005a 0422     		movs	r2, #4
+ 969 005c FFF7FEFF 		bl	memcpy
+ 196:.\memory.c    ****     
+ 197:.\memory.c    ****     return value;
+ 970              		.loc 1 197 0
+ 971 0060 FB68     		ldr	r3, [r7, #12]
+ 198:.\memory.c    **** }
+ 972              		.loc 1 198 0
+ 973 0062 1846     		mov	r0, r3
+ 974 0064 1037     		adds	r7, r7, #16
+ 975              		.cfi_def_cfa_offset 8
+ 976 0066 BD46     		mov	sp, r7
+ 977              		.cfi_def_cfa_register 13
+ 978              		@ sp needed
+ 979 0068 80BD     		pop	{r7, pc}
+ 980              		.cfi_endproc
+ 981              	.LFE72:
+ 982              		.size	loadINT, .-loadINT
+ 983 006a 00BF     		.text
+ 984              	.Letext0:
+ 985              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 986              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 987              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 988              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
+ 989              		.section	.debug_info,"",%progbits
+ 990              	.Ldebug_info0:
+ 991 0000 88040000 		.4byte	0x488
+ 992 0004 0400     		.2byte	0x4
+ 993 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 994 000a 04       		.byte	0x4
+ 995 000b 01       		.uleb128 0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 22
+
+
+ 996 000c 3A000000 		.4byte	.LASF41
+ 997 0010 01       		.byte	0x1
+ 998 0011 5F020000 		.4byte	.LASF42
+ 999 0015 CF000000 		.4byte	.LASF43
+ 1000 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1001 001d 00000000 		.4byte	0
+ 1002 0021 00000000 		.4byte	.Ldebug_line0
+ 1003 0025 02       		.uleb128 0x2
+ 1004 0026 01       		.byte	0x1
+ 1005 0027 06       		.byte	0x6
+ 1006 0028 10030000 		.4byte	.LASF0
+ 1007 002c 02       		.uleb128 0x2
+ 1008 002d 01       		.byte	0x1
+ 1009 002e 08       		.byte	0x8
+ 1010 002f 2B010000 		.4byte	.LASF1
+ 1011 0033 02       		.uleb128 0x2
+ 1012 0034 02       		.byte	0x2
+ 1013 0035 05       		.byte	0x5
+ 1014 0036 D3020000 		.4byte	.LASF2
+ 1015 003a 02       		.uleb128 0x2
+ 1016 003b 02       		.byte	0x2
+ 1017 003c 07       		.byte	0x7
+ 1018 003d 73010000 		.4byte	.LASF3
+ 1019 0041 03       		.uleb128 0x3
+ 1020 0042 30000000 		.4byte	.LASF9
+ 1021 0046 02       		.byte	0x2
+ 1022 0047 3F       		.byte	0x3f
+ 1023 0048 4C000000 		.4byte	0x4c
+ 1024 004c 02       		.uleb128 0x2
+ 1025 004d 04       		.byte	0x4
+ 1026 004e 05       		.byte	0x5
+ 1027 004f EF020000 		.4byte	.LASF4
+ 1028 0053 02       		.uleb128 0x2
+ 1029 0054 04       		.byte	0x4
+ 1030 0055 07       		.byte	0x7
+ 1031 0056 57010000 		.4byte	.LASF5
+ 1032 005a 02       		.uleb128 0x2
+ 1033 005b 08       		.byte	0x8
+ 1034 005c 05       		.byte	0x5
+ 1035 005d 51020000 		.4byte	.LASF6
+ 1036 0061 02       		.uleb128 0x2
+ 1037 0062 08       		.byte	0x8
+ 1038 0063 07       		.byte	0x7
+ 1039 0064 E8010000 		.4byte	.LASF7
+ 1040 0068 04       		.uleb128 0x4
+ 1041 0069 04       		.byte	0x4
+ 1042 006a 05       		.byte	0x5
+ 1043 006b 696E7400 		.ascii	"int\000"
+ 1044 006f 02       		.uleb128 0x2
+ 1045 0070 04       		.byte	0x4
+ 1046 0071 07       		.byte	0x7
+ 1047 0072 DB010000 		.4byte	.LASF8
+ 1048 0076 03       		.uleb128 0x3
+ 1049 0077 40020000 		.4byte	.LASF10
+ 1050 007b 03       		.byte	0x3
+ 1051 007c 2C       		.byte	0x2c
+ 1052 007d 41000000 		.4byte	0x41
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 23
+
+
+ 1053 0081 03       		.uleb128 0x3
+ 1054 0082 25010000 		.4byte	.LASF11
+ 1055 0086 04       		.byte	0x4
+ 1056 0087 A1       		.byte	0xa1
+ 1057 0088 2C000000 		.4byte	0x2c
+ 1058 008c 03       		.uleb128 0x3
+ 1059 008d C6010000 		.4byte	.LASF12
+ 1060 0091 04       		.byte	0x4
+ 1061 0092 A2       		.byte	0xa2
+ 1062 0093 3A000000 		.4byte	0x3a
+ 1063 0097 03       		.uleb128 0x3
+ 1064 0098 CD010000 		.4byte	.LASF13
+ 1065 009c 04       		.byte	0x4
+ 1066 009d A4       		.byte	0xa4
+ 1067 009e 25000000 		.4byte	0x25
+ 1068 00a2 02       		.uleb128 0x2
+ 1069 00a3 04       		.byte	0x4
+ 1070 00a4 04       		.byte	0x4
+ 1071 00a5 FD000000 		.4byte	.LASF14
+ 1072 00a9 02       		.uleb128 0x2
+ 1073 00aa 08       		.byte	0x8
+ 1074 00ab 04       		.byte	0x4
+ 1075 00ac BF010000 		.4byte	.LASF15
+ 1076 00b0 02       		.uleb128 0x2
+ 1077 00b1 01       		.byte	0x1
+ 1078 00b2 08       		.byte	0x8
+ 1079 00b3 F8020000 		.4byte	.LASF16
+ 1080 00b7 02       		.uleb128 0x2
+ 1081 00b8 04       		.byte	0x4
+ 1082 00b9 07       		.byte	0x7
+ 1083 00ba 48020000 		.4byte	.LASF17
+ 1084 00be 05       		.uleb128 0x5
+ 1085 00bf 81000000 		.4byte	0x81
+ 1086 00c3 CE000000 		.4byte	0xce
+ 1087 00c7 06       		.uleb128 0x6
+ 1088 00c8 B7000000 		.4byte	0xb7
+ 1089 00cc 03       		.byte	0x3
+ 1090 00cd 00       		.byte	0
+ 1091 00ce 02       		.uleb128 0x2
+ 1092 00cf 08       		.byte	0x8
+ 1093 00d0 04       		.byte	0x4
+ 1094 00d1 FD020000 		.4byte	.LASF18
+ 1095 00d5 07       		.uleb128 0x7
+ 1096 00d6 1E000000 		.4byte	.LASF44
+ 1097 00da 01       		.byte	0x1
+ 1098 00db 19       		.byte	0x19
+ 1099 00dc 00000000 		.4byte	.LFB56
+ 1100 00e0 14000000 		.4byte	.LFE56-.LFB56
+ 1101 00e4 01       		.uleb128 0x1
+ 1102 00e5 9C       		.byte	0x9c
+ 1103 00e6 08       		.uleb128 0x8
+ 1104 00e7 30020000 		.4byte	.LASF20
+ 1105 00eb 01       		.byte	0x1
+ 1106 00ec 2B       		.byte	0x2b
+ 1107 00ed 00000000 		.4byte	.LFB57
+ 1108 00f1 4C000000 		.4byte	.LFE57-.LFB57
+ 1109 00f5 01       		.uleb128 0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 24
+
+
+ 1110 00f6 9C       		.byte	0x9c
+ 1111 00f7 3F010000 		.4byte	0x13f
+ 1112 00fb 09       		.uleb128 0x9
+ 1113 00fc C8000000 		.4byte	.LASF19
+ 1114 0100 01       		.byte	0x1
+ 1115 0101 2B       		.byte	0x2b
+ 1116 0102 81000000 		.4byte	0x81
+ 1117 0106 02       		.uleb128 0x2
+ 1118 0107 91       		.byte	0x91
+ 1119 0108 6F       		.sleb128 -17
+ 1120 0109 0A       		.uleb128 0xa
+ 1121 010a 6B7000   		.ascii	"kp\000"
+ 1122 010d 01       		.byte	0x1
+ 1123 010e 2B       		.byte	0x2b
+ 1124 010f A2000000 		.4byte	0xa2
+ 1125 0113 02       		.uleb128 0x2
+ 1126 0114 91       		.byte	0x91
+ 1127 0115 68       		.sleb128 -24
+ 1128 0116 0A       		.uleb128 0xa
+ 1129 0117 6B6900   		.ascii	"ki\000"
+ 1130 011a 01       		.byte	0x1
+ 1131 011b 2B       		.byte	0x2b
+ 1132 011c A2000000 		.4byte	0xa2
+ 1133 0120 02       		.uleb128 0x2
+ 1134 0121 91       		.byte	0x91
+ 1135 0122 64       		.sleb128 -28
+ 1136 0123 0A       		.uleb128 0xa
+ 1137 0124 6B6400   		.ascii	"kd\000"
+ 1138 0127 01       		.byte	0x1
+ 1139 0128 2B       		.byte	0x2b
+ 1140 0129 A2000000 		.4byte	0xa2
+ 1141 012d 02       		.uleb128 0x2
+ 1142 012e 91       		.byte	0x91
+ 1143 012f 60       		.sleb128 -32
+ 1144 0130 0B       		.uleb128 0xb
+ 1145 0131 C7020000 		.4byte	.LASF22
+ 1146 0135 01       		.byte	0x1
+ 1147 0136 2D       		.byte	0x2d
+ 1148 0137 81000000 		.4byte	0x81
+ 1149 013b 02       		.uleb128 0x2
+ 1150 013c 91       		.byte	0x91
+ 1151 013d 77       		.sleb128 -9
+ 1152 013e 00       		.byte	0
+ 1153 013f 08       		.uleb128 0x8
+ 1154 0140 AD020000 		.4byte	.LASF21
+ 1155 0144 01       		.byte	0x1
+ 1156 0145 39       		.byte	0x39
+ 1157 0146 00000000 		.4byte	.LFB58
+ 1158 014a 58000000 		.4byte	.LFE58-.LFB58
+ 1159 014e 01       		.uleb128 0x1
+ 1160 014f 9C       		.byte	0x9c
+ 1161 0150 98010000 		.4byte	0x198
+ 1162 0154 09       		.uleb128 0x9
+ 1163 0155 C8000000 		.4byte	.LASF19
+ 1164 0159 01       		.byte	0x1
+ 1165 015a 39       		.byte	0x39
+ 1166 015b 81000000 		.4byte	0x81
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 25
+
+
+ 1167 015f 02       		.uleb128 0x2
+ 1168 0160 91       		.byte	0x91
+ 1169 0161 6F       		.sleb128 -17
+ 1170 0162 0A       		.uleb128 0xa
+ 1171 0163 6B7000   		.ascii	"kp\000"
+ 1172 0166 01       		.byte	0x1
+ 1173 0167 39       		.byte	0x39
+ 1174 0168 98010000 		.4byte	0x198
+ 1175 016c 02       		.uleb128 0x2
+ 1176 016d 91       		.byte	0x91
+ 1177 016e 68       		.sleb128 -24
+ 1178 016f 0A       		.uleb128 0xa
+ 1179 0170 6B6900   		.ascii	"ki\000"
+ 1180 0173 01       		.byte	0x1
+ 1181 0174 39       		.byte	0x39
+ 1182 0175 98010000 		.4byte	0x198
+ 1183 0179 02       		.uleb128 0x2
+ 1184 017a 91       		.byte	0x91
+ 1185 017b 64       		.sleb128 -28
+ 1186 017c 0A       		.uleb128 0xa
+ 1187 017d 6B6400   		.ascii	"kd\000"
+ 1188 0180 01       		.byte	0x1
+ 1189 0181 39       		.byte	0x39
+ 1190 0182 98010000 		.4byte	0x198
+ 1191 0186 02       		.uleb128 0x2
+ 1192 0187 91       		.byte	0x91
+ 1193 0188 60       		.sleb128 -32
+ 1194 0189 0B       		.uleb128 0xb
+ 1195 018a C7020000 		.4byte	.LASF22
+ 1196 018e 01       		.byte	0x1
+ 1197 018f 3B       		.byte	0x3b
+ 1198 0190 81000000 		.4byte	0x81
+ 1199 0194 02       		.uleb128 0x2
+ 1200 0195 91       		.byte	0x91
+ 1201 0196 77       		.sleb128 -9
+ 1202 0197 00       		.byte	0
+ 1203 0198 0C       		.uleb128 0xc
+ 1204 0199 04       		.byte	0x4
+ 1205 019a A2000000 		.4byte	0xa2
+ 1206 019e 08       		.uleb128 0x8
+ 1207 019f 86010000 		.4byte	.LASF23
+ 1208 01a3 01       		.byte	0x1
+ 1209 01a4 48       		.byte	0x48
+ 1210 01a5 00000000 		.4byte	.LFB59
+ 1211 01a9 32000000 		.4byte	.LFE59-.LFB59
+ 1212 01ad 01       		.uleb128 0x1
+ 1213 01ae 9C       		.byte	0x9c
+ 1214 01af D0010000 		.4byte	0x1d0
+ 1215 01b3 09       		.uleb128 0x9
+ 1216 01b4 C8000000 		.4byte	.LASF19
+ 1217 01b8 01       		.byte	0x1
+ 1218 01b9 48       		.byte	0x48
+ 1219 01ba 81000000 		.4byte	0x81
+ 1220 01be 02       		.uleb128 0x2
+ 1221 01bf 91       		.byte	0x91
+ 1222 01c0 77       		.sleb128 -9
+ 1223 01c1 09       		.uleb128 0x9
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 26
+
+
+ 1224 01c2 FF010000 		.4byte	.LASF24
+ 1225 01c6 01       		.byte	0x1
+ 1226 01c7 48       		.byte	0x48
+ 1227 01c8 8C000000 		.4byte	0x8c
+ 1228 01cc 02       		.uleb128 0x2
+ 1229 01cd 91       		.byte	0x91
+ 1230 01ce 74       		.sleb128 -12
+ 1231 01cf 00       		.byte	0
+ 1232 01d0 0D       		.uleb128 0xd
+ 1233 01d1 6A020000 		.4byte	.LASF26
+ 1234 01d5 01       		.byte	0x1
+ 1235 01d6 50       		.byte	0x50
+ 1236 01d7 8C000000 		.4byte	0x8c
+ 1237 01db 00000000 		.4byte	.LFB60
+ 1238 01df 2A000000 		.4byte	.LFE60-.LFB60
+ 1239 01e3 01       		.uleb128 0x1
+ 1240 01e4 9C       		.byte	0x9c
+ 1241 01e5 F8010000 		.4byte	0x1f8
+ 1242 01e9 09       		.uleb128 0x9
+ 1243 01ea C8000000 		.4byte	.LASF19
+ 1244 01ee 01       		.byte	0x1
+ 1245 01ef 50       		.byte	0x50
+ 1246 01f0 81000000 		.4byte	0x81
+ 1247 01f4 02       		.uleb128 0x2
+ 1248 01f5 91       		.byte	0x91
+ 1249 01f6 77       		.sleb128 -9
+ 1250 01f7 00       		.byte	0
+ 1251 01f8 08       		.uleb128 0x8
+ 1252 01f9 8D020000 		.4byte	.LASF25
+ 1253 01fd 01       		.byte	0x1
+ 1254 01fe 58       		.byte	0x58
+ 1255 01ff 00000000 		.4byte	.LFB61
+ 1256 0203 32000000 		.4byte	.LFE61-.LFB61
+ 1257 0207 01       		.uleb128 0x1
+ 1258 0208 9C       		.byte	0x9c
+ 1259 0209 2A020000 		.4byte	0x22a
+ 1260 020d 09       		.uleb128 0x9
+ 1261 020e C8000000 		.4byte	.LASF19
+ 1262 0212 01       		.byte	0x1
+ 1263 0213 58       		.byte	0x58
+ 1264 0214 81000000 		.4byte	0x81
+ 1265 0218 02       		.uleb128 0x2
+ 1266 0219 91       		.byte	0x91
+ 1267 021a 77       		.sleb128 -9
+ 1268 021b 09       		.uleb128 0x9
+ 1269 021c FF010000 		.4byte	.LASF24
+ 1270 0220 01       		.byte	0x1
+ 1271 0221 58       		.byte	0x58
+ 1272 0222 8C000000 		.4byte	0x8c
+ 1273 0226 02       		.uleb128 0x2
+ 1274 0227 91       		.byte	0x91
+ 1275 0228 74       		.sleb128 -12
+ 1276 0229 00       		.byte	0
+ 1277 022a 0D       		.uleb128 0xd
+ 1278 022b 03010000 		.4byte	.LASF27
+ 1279 022f 01       		.byte	0x1
+ 1280 0230 60       		.byte	0x60
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 27
+
+
+ 1281 0231 8C000000 		.4byte	0x8c
+ 1282 0235 00000000 		.4byte	.LFB62
+ 1283 0239 2A000000 		.4byte	.LFE62-.LFB62
+ 1284 023d 01       		.uleb128 0x1
+ 1285 023e 9C       		.byte	0x9c
+ 1286 023f 52020000 		.4byte	0x252
+ 1287 0243 09       		.uleb128 0x9
+ 1288 0244 C8000000 		.4byte	.LASF19
+ 1289 0248 01       		.byte	0x1
+ 1290 0249 60       		.byte	0x60
+ 1291 024a 81000000 		.4byte	0x81
+ 1292 024e 02       		.uleb128 0x2
+ 1293 024f 91       		.byte	0x91
+ 1294 0250 77       		.sleb128 -9
+ 1295 0251 00       		.byte	0
+ 1296 0252 08       		.uleb128 0x8
+ 1297 0253 39010000 		.4byte	.LASF28
+ 1298 0257 01       		.byte	0x1
+ 1299 0258 68       		.byte	0x68
+ 1300 0259 00000000 		.4byte	.LFB63
+ 1301 025d 32000000 		.4byte	.LFE63-.LFB63
+ 1302 0261 01       		.uleb128 0x1
+ 1303 0262 9C       		.byte	0x9c
+ 1304 0263 84020000 		.4byte	0x284
+ 1305 0267 09       		.uleb128 0x9
+ 1306 0268 C8000000 		.4byte	.LASF19
+ 1307 026c 01       		.byte	0x1
+ 1308 026d 68       		.byte	0x68
+ 1309 026e 81000000 		.4byte	0x81
+ 1310 0272 02       		.uleb128 0x2
+ 1311 0273 91       		.byte	0x91
+ 1312 0274 77       		.sleb128 -9
+ 1313 0275 09       		.uleb128 0x9
+ 1314 0276 09030000 		.4byte	.LASF29
+ 1315 027a 01       		.byte	0x1
+ 1316 027b 68       		.byte	0x68
+ 1317 027c 8C000000 		.4byte	0x8c
+ 1318 0280 02       		.uleb128 0x2
+ 1319 0281 91       		.byte	0x91
+ 1320 0282 74       		.sleb128 -12
+ 1321 0283 00       		.byte	0
+ 1322 0284 0D       		.uleb128 0xd
+ 1323 0285 10020000 		.4byte	.LASF30
+ 1324 0289 01       		.byte	0x1
+ 1325 028a 70       		.byte	0x70
+ 1326 028b 8C000000 		.4byte	0x8c
+ 1327 028f 00000000 		.4byte	.LFB64
+ 1328 0293 2A000000 		.4byte	.LFE64-.LFB64
+ 1329 0297 01       		.uleb128 0x1
+ 1330 0298 9C       		.byte	0x9c
+ 1331 0299 AC020000 		.4byte	0x2ac
+ 1332 029d 09       		.uleb128 0x9
+ 1333 029e C8000000 		.4byte	.LASF19
+ 1334 02a2 01       		.byte	0x1
+ 1335 02a3 70       		.byte	0x70
+ 1336 02a4 81000000 		.4byte	0x81
+ 1337 02a8 02       		.uleb128 0x2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 28
+
+
+ 1338 02a9 91       		.byte	0x91
+ 1339 02aa 77       		.sleb128 -9
+ 1340 02ab 00       		.byte	0
+ 1341 02ac 08       		.uleb128 0x8
+ 1342 02ad 1C030000 		.4byte	.LASF31
+ 1343 02b1 01       		.byte	0x1
+ 1344 02b2 78       		.byte	0x78
+ 1345 02b3 00000000 		.4byte	.LFB65
+ 1346 02b7 2A000000 		.4byte	.LFE65-.LFB65
+ 1347 02bb 01       		.uleb128 0x1
+ 1348 02bc 9C       		.byte	0x9c
+ 1349 02bd DE020000 		.4byte	0x2de
+ 1350 02c1 09       		.uleb128 0x9
+ 1351 02c2 C8000000 		.4byte	.LASF19
+ 1352 02c6 01       		.byte	0x1
+ 1353 02c7 78       		.byte	0x78
+ 1354 02c8 81000000 		.4byte	0x81
+ 1355 02cc 02       		.uleb128 0x2
+ 1356 02cd 91       		.byte	0x91
+ 1357 02ce 77       		.sleb128 -9
+ 1358 02cf 09       		.uleb128 0x9
+ 1359 02d0 D2010000 		.4byte	.LASF32
+ 1360 02d4 01       		.byte	0x1
+ 1361 02d5 78       		.byte	0x78
+ 1362 02d6 68000000 		.4byte	0x68
+ 1363 02da 02       		.uleb128 0x2
+ 1364 02db 91       		.byte	0x91
+ 1365 02dc 70       		.sleb128 -16
+ 1366 02dd 00       		.byte	0
+ 1367 02de 0D       		.uleb128 0xd
+ 1368 02df 00000000 		.4byte	.LASF33
+ 1369 02e3 01       		.byte	0x1
+ 1370 02e4 80       		.byte	0x80
+ 1371 02e5 68000000 		.4byte	0x68
+ 1372 02e9 00000000 		.4byte	.LFB66
+ 1373 02ed 2A000000 		.4byte	.LFE66-.LFB66
+ 1374 02f1 01       		.uleb128 0x1
+ 1375 02f2 9C       		.byte	0x9c
+ 1376 02f3 06030000 		.4byte	0x306
+ 1377 02f7 09       		.uleb128 0x9
+ 1378 02f8 C8000000 		.4byte	.LASF19
+ 1379 02fc 01       		.byte	0x1
+ 1380 02fd 80       		.byte	0x80
+ 1381 02fe 81000000 		.4byte	0x81
+ 1382 0302 02       		.uleb128 0x2
+ 1383 0303 91       		.byte	0x91
+ 1384 0304 77       		.sleb128 -9
+ 1385 0305 00       		.byte	0
+ 1386 0306 08       		.uleb128 0x8
+ 1387 0307 A7010000 		.4byte	.LASF34
+ 1388 030b 01       		.byte	0x1
+ 1389 030c 8B       		.byte	0x8b
+ 1390 030d 00000000 		.4byte	.LFB67
+ 1391 0311 3E000000 		.4byte	.LFE67-.LFB67
+ 1392 0315 01       		.uleb128 0x1
+ 1393 0316 9C       		.byte	0x9c
+ 1394 0317 38030000 		.4byte	0x338
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 29
+
+
+ 1395 031b 09       		.uleb128 0x9
+ 1396 031c C7020000 		.4byte	.LASF22
+ 1397 0320 01       		.byte	0x1
+ 1398 0321 8B       		.byte	0x8b
+ 1399 0322 81000000 		.4byte	0x81
+ 1400 0326 02       		.uleb128 0x2
+ 1401 0327 91       		.byte	0x91
+ 1402 0328 77       		.sleb128 -9
+ 1403 0329 09       		.uleb128 0x9
+ 1404 032a 2A000000 		.4byte	.LASF35
+ 1405 032e 01       		.byte	0x1
+ 1406 032f 8B       		.byte	0x8b
+ 1407 0330 8C000000 		.4byte	0x8c
+ 1408 0334 02       		.uleb128 0x2
+ 1409 0335 91       		.byte	0x91
+ 1410 0336 74       		.sleb128 -12
+ 1411 0337 00       		.byte	0
+ 1412 0338 0D       		.uleb128 0xd
+ 1413 0339 05020000 		.4byte	.LASF36
+ 1414 033d 01       		.byte	0x1
+ 1415 033e 91       		.byte	0x91
+ 1416 033f 8C000000 		.4byte	0x8c
+ 1417 0343 00000000 		.4byte	.LFB68
+ 1418 0347 3E000000 		.4byte	.LFE68-.LFB68
+ 1419 034b 01       		.uleb128 0x1
+ 1420 034c 9C       		.byte	0x9c
+ 1421 034d 6E030000 		.4byte	0x36e
+ 1422 0351 09       		.uleb128 0x9
+ 1423 0352 C7020000 		.4byte	.LASF22
+ 1424 0356 01       		.byte	0x1
+ 1425 0357 91       		.byte	0x91
+ 1426 0358 81000000 		.4byte	0x81
+ 1427 035c 02       		.uleb128 0x2
+ 1428 035d 91       		.byte	0x91
+ 1429 035e 67       		.sleb128 -25
+ 1430 035f 0B       		.uleb128 0xb
+ 1431 0360 2A000000 		.4byte	.LASF35
+ 1432 0364 01       		.byte	0x1
+ 1433 0365 93       		.byte	0x93
+ 1434 0366 8C000000 		.4byte	0x8c
+ 1435 036a 02       		.uleb128 0x2
+ 1436 036b 91       		.byte	0x91
+ 1437 036c 6E       		.sleb128 -18
+ 1438 036d 00       		.byte	0
+ 1439 036e 08       		.uleb128 0x8
+ 1440 036f DD020000 		.4byte	.LASF37
+ 1441 0373 01       		.byte	0x1
+ 1442 0374 9B       		.byte	0x9b
+ 1443 0375 00000000 		.4byte	.LFB69
+ 1444 0379 48000000 		.4byte	.LFE69-.LFB69
+ 1445 037d 01       		.uleb128 0x1
+ 1446 037e 9C       		.byte	0x9c
+ 1447 037f B8030000 		.4byte	0x3b8
+ 1448 0383 09       		.uleb128 0x9
+ 1449 0384 C7020000 		.4byte	.LASF22
+ 1450 0388 01       		.byte	0x1
+ 1451 0389 9B       		.byte	0x9b
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 30
+
+
+ 1452 038a 81000000 		.4byte	0x81
+ 1453 038e 02       		.uleb128 0x2
+ 1454 038f 91       		.byte	0x91
+ 1455 0390 6F       		.sleb128 -17
+ 1456 0391 09       		.uleb128 0x9
+ 1457 0392 2A000000 		.4byte	.LASF35
+ 1458 0396 01       		.byte	0x1
+ 1459 0397 9B       		.byte	0x9b
+ 1460 0398 A2000000 		.4byte	0xa2
+ 1461 039c 02       		.uleb128 0x2
+ 1462 039d 91       		.byte	0x91
+ 1463 039e 68       		.sleb128 -24
+ 1464 039f 0E       		.uleb128 0xe
+ 1465 03a0 6900     		.ascii	"i\000"
+ 1466 03a2 01       		.byte	0x1
+ 1467 03a3 9D       		.byte	0x9d
+ 1468 03a4 81000000 		.4byte	0x81
+ 1469 03a8 02       		.uleb128 0x2
+ 1470 03a9 91       		.byte	0x91
+ 1471 03aa 77       		.sleb128 -9
+ 1472 03ab 0E       		.uleb128 0xe
+ 1473 03ac 6B00     		.ascii	"k\000"
+ 1474 03ae 01       		.byte	0x1
+ 1475 03af 9E       		.byte	0x9e
+ 1476 03b0 BE000000 		.4byte	0xbe
+ 1477 03b4 02       		.uleb128 0x2
+ 1478 03b5 91       		.byte	0x91
+ 1479 03b6 70       		.sleb128 -16
+ 1480 03b7 00       		.byte	0
+ 1481 03b8 0D       		.uleb128 0xd
+ 1482 03b9 69010000 		.4byte	.LASF38
+ 1483 03bd 01       		.byte	0x1
+ 1484 03be A5       		.byte	0xa5
+ 1485 03bf A2000000 		.4byte	0xa2
+ 1486 03c3 00000000 		.4byte	.LFB70
+ 1487 03c7 5A000000 		.4byte	.LFE70-.LFB70
+ 1488 03cb 01       		.uleb128 0x1
+ 1489 03cc 9C       		.byte	0x9c
+ 1490 03cd 06040000 		.4byte	0x406
+ 1491 03d1 09       		.uleb128 0x9
+ 1492 03d2 C7020000 		.4byte	.LASF22
+ 1493 03d6 01       		.byte	0x1
+ 1494 03d7 A5       		.byte	0xa5
+ 1495 03d8 81000000 		.4byte	0x81
+ 1496 03dc 02       		.uleb128 0x2
+ 1497 03dd 91       		.byte	0x91
+ 1498 03de 5F       		.sleb128 -33
+ 1499 03df 0E       		.uleb128 0xe
+ 1500 03e0 6900     		.ascii	"i\000"
+ 1501 03e2 01       		.byte	0x1
+ 1502 03e3 A7       		.byte	0xa7
+ 1503 03e4 81000000 		.4byte	0x81
+ 1504 03e8 02       		.uleb128 0x2
+ 1505 03e9 91       		.byte	0x91
+ 1506 03ea 6F       		.sleb128 -17
+ 1507 03eb 0E       		.uleb128 0xe
+ 1508 03ec 6B00     		.ascii	"k\000"
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 31
+
+
+ 1509 03ee 01       		.byte	0x1
+ 1510 03ef A8       		.byte	0xa8
+ 1511 03f0 BE000000 		.4byte	0xbe
+ 1512 03f4 02       		.uleb128 0x2
+ 1513 03f5 91       		.byte	0x91
+ 1514 03f6 68       		.sleb128 -24
+ 1515 03f7 0B       		.uleb128 0xb
+ 1516 03f8 2A000000 		.4byte	.LASF35
+ 1517 03fc 01       		.byte	0x1
+ 1518 03fd A9       		.byte	0xa9
+ 1519 03fe A2000000 		.4byte	0xa2
+ 1520 0402 02       		.uleb128 0x2
+ 1521 0403 91       		.byte	0x91
+ 1522 0404 64       		.sleb128 -28
+ 1523 0405 00       		.byte	0
+ 1524 0406 08       		.uleb128 0x8
+ 1525 0407 BF020000 		.4byte	.LASF39
+ 1526 040b 01       		.byte	0x1
+ 1527 040c B3       		.byte	0xb3
+ 1528 040d 00000000 		.4byte	.LFB71
+ 1529 0411 64000000 		.4byte	.LFE71-.LFB71
+ 1530 0415 01       		.uleb128 0x1
+ 1531 0416 9C       		.byte	0x9c
+ 1532 0417 38040000 		.4byte	0x438
+ 1533 041b 09       		.uleb128 0x9
+ 1534 041c C7020000 		.4byte	.LASF22
+ 1535 0420 01       		.byte	0x1
+ 1536 0421 B3       		.byte	0xb3
+ 1537 0422 81000000 		.4byte	0x81
+ 1538 0426 02       		.uleb128 0x2
+ 1539 0427 91       		.byte	0x91
+ 1540 0428 77       		.sleb128 -9
+ 1541 0429 09       		.uleb128 0x9
+ 1542 042a 2A000000 		.4byte	.LASF35
+ 1543 042e 01       		.byte	0x1
+ 1544 042f B3       		.byte	0xb3
+ 1545 0430 68000000 		.4byte	0x68
+ 1546 0434 02       		.uleb128 0x2
+ 1547 0435 91       		.byte	0x91
+ 1548 0436 70       		.sleb128 -16
+ 1549 0437 00       		.byte	0
+ 1550 0438 0D       		.uleb128 0xd
+ 1551 0439 E7020000 		.4byte	.LASF40
+ 1552 043d 01       		.byte	0x1
+ 1553 043e BA       		.byte	0xba
+ 1554 043f 68000000 		.4byte	0x68
+ 1555 0443 00000000 		.4byte	.LFB72
+ 1556 0447 6A000000 		.4byte	.LFE72-.LFB72
+ 1557 044b 01       		.uleb128 0x1
+ 1558 044c 9C       		.byte	0x9c
+ 1559 044d 7A040000 		.4byte	0x47a
+ 1560 0451 09       		.uleb128 0x9
+ 1561 0452 C7020000 		.4byte	.LASF22
+ 1562 0456 01       		.byte	0x1
+ 1563 0457 BA       		.byte	0xba
+ 1564 0458 81000000 		.4byte	0x81
+ 1565 045c 02       		.uleb128 0x2
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 32
+
+
+ 1566 045d 91       		.byte	0x91
+ 1567 045e 6F       		.sleb128 -17
+ 1568 045f 0B       		.uleb128 0xb
+ 1569 0460 2A000000 		.4byte	.LASF35
+ 1570 0464 01       		.byte	0x1
+ 1571 0465 BC       		.byte	0xbc
+ 1572 0466 68000000 		.4byte	0x68
+ 1573 046a 02       		.uleb128 0x2
+ 1574 046b 91       		.byte	0x91
+ 1575 046c 74       		.sleb128 -12
+ 1576 046d 0E       		.uleb128 0xe
+ 1577 046e 6B00     		.ascii	"k\000"
+ 1578 0470 01       		.byte	0x1
+ 1579 0471 BD       		.byte	0xbd
+ 1580 0472 BE000000 		.4byte	0xbe
+ 1581 0476 02       		.uleb128 0x2
+ 1582 0477 91       		.byte	0x91
+ 1583 0478 70       		.sleb128 -16
+ 1584 0479 00       		.byte	0
+ 1585 047a 0F       		.uleb128 0xf
+ 1586 047b B2010000 		.4byte	.LASF45
+ 1587 047f 05       		.byte	0x5
+ 1588 0480 1606     		.2byte	0x616
+ 1589 0482 86040000 		.4byte	0x486
+ 1590 0486 10       		.uleb128 0x10
+ 1591 0487 76000000 		.4byte	0x76
+ 1592 048b 00       		.byte	0
+ 1593              		.section	.debug_abbrev,"",%progbits
+ 1594              	.Ldebug_abbrev0:
+ 1595 0000 01       		.uleb128 0x1
+ 1596 0001 11       		.uleb128 0x11
+ 1597 0002 01       		.byte	0x1
+ 1598 0003 25       		.uleb128 0x25
+ 1599 0004 0E       		.uleb128 0xe
+ 1600 0005 13       		.uleb128 0x13
+ 1601 0006 0B       		.uleb128 0xb
+ 1602 0007 03       		.uleb128 0x3
+ 1603 0008 0E       		.uleb128 0xe
+ 1604 0009 1B       		.uleb128 0x1b
+ 1605 000a 0E       		.uleb128 0xe
+ 1606 000b 55       		.uleb128 0x55
+ 1607 000c 17       		.uleb128 0x17
+ 1608 000d 11       		.uleb128 0x11
+ 1609 000e 01       		.uleb128 0x1
+ 1610 000f 10       		.uleb128 0x10
+ 1611 0010 17       		.uleb128 0x17
+ 1612 0011 00       		.byte	0
+ 1613 0012 00       		.byte	0
+ 1614 0013 02       		.uleb128 0x2
+ 1615 0014 24       		.uleb128 0x24
+ 1616 0015 00       		.byte	0
+ 1617 0016 0B       		.uleb128 0xb
+ 1618 0017 0B       		.uleb128 0xb
+ 1619 0018 3E       		.uleb128 0x3e
+ 1620 0019 0B       		.uleb128 0xb
+ 1621 001a 03       		.uleb128 0x3
+ 1622 001b 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 33
+
+
+ 1623 001c 00       		.byte	0
+ 1624 001d 00       		.byte	0
+ 1625 001e 03       		.uleb128 0x3
+ 1626 001f 16       		.uleb128 0x16
+ 1627 0020 00       		.byte	0
+ 1628 0021 03       		.uleb128 0x3
+ 1629 0022 0E       		.uleb128 0xe
+ 1630 0023 3A       		.uleb128 0x3a
+ 1631 0024 0B       		.uleb128 0xb
+ 1632 0025 3B       		.uleb128 0x3b
+ 1633 0026 0B       		.uleb128 0xb
+ 1634 0027 49       		.uleb128 0x49
+ 1635 0028 13       		.uleb128 0x13
+ 1636 0029 00       		.byte	0
+ 1637 002a 00       		.byte	0
+ 1638 002b 04       		.uleb128 0x4
+ 1639 002c 24       		.uleb128 0x24
+ 1640 002d 00       		.byte	0
+ 1641 002e 0B       		.uleb128 0xb
+ 1642 002f 0B       		.uleb128 0xb
+ 1643 0030 3E       		.uleb128 0x3e
+ 1644 0031 0B       		.uleb128 0xb
+ 1645 0032 03       		.uleb128 0x3
+ 1646 0033 08       		.uleb128 0x8
+ 1647 0034 00       		.byte	0
+ 1648 0035 00       		.byte	0
+ 1649 0036 05       		.uleb128 0x5
+ 1650 0037 01       		.uleb128 0x1
+ 1651 0038 01       		.byte	0x1
+ 1652 0039 49       		.uleb128 0x49
+ 1653 003a 13       		.uleb128 0x13
+ 1654 003b 01       		.uleb128 0x1
+ 1655 003c 13       		.uleb128 0x13
+ 1656 003d 00       		.byte	0
+ 1657 003e 00       		.byte	0
+ 1658 003f 06       		.uleb128 0x6
+ 1659 0040 21       		.uleb128 0x21
+ 1660 0041 00       		.byte	0
+ 1661 0042 49       		.uleb128 0x49
+ 1662 0043 13       		.uleb128 0x13
+ 1663 0044 2F       		.uleb128 0x2f
+ 1664 0045 0B       		.uleb128 0xb
+ 1665 0046 00       		.byte	0
+ 1666 0047 00       		.byte	0
+ 1667 0048 07       		.uleb128 0x7
+ 1668 0049 2E       		.uleb128 0x2e
+ 1669 004a 00       		.byte	0
+ 1670 004b 3F       		.uleb128 0x3f
+ 1671 004c 19       		.uleb128 0x19
+ 1672 004d 03       		.uleb128 0x3
+ 1673 004e 0E       		.uleb128 0xe
+ 1674 004f 3A       		.uleb128 0x3a
+ 1675 0050 0B       		.uleb128 0xb
+ 1676 0051 3B       		.uleb128 0x3b
+ 1677 0052 0B       		.uleb128 0xb
+ 1678 0053 11       		.uleb128 0x11
+ 1679 0054 01       		.uleb128 0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 34
+
+
+ 1680 0055 12       		.uleb128 0x12
+ 1681 0056 06       		.uleb128 0x6
+ 1682 0057 40       		.uleb128 0x40
+ 1683 0058 18       		.uleb128 0x18
+ 1684 0059 9642     		.uleb128 0x2116
+ 1685 005b 19       		.uleb128 0x19
+ 1686 005c 00       		.byte	0
+ 1687 005d 00       		.byte	0
+ 1688 005e 08       		.uleb128 0x8
+ 1689 005f 2E       		.uleb128 0x2e
+ 1690 0060 01       		.byte	0x1
+ 1691 0061 3F       		.uleb128 0x3f
+ 1692 0062 19       		.uleb128 0x19
+ 1693 0063 03       		.uleb128 0x3
+ 1694 0064 0E       		.uleb128 0xe
+ 1695 0065 3A       		.uleb128 0x3a
+ 1696 0066 0B       		.uleb128 0xb
+ 1697 0067 3B       		.uleb128 0x3b
+ 1698 0068 0B       		.uleb128 0xb
+ 1699 0069 27       		.uleb128 0x27
+ 1700 006a 19       		.uleb128 0x19
+ 1701 006b 11       		.uleb128 0x11
+ 1702 006c 01       		.uleb128 0x1
+ 1703 006d 12       		.uleb128 0x12
+ 1704 006e 06       		.uleb128 0x6
+ 1705 006f 40       		.uleb128 0x40
+ 1706 0070 18       		.uleb128 0x18
+ 1707 0071 9642     		.uleb128 0x2116
+ 1708 0073 19       		.uleb128 0x19
+ 1709 0074 01       		.uleb128 0x1
+ 1710 0075 13       		.uleb128 0x13
+ 1711 0076 00       		.byte	0
+ 1712 0077 00       		.byte	0
+ 1713 0078 09       		.uleb128 0x9
+ 1714 0079 05       		.uleb128 0x5
+ 1715 007a 00       		.byte	0
+ 1716 007b 03       		.uleb128 0x3
+ 1717 007c 0E       		.uleb128 0xe
+ 1718 007d 3A       		.uleb128 0x3a
+ 1719 007e 0B       		.uleb128 0xb
+ 1720 007f 3B       		.uleb128 0x3b
+ 1721 0080 0B       		.uleb128 0xb
+ 1722 0081 49       		.uleb128 0x49
+ 1723 0082 13       		.uleb128 0x13
+ 1724 0083 02       		.uleb128 0x2
+ 1725 0084 18       		.uleb128 0x18
+ 1726 0085 00       		.byte	0
+ 1727 0086 00       		.byte	0
+ 1728 0087 0A       		.uleb128 0xa
+ 1729 0088 05       		.uleb128 0x5
+ 1730 0089 00       		.byte	0
+ 1731 008a 03       		.uleb128 0x3
+ 1732 008b 08       		.uleb128 0x8
+ 1733 008c 3A       		.uleb128 0x3a
+ 1734 008d 0B       		.uleb128 0xb
+ 1735 008e 3B       		.uleb128 0x3b
+ 1736 008f 0B       		.uleb128 0xb
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 35
+
+
+ 1737 0090 49       		.uleb128 0x49
+ 1738 0091 13       		.uleb128 0x13
+ 1739 0092 02       		.uleb128 0x2
+ 1740 0093 18       		.uleb128 0x18
+ 1741 0094 00       		.byte	0
+ 1742 0095 00       		.byte	0
+ 1743 0096 0B       		.uleb128 0xb
+ 1744 0097 34       		.uleb128 0x34
+ 1745 0098 00       		.byte	0
+ 1746 0099 03       		.uleb128 0x3
+ 1747 009a 0E       		.uleb128 0xe
+ 1748 009b 3A       		.uleb128 0x3a
+ 1749 009c 0B       		.uleb128 0xb
+ 1750 009d 3B       		.uleb128 0x3b
+ 1751 009e 0B       		.uleb128 0xb
+ 1752 009f 49       		.uleb128 0x49
+ 1753 00a0 13       		.uleb128 0x13
+ 1754 00a1 02       		.uleb128 0x2
+ 1755 00a2 18       		.uleb128 0x18
+ 1756 00a3 00       		.byte	0
+ 1757 00a4 00       		.byte	0
+ 1758 00a5 0C       		.uleb128 0xc
+ 1759 00a6 0F       		.uleb128 0xf
+ 1760 00a7 00       		.byte	0
+ 1761 00a8 0B       		.uleb128 0xb
+ 1762 00a9 0B       		.uleb128 0xb
+ 1763 00aa 49       		.uleb128 0x49
+ 1764 00ab 13       		.uleb128 0x13
+ 1765 00ac 00       		.byte	0
+ 1766 00ad 00       		.byte	0
+ 1767 00ae 0D       		.uleb128 0xd
+ 1768 00af 2E       		.uleb128 0x2e
+ 1769 00b0 01       		.byte	0x1
+ 1770 00b1 3F       		.uleb128 0x3f
+ 1771 00b2 19       		.uleb128 0x19
+ 1772 00b3 03       		.uleb128 0x3
+ 1773 00b4 0E       		.uleb128 0xe
+ 1774 00b5 3A       		.uleb128 0x3a
+ 1775 00b6 0B       		.uleb128 0xb
+ 1776 00b7 3B       		.uleb128 0x3b
+ 1777 00b8 0B       		.uleb128 0xb
+ 1778 00b9 27       		.uleb128 0x27
+ 1779 00ba 19       		.uleb128 0x19
+ 1780 00bb 49       		.uleb128 0x49
+ 1781 00bc 13       		.uleb128 0x13
+ 1782 00bd 11       		.uleb128 0x11
+ 1783 00be 01       		.uleb128 0x1
+ 1784 00bf 12       		.uleb128 0x12
+ 1785 00c0 06       		.uleb128 0x6
+ 1786 00c1 40       		.uleb128 0x40
+ 1787 00c2 18       		.uleb128 0x18
+ 1788 00c3 9642     		.uleb128 0x2116
+ 1789 00c5 19       		.uleb128 0x19
+ 1790 00c6 01       		.uleb128 0x1
+ 1791 00c7 13       		.uleb128 0x13
+ 1792 00c8 00       		.byte	0
+ 1793 00c9 00       		.byte	0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 36
+
+
+ 1794 00ca 0E       		.uleb128 0xe
+ 1795 00cb 34       		.uleb128 0x34
+ 1796 00cc 00       		.byte	0
+ 1797 00cd 03       		.uleb128 0x3
+ 1798 00ce 08       		.uleb128 0x8
+ 1799 00cf 3A       		.uleb128 0x3a
+ 1800 00d0 0B       		.uleb128 0xb
+ 1801 00d1 3B       		.uleb128 0x3b
+ 1802 00d2 0B       		.uleb128 0xb
+ 1803 00d3 49       		.uleb128 0x49
+ 1804 00d4 13       		.uleb128 0x13
+ 1805 00d5 02       		.uleb128 0x2
+ 1806 00d6 18       		.uleb128 0x18
+ 1807 00d7 00       		.byte	0
+ 1808 00d8 00       		.byte	0
+ 1809 00d9 0F       		.uleb128 0xf
+ 1810 00da 34       		.uleb128 0x34
+ 1811 00db 00       		.byte	0
+ 1812 00dc 03       		.uleb128 0x3
+ 1813 00dd 0E       		.uleb128 0xe
+ 1814 00de 3A       		.uleb128 0x3a
+ 1815 00df 0B       		.uleb128 0xb
+ 1816 00e0 3B       		.uleb128 0x3b
+ 1817 00e1 05       		.uleb128 0x5
+ 1818 00e2 49       		.uleb128 0x49
+ 1819 00e3 13       		.uleb128 0x13
+ 1820 00e4 3F       		.uleb128 0x3f
+ 1821 00e5 19       		.uleb128 0x19
+ 1822 00e6 3C       		.uleb128 0x3c
+ 1823 00e7 19       		.uleb128 0x19
+ 1824 00e8 00       		.byte	0
+ 1825 00e9 00       		.byte	0
+ 1826 00ea 10       		.uleb128 0x10
+ 1827 00eb 35       		.uleb128 0x35
+ 1828 00ec 00       		.byte	0
+ 1829 00ed 49       		.uleb128 0x49
+ 1830 00ee 13       		.uleb128 0x13
+ 1831 00ef 00       		.byte	0
+ 1832 00f0 00       		.byte	0
+ 1833 00f1 00       		.byte	0
+ 1834              		.section	.debug_aranges,"",%progbits
+ 1835 0000 9C000000 		.4byte	0x9c
+ 1836 0004 0200     		.2byte	0x2
+ 1837 0006 00000000 		.4byte	.Ldebug_info0
+ 1838 000a 04       		.byte	0x4
+ 1839 000b 00       		.byte	0
+ 1840 000c 0000     		.2byte	0
+ 1841 000e 0000     		.2byte	0
+ 1842 0010 00000000 		.4byte	.LFB56
+ 1843 0014 14000000 		.4byte	.LFE56-.LFB56
+ 1844 0018 00000000 		.4byte	.LFB57
+ 1845 001c 4C000000 		.4byte	.LFE57-.LFB57
+ 1846 0020 00000000 		.4byte	.LFB58
+ 1847 0024 58000000 		.4byte	.LFE58-.LFB58
+ 1848 0028 00000000 		.4byte	.LFB59
+ 1849 002c 32000000 		.4byte	.LFE59-.LFB59
+ 1850 0030 00000000 		.4byte	.LFB60
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 37
+
+
+ 1851 0034 2A000000 		.4byte	.LFE60-.LFB60
+ 1852 0038 00000000 		.4byte	.LFB61
+ 1853 003c 32000000 		.4byte	.LFE61-.LFB61
+ 1854 0040 00000000 		.4byte	.LFB62
+ 1855 0044 2A000000 		.4byte	.LFE62-.LFB62
+ 1856 0048 00000000 		.4byte	.LFB63
+ 1857 004c 32000000 		.4byte	.LFE63-.LFB63
+ 1858 0050 00000000 		.4byte	.LFB64
+ 1859 0054 2A000000 		.4byte	.LFE64-.LFB64
+ 1860 0058 00000000 		.4byte	.LFB65
+ 1861 005c 2A000000 		.4byte	.LFE65-.LFB65
+ 1862 0060 00000000 		.4byte	.LFB66
+ 1863 0064 2A000000 		.4byte	.LFE66-.LFB66
+ 1864 0068 00000000 		.4byte	.LFB67
+ 1865 006c 3E000000 		.4byte	.LFE67-.LFB67
+ 1866 0070 00000000 		.4byte	.LFB68
+ 1867 0074 3E000000 		.4byte	.LFE68-.LFB68
+ 1868 0078 00000000 		.4byte	.LFB69
+ 1869 007c 48000000 		.4byte	.LFE69-.LFB69
+ 1870 0080 00000000 		.4byte	.LFB70
+ 1871 0084 5A000000 		.4byte	.LFE70-.LFB70
+ 1872 0088 00000000 		.4byte	.LFB71
+ 1873 008c 64000000 		.4byte	.LFE71-.LFB71
+ 1874 0090 00000000 		.4byte	.LFB72
+ 1875 0094 6A000000 		.4byte	.LFE72-.LFB72
+ 1876 0098 00000000 		.4byte	0
+ 1877 009c 00000000 		.4byte	0
+ 1878              		.section	.debug_ranges,"",%progbits
+ 1879              	.Ldebug_ranges0:
+ 1880 0000 00000000 		.4byte	.LFB56
+ 1881 0004 14000000 		.4byte	.LFE56
+ 1882 0008 00000000 		.4byte	.LFB57
+ 1883 000c 4C000000 		.4byte	.LFE57
+ 1884 0010 00000000 		.4byte	.LFB58
+ 1885 0014 58000000 		.4byte	.LFE58
+ 1886 0018 00000000 		.4byte	.LFB59
+ 1887 001c 32000000 		.4byte	.LFE59
+ 1888 0020 00000000 		.4byte	.LFB60
+ 1889 0024 2A000000 		.4byte	.LFE60
+ 1890 0028 00000000 		.4byte	.LFB61
+ 1891 002c 32000000 		.4byte	.LFE61
+ 1892 0030 00000000 		.4byte	.LFB62
+ 1893 0034 2A000000 		.4byte	.LFE62
+ 1894 0038 00000000 		.4byte	.LFB63
+ 1895 003c 32000000 		.4byte	.LFE63
+ 1896 0040 00000000 		.4byte	.LFB64
+ 1897 0044 2A000000 		.4byte	.LFE64
+ 1898 0048 00000000 		.4byte	.LFB65
+ 1899 004c 2A000000 		.4byte	.LFE65
+ 1900 0050 00000000 		.4byte	.LFB66
+ 1901 0054 2A000000 		.4byte	.LFE66
+ 1902 0058 00000000 		.4byte	.LFB67
+ 1903 005c 3E000000 		.4byte	.LFE67
+ 1904 0060 00000000 		.4byte	.LFB68
+ 1905 0064 3E000000 		.4byte	.LFE68
+ 1906 0068 00000000 		.4byte	.LFB69
+ 1907 006c 48000000 		.4byte	.LFE69
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 38
+
+
+ 1908 0070 00000000 		.4byte	.LFB70
+ 1909 0074 5A000000 		.4byte	.LFE70
+ 1910 0078 00000000 		.4byte	.LFB71
+ 1911 007c 64000000 		.4byte	.LFE71
+ 1912 0080 00000000 		.4byte	.LFB72
+ 1913 0084 6A000000 		.4byte	.LFE72
+ 1914 0088 00000000 		.4byte	0
+ 1915 008c 00000000 		.4byte	0
+ 1916              		.section	.debug_line,"",%progbits
+ 1917              	.Ldebug_line0:
+ 1918 0000 CE020000 		.section	.debug_str,"MS",%progbits,1
+ 1918      02004B01 
+ 1918      00000201 
+ 1918      FB0E0D00 
+ 1918      01010101 
+ 1919              	.LASF33:
+ 1920 0000 6C6F6164 		.ascii	"loadStepperPositionFromEEPROM\000"
+ 1920      53746570 
+ 1920      70657250 
+ 1920      6F736974 
+ 1920      696F6E46 
+ 1921              	.LASF44:
+ 1922 001e 696E6974 		.ascii	"init_eeprom\000"
+ 1922      5F656570 
+ 1922      726F6D00 
+ 1923              	.LASF35:
+ 1924 002a 76616C75 		.ascii	"value\000"
+ 1924      6500
+ 1925              	.LASF9:
+ 1926 0030 5F5F696E 		.ascii	"__int32_t\000"
+ 1926      7433325F 
+ 1926      7400
+ 1927              	.LASF41:
+ 1928 003a 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1928      4320342E 
+ 1928      392E3320 
+ 1928      32303135 
+ 1928      30333033 
+ 1929 006d 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1929      20726576 
+ 1929      6973696F 
+ 1929      6E203232 
+ 1929      31323230 
+ 1930 00a0 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1930      66756E63 
+ 1930      74696F6E 
+ 1930      2D736563 
+ 1930      74696F6E 
+ 1931              	.LASF19:
+ 1932 00c8 6D6F6475 		.ascii	"module\000"
+ 1932      6C6500
+ 1933              	.LASF43:
+ 1934 00cf 433A5C55 		.ascii	"C:\\Users\\Lois\\Desktop\\MC1_5\\MC1_5_PSOC5.cydsn\000"
+ 1934      73657273 
+ 1934      5C4C6F69 
+ 1934      735C4465 
+ 1934      736B746F 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 39
+
+
+ 1935              	.LASF14:
+ 1936 00fd 666C6F61 		.ascii	"float\000"
+ 1936      7400
+ 1937              	.LASF27:
+ 1938 0103 6C6F6164 		.ascii	"loadTemperatureLimitLowFromEEPROM\000"
+ 1938      54656D70 
+ 1938      65726174 
+ 1938      7572654C 
+ 1938      696D6974 
+ 1939              	.LASF11:
+ 1940 0125 75696E74 		.ascii	"uint8\000"
+ 1940      3800
+ 1941              	.LASF1:
+ 1942 012b 756E7369 		.ascii	"unsigned char\000"
+ 1942      676E6564 
+ 1942      20636861 
+ 1942      7200
+ 1943              	.LASF28:
+ 1944 0139 73617665 		.ascii	"saveTargetTemperatureToEEPROM\000"
+ 1944      54617267 
+ 1944      65745465 
+ 1944      6D706572 
+ 1944      61747572 
+ 1945              	.LASF5:
+ 1946 0157 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1946      20756E73 
+ 1946      69676E65 
+ 1946      6420696E 
+ 1946      7400
+ 1947              	.LASF38:
+ 1948 0169 6C6F6164 		.ascii	"loadFLOAT\000"
+ 1948      464C4F41 
+ 1948      5400
+ 1949              	.LASF3:
+ 1950 0173 73686F72 		.ascii	"short unsigned int\000"
+ 1950      7420756E 
+ 1950      7369676E 
+ 1950      65642069 
+ 1950      6E7400
+ 1951              	.LASF23:
+ 1952 0186 73617665 		.ascii	"saveTemperatureLimitHighToEEPROM\000"
+ 1952      54656D70 
+ 1952      65726174 
+ 1952      7572654C 
+ 1952      696D6974 
+ 1953              	.LASF34:
+ 1954 01a7 73617665 		.ascii	"saveUINT16\000"
+ 1954      55494E54 
+ 1954      313600
+ 1955              	.LASF45:
+ 1956 01b2 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1956      52784275 
+ 1956      66666572 
+ 1956      00
+ 1957              	.LASF15:
+ 1958 01bf 646F7562 		.ascii	"double\000"
+ 1958      6C6500
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 40
+
+
+ 1959              	.LASF12:
+ 1960 01c6 75696E74 		.ascii	"uint16\000"
+ 1960      313600
+ 1961              	.LASF13:
+ 1962 01cd 696E7438 		.ascii	"int8\000"
+ 1962      00
+ 1963              	.LASF32:
+ 1964 01d2 706F7369 		.ascii	"position\000"
+ 1964      74696F6E 
+ 1964      00
+ 1965              	.LASF8:
+ 1966 01db 756E7369 		.ascii	"unsigned int\000"
+ 1966      676E6564 
+ 1966      20696E74 
+ 1966      00
+ 1967              	.LASF7:
+ 1968 01e8 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1968      206C6F6E 
+ 1968      6720756E 
+ 1968      7369676E 
+ 1968      65642069 
+ 1969              	.LASF24:
+ 1970 01ff 6C696D69 		.ascii	"limit\000"
+ 1970      7400
+ 1971              	.LASF36:
+ 1972 0205 6C6F6164 		.ascii	"loadUINT16\000"
+ 1972      55494E54 
+ 1972      313600
+ 1973              	.LASF30:
+ 1974 0210 6C6F6164 		.ascii	"loadTargetTemperatureFromEEPROM\000"
+ 1974      54617267 
+ 1974      65745465 
+ 1974      6D706572 
+ 1974      61747572 
+ 1975              	.LASF20:
+ 1976 0230 73617665 		.ascii	"savePIDToEEPROM\000"
+ 1976      50494454 
+ 1976      6F454550 
+ 1976      524F4D00 
+ 1977              	.LASF10:
+ 1978 0240 696E7433 		.ascii	"int32_t\000"
+ 1978      325F7400 
+ 1979              	.LASF17:
+ 1980 0248 73697A65 		.ascii	"sizetype\000"
+ 1980      74797065 
+ 1980      00
+ 1981              	.LASF6:
+ 1982 0251 6C6F6E67 		.ascii	"long long int\000"
+ 1982      206C6F6E 
+ 1982      6720696E 
+ 1982      7400
+ 1983              	.LASF42:
+ 1984 025f 2E5C6D65 		.ascii	".\\memory.c\000"
+ 1984      6D6F7279 
+ 1984      2E6300
+ 1985              	.LASF26:
+ 1986 026a 6C6F6164 		.ascii	"loadTemperatureLimitHighFromEEPROM\000"
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 41
+
+
+ 1986      54656D70 
+ 1986      65726174 
+ 1986      7572654C 
+ 1986      696D6974 
+ 1987              	.LASF25:
+ 1988 028d 73617665 		.ascii	"saveTemperatureLimitLowToEEPROM\000"
+ 1988      54656D70 
+ 1988      65726174 
+ 1988      7572654C 
+ 1988      696D6974 
+ 1989              	.LASF21:
+ 1990 02ad 6C6F6164 		.ascii	"loadPIDFromEEPROM\000"
+ 1990      50494446 
+ 1990      726F6D45 
+ 1990      4550524F 
+ 1990      4D00
+ 1991              	.LASF39:
+ 1992 02bf 73617665 		.ascii	"saveINT\000"
+ 1992      494E5400 
+ 1993              	.LASF22:
+ 1994 02c7 73746172 		.ascii	"startAdress\000"
+ 1994      74416472 
+ 1994      65737300 
+ 1995              	.LASF2:
+ 1996 02d3 73686F72 		.ascii	"short int\000"
+ 1996      7420696E 
+ 1996      7400
+ 1997              	.LASF37:
+ 1998 02dd 73617665 		.ascii	"saveFLOAT\000"
+ 1998      464C4F41 
+ 1998      5400
+ 1999              	.LASF40:
+ 2000 02e7 6C6F6164 		.ascii	"loadINT\000"
+ 2000      494E5400 
+ 2001              	.LASF4:
+ 2002 02ef 6C6F6E67 		.ascii	"long int\000"
+ 2002      20696E74 
+ 2002      00
+ 2003              	.LASF16:
+ 2004 02f8 63686172 		.ascii	"char\000"
+ 2004      00
+ 2005              	.LASF18:
+ 2006 02fd 6C6F6E67 		.ascii	"long double\000"
+ 2006      20646F75 
+ 2006      626C6500 
+ 2007              	.LASF29:
+ 2008 0309 74617267 		.ascii	"target\000"
+ 2008      657400
+ 2009              	.LASF0:
+ 2010 0310 7369676E 		.ascii	"signed char\000"
+ 2010      65642063 
+ 2010      68617200 
+ 2011              	.LASF31:
+ 2012 031c 73617665 		.ascii	"saveStepperPositionToEEPROM\000"
+ 2012      53746570 
+ 2012      70657250 
+ 2012      6F736974 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccKtkImJ.s 			page 42
+
+
+ 2012      696F6E54 
+ 2013              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

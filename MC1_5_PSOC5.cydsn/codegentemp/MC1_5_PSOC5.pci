@@ -1,0 +1,38 @@
+# MC1_5_PSOC5
+# 2015-12-12 18:50:11Z
+
+# IO_0@[IOP=(1)][IoId=(0)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 0
+# IO_1@[IOP=(1)][IoId=(1)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 1
+set_io "\UART:Dm(0)\" iocell 15 7
+set_io "\UART:Dp(0)\" iocell 15 6
+set_io "PELTIER1_Heat(0)" iocell 0 7
+set_io "PELTIER1_Cool(0)" iocell 0 5
+set_io "Stepper1_Output(0)" iocell 0 2
+set_io "fanPeltier1(0)" iocell 6 1
+set_io "CAN_Standby(0)" iocell 6 4
+set_io "Can_Enable(0)" iocell 1 2
+set_io "TX_1(0)" iocell 12 5
+set_io "fanPeltier2(0)" iocell 4 6
+set_io "Stepper2_Output(0)" iocell 12 2
+set_io "Stepper2_Enable(0)" iocell 12 3
+set_io "Stepper1_Enable(0)" iocell 0 3
+set_io "fanPeltier2_Enable(0)" iocell 4 7
+set_io "fanPeltier1_Enable(0)" iocell 6 0
+set_io "Peltier1_Enable_1(0)" iocell 0 4
+set_io "Peltier1_Enable_2(0)" iocell 0 6
+set_io "Peltier2_Enable_1(0)" iocell 4 2
+set_io "Peltier2_Enable_2(0)" iocell 4 4
+set_io "PELTIER2_Heat(0)" iocell 4 5
+set_io "PELTIER2_Cool(0)" iocell 4 3
+set_io "RX_1(0)" iocell 12 4
+set_io "Stepper2_Step_SizeB2(0)" iocell 12 0
+set_io "Stepper2_Step_SizeA2(0)" iocell 12 1
+set_io "Stepper1_Dir(0)" iocell 0 0
+set_io "Stepper1_Step_SizeA1(0)" iocell 4 1
+set_io "Stepper1_Step_SizeB1(0)" iocell 4 0
+set_io "VTherm(0)" iocell 3 5
+set_io "Stepper2_Dir(0)" iocell 15 2
+set_location "\UART:USB\" usbcell -1 -1 0
+set_location "\ADC:DSM\" dsmodcell -1 -1 0

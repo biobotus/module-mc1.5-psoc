@@ -1,0 +1,13 @@
+Loading plugins phase: Elapsed time ==> 0s.296ms
+Initializing data phase: Elapsed time ==> 0s.000ms
+<CYPRESSTAG name="CyDsfit arguments...">
+cydsfit arguments: -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -p C:\Users\majl1801\Desktop\TAC_ThermalControl_lv\TAC_PSOC5.cydsn\TAC_PSOC5.cyprj -d CY8C3244AXA-153 -s C:\Users\majl1801\Desktop\TAC_ThermalControl_lv\TAC_PSOC5.cydsn\Generated_Source\PSoC3 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=BE</CYPRESSTAG>
+<CYPRESSTAG name="Design elaboration results...">
+ADD: sdb.M0058: error: Unable to find Verilog, schematic or API implementation for block 'ADC_SAR_v3_0' in schematic 'TopDesign'.
+ * C:\Users\majl1801\Desktop\TAC_ThermalControl_lv\TAC_PSOC5.cydsn\TopDesign\TopDesign.cysch (Instance:ADC)
+
+ADD: sdb.M0059: error: Error in component: ADC. PSoC 3 does not have support for the SAR ADC functionality, so this component (ADC) cannot be used with this silicon.
+ * C:\Users\majl1801\Desktop\TAC_ThermalControl_lv\TAC_PSOC5.cydsn\TopDesign\TopDesign.cysch (Instance:ADC)
+
+</CYPRESSTAG>
+Elaboration phase: Elapsed time ==> 8s.114ms

@@ -1,0 +1,1433 @@
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"UART_pm.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.bss
+  19              		.align	2
+  20              	UART_backup:
+  21 0000 0000     		.space	2
+  22 0002 0000     		.section	.text.UART_DP_ISR,"ax",%progbits
+  23              		.align	2
+  24              		.global	UART_DP_ISR
+  25              		.thumb
+  26              		.thumb_func
+  27              		.type	UART_DP_ISR, %function
+  28              	UART_DP_ISR:
+  29              	.LFB56:
+  30              		.file 1 ".\\Generated_Source\\PSoC5\\UART_pm.c"
+   1:.\Generated_Source\PSoC5/UART_pm.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/UART_pm.c **** * File Name: UART_pm.c
+   3:.\Generated_Source\PSoC5/UART_pm.c **** * Version 2.80
+   4:.\Generated_Source\PSoC5/UART_pm.c **** *
+   5:.\Generated_Source\PSoC5/UART_pm.c **** * Description:
+   6:.\Generated_Source\PSoC5/UART_pm.c **** *  This file provides Suspend/Resume APIs functionality.
+   7:.\Generated_Source\PSoC5/UART_pm.c **** *
+   8:.\Generated_Source\PSoC5/UART_pm.c **** * Note:
+   9:.\Generated_Source\PSoC5/UART_pm.c **** *
+  10:.\Generated_Source\PSoC5/UART_pm.c **** ********************************************************************************
+  11:.\Generated_Source\PSoC5/UART_pm.c **** * Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+  12:.\Generated_Source\PSoC5/UART_pm.c **** * You may use this file only in accordance with the license, terms, conditions,
+  13:.\Generated_Source\PSoC5/UART_pm.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  14:.\Generated_Source\PSoC5/UART_pm.c **** * the software package with which this file was provided.
+  15:.\Generated_Source\PSoC5/UART_pm.c **** *******************************************************************************/
+  16:.\Generated_Source\PSoC5/UART_pm.c **** 
+  17:.\Generated_Source\PSoC5/UART_pm.c **** #include "project.h"
+  18:.\Generated_Source\PSoC5/UART_pm.c **** #include "UART.h"
+  19:.\Generated_Source\PSoC5/UART_pm.c **** #include "UART_pvt.h"
+  20:.\Generated_Source\PSoC5/UART_pm.c **** 
+  21:.\Generated_Source\PSoC5/UART_pm.c **** 
+  22:.\Generated_Source\PSoC5/UART_pm.c **** 
+  23:.\Generated_Source\PSoC5/UART_pm.c **** /***************************************
+  24:.\Generated_Source\PSoC5/UART_pm.c **** * Custom Declarations
+  25:.\Generated_Source\PSoC5/UART_pm.c **** ***************************************/
+  26:.\Generated_Source\PSoC5/UART_pm.c **** /* `#START PM_CUSTOM_DECLARATIONS` Place your declaration here */
+  27:.\Generated_Source\PSoC5/UART_pm.c **** 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 2
+
+
+  28:.\Generated_Source\PSoC5/UART_pm.c **** /* `#END` */
+  29:.\Generated_Source\PSoC5/UART_pm.c **** 
+  30:.\Generated_Source\PSoC5/UART_pm.c **** 
+  31:.\Generated_Source\PSoC5/UART_pm.c **** /***************************************
+  32:.\Generated_Source\PSoC5/UART_pm.c **** * Local data allocation
+  33:.\Generated_Source\PSoC5/UART_pm.c **** ***************************************/
+  34:.\Generated_Source\PSoC5/UART_pm.c **** 
+  35:.\Generated_Source\PSoC5/UART_pm.c **** static UART_BACKUP_STRUCT  UART_backup;
+  36:.\Generated_Source\PSoC5/UART_pm.c **** 
+  37:.\Generated_Source\PSoC5/UART_pm.c **** 
+  38:.\Generated_Source\PSoC5/UART_pm.c **** #if(UART_DP_ISR_REMOVE == 0u)
+  39:.\Generated_Source\PSoC5/UART_pm.c **** 
+  40:.\Generated_Source\PSoC5/UART_pm.c ****     /*******************************************************************************
+  41:.\Generated_Source\PSoC5/UART_pm.c ****     * Function Name: UART_DP_Interrupt
+  42:.\Generated_Source\PSoC5/UART_pm.c ****     ********************************************************************************
+  43:.\Generated_Source\PSoC5/UART_pm.c ****     *
+  44:.\Generated_Source\PSoC5/UART_pm.c ****     * Summary:
+  45:.\Generated_Source\PSoC5/UART_pm.c ****     *  This Interrupt Service Routine handles DP pin changes for wake-up from
+  46:.\Generated_Source\PSoC5/UART_pm.c ****     *  the sleep mode.
+  47:.\Generated_Source\PSoC5/UART_pm.c ****     *
+  48:.\Generated_Source\PSoC5/UART_pm.c ****     * Parameters:
+  49:.\Generated_Source\PSoC5/UART_pm.c ****     *  None.
+  50:.\Generated_Source\PSoC5/UART_pm.c ****     *
+  51:.\Generated_Source\PSoC5/UART_pm.c ****     * Return:
+  52:.\Generated_Source\PSoC5/UART_pm.c ****     *  None.
+  53:.\Generated_Source\PSoC5/UART_pm.c ****     *
+  54:.\Generated_Source\PSoC5/UART_pm.c ****     *******************************************************************************/
+  55:.\Generated_Source\PSoC5/UART_pm.c ****     CY_ISR(UART_DP_ISR)
+  56:.\Generated_Source\PSoC5/UART_pm.c ****     {
+  31              		.loc 1 56 0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 1, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  36 0000 80B4     		push	{r7}
+  37              		.cfi_def_cfa_offset 4
+  38              		.cfi_offset 7, -4
+  39 0002 00AF     		add	r7, sp, #0
+  40              		.cfi_def_cfa_register 7
+  57:.\Generated_Source\PSoC5/UART_pm.c ****         #ifdef UART_DP_ISR_ENTRY_CALLBACK
+  58:.\Generated_Source\PSoC5/UART_pm.c ****             UART_DP_ISR_EntryCallback();
+  59:.\Generated_Source\PSoC5/UART_pm.c ****         #endif /* UART_DP_ISR_ENTRY_CALLBACK */
+  60:.\Generated_Source\PSoC5/UART_pm.c **** 
+  61:.\Generated_Source\PSoC5/UART_pm.c ****         /* `#START DP_USER_CODE` Place your code here */
+  62:.\Generated_Source\PSoC5/UART_pm.c **** 
+  63:.\Generated_Source\PSoC5/UART_pm.c ****         /* `#END` */
+  64:.\Generated_Source\PSoC5/UART_pm.c **** 
+  65:.\Generated_Source\PSoC5/UART_pm.c ****         /* Clears active interrupt */
+  66:.\Generated_Source\PSoC5/UART_pm.c ****         CY_GET_REG8(UART_DP_INTSTAT_PTR);
+  41              		.loc 1 66 0
+  42 0004 024B     		ldr	r3, .L2
+  43 0006 1B78     		ldrb	r3, [r3]
+  67:.\Generated_Source\PSoC5/UART_pm.c **** 
+  68:.\Generated_Source\PSoC5/UART_pm.c ****         #ifdef UART_DP_ISR_EXIT_CALLBACK
+  69:.\Generated_Source\PSoC5/UART_pm.c ****             UART_DP_ISR_ExitCallback();
+  70:.\Generated_Source\PSoC5/UART_pm.c ****         #endif /* UART_DP_ISR_EXIT_CALLBACK */
+  71:.\Generated_Source\PSoC5/UART_pm.c ****     }
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 3
+
+
+  44              		.loc 1 71 0
+  45 0008 BD46     		mov	sp, r7
+  46              		.cfi_def_cfa_register 13
+  47              		@ sp needed
+  48 000a 5DF8047B 		ldr	r7, [sp], #4
+  49              		.cfi_restore 7
+  50              		.cfi_def_cfa_offset 0
+  51 000e 7047     		bx	lr
+  52              	.L3:
+  53              		.align	2
+  54              	.L2:
+  55 0010 8F450040 		.word	1073759631
+  56              		.cfi_endproc
+  57              	.LFE56:
+  58              		.size	UART_DP_ISR, .-UART_DP_ISR
+  59              		.section	.text.UART_SaveConfig,"ax",%progbits
+  60              		.align	2
+  61              		.global	UART_SaveConfig
+  62              		.thumb
+  63              		.thumb_func
+  64              		.type	UART_SaveConfig, %function
+  65              	UART_SaveConfig:
+  66              	.LFB57:
+  72:.\Generated_Source\PSoC5/UART_pm.c **** 
+  73:.\Generated_Source\PSoC5/UART_pm.c **** #endif /* (UART_DP_ISR_REMOVE == 0u) */
+  74:.\Generated_Source\PSoC5/UART_pm.c **** 
+  75:.\Generated_Source\PSoC5/UART_pm.c **** 
+  76:.\Generated_Source\PSoC5/UART_pm.c **** /*******************************************************************************
+  77:.\Generated_Source\PSoC5/UART_pm.c **** * Function Name: UART_SaveConfig
+  78:.\Generated_Source\PSoC5/UART_pm.c **** ********************************************************************************
+  79:.\Generated_Source\PSoC5/UART_pm.c **** *
+  80:.\Generated_Source\PSoC5/UART_pm.c **** * Summary:
+  81:.\Generated_Source\PSoC5/UART_pm.c **** *  Saves the current user configuration.
+  82:.\Generated_Source\PSoC5/UART_pm.c **** *
+  83:.\Generated_Source\PSoC5/UART_pm.c **** * Parameters:
+  84:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+  85:.\Generated_Source\PSoC5/UART_pm.c **** *
+  86:.\Generated_Source\PSoC5/UART_pm.c **** * Return:
+  87:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+  88:.\Generated_Source\PSoC5/UART_pm.c **** *
+  89:.\Generated_Source\PSoC5/UART_pm.c **** * Reentrant:
+  90:.\Generated_Source\PSoC5/UART_pm.c **** *  No.
+  91:.\Generated_Source\PSoC5/UART_pm.c **** *
+  92:.\Generated_Source\PSoC5/UART_pm.c **** *******************************************************************************/
+  93:.\Generated_Source\PSoC5/UART_pm.c **** void UART_SaveConfig(void) 
+  94:.\Generated_Source\PSoC5/UART_pm.c **** {
+  67              		.loc 1 94 0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 1, uses_anonymous_args = 0
+  71              		@ link register save eliminated.
+  72 0000 80B4     		push	{r7}
+  73              		.cfi_def_cfa_offset 4
+  74              		.cfi_offset 7, -4
+  75 0002 00AF     		add	r7, sp, #0
+  76              		.cfi_def_cfa_register 7
+  95:.\Generated_Source\PSoC5/UART_pm.c **** 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 4
+
+
+  96:.\Generated_Source\PSoC5/UART_pm.c **** }
+  77              		.loc 1 96 0
+  78 0004 BD46     		mov	sp, r7
+  79              		.cfi_def_cfa_register 13
+  80              		@ sp needed
+  81 0006 5DF8047B 		ldr	r7, [sp], #4
+  82              		.cfi_restore 7
+  83              		.cfi_def_cfa_offset 0
+  84 000a 7047     		bx	lr
+  85              		.cfi_endproc
+  86              	.LFE57:
+  87              		.size	UART_SaveConfig, .-UART_SaveConfig
+  88              		.section	.text.UART_RestoreConfig,"ax",%progbits
+  89              		.align	2
+  90              		.global	UART_RestoreConfig
+  91              		.thumb
+  92              		.thumb_func
+  93              		.type	UART_RestoreConfig, %function
+  94              	UART_RestoreConfig:
+  95              	.LFB58:
+  97:.\Generated_Source\PSoC5/UART_pm.c **** 
+  98:.\Generated_Source\PSoC5/UART_pm.c **** 
+  99:.\Generated_Source\PSoC5/UART_pm.c **** /*******************************************************************************
+ 100:.\Generated_Source\PSoC5/UART_pm.c **** * Function Name: UART_RestoreConfig
+ 101:.\Generated_Source\PSoC5/UART_pm.c **** ********************************************************************************
+ 102:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 103:.\Generated_Source\PSoC5/UART_pm.c **** * Summary:
+ 104:.\Generated_Source\PSoC5/UART_pm.c **** *  Restores the current user configuration.
+ 105:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 106:.\Generated_Source\PSoC5/UART_pm.c **** * Parameters:
+ 107:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+ 108:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 109:.\Generated_Source\PSoC5/UART_pm.c **** * Return:
+ 110:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+ 111:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 112:.\Generated_Source\PSoC5/UART_pm.c **** * Reentrant:
+ 113:.\Generated_Source\PSoC5/UART_pm.c **** *  No.
+ 114:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 115:.\Generated_Source\PSoC5/UART_pm.c **** *******************************************************************************/
+ 116:.\Generated_Source\PSoC5/UART_pm.c **** void UART_RestoreConfig(void) 
+ 117:.\Generated_Source\PSoC5/UART_pm.c **** {
+  96              		.loc 1 117 0
+  97              		.cfi_startproc
+  98              		@ args = 0, pretend = 0, frame = 0
+  99              		@ frame_needed = 1, uses_anonymous_args = 0
+ 100 0000 80B5     		push	{r7, lr}
+ 101              		.cfi_def_cfa_offset 8
+ 102              		.cfi_offset 7, -8
+ 103              		.cfi_offset 14, -4
+ 104 0002 00AF     		add	r7, sp, #0
+ 105              		.cfi_def_cfa_register 7
+ 118:.\Generated_Source\PSoC5/UART_pm.c ****     if(UART_configuration != 0u)
+ 106              		.loc 1 118 0
+ 107 0004 034B     		ldr	r3, .L7
+ 108 0006 1B78     		ldrb	r3, [r3]
+ 109 0008 DBB2     		uxtb	r3, r3
+ 110 000a 002B     		cmp	r3, #0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 5
+
+
+ 111 000c 01D0     		beq	.L5
+ 119:.\Generated_Source\PSoC5/UART_pm.c ****     {
+ 120:.\Generated_Source\PSoC5/UART_pm.c ****         UART_ConfigReg();
+ 112              		.loc 1 120 0
+ 113 000e FFF7FEFF 		bl	UART_ConfigReg
+ 114              	.L5:
+ 121:.\Generated_Source\PSoC5/UART_pm.c ****     }
+ 122:.\Generated_Source\PSoC5/UART_pm.c **** }
+ 115              		.loc 1 122 0
+ 116 0012 80BD     		pop	{r7, pc}
+ 117              	.L8:
+ 118              		.align	2
+ 119              	.L7:
+ 120 0014 00000000 		.word	UART_configuration
+ 121              		.cfi_endproc
+ 122              	.LFE58:
+ 123              		.size	UART_RestoreConfig, .-UART_RestoreConfig
+ 124              		.section	.text.UART_Suspend,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	UART_Suspend
+ 127              		.thumb
+ 128              		.thumb_func
+ 129              		.type	UART_Suspend, %function
+ 130              	UART_Suspend:
+ 131              	.LFB59:
+ 123:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 124:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 125:.\Generated_Source\PSoC5/UART_pm.c **** /*******************************************************************************
+ 126:.\Generated_Source\PSoC5/UART_pm.c **** * Function Name: UART_Suspend
+ 127:.\Generated_Source\PSoC5/UART_pm.c **** ********************************************************************************
+ 128:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 129:.\Generated_Source\PSoC5/UART_pm.c **** * Summary:
+ 130:.\Generated_Source\PSoC5/UART_pm.c **** *  This function disables the USBFS block and prepares for power down mode.
+ 131:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 132:.\Generated_Source\PSoC5/UART_pm.c **** * Parameters:
+ 133:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+ 134:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 135:.\Generated_Source\PSoC5/UART_pm.c **** * Return:
+ 136:.\Generated_Source\PSoC5/UART_pm.c **** *   None.
+ 137:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 138:.\Generated_Source\PSoC5/UART_pm.c **** * Global variables:
+ 139:.\Generated_Source\PSoC5/UART_pm.c **** *  UART_backup.enable:  modified.
+ 140:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 141:.\Generated_Source\PSoC5/UART_pm.c **** * Reentrant:
+ 142:.\Generated_Source\PSoC5/UART_pm.c **** *  No.
+ 143:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 144:.\Generated_Source\PSoC5/UART_pm.c **** *******************************************************************************/
+ 145:.\Generated_Source\PSoC5/UART_pm.c **** void UART_Suspend(void) 
+ 146:.\Generated_Source\PSoC5/UART_pm.c **** {
+ 132              		.loc 1 146 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 8
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ 136 0000 80B5     		push	{r7, lr}
+ 137              		.cfi_def_cfa_offset 8
+ 138              		.cfi_offset 7, -8
+ 139              		.cfi_offset 14, -4
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 6
+
+
+ 140 0002 82B0     		sub	sp, sp, #8
+ 141              		.cfi_def_cfa_offset 16
+ 142 0004 00AF     		add	r7, sp, #0
+ 143              		.cfi_def_cfa_register 7
+ 147:.\Generated_Source\PSoC5/UART_pm.c ****     uint8 enableInterrupts;
+ 148:.\Generated_Source\PSoC5/UART_pm.c ****     enableInterrupts = CyEnterCriticalSection();
+ 144              		.loc 1 148 0
+ 145 0006 FFF7FEFF 		bl	CyEnterCriticalSection
+ 146 000a 0346     		mov	r3, r0
+ 147 000c FB71     		strb	r3, [r7, #7]
+ 149:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 150:.\Generated_Source\PSoC5/UART_pm.c ****     if((CY_GET_REG8(UART_CR0_PTR) & UART_CR0_ENABLE) != 0u)
+ 148              		.loc 1 150 0
+ 149 000e 3C4B     		ldr	r3, .L12
+ 150 0010 1B78     		ldrb	r3, [r3]
+ 151 0012 DBB2     		uxtb	r3, r3
+ 152 0014 DBB2     		uxtb	r3, r3
+ 153 0016 5BB2     		sxtb	r3, r3
+ 154 0018 002B     		cmp	r3, #0
+ 155 001a 57DA     		bge	.L10
+ 151:.\Generated_Source\PSoC5/UART_pm.c ****     {   /* USB block is enabled */
+ 152:.\Generated_Source\PSoC5/UART_pm.c ****         UART_backup.enableState = 1u;
+ 156              		.loc 1 152 0
+ 157 001c 394B     		ldr	r3, .L12+4
+ 158 001e 0122     		movs	r2, #1
+ 159 0020 1A70     		strb	r2, [r3]
+ 153:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 154:.\Generated_Source\PSoC5/UART_pm.c ****         #if(UART_EP_MM != UART__EP_MANUAL)
+ 155:.\Generated_Source\PSoC5/UART_pm.c ****             UART_Stop_DMA(UART_MAX_EP);     /* Stop all DMAs */
+ 156:.\Generated_Source\PSoC5/UART_pm.c ****         #endif   /*  UART_EP_MM != UART__EP_MANUAL */
+ 157:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 158:.\Generated_Source\PSoC5/UART_pm.c ****         /* Ensure USB transmit enable is low (USB_USBIO_CR0.ten). - Manual Transmission - Disabled 
+ 159:.\Generated_Source\PSoC5/UART_pm.c ****         UART_USBIO_CR0_REG &= (uint8)~UART_USBIO_CR0_TEN;
+ 160              		.loc 1 159 0
+ 161 0022 394A     		ldr	r2, .L12+8
+ 162 0024 384B     		ldr	r3, .L12+8
+ 163 0026 1B78     		ldrb	r3, [r3]
+ 164 0028 DBB2     		uxtb	r3, r3
+ 165 002a 03F07F03 		and	r3, r3, #127
+ 166 002e DBB2     		uxtb	r3, r3
+ 167 0030 1370     		strb	r3, [r2]
+ 160:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(0u);  /*~50ns delay */
+ 168              		.loc 1 160 0
+ 169 0032 0020     		movs	r0, #0
+ 170 0034 FFF7FEFF 		bl	CyDelayUs
+ 161:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 162:.\Generated_Source\PSoC5/UART_pm.c ****         /* Disable the USBIO by asserting PM.USB_CR0.fsusbio_pd_n(Inverted) and pd_pullup_hv(Invert
+ 163:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_USB_CR0_REG &=
+ 171              		.loc 1 163 0
+ 172 0038 344A     		ldr	r2, .L12+12
+ 173 003a 344B     		ldr	r3, .L12+12
+ 174 003c 1B78     		ldrb	r3, [r3]
+ 175 003e DBB2     		uxtb	r3, r3
+ 176 0040 23F00603 		bic	r3, r3, #6
+ 177 0044 DBB2     		uxtb	r3, r3
+ 178 0046 1370     		strb	r3, [r2]
+ 164:.\Generated_Source\PSoC5/UART_pm.c ****                                 (uint8)~(UART_PM_USB_CR0_PD_N | UART_PM_USB_CR0_PD_PULLUP_N);
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 7
+
+
+ 165:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 166:.\Generated_Source\PSoC5/UART_pm.c ****         /* Disable the SIE */
+ 167:.\Generated_Source\PSoC5/UART_pm.c ****         UART_CR0_REG &= (uint8)~UART_CR0_ENABLE;
+ 179              		.loc 1 167 0
+ 180 0048 2D4A     		ldr	r2, .L12
+ 181 004a 2D4B     		ldr	r3, .L12
+ 182 004c 1B78     		ldrb	r3, [r3]
+ 183 004e DBB2     		uxtb	r3, r3
+ 184 0050 03F07F03 		and	r3, r3, #127
+ 185 0054 DBB2     		uxtb	r3, r3
+ 186 0056 1370     		strb	r3, [r2]
+ 168:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 169:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(0u);  /* ~50ns delay */
+ 187              		.loc 1 169 0
+ 188 0058 0020     		movs	r0, #0
+ 189 005a FFF7FEFF 		bl	CyDelayUs
+ 170:.\Generated_Source\PSoC5/UART_pm.c ****         /* Store mode and Disable VRegulator*/
+ 171:.\Generated_Source\PSoC5/UART_pm.c ****         UART_backup.mode = UART_CR1_REG & UART_CR1_REG_ENABLE;
+ 190              		.loc 1 171 0
+ 191 005e 2C4B     		ldr	r3, .L12+16
+ 192 0060 1B78     		ldrb	r3, [r3]
+ 193 0062 DBB2     		uxtb	r3, r3
+ 194 0064 03F00103 		and	r3, r3, #1
+ 195 0068 DAB2     		uxtb	r2, r3
+ 196 006a 264B     		ldr	r3, .L12+4
+ 197 006c 5A70     		strb	r2, [r3, #1]
+ 172:.\Generated_Source\PSoC5/UART_pm.c ****         UART_CR1_REG &= (uint8)~UART_CR1_REG_ENABLE;
+ 198              		.loc 1 172 0
+ 199 006e 284A     		ldr	r2, .L12+16
+ 200 0070 274B     		ldr	r3, .L12+16
+ 201 0072 1B78     		ldrb	r3, [r3]
+ 202 0074 DBB2     		uxtb	r3, r3
+ 203 0076 23F00103 		bic	r3, r3, #1
+ 204 007a DBB2     		uxtb	r3, r3
+ 205 007c 1370     		strb	r3, [r2]
+ 173:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 174:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(1u);  /* 0.5 us min delay */
+ 206              		.loc 1 174 0
+ 207 007e 0120     		movs	r0, #1
+ 208 0080 FFF7FEFF 		bl	CyDelayUs
+ 175:.\Generated_Source\PSoC5/UART_pm.c ****         /* Disable the USBIO reference by setting PM.USB_CR0.fsusbio_ref_en.*/
+ 176:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_USB_CR0_REG &= (uint8)~UART_PM_USB_CR0_REF_EN;
+ 209              		.loc 1 176 0
+ 210 0084 214A     		ldr	r2, .L12+12
+ 211 0086 214B     		ldr	r3, .L12+12
+ 212 0088 1B78     		ldrb	r3, [r3]
+ 213 008a DBB2     		uxtb	r3, r3
+ 214 008c 23F00103 		bic	r3, r3, #1
+ 215 0090 DBB2     		uxtb	r3, r3
+ 216 0092 1370     		strb	r3, [r2]
+ 177:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 178:.\Generated_Source\PSoC5/UART_pm.c ****         /* Switch DP and DM terminals to GPIO mode and disconnect 1.5k pullup*/
+ 179:.\Generated_Source\PSoC5/UART_pm.c ****         UART_USBIO_CR1_REG |= UART_USBIO_CR1_IOMODE;
+ 217              		.loc 1 179 0
+ 218 0094 1F4A     		ldr	r2, .L12+20
+ 219 0096 1F4B     		ldr	r3, .L12+20
+ 220 0098 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 8
+
+
+ 221 009a DBB2     		uxtb	r3, r3
+ 222 009c 43F02003 		orr	r3, r3, #32
+ 223 00a0 DBB2     		uxtb	r3, r3
+ 224 00a2 1370     		strb	r3, [r2]
+ 180:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 181:.\Generated_Source\PSoC5/UART_pm.c ****         /* Disable USB in ACT PM */
+ 182:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_ACT_CFG_REG &= (uint8)~UART_PM_ACT_EN_FSUSB;
+ 225              		.loc 1 182 0
+ 226 00a4 1C4A     		ldr	r2, .L12+24
+ 227 00a6 1C4B     		ldr	r3, .L12+24
+ 228 00a8 1B78     		ldrb	r3, [r3]
+ 229 00aa DBB2     		uxtb	r3, r3
+ 230 00ac 23F00103 		bic	r3, r3, #1
+ 231 00b0 DBB2     		uxtb	r3, r3
+ 232 00b2 1370     		strb	r3, [r2]
+ 183:.\Generated_Source\PSoC5/UART_pm.c ****         /* Disable USB block for Standby Power Mode */
+ 184:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_STBY_CFG_REG &= (uint8)~UART_PM_STBY_EN_FSUSB;
+ 233              		.loc 1 184 0
+ 234 00b4 194A     		ldr	r2, .L12+28
+ 235 00b6 194B     		ldr	r3, .L12+28
+ 236 00b8 1B78     		ldrb	r3, [r3]
+ 237 00ba DBB2     		uxtb	r3, r3
+ 238 00bc 23F00103 		bic	r3, r3, #1
+ 239 00c0 DBB2     		uxtb	r3, r3
+ 240 00c2 1370     		strb	r3, [r2]
+ 185:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(1u); /* min  0.5us delay required */
+ 241              		.loc 1 185 0
+ 242 00c4 0120     		movs	r0, #1
+ 243 00c6 FFF7FEFF 		bl	CyDelayUs
+ 244 00ca 02E0     		b	.L11
+ 245              	.L10:
+ 186:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 187:.\Generated_Source\PSoC5/UART_pm.c ****     }
+ 188:.\Generated_Source\PSoC5/UART_pm.c ****     else
+ 189:.\Generated_Source\PSoC5/UART_pm.c ****     {
+ 190:.\Generated_Source\PSoC5/UART_pm.c ****         UART_backup.enableState = 0u;
+ 246              		.loc 1 190 0
+ 247 00cc 0D4B     		ldr	r3, .L12+4
+ 248 00ce 0022     		movs	r2, #0
+ 249 00d0 1A70     		strb	r2, [r3]
+ 250              	.L11:
+ 191:.\Generated_Source\PSoC5/UART_pm.c ****     }
+ 192:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 193:.\Generated_Source\PSoC5/UART_pm.c ****     CyExitCriticalSection(enableInterrupts);
+ 251              		.loc 1 193 0
+ 252 00d2 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 253 00d4 1846     		mov	r0, r3
+ 254 00d6 FFF7FEFF 		bl	CyExitCriticalSection
+ 194:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 195:.\Generated_Source\PSoC5/UART_pm.c ****     /* Set the DP Interrupt for wake-up from sleep mode. */
+ 196:.\Generated_Source\PSoC5/UART_pm.c ****     #if(UART_DP_ISR_REMOVE == 0u)
+ 197:.\Generated_Source\PSoC5/UART_pm.c ****         (void) CyIntSetVector(UART_DP_INTC_VECT_NUM, &UART_DP_ISR);
+ 255              		.loc 1 197 0
+ 256 00da 0C20     		movs	r0, #12
+ 257 00dc 1049     		ldr	r1, .L12+32
+ 258 00de FFF7FEFF 		bl	CyIntSetVector
+ 198:.\Generated_Source\PSoC5/UART_pm.c ****         CyIntSetPriority(UART_DP_INTC_VECT_NUM, UART_DP_INTC_PRIOR);
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 9
+
+
+ 259              		.loc 1 198 0
+ 260 00e2 0C20     		movs	r0, #12
+ 261 00e4 0721     		movs	r1, #7
+ 262 00e6 FFF7FEFF 		bl	CyIntSetPriority
+ 199:.\Generated_Source\PSoC5/UART_pm.c ****         CyIntClearPending(UART_DP_INTC_VECT_NUM);
+ 263              		.loc 1 199 0
+ 264 00ea 0E4B     		ldr	r3, .L12+36
+ 265 00ec 4FF48052 		mov	r2, #4096
+ 266 00f0 1A60     		str	r2, [r3]
+ 200:.\Generated_Source\PSoC5/UART_pm.c ****         CyIntEnable(UART_DP_INTC_VECT_NUM);
+ 267              		.loc 1 200 0
+ 268 00f2 0D4B     		ldr	r3, .L12+40
+ 269 00f4 4FF48052 		mov	r2, #4096
+ 270 00f8 1A60     		str	r2, [r3]
+ 201:.\Generated_Source\PSoC5/UART_pm.c ****     #endif /* (UART_DP_ISR_REMOVE == 0u) */
+ 202:.\Generated_Source\PSoC5/UART_pm.c **** }
+ 271              		.loc 1 202 0
+ 272 00fa 0837     		adds	r7, r7, #8
+ 273              		.cfi_def_cfa_offset 8
+ 274 00fc BD46     		mov	sp, r7
+ 275              		.cfi_def_cfa_register 13
+ 276              		@ sp needed
+ 277 00fe 80BD     		pop	{r7, pc}
+ 278              	.L13:
+ 279              		.align	2
+ 280              	.L12:
+ 281 0100 08600040 		.word	1073766408
+ 282 0104 00000000 		.word	UART_backup
+ 283 0108 10600040 		.word	1073766416
+ 284 010c 94430040 		.word	1073759124
+ 285 0110 09600040 		.word	1073766409
+ 286 0114 12600040 		.word	1073766418
+ 287 0118 A5430040 		.word	1073759141
+ 288 011c B5430040 		.word	1073759157
+ 289 0120 00000000 		.word	UART_DP_ISR
+ 290 0124 80E200E0 		.word	-536812928
+ 291 0128 00E100E0 		.word	-536813312
+ 292              		.cfi_endproc
+ 293              	.LFE59:
+ 294              		.size	UART_Suspend, .-UART_Suspend
+ 295              		.section	.text.UART_Resume,"ax",%progbits
+ 296              		.align	2
+ 297              		.global	UART_Resume
+ 298              		.thumb
+ 299              		.thumb_func
+ 300              		.type	UART_Resume, %function
+ 301              	UART_Resume:
+ 302              	.LFB60:
+ 203:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 204:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 205:.\Generated_Source\PSoC5/UART_pm.c **** /*******************************************************************************
+ 206:.\Generated_Source\PSoC5/UART_pm.c **** * Function Name: UART_Resume
+ 207:.\Generated_Source\PSoC5/UART_pm.c **** ********************************************************************************
+ 208:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 209:.\Generated_Source\PSoC5/UART_pm.c **** * Summary:
+ 210:.\Generated_Source\PSoC5/UART_pm.c **** *  This function enables the USBFS block after power down mode.
+ 211:.\Generated_Source\PSoC5/UART_pm.c **** *
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 10
+
+
+ 212:.\Generated_Source\PSoC5/UART_pm.c **** * Parameters:
+ 213:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+ 214:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 215:.\Generated_Source\PSoC5/UART_pm.c **** * Return:
+ 216:.\Generated_Source\PSoC5/UART_pm.c **** *  None.
+ 217:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 218:.\Generated_Source\PSoC5/UART_pm.c **** * Global variables:
+ 219:.\Generated_Source\PSoC5/UART_pm.c **** *  UART_backup - checked.
+ 220:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 221:.\Generated_Source\PSoC5/UART_pm.c **** * Reentrant:
+ 222:.\Generated_Source\PSoC5/UART_pm.c **** *  No.
+ 223:.\Generated_Source\PSoC5/UART_pm.c **** *
+ 224:.\Generated_Source\PSoC5/UART_pm.c **** *******************************************************************************/
+ 225:.\Generated_Source\PSoC5/UART_pm.c **** void UART_Resume(void) 
+ 226:.\Generated_Source\PSoC5/UART_pm.c **** {
+ 303              		.loc 1 226 0
+ 304              		.cfi_startproc
+ 305              		@ args = 0, pretend = 0, frame = 8
+ 306              		@ frame_needed = 1, uses_anonymous_args = 0
+ 307 0000 80B5     		push	{r7, lr}
+ 308              		.cfi_def_cfa_offset 8
+ 309              		.cfi_offset 7, -8
+ 310              		.cfi_offset 14, -4
+ 311 0002 82B0     		sub	sp, sp, #8
+ 312              		.cfi_def_cfa_offset 16
+ 313 0004 00AF     		add	r7, sp, #0
+ 314              		.cfi_def_cfa_register 7
+ 227:.\Generated_Source\PSoC5/UART_pm.c ****     uint8 enableInterrupts;
+ 228:.\Generated_Source\PSoC5/UART_pm.c ****     enableInterrupts = CyEnterCriticalSection();
+ 315              		.loc 1 228 0
+ 316 0006 FFF7FEFF 		bl	CyEnterCriticalSection
+ 317 000a 0346     		mov	r3, r0
+ 318 000c FB71     		strb	r3, [r7, #7]
+ 229:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 230:.\Generated_Source\PSoC5/UART_pm.c ****     if(UART_backup.enableState != 0u)
+ 319              		.loc 1 230 0
+ 320 000e 324B     		ldr	r3, .L16
+ 321 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 322 0012 002B     		cmp	r3, #0
+ 323 0014 58D0     		beq	.L15
+ 231:.\Generated_Source\PSoC5/UART_pm.c ****     {
+ 232:.\Generated_Source\PSoC5/UART_pm.c ****         #if(UART_DP_ISR_REMOVE == 0u)
+ 233:.\Generated_Source\PSoC5/UART_pm.c ****             CyIntDisable(UART_DP_INTC_VECT_NUM);
+ 324              		.loc 1 233 0
+ 325 0016 314B     		ldr	r3, .L16+4
+ 326 0018 4FF48052 		mov	r2, #4096
+ 327 001c 1A60     		str	r2, [r3]
+ 234:.\Generated_Source\PSoC5/UART_pm.c ****         #endif /*  UART_DP_ISR_REMOVE */
+ 235:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 236:.\Generated_Source\PSoC5/UART_pm.c ****         /* Enable USB block */
+ 237:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_ACT_CFG_REG |= UART_PM_ACT_EN_FSUSB;
+ 328              		.loc 1 237 0
+ 329 001e 304A     		ldr	r2, .L16+8
+ 330 0020 2F4B     		ldr	r3, .L16+8
+ 331 0022 1B78     		ldrb	r3, [r3]
+ 332 0024 DBB2     		uxtb	r3, r3
+ 333 0026 43F00103 		orr	r3, r3, #1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 11
+
+
+ 334 002a DBB2     		uxtb	r3, r3
+ 335 002c 1370     		strb	r3, [r2]
+ 238:.\Generated_Source\PSoC5/UART_pm.c ****         /* Enable USB block for Standby Power Mode */
+ 239:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_STBY_CFG_REG |= UART_PM_STBY_EN_FSUSB;
+ 336              		.loc 1 239 0
+ 337 002e 2D4A     		ldr	r2, .L16+12
+ 338 0030 2C4B     		ldr	r3, .L16+12
+ 339 0032 1B78     		ldrb	r3, [r3]
+ 340 0034 DBB2     		uxtb	r3, r3
+ 341 0036 43F00103 		orr	r3, r3, #1
+ 342 003a DBB2     		uxtb	r3, r3
+ 343 003c 1370     		strb	r3, [r2]
+ 240:.\Generated_Source\PSoC5/UART_pm.c ****         /* Enable core clock */
+ 241:.\Generated_Source\PSoC5/UART_pm.c ****         UART_USB_CLK_EN_REG |= UART_USB_CLK_ENABLE;
+ 344              		.loc 1 241 0
+ 345 003e 2A4A     		ldr	r2, .L16+16
+ 346 0040 294B     		ldr	r3, .L16+16
+ 347 0042 1B78     		ldrb	r3, [r3]
+ 348 0044 DBB2     		uxtb	r3, r3
+ 349 0046 43F00103 		orr	r3, r3, #1
+ 350 004a DBB2     		uxtb	r3, r3
+ 351 004c 1370     		strb	r3, [r2]
+ 242:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 243:.\Generated_Source\PSoC5/UART_pm.c ****         /* Enable the USBIO reference by setting PM.USB_CR0.fsusbio_ref_en.*/
+ 244:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_USB_CR0_REG |= UART_PM_USB_CR0_REF_EN;
+ 352              		.loc 1 244 0
+ 353 004e 274A     		ldr	r2, .L16+20
+ 354 0050 264B     		ldr	r3, .L16+20
+ 355 0052 1B78     		ldrb	r3, [r3]
+ 356 0054 DBB2     		uxtb	r3, r3
+ 357 0056 43F00103 		orr	r3, r3, #1
+ 358 005a DBB2     		uxtb	r3, r3
+ 359 005c 1370     		strb	r3, [r2]
+ 245:.\Generated_Source\PSoC5/UART_pm.c ****         /* The reference will be available ~40us after power restored */
+ 246:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(40u);
+ 360              		.loc 1 246 0
+ 361 005e 2820     		movs	r0, #40
+ 362 0060 FFF7FEFF 		bl	CyDelayUs
+ 247:.\Generated_Source\PSoC5/UART_pm.c ****         /* Return VRegulator*/
+ 248:.\Generated_Source\PSoC5/UART_pm.c ****         UART_CR1_REG |= UART_backup.mode;
+ 363              		.loc 1 248 0
+ 364 0064 2249     		ldr	r1, .L16+24
+ 365 0066 224B     		ldr	r3, .L16+24
+ 366 0068 1B78     		ldrb	r3, [r3]
+ 367 006a DAB2     		uxtb	r2, r3
+ 368 006c 1A4B     		ldr	r3, .L16
+ 369 006e 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 370 0070 1343     		orrs	r3, r3, r2
+ 371 0072 DBB2     		uxtb	r3, r3
+ 372 0074 0B70     		strb	r3, [r1]
+ 249:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(0u);  /*~50ns delay */
+ 373              		.loc 1 249 0
+ 374 0076 0020     		movs	r0, #0
+ 375 0078 FFF7FEFF 		bl	CyDelayUs
+ 250:.\Generated_Source\PSoC5/UART_pm.c ****         /* Enable USBIO */
+ 251:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_USB_CR0_REG |= UART_PM_USB_CR0_PD_N;
+ 376              		.loc 1 251 0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 12
+
+
+ 377 007c 1B4A     		ldr	r2, .L16+20
+ 378 007e 1B4B     		ldr	r3, .L16+20
+ 379 0080 1B78     		ldrb	r3, [r3]
+ 380 0082 DBB2     		uxtb	r3, r3
+ 381 0084 43F00203 		orr	r3, r3, #2
+ 382 0088 DBB2     		uxtb	r3, r3
+ 383 008a 1370     		strb	r3, [r2]
+ 252:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayUs(2u);
+ 384              		.loc 1 252 0
+ 385 008c 0220     		movs	r0, #2
+ 386 008e FFF7FEFF 		bl	CyDelayUs
+ 253:.\Generated_Source\PSoC5/UART_pm.c ****         /* Set the USBIO pull-up enable */
+ 254:.\Generated_Source\PSoC5/UART_pm.c ****         UART_PM_USB_CR0_REG |= UART_PM_USB_CR0_PD_PULLUP_N;
+ 387              		.loc 1 254 0
+ 388 0092 164A     		ldr	r2, .L16+20
+ 389 0094 154B     		ldr	r3, .L16+20
+ 390 0096 1B78     		ldrb	r3, [r3]
+ 391 0098 DBB2     		uxtb	r3, r3
+ 392 009a 43F00403 		orr	r3, r3, #4
+ 393 009e DBB2     		uxtb	r3, r3
+ 394 00a0 1370     		strb	r3, [r2]
+ 255:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 256:.\Generated_Source\PSoC5/UART_pm.c ****         /* Re-init Arbiter configuration for DMA transfers */
+ 257:.\Generated_Source\PSoC5/UART_pm.c ****         #if(UART_EP_MM != UART__EP_MANUAL)
+ 258:.\Generated_Source\PSoC5/UART_pm.c ****             /* Usb arb interrupt enable */
+ 259:.\Generated_Source\PSoC5/UART_pm.c ****             UART_ARB_INT_EN_REG = UART_ARB_INT_MASK;
+ 260:.\Generated_Source\PSoC5/UART_pm.c ****             #if(UART_EP_MM == UART__EP_DMAMANUAL)
+ 261:.\Generated_Source\PSoC5/UART_pm.c ****                 UART_ARB_CFG_REG = UART_ARB_CFG_MANUAL_DMA;
+ 262:.\Generated_Source\PSoC5/UART_pm.c ****             #endif   /*  UART_EP_MM == UART__EP_DMAMANUAL */
+ 263:.\Generated_Source\PSoC5/UART_pm.c ****             #if(UART_EP_MM == UART__EP_DMAAUTO)
+ 264:.\Generated_Source\PSoC5/UART_pm.c ****                 /*Set cfg cmplt this rises DMA request when the full configuration is done */
+ 265:.\Generated_Source\PSoC5/UART_pm.c ****                 UART_ARB_CFG_REG = UART_ARB_CFG_AUTO_DMA | UART_ARB_CFG_AUTO_MEM;
+ 266:.\Generated_Source\PSoC5/UART_pm.c ****             #endif   /*  UART_EP_MM == UART__EP_DMAAUTO */
+ 267:.\Generated_Source\PSoC5/UART_pm.c ****         #endif   /*  UART_EP_MM != UART__EP_MANUAL */
+ 268:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 269:.\Generated_Source\PSoC5/UART_pm.c ****         /* STALL_IN_OUT */
+ 270:.\Generated_Source\PSoC5/UART_pm.c ****         CY_SET_REG8(UART_EP0_CR_PTR, UART_MODE_STALL_IN_OUT);
+ 395              		.loc 1 270 0
+ 396 00a2 144B     		ldr	r3, .L16+28
+ 397 00a4 0322     		movs	r2, #3
+ 398 00a6 1A70     		strb	r2, [r3]
+ 271:.\Generated_Source\PSoC5/UART_pm.c ****         /* Enable the SIE with a last address */
+ 272:.\Generated_Source\PSoC5/UART_pm.c ****         UART_CR0_REG |= UART_CR0_ENABLE;
+ 399              		.loc 1 272 0
+ 400 00a8 134A     		ldr	r2, .L16+32
+ 401 00aa 134B     		ldr	r3, .L16+32
+ 402 00ac 1B78     		ldrb	r3, [r3]
+ 403 00ae DBB2     		uxtb	r3, r3
+ 404 00b0 63F07F03 		orn	r3, r3, #127
+ 405 00b4 DBB2     		uxtb	r3, r3
+ 406 00b6 1370     		strb	r3, [r2]
+ 273:.\Generated_Source\PSoC5/UART_pm.c ****         CyDelayCycles(1u);
+ 407              		.loc 1 273 0
+ 408 00b8 0120     		movs	r0, #1
+ 409 00ba FFF7FEFF 		bl	CyDelayCycles
+ 274:.\Generated_Source\PSoC5/UART_pm.c ****         /* Finally, Enable d+ pullup and select iomode to USB mode*/
+ 275:.\Generated_Source\PSoC5/UART_pm.c ****         CY_SET_REG8(UART_USBIO_CR1_PTR, UART_USBIO_CR1_USBPUEN);
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 13
+
+
+ 410              		.loc 1 275 0
+ 411 00be 0F4B     		ldr	r3, .L16+36
+ 412 00c0 0422     		movs	r2, #4
+ 413 00c2 1A70     		strb	r2, [r3]
+ 276:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 277:.\Generated_Source\PSoC5/UART_pm.c ****         /* Restore USB register settings */
+ 278:.\Generated_Source\PSoC5/UART_pm.c ****         UART_RestoreConfig();
+ 414              		.loc 1 278 0
+ 415 00c4 FFF7FEFF 		bl	UART_RestoreConfig
+ 416              	.L15:
+ 279:.\Generated_Source\PSoC5/UART_pm.c ****     }
+ 280:.\Generated_Source\PSoC5/UART_pm.c **** 
+ 281:.\Generated_Source\PSoC5/UART_pm.c ****     CyExitCriticalSection(enableInterrupts);
+ 417              		.loc 1 281 0
+ 418 00c8 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 419 00ca 1846     		mov	r0, r3
+ 420 00cc FFF7FEFF 		bl	CyExitCriticalSection
+ 282:.\Generated_Source\PSoC5/UART_pm.c **** }
+ 421              		.loc 1 282 0
+ 422 00d0 0837     		adds	r7, r7, #8
+ 423              		.cfi_def_cfa_offset 8
+ 424 00d2 BD46     		mov	sp, r7
+ 425              		.cfi_def_cfa_register 13
+ 426              		@ sp needed
+ 427 00d4 80BD     		pop	{r7, pc}
+ 428              	.L17:
+ 429 00d6 00BF     		.align	2
+ 430              	.L16:
+ 431 00d8 00000000 		.word	UART_backup
+ 432 00dc 80E100E0 		.word	-536813184
+ 433 00e0 A5430040 		.word	1073759141
+ 434 00e4 B5430040 		.word	1073759157
+ 435 00e8 9D600040 		.word	1073766557
+ 436 00ec 94430040 		.word	1073759124
+ 437 00f0 09600040 		.word	1073766409
+ 438 00f4 28600040 		.word	1073766440
+ 439 00f8 08600040 		.word	1073766408
+ 440 00fc 12600040 		.word	1073766418
+ 441              		.cfi_endproc
+ 442              	.LFE60:
+ 443              		.size	UART_Resume, .-UART_Resume
+ 444              		.text
+ 445              	.Letext0:
+ 446              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 447              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 448              		.file 4 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 449              		.file 5 ".\\Generated_Source\\PSoC5\\UART.h"
+ 450              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 451              		.section	.debug_info,"",%progbits
+ 452              	.Ldebug_info0:
+ 453 0000 AE010000 		.4byte	0x1ae
+ 454 0004 0400     		.2byte	0x4
+ 455 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 456 000a 04       		.byte	0x4
+ 457 000b 01       		.uleb128 0x1
+ 458 000c 4C000000 		.4byte	.LASF32
+ 459 0010 01       		.byte	0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 14
+
+
+ 460 0011 31010000 		.4byte	.LASF33
+ 461 0015 DA000000 		.4byte	.LASF34
+ 462 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 463 001d 00000000 		.4byte	0
+ 464 0021 00000000 		.4byte	.Ldebug_line0
+ 465 0025 02       		.uleb128 0x2
+ 466 0026 01       		.byte	0x1
+ 467 0027 06       		.byte	0x6
+ 468 0028 2B020000 		.4byte	.LASF0
+ 469 002c 02       		.uleb128 0x2
+ 470 002d 01       		.byte	0x1
+ 471 002e 08       		.byte	0x8
+ 472 002f 72010000 		.4byte	.LASF1
+ 473 0033 02       		.uleb128 0x2
+ 474 0034 02       		.byte	0x2
+ 475 0035 05       		.byte	0x5
+ 476 0036 FA010000 		.4byte	.LASF2
+ 477 003a 02       		.uleb128 0x2
+ 478 003b 02       		.byte	0x2
+ 479 003c 07       		.byte	0x7
+ 480 003d 37020000 		.4byte	.LASF3
+ 481 0041 03       		.uleb128 0x3
+ 482 0042 2F000000 		.4byte	.LASF9
+ 483 0046 02       		.byte	0x2
+ 484 0047 3F       		.byte	0x3f
+ 485 0048 4C000000 		.4byte	0x4c
+ 486 004c 02       		.uleb128 0x2
+ 487 004d 04       		.byte	0x4
+ 488 004e 05       		.byte	0x5
+ 489 004f 0A020000 		.4byte	.LASF4
+ 490 0053 02       		.uleb128 0x2
+ 491 0054 04       		.byte	0x4
+ 492 0055 07       		.byte	0x7
+ 493 0056 1F010000 		.4byte	.LASF5
+ 494 005a 02       		.uleb128 0x2
+ 495 005b 08       		.byte	0x8
+ 496 005c 05       		.byte	0x5
+ 497 005d E7010000 		.4byte	.LASF6
+ 498 0061 02       		.uleb128 0x2
+ 499 0062 08       		.byte	0x8
+ 500 0063 07       		.byte	0x7
+ 501 0064 A7010000 		.4byte	.LASF7
+ 502 0068 04       		.uleb128 0x4
+ 503 0069 04       		.byte	0x4
+ 504 006a 05       		.byte	0x5
+ 505 006b 696E7400 		.ascii	"int\000"
+ 506 006f 02       		.uleb128 0x2
+ 507 0070 04       		.byte	0x4
+ 508 0071 07       		.byte	0x7
+ 509 0072 9A010000 		.4byte	.LASF8
+ 510 0076 03       		.uleb128 0x3
+ 511 0077 D6010000 		.4byte	.LASF10
+ 512 007b 03       		.byte	0x3
+ 513 007c 2C       		.byte	0x2c
+ 514 007d 41000000 		.4byte	0x41
+ 515 0081 03       		.uleb128 0x3
+ 516 0082 04020000 		.4byte	.LASF11
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 15
+
+
+ 517 0086 04       		.byte	0x4
+ 518 0087 A1       		.byte	0xa1
+ 519 0088 2C000000 		.4byte	0x2c
+ 520 008c 03       		.uleb128 0x3
+ 521 008d 93010000 		.4byte	.LASF12
+ 522 0091 04       		.byte	0x4
+ 523 0092 A3       		.byte	0xa3
+ 524 0093 53000000 		.4byte	0x53
+ 525 0097 02       		.uleb128 0x2
+ 526 0098 04       		.byte	0x4
+ 527 0099 04       		.byte	0x4
+ 528 009a 08010000 		.4byte	.LASF13
+ 529 009e 02       		.uleb128 0x2
+ 530 009f 08       		.byte	0x8
+ 531 00a0 04       		.byte	0x4
+ 532 00a1 80010000 		.4byte	.LASF14
+ 533 00a5 02       		.uleb128 0x2
+ 534 00a6 01       		.byte	0x1
+ 535 00a7 08       		.byte	0x8
+ 536 00a8 F5010000 		.4byte	.LASF15
+ 537 00ac 05       		.uleb128 0x5
+ 538 00ad 1A010000 		.4byte	.LASF16
+ 539 00b1 04       		.byte	0x4
+ 540 00b2 4B01     		.2byte	0x14b
+ 541 00b4 B8000000 		.4byte	0xb8
+ 542 00b8 06       		.uleb128 0x6
+ 543 00b9 81000000 		.4byte	0x81
+ 544 00bd 05       		.uleb128 0x5
+ 545 00be 0D000000 		.4byte	.LASF17
+ 546 00c2 04       		.byte	0x4
+ 547 00c3 4D01     		.2byte	0x14d
+ 548 00c5 C9000000 		.4byte	0xc9
+ 549 00c9 06       		.uleb128 0x6
+ 550 00ca 8C000000 		.4byte	0x8c
+ 551 00ce 02       		.uleb128 0x2
+ 552 00cf 04       		.byte	0x4
+ 553 00d0 07       		.byte	0x7
+ 554 00d1 DE010000 		.4byte	.LASF18
+ 555 00d5 07       		.uleb128 0x7
+ 556 00d6 02       		.byte	0x2
+ 557 00d7 05       		.byte	0x5
+ 558 00d8 A6       		.byte	0xa6
+ 559 00d9 F6000000 		.4byte	0xf6
+ 560 00dd 08       		.uleb128 0x8
+ 561 00de 13020000 		.4byte	.LASF19
+ 562 00e2 05       		.byte	0x5
+ 563 00e3 A8       		.byte	0xa8
+ 564 00e4 81000000 		.4byte	0x81
+ 565 00e8 00       		.byte	0
+ 566 00e9 08       		.uleb128 0x8
+ 567 00ea BE010000 		.4byte	.LASF20
+ 568 00ee 05       		.byte	0x5
+ 569 00ef A9       		.byte	0xa9
+ 570 00f0 81000000 		.4byte	0x81
+ 571 00f4 01       		.byte	0x1
+ 572 00f5 00       		.byte	0
+ 573 00f6 03       		.uleb128 0x3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 16
+
+
+ 574 00f7 4A020000 		.4byte	.LASF21
+ 575 00fb 05       		.byte	0x5
+ 576 00fc AA       		.byte	0xaa
+ 577 00fd D5000000 		.4byte	0xd5
+ 578 0101 02       		.uleb128 0x2
+ 579 0102 08       		.byte	0x8
+ 580 0103 04       		.byte	0x4
+ 581 0104 1F020000 		.4byte	.LASF22
+ 582 0108 09       		.uleb128 0x9
+ 583 0109 0E010000 		.4byte	.LASF23
+ 584 010d 01       		.byte	0x1
+ 585 010e 37       		.byte	0x37
+ 586 010f 00000000 		.4byte	.LFB56
+ 587 0113 14000000 		.4byte	.LFE56-.LFB56
+ 588 0117 01       		.uleb128 0x1
+ 589 0118 9C       		.byte	0x9c
+ 590 0119 09       		.uleb128 0x9
+ 591 011a 1F000000 		.4byte	.LASF24
+ 592 011e 01       		.byte	0x1
+ 593 011f 5D       		.byte	0x5d
+ 594 0120 00000000 		.4byte	.LFB57
+ 595 0124 0C000000 		.4byte	.LFE57-.LFB57
+ 596 0128 01       		.uleb128 0x1
+ 597 0129 9C       		.byte	0x9c
+ 598 012a 0A       		.uleb128 0xa
+ 599 012b 39000000 		.4byte	.LASF25
+ 600 012f 01       		.byte	0x1
+ 601 0130 74       		.byte	0x74
+ 602 0131 00000000 		.4byte	.LFB58
+ 603 0135 18000000 		.4byte	.LFE58-.LFB58
+ 604 0139 01       		.uleb128 0x1
+ 605 013a 9C       		.byte	0x9c
+ 606 013b 0B       		.uleb128 0xb
+ 607 013c 00000000 		.4byte	.LASF26
+ 608 0140 01       		.byte	0x1
+ 609 0141 91       		.byte	0x91
+ 610 0142 00000000 		.4byte	.LFB59
+ 611 0146 2C010000 		.4byte	.LFE59-.LFB59
+ 612 014a 01       		.uleb128 0x1
+ 613 014b 9C       		.byte	0x9c
+ 614 014c 5F010000 		.4byte	0x15f
+ 615 0150 0C       		.uleb128 0xc
+ 616 0151 61010000 		.4byte	.LASF28
+ 617 0155 01       		.byte	0x1
+ 618 0156 93       		.byte	0x93
+ 619 0157 81000000 		.4byte	0x81
+ 620 015b 02       		.uleb128 0x2
+ 621 015c 91       		.byte	0x91
+ 622 015d 77       		.sleb128 -9
+ 623 015e 00       		.byte	0
+ 624 015f 0B       		.uleb128 0xb
+ 625 0160 13000000 		.4byte	.LASF27
+ 626 0164 01       		.byte	0x1
+ 627 0165 E1       		.byte	0xe1
+ 628 0166 00000000 		.4byte	.LFB60
+ 629 016a 00010000 		.4byte	.LFE60-.LFB60
+ 630 016e 01       		.uleb128 0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 17
+
+
+ 631 016f 9C       		.byte	0x9c
+ 632 0170 83010000 		.4byte	0x183
+ 633 0174 0C       		.uleb128 0xc
+ 634 0175 61010000 		.4byte	.LASF28
+ 635 0179 01       		.byte	0x1
+ 636 017a E3       		.byte	0xe3
+ 637 017b 81000000 		.4byte	0x81
+ 638 017f 02       		.uleb128 0x2
+ 639 0180 91       		.byte	0x91
+ 640 0181 77       		.sleb128 -9
+ 641 0182 00       		.byte	0
+ 642 0183 0C       		.uleb128 0xc
+ 643 0184 87010000 		.4byte	.LASF29
+ 644 0188 01       		.byte	0x1
+ 645 0189 23       		.byte	0x23
+ 646 018a F6000000 		.4byte	0xf6
+ 647 018e 05       		.uleb128 0x5
+ 648 018f 03       		.byte	0x3
+ 649 0190 00000000 		.4byte	UART_backup
+ 650 0194 0D       		.uleb128 0xd
+ 651 0195 C3010000 		.4byte	.LASF30
+ 652 0199 05       		.byte	0x5
+ 653 019a 4E02     		.2byte	0x24e
+ 654 019c B8000000 		.4byte	0xb8
+ 655 01a0 0D       		.uleb128 0xd
+ 656 01a1 54010000 		.4byte	.LASF31
+ 657 01a5 06       		.byte	0x6
+ 658 01a6 1606     		.2byte	0x616
+ 659 01a8 AC010000 		.4byte	0x1ac
+ 660 01ac 06       		.uleb128 0x6
+ 661 01ad 76000000 		.4byte	0x76
+ 662 01b1 00       		.byte	0
+ 663              		.section	.debug_abbrev,"",%progbits
+ 664              	.Ldebug_abbrev0:
+ 665 0000 01       		.uleb128 0x1
+ 666 0001 11       		.uleb128 0x11
+ 667 0002 01       		.byte	0x1
+ 668 0003 25       		.uleb128 0x25
+ 669 0004 0E       		.uleb128 0xe
+ 670 0005 13       		.uleb128 0x13
+ 671 0006 0B       		.uleb128 0xb
+ 672 0007 03       		.uleb128 0x3
+ 673 0008 0E       		.uleb128 0xe
+ 674 0009 1B       		.uleb128 0x1b
+ 675 000a 0E       		.uleb128 0xe
+ 676 000b 55       		.uleb128 0x55
+ 677 000c 17       		.uleb128 0x17
+ 678 000d 11       		.uleb128 0x11
+ 679 000e 01       		.uleb128 0x1
+ 680 000f 10       		.uleb128 0x10
+ 681 0010 17       		.uleb128 0x17
+ 682 0011 00       		.byte	0
+ 683 0012 00       		.byte	0
+ 684 0013 02       		.uleb128 0x2
+ 685 0014 24       		.uleb128 0x24
+ 686 0015 00       		.byte	0
+ 687 0016 0B       		.uleb128 0xb
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 18
+
+
+ 688 0017 0B       		.uleb128 0xb
+ 689 0018 3E       		.uleb128 0x3e
+ 690 0019 0B       		.uleb128 0xb
+ 691 001a 03       		.uleb128 0x3
+ 692 001b 0E       		.uleb128 0xe
+ 693 001c 00       		.byte	0
+ 694 001d 00       		.byte	0
+ 695 001e 03       		.uleb128 0x3
+ 696 001f 16       		.uleb128 0x16
+ 697 0020 00       		.byte	0
+ 698 0021 03       		.uleb128 0x3
+ 699 0022 0E       		.uleb128 0xe
+ 700 0023 3A       		.uleb128 0x3a
+ 701 0024 0B       		.uleb128 0xb
+ 702 0025 3B       		.uleb128 0x3b
+ 703 0026 0B       		.uleb128 0xb
+ 704 0027 49       		.uleb128 0x49
+ 705 0028 13       		.uleb128 0x13
+ 706 0029 00       		.byte	0
+ 707 002a 00       		.byte	0
+ 708 002b 04       		.uleb128 0x4
+ 709 002c 24       		.uleb128 0x24
+ 710 002d 00       		.byte	0
+ 711 002e 0B       		.uleb128 0xb
+ 712 002f 0B       		.uleb128 0xb
+ 713 0030 3E       		.uleb128 0x3e
+ 714 0031 0B       		.uleb128 0xb
+ 715 0032 03       		.uleb128 0x3
+ 716 0033 08       		.uleb128 0x8
+ 717 0034 00       		.byte	0
+ 718 0035 00       		.byte	0
+ 719 0036 05       		.uleb128 0x5
+ 720 0037 16       		.uleb128 0x16
+ 721 0038 00       		.byte	0
+ 722 0039 03       		.uleb128 0x3
+ 723 003a 0E       		.uleb128 0xe
+ 724 003b 3A       		.uleb128 0x3a
+ 725 003c 0B       		.uleb128 0xb
+ 726 003d 3B       		.uleb128 0x3b
+ 727 003e 05       		.uleb128 0x5
+ 728 003f 49       		.uleb128 0x49
+ 729 0040 13       		.uleb128 0x13
+ 730 0041 00       		.byte	0
+ 731 0042 00       		.byte	0
+ 732 0043 06       		.uleb128 0x6
+ 733 0044 35       		.uleb128 0x35
+ 734 0045 00       		.byte	0
+ 735 0046 49       		.uleb128 0x49
+ 736 0047 13       		.uleb128 0x13
+ 737 0048 00       		.byte	0
+ 738 0049 00       		.byte	0
+ 739 004a 07       		.uleb128 0x7
+ 740 004b 13       		.uleb128 0x13
+ 741 004c 01       		.byte	0x1
+ 742 004d 0B       		.uleb128 0xb
+ 743 004e 0B       		.uleb128 0xb
+ 744 004f 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 19
+
+
+ 745 0050 0B       		.uleb128 0xb
+ 746 0051 3B       		.uleb128 0x3b
+ 747 0052 0B       		.uleb128 0xb
+ 748 0053 01       		.uleb128 0x1
+ 749 0054 13       		.uleb128 0x13
+ 750 0055 00       		.byte	0
+ 751 0056 00       		.byte	0
+ 752 0057 08       		.uleb128 0x8
+ 753 0058 0D       		.uleb128 0xd
+ 754 0059 00       		.byte	0
+ 755 005a 03       		.uleb128 0x3
+ 756 005b 0E       		.uleb128 0xe
+ 757 005c 3A       		.uleb128 0x3a
+ 758 005d 0B       		.uleb128 0xb
+ 759 005e 3B       		.uleb128 0x3b
+ 760 005f 0B       		.uleb128 0xb
+ 761 0060 49       		.uleb128 0x49
+ 762 0061 13       		.uleb128 0x13
+ 763 0062 38       		.uleb128 0x38
+ 764 0063 0B       		.uleb128 0xb
+ 765 0064 00       		.byte	0
+ 766 0065 00       		.byte	0
+ 767 0066 09       		.uleb128 0x9
+ 768 0067 2E       		.uleb128 0x2e
+ 769 0068 00       		.byte	0
+ 770 0069 3F       		.uleb128 0x3f
+ 771 006a 19       		.uleb128 0x19
+ 772 006b 03       		.uleb128 0x3
+ 773 006c 0E       		.uleb128 0xe
+ 774 006d 3A       		.uleb128 0x3a
+ 775 006e 0B       		.uleb128 0xb
+ 776 006f 3B       		.uleb128 0x3b
+ 777 0070 0B       		.uleb128 0xb
+ 778 0071 27       		.uleb128 0x27
+ 779 0072 19       		.uleb128 0x19
+ 780 0073 11       		.uleb128 0x11
+ 781 0074 01       		.uleb128 0x1
+ 782 0075 12       		.uleb128 0x12
+ 783 0076 06       		.uleb128 0x6
+ 784 0077 40       		.uleb128 0x40
+ 785 0078 18       		.uleb128 0x18
+ 786 0079 9742     		.uleb128 0x2117
+ 787 007b 19       		.uleb128 0x19
+ 788 007c 00       		.byte	0
+ 789 007d 00       		.byte	0
+ 790 007e 0A       		.uleb128 0xa
+ 791 007f 2E       		.uleb128 0x2e
+ 792 0080 00       		.byte	0
+ 793 0081 3F       		.uleb128 0x3f
+ 794 0082 19       		.uleb128 0x19
+ 795 0083 03       		.uleb128 0x3
+ 796 0084 0E       		.uleb128 0xe
+ 797 0085 3A       		.uleb128 0x3a
+ 798 0086 0B       		.uleb128 0xb
+ 799 0087 3B       		.uleb128 0x3b
+ 800 0088 0B       		.uleb128 0xb
+ 801 0089 27       		.uleb128 0x27
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 20
+
+
+ 802 008a 19       		.uleb128 0x19
+ 803 008b 11       		.uleb128 0x11
+ 804 008c 01       		.uleb128 0x1
+ 805 008d 12       		.uleb128 0x12
+ 806 008e 06       		.uleb128 0x6
+ 807 008f 40       		.uleb128 0x40
+ 808 0090 18       		.uleb128 0x18
+ 809 0091 9642     		.uleb128 0x2116
+ 810 0093 19       		.uleb128 0x19
+ 811 0094 00       		.byte	0
+ 812 0095 00       		.byte	0
+ 813 0096 0B       		.uleb128 0xb
+ 814 0097 2E       		.uleb128 0x2e
+ 815 0098 01       		.byte	0x1
+ 816 0099 3F       		.uleb128 0x3f
+ 817 009a 19       		.uleb128 0x19
+ 818 009b 03       		.uleb128 0x3
+ 819 009c 0E       		.uleb128 0xe
+ 820 009d 3A       		.uleb128 0x3a
+ 821 009e 0B       		.uleb128 0xb
+ 822 009f 3B       		.uleb128 0x3b
+ 823 00a0 0B       		.uleb128 0xb
+ 824 00a1 27       		.uleb128 0x27
+ 825 00a2 19       		.uleb128 0x19
+ 826 00a3 11       		.uleb128 0x11
+ 827 00a4 01       		.uleb128 0x1
+ 828 00a5 12       		.uleb128 0x12
+ 829 00a6 06       		.uleb128 0x6
+ 830 00a7 40       		.uleb128 0x40
+ 831 00a8 18       		.uleb128 0x18
+ 832 00a9 9642     		.uleb128 0x2116
+ 833 00ab 19       		.uleb128 0x19
+ 834 00ac 01       		.uleb128 0x1
+ 835 00ad 13       		.uleb128 0x13
+ 836 00ae 00       		.byte	0
+ 837 00af 00       		.byte	0
+ 838 00b0 0C       		.uleb128 0xc
+ 839 00b1 34       		.uleb128 0x34
+ 840 00b2 00       		.byte	0
+ 841 00b3 03       		.uleb128 0x3
+ 842 00b4 0E       		.uleb128 0xe
+ 843 00b5 3A       		.uleb128 0x3a
+ 844 00b6 0B       		.uleb128 0xb
+ 845 00b7 3B       		.uleb128 0x3b
+ 846 00b8 0B       		.uleb128 0xb
+ 847 00b9 49       		.uleb128 0x49
+ 848 00ba 13       		.uleb128 0x13
+ 849 00bb 02       		.uleb128 0x2
+ 850 00bc 18       		.uleb128 0x18
+ 851 00bd 00       		.byte	0
+ 852 00be 00       		.byte	0
+ 853 00bf 0D       		.uleb128 0xd
+ 854 00c0 34       		.uleb128 0x34
+ 855 00c1 00       		.byte	0
+ 856 00c2 03       		.uleb128 0x3
+ 857 00c3 0E       		.uleb128 0xe
+ 858 00c4 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 21
+
+
+ 859 00c5 0B       		.uleb128 0xb
+ 860 00c6 3B       		.uleb128 0x3b
+ 861 00c7 05       		.uleb128 0x5
+ 862 00c8 49       		.uleb128 0x49
+ 863 00c9 13       		.uleb128 0x13
+ 864 00ca 3F       		.uleb128 0x3f
+ 865 00cb 19       		.uleb128 0x19
+ 866 00cc 3C       		.uleb128 0x3c
+ 867 00cd 19       		.uleb128 0x19
+ 868 00ce 00       		.byte	0
+ 869 00cf 00       		.byte	0
+ 870 00d0 00       		.byte	0
+ 871              		.section	.debug_aranges,"",%progbits
+ 872 0000 3C000000 		.4byte	0x3c
+ 873 0004 0200     		.2byte	0x2
+ 874 0006 00000000 		.4byte	.Ldebug_info0
+ 875 000a 04       		.byte	0x4
+ 876 000b 00       		.byte	0
+ 877 000c 0000     		.2byte	0
+ 878 000e 0000     		.2byte	0
+ 879 0010 00000000 		.4byte	.LFB56
+ 880 0014 14000000 		.4byte	.LFE56-.LFB56
+ 881 0018 00000000 		.4byte	.LFB57
+ 882 001c 0C000000 		.4byte	.LFE57-.LFB57
+ 883 0020 00000000 		.4byte	.LFB58
+ 884 0024 18000000 		.4byte	.LFE58-.LFB58
+ 885 0028 00000000 		.4byte	.LFB59
+ 886 002c 2C010000 		.4byte	.LFE59-.LFB59
+ 887 0030 00000000 		.4byte	.LFB60
+ 888 0034 00010000 		.4byte	.LFE60-.LFB60
+ 889 0038 00000000 		.4byte	0
+ 890 003c 00000000 		.4byte	0
+ 891              		.section	.debug_ranges,"",%progbits
+ 892              	.Ldebug_ranges0:
+ 893 0000 00000000 		.4byte	.LFB56
+ 894 0004 14000000 		.4byte	.LFE56
+ 895 0008 00000000 		.4byte	.LFB57
+ 896 000c 0C000000 		.4byte	.LFE57
+ 897 0010 00000000 		.4byte	.LFB58
+ 898 0014 18000000 		.4byte	.LFE58
+ 899 0018 00000000 		.4byte	.LFB59
+ 900 001c 2C010000 		.4byte	.LFE59
+ 901 0020 00000000 		.4byte	.LFB60
+ 902 0024 00010000 		.4byte	.LFE60
+ 903 0028 00000000 		.4byte	0
+ 904 002c 00000000 		.4byte	0
+ 905              		.section	.debug_line,"",%progbits
+ 906              	.Ldebug_line0:
+ 907 0000 F7010000 		.section	.debug_str,"MS",%progbits,1
+ 907      02006D01 
+ 907      00000201 
+ 907      FB0E0D00 
+ 907      01010101 
+ 908              	.LASF26:
+ 909 0000 55415254 		.ascii	"UART_Suspend\000"
+ 909      5F537573 
+ 909      70656E64 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 22
+
+
+ 909      00
+ 910              	.LASF17:
+ 911 000d 72656733 		.ascii	"reg32\000"
+ 911      3200
+ 912              	.LASF27:
+ 913 0013 55415254 		.ascii	"UART_Resume\000"
+ 913      5F526573 
+ 913      756D6500 
+ 914              	.LASF24:
+ 915 001f 55415254 		.ascii	"UART_SaveConfig\000"
+ 915      5F536176 
+ 915      65436F6E 
+ 915      66696700 
+ 916              	.LASF9:
+ 917 002f 5F5F696E 		.ascii	"__int32_t\000"
+ 917      7433325F 
+ 917      7400
+ 918              	.LASF25:
+ 919 0039 55415254 		.ascii	"UART_RestoreConfig\000"
+ 919      5F526573 
+ 919      746F7265 
+ 919      436F6E66 
+ 919      696700
+ 920              	.LASF32:
+ 921 004c 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 921      4320342E 
+ 921      392E3320 
+ 921      32303135 
+ 921      30333033 
+ 922 007f 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 922      20726576 
+ 922      6973696F 
+ 922      6E203232 
+ 922      31323230 
+ 923 00b2 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 923      66756E63 
+ 923      74696F6E 
+ 923      2D736563 
+ 923      74696F6E 
+ 924              	.LASF34:
+ 925 00da 433A5C55 		.ascii	"C:\\Users\\Lois\\Desktop\\MC1_5\\MC1_5_PSOC5.cydsn\000"
+ 925      73657273 
+ 925      5C4C6F69 
+ 925      735C4465 
+ 925      736B746F 
+ 926              	.LASF13:
+ 927 0108 666C6F61 		.ascii	"float\000"
+ 927      7400
+ 928              	.LASF23:
+ 929 010e 55415254 		.ascii	"UART_DP_ISR\000"
+ 929      5F44505F 
+ 929      49535200 
+ 930              	.LASF16:
+ 931 011a 72656738 		.ascii	"reg8\000"
+ 931      00
+ 932              	.LASF5:
+ 933 011f 6C6F6E67 		.ascii	"long unsigned int\000"
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 23
+
+
+ 933      20756E73 
+ 933      69676E65 
+ 933      6420696E 
+ 933      7400
+ 934              	.LASF33:
+ 935 0131 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\UART_pm.c\000"
+ 935      6E657261 
+ 935      7465645F 
+ 935      536F7572 
+ 935      63655C50 
+ 936              	.LASF31:
+ 937 0154 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 937      52784275 
+ 937      66666572 
+ 937      00
+ 938              	.LASF28:
+ 939 0161 656E6162 		.ascii	"enableInterrupts\000"
+ 939      6C65496E 
+ 939      74657272 
+ 939      75707473 
+ 939      00
+ 940              	.LASF1:
+ 941 0172 756E7369 		.ascii	"unsigned char\000"
+ 941      676E6564 
+ 941      20636861 
+ 941      7200
+ 942              	.LASF14:
+ 943 0180 646F7562 		.ascii	"double\000"
+ 943      6C6500
+ 944              	.LASF29:
+ 945 0187 55415254 		.ascii	"UART_backup\000"
+ 945      5F626163 
+ 945      6B757000 
+ 946              	.LASF12:
+ 947 0193 75696E74 		.ascii	"uint32\000"
+ 947      333200
+ 948              	.LASF8:
+ 949 019a 756E7369 		.ascii	"unsigned int\000"
+ 949      676E6564 
+ 949      20696E74 
+ 949      00
+ 950              	.LASF7:
+ 951 01a7 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 951      206C6F6E 
+ 951      6720756E 
+ 951      7369676E 
+ 951      65642069 
+ 952              	.LASF20:
+ 953 01be 6D6F6465 		.ascii	"mode\000"
+ 953      00
+ 954              	.LASF30:
+ 955 01c3 55415254 		.ascii	"UART_configuration\000"
+ 955      5F636F6E 
+ 955      66696775 
+ 955      72617469 
+ 955      6F6E00
+ 956              	.LASF10:
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccffXYnk.s 			page 24
+
+
+ 957 01d6 696E7433 		.ascii	"int32_t\000"
+ 957      325F7400 
+ 958              	.LASF18:
+ 959 01de 73697A65 		.ascii	"sizetype\000"
+ 959      74797065 
+ 959      00
+ 960              	.LASF6:
+ 961 01e7 6C6F6E67 		.ascii	"long long int\000"
+ 961      206C6F6E 
+ 961      6720696E 
+ 961      7400
+ 962              	.LASF15:
+ 963 01f5 63686172 		.ascii	"char\000"
+ 963      00
+ 964              	.LASF2:
+ 965 01fa 73686F72 		.ascii	"short int\000"
+ 965      7420696E 
+ 965      7400
+ 966              	.LASF11:
+ 967 0204 75696E74 		.ascii	"uint8\000"
+ 967      3800
+ 968              	.LASF4:
+ 969 020a 6C6F6E67 		.ascii	"long int\000"
+ 969      20696E74 
+ 969      00
+ 970              	.LASF19:
+ 971 0213 656E6162 		.ascii	"enableState\000"
+ 971      6C655374 
+ 971      61746500 
+ 972              	.LASF22:
+ 973 021f 6C6F6E67 		.ascii	"long double\000"
+ 973      20646F75 
+ 973      626C6500 
+ 974              	.LASF0:
+ 975 022b 7369676E 		.ascii	"signed char\000"
+ 975      65642063 
+ 975      68617200 
+ 976              	.LASF3:
+ 977 0237 73686F72 		.ascii	"short unsigned int\000"
+ 977      7420756E 
+ 977      7369676E 
+ 977      65642069 
+ 977      6E7400
+ 978              	.LASF21:
+ 979 024a 55415254 		.ascii	"UART_BACKUP_STRUCT\000"
+ 979      5F424143 
+ 979      4B55505F 
+ 979      53545255 
+ 979      435400
+ 980              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

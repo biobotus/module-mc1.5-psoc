@@ -1,0 +1,1999 @@
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"PIDControler.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	integral
+  19              		.bss
+  20              		.align	3
+  21              		.type	integral, %object
+  22              		.size	integral, 8
+  23              	integral:
+  24 0000 00000000 		.space	8
+  24      00000000 
+  25              		.global	last_error
+  26              		.align	3
+  27              		.type	last_error, %object
+  28              		.size	last_error, 8
+  29              	last_error:
+  30 0008 00000000 		.space	8
+  30      00000000 
+  31              		.global	__aeabi_i2d
+  32              		.global	__aeabi_dsub
+  33              		.global	__aeabi_dcmpgt
+  34              		.global	__aeabi_dcmplt
+  35              		.global	__aeabi_dmul
+  36              		.global	__aeabi_dadd
+  37              		.global	__aeabi_ddiv
+  38              		.global	__aeabi_f2d
+  39              		.global	__aeabi_d2iz
+  40              		.global	__aeabi_d2uiz
+  41              		.global	__aeabi_d2f
+  42              		.section	.text.updatePeltierOutput,"ax",%progbits
+  43              		.align	2
+  44              		.global	updatePeltierOutput
+  45              		.thumb
+  46              		.thumb_func
+  47              		.type	updatePeltierOutput, %function
+  48              	updatePeltierOutput:
+  49              	.LFB56:
+  50              		.file 1 ".\\PIDControler.c"
+   1:.\PIDControler.c **** /* ========================================
+   2:.\PIDControler.c ****  *
+   3:.\PIDControler.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\PIDControler.c ****  * All Rights Reserved
+   5:.\PIDControler.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 2
+
+
+   6:.\PIDControler.c ****  *
+   7:.\PIDControler.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\PIDControler.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\PIDControler.c ****  *
+  10:.\PIDControler.c ****  * ========================================
+  11:.\PIDControler.c **** */
+  12:.\PIDControler.c **** 
+  13:.\PIDControler.c **** #include "PIDControler.h"
+  14:.\PIDControler.c **** 
+  15:.\PIDControler.c **** void applyCommand(uint8 module, int8 command);
+  16:.\PIDControler.c **** 
+  17:.\PIDControler.c **** 
+  18:.\PIDControler.c **** double integral = 0;
+  19:.\PIDControler.c **** double last_error = 0;
+  20:.\PIDControler.c **** 
+  21:.\PIDControler.c **** extern MC1_5Module  mc1_5Module [2];
+  22:.\PIDControler.c **** 
+  23:.\PIDControler.c **** #define PID_ENABLE_TEMPERATURE 90
+  24:.\PIDControler.c **** 
+  25:.\PIDControler.c **** // Updates current temperature of the Peltier element by reading the corresponding thermistor.
+  26:.\PIDControler.c **** void updatePeltierOutput(uint8 module, double dt)
+  27:.\PIDControler.c **** {
+  51              		.loc 1 27 0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 80
+  54              		@ frame_needed = 1, uses_anonymous_args = 0
+  55 0000 B0B5     		push	{r4, r5, r7, lr}
+  56              		.cfi_def_cfa_offset 16
+  57              		.cfi_offset 4, -16
+  58              		.cfi_offset 5, -12
+  59              		.cfi_offset 7, -8
+  60              		.cfi_offset 14, -4
+  61 0002 94B0     		sub	sp, sp, #80
+  62              		.cfi_def_cfa_offset 96
+  63 0004 00AF     		add	r7, sp, #0
+  64              		.cfi_def_cfa_register 7
+  65 0006 0146     		mov	r1, r0
+  66 0008 C7E90023 		strd	r2, [r7]
+  67 000c 0B46     		mov	r3, r1
+  68 000e FB73     		strb	r3, [r7, #15]
+  28:.\PIDControler.c ****     double command;
+  29:.\PIDControler.c ****     uint16 target = mc1_5Module [module].targetTemperature;
+  69              		.loc 1 29 0
+  70 0010 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  71 0012 BF4A     		ldr	r2, .L23+8
+  72 0014 2C21     		movs	r1, #44
+  73 0016 01FB03F3 		mul	r3, r1, r3
+  74 001a 1344     		add	r3, r3, r2
+  75 001c 9B88     		ldrh	r3, [r3, #4]
+  76 001e FB87     		strh	r3, [r7, #62]	@ movhi
+  30:.\PIDControler.c ****     double current = getThermistorTemp(module); 
+  77              		.loc 1 30 0
+  78 0020 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  79 0022 1846     		mov	r0, r3
+  80 0024 FFF7FEFF 		bl	getThermistorTemp
+  81 0028 0346     		mov	r3, r0
+  82 002a 1846     		mov	r0, r3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 3
+
+
+  83 002c FFF7FEFF 		bl	__aeabi_i2d
+  84 0030 0246     		mov	r2, r0
+  85 0032 0B46     		mov	r3, r1
+  86 0034 C7E90C23 		strd	r2, [r7, #48]
+  31:.\PIDControler.c **** 	double error = target - current;
+  87              		.loc 1 31 0
+  88 0038 FB8F     		ldrh	r3, [r7, #62]
+  89 003a 1846     		mov	r0, r3
+  90 003c FFF7FEFF 		bl	__aeabi_i2d
+  91 0040 0246     		mov	r2, r0
+  92 0042 0B46     		mov	r3, r1
+  93 0044 1046     		mov	r0, r2
+  94 0046 1946     		mov	r1, r3
+  95 0048 D7E90C23 		ldrd	r2, [r7, #48]
+  96 004c FFF7FEFF 		bl	__aeabi_dsub
+  97 0050 0246     		mov	r2, r0
+  98 0052 0B46     		mov	r3, r1
+  99 0054 C7E90A23 		strd	r2, [r7, #40]
+  32:.\PIDControler.c ****     double kp;
+  33:.\PIDControler.c ****     double x;
+  34:.\PIDControler.c ****     
+  35:.\PIDControler.c ****     if(current < mc1_5Module [module].temperatureLimitHigh)
+ 100              		.loc 1 35 0
+ 101 0058 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 102 005a AD4A     		ldr	r2, .L23+8
+ 103 005c 2C21     		movs	r1, #44
+ 104 005e 01FB03F3 		mul	r3, r1, r3
+ 105 0062 1344     		add	r3, r3, r2
+ 106 0064 1833     		adds	r3, r3, #24
+ 107 0066 5B88     		ldrh	r3, [r3, #2]
+ 108 0068 1846     		mov	r0, r3
+ 109 006a FFF7FEFF 		bl	__aeabi_i2d
+ 110 006e 0246     		mov	r2, r0
+ 111 0070 0B46     		mov	r3, r1
+ 112 0072 1046     		mov	r0, r2
+ 113 0074 1946     		mov	r1, r3
+ 114 0076 D7E90C23 		ldrd	r2, [r7, #48]
+ 115 007a FFF7FEFF 		bl	__aeabi_dcmpgt
+ 116 007e 0346     		mov	r3, r0
+ 117 0080 002B     		cmp	r3, #0
+ 118 0082 00F05181 		beq	.L21
+ 119              	.LBB2:
+  36:.\PIDControler.c ****     {
+  37:.\PIDControler.c ****         if( current > target-PID_ENABLE_TEMPERATURE && current < target+PID_ENABLE_TEMPERATURE)
+ 120              		.loc 1 37 0
+ 121 0086 FB8F     		ldrh	r3, [r7, #62]
+ 122 0088 5A3B     		subs	r3, r3, #90
+ 123 008a 1846     		mov	r0, r3
+ 124 008c FFF7FEFF 		bl	__aeabi_i2d
+ 125 0090 0246     		mov	r2, r0
+ 126 0092 0B46     		mov	r3, r1
+ 127 0094 1046     		mov	r0, r2
+ 128 0096 1946     		mov	r1, r3
+ 129 0098 D7E90C23 		ldrd	r2, [r7, #48]
+ 130 009c FFF7FEFF 		bl	__aeabi_dcmplt
+ 131 00a0 0346     		mov	r3, r0
+ 132 00a2 002B     		cmp	r3, #0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 4
+
+
+ 133 00a4 23D0     		beq	.L4
+ 134              		.loc 1 37 0 is_stmt 0 discriminator 1
+ 135 00a6 FB8F     		ldrh	r3, [r7, #62]
+ 136 00a8 5A33     		adds	r3, r3, #90
+ 137 00aa 1846     		mov	r0, r3
+ 138 00ac FFF7FEFF 		bl	__aeabi_i2d
+ 139 00b0 0246     		mov	r2, r0
+ 140 00b2 0B46     		mov	r3, r1
+ 141 00b4 1046     		mov	r0, r2
+ 142 00b6 1946     		mov	r1, r3
+ 143 00b8 D7E90C23 		ldrd	r2, [r7, #48]
+ 144 00bc FFF7FEFF 		bl	__aeabi_dcmpgt
+ 145 00c0 0346     		mov	r3, r0
+ 146 00c2 002B     		cmp	r3, #0
+ 147 00c4 13D0     		beq	.L4
+  38:.\PIDControler.c ****         {
+  39:.\PIDControler.c **** 			integral += error*dt;
+ 148              		.loc 1 39 0 is_stmt 1
+ 149 00c6 D7E90A01 		ldrd	r0, [r7, #40]
+ 150 00ca D7E90023 		ldrd	r2, [r7]
+ 151 00ce FFF7FEFF 		bl	__aeabi_dmul
+ 152 00d2 0246     		mov	r2, r0
+ 153 00d4 0B46     		mov	r3, r1
+ 154 00d6 1046     		mov	r0, r2
+ 155 00d8 1946     		mov	r1, r3
+ 156 00da 8E4B     		ldr	r3, .L23+12
+ 157 00dc D3E90023 		ldrd	r2, [r3]
+ 158 00e0 FFF7FEFF 		bl	__aeabi_dadd
+ 159 00e4 0246     		mov	r2, r0
+ 160 00e6 0B46     		mov	r3, r1
+ 161 00e8 8A49     		ldr	r1, .L23+12
+ 162 00ea C1E90023 		strd	r2, [r1]
+ 163              	.L4:
+  40:.\PIDControler.c **** 		}
+  41:.\PIDControler.c **** 			
+  42:.\PIDControler.c **** 		double derivative = (error - last_error)/dt;
+ 164              		.loc 1 42 0
+ 165 00ee 8A4B     		ldr	r3, .L23+16
+ 166 00f0 D3E90023 		ldrd	r2, [r3]
+ 167 00f4 D7E90A01 		ldrd	r0, [r7, #40]
+ 168 00f8 FFF7FEFF 		bl	__aeabi_dsub
+ 169 00fc 0246     		mov	r2, r0
+ 170 00fe 0B46     		mov	r3, r1
+ 171 0100 1046     		mov	r0, r2
+ 172 0102 1946     		mov	r1, r3
+ 173 0104 D7E90023 		ldrd	r2, [r7]
+ 174 0108 FFF7FEFF 		bl	__aeabi_ddiv
+ 175 010c 0246     		mov	r2, r0
+ 176 010e 0B46     		mov	r3, r1
+ 177 0110 C7E90823 		strd	r2, [r7, #32]
+  43:.\PIDControler.c ****  		
+  44:.\PIDControler.c **** 		x = (fabs(error)/(double)100);
+ 178              		.loc 1 44 0
+ 179 0114 BC6A     		ldr	r4, [r7, #40]
+ 180 0116 FB6A     		ldr	r3, [r7, #44]
+ 181 0118 23F00045 		bic	r5, r3, #-2147483648
+ 182 011c 2046     		mov	r0, r4
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 5
+
+
+ 183 011e 2946     		mov	r1, r5
+ 184 0120 4FF00002 		mov	r2, #0
+ 185 0124 7D4B     		ldr	r3, .L23+20
+ 186 0126 FFF7FEFF 		bl	__aeabi_ddiv
+ 187 012a 0246     		mov	r2, r0
+ 188 012c 0B46     		mov	r3, r1
+ 189 012e C7E90623 		strd	r2, [r7, #24]
+  45:.\PIDControler.c **** 		if(error < 0)
+ 190              		.loc 1 45 0
+ 191 0132 D7E90A01 		ldrd	r0, [r7, #40]
+ 192 0136 4FF00002 		mov	r2, #0
+ 193 013a 4FF00003 		mov	r3, #0
+ 194 013e FFF7FEFF 		bl	__aeabi_dcmplt
+ 195 0142 0346     		mov	r3, r0
+ 196 0144 002B     		cmp	r3, #0
+ 197 0146 39D0     		beq	.L22
+  46:.\PIDControler.c **** 			kp = (double)mc1_5Module [module].kp + x + (x*x*x)/(double)2;
+ 198              		.loc 1 46 0
+ 199 0148 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 200 014a 714A     		ldr	r2, .L23+8
+ 201 014c 2C21     		movs	r1, #44
+ 202 014e 01FB03F3 		mul	r3, r1, r3
+ 203 0152 1344     		add	r3, r3, r2
+ 204 0154 2033     		adds	r3, r3, #32
+ 205 0156 1B68     		ldr	r3, [r3]	@ float
+ 206 0158 1846     		mov	r0, r3
+ 207 015a FFF7FEFF 		bl	__aeabi_f2d
+ 208 015e 0246     		mov	r2, r0
+ 209 0160 0B46     		mov	r3, r1
+ 210 0162 1046     		mov	r0, r2
+ 211 0164 1946     		mov	r1, r3
+ 212 0166 D7E90623 		ldrd	r2, [r7, #24]
+ 213 016a FFF7FEFF 		bl	__aeabi_dadd
+ 214 016e 0246     		mov	r2, r0
+ 215 0170 0B46     		mov	r3, r1
+ 216 0172 1446     		mov	r4, r2
+ 217 0174 1D46     		mov	r5, r3
+ 218 0176 D7E90601 		ldrd	r0, [r7, #24]
+ 219 017a D7E90623 		ldrd	r2, [r7, #24]
+ 220 017e FFF7FEFF 		bl	__aeabi_dmul
+ 221 0182 0246     		mov	r2, r0
+ 222 0184 0B46     		mov	r3, r1
+ 223 0186 1046     		mov	r0, r2
+ 224 0188 1946     		mov	r1, r3
+ 225 018a D7E90623 		ldrd	r2, [r7, #24]
+ 226 018e FFF7FEFF 		bl	__aeabi_dmul
+ 227 0192 0246     		mov	r2, r0
+ 228 0194 0B46     		mov	r3, r1
+ 229 0196 1046     		mov	r0, r2
+ 230 0198 1946     		mov	r1, r3
+ 231 019a 4FF00002 		mov	r2, #0
+ 232 019e 4FF08043 		mov	r3, #1073741824
+ 233 01a2 FFF7FEFF 		bl	__aeabi_ddiv
+ 234 01a6 0246     		mov	r2, r0
+ 235 01a8 0B46     		mov	r3, r1
+ 236 01aa 2046     		mov	r0, r4
+ 237 01ac 2946     		mov	r1, r5
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 6
+
+
+ 238 01ae FFF7FEFF 		bl	__aeabi_dadd
+ 239 01b2 0246     		mov	r2, r0
+ 240 01b4 0B46     		mov	r3, r1
+ 241 01b6 C7E91023 		strd	r2, [r7, #64]
+ 242 01ba 36E0     		b	.L9
+ 243              	.L22:
+  47:.\PIDControler.c **** 		else
+  48:.\PIDControler.c **** 			kp = (double)mc1_5Module [module].kp + 0.01*x + (x*x)/(double)20;
+ 244              		.loc 1 48 0
+ 245 01bc FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 246 01be 544A     		ldr	r2, .L23+8
+ 247 01c0 2C21     		movs	r1, #44
+ 248 01c2 01FB03F3 		mul	r3, r1, r3
+ 249 01c6 1344     		add	r3, r3, r2
+ 250 01c8 2033     		adds	r3, r3, #32
+ 251 01ca 1B68     		ldr	r3, [r3]	@ float
+ 252 01cc 1846     		mov	r0, r3
+ 253 01ce FFF7FEFF 		bl	__aeabi_f2d
+ 254 01d2 0446     		mov	r4, r0
+ 255 01d4 0D46     		mov	r5, r1
+ 256 01d6 D7E90601 		ldrd	r0, [r7, #24]
+ 257 01da 4BA3     		adr	r3, .L23
+ 258 01dc D3E90023 		ldrd	r2, [r3]
+ 259 01e0 FFF7FEFF 		bl	__aeabi_dmul
+ 260 01e4 0246     		mov	r2, r0
+ 261 01e6 0B46     		mov	r3, r1
+ 262 01e8 2046     		mov	r0, r4
+ 263 01ea 2946     		mov	r1, r5
+ 264 01ec FFF7FEFF 		bl	__aeabi_dadd
+ 265 01f0 0246     		mov	r2, r0
+ 266 01f2 0B46     		mov	r3, r1
+ 267 01f4 1446     		mov	r4, r2
+ 268 01f6 1D46     		mov	r5, r3
+ 269 01f8 D7E90601 		ldrd	r0, [r7, #24]
+ 270 01fc D7E90623 		ldrd	r2, [r7, #24]
+ 271 0200 FFF7FEFF 		bl	__aeabi_dmul
+ 272 0204 0246     		mov	r2, r0
+ 273 0206 0B46     		mov	r3, r1
+ 274 0208 1046     		mov	r0, r2
+ 275 020a 1946     		mov	r1, r3
+ 276 020c 4FF00002 		mov	r2, #0
+ 277 0210 434B     		ldr	r3, .L23+24
+ 278 0212 FFF7FEFF 		bl	__aeabi_ddiv
+ 279 0216 0246     		mov	r2, r0
+ 280 0218 0B46     		mov	r3, r1
+ 281 021a 2046     		mov	r0, r4
+ 282 021c 2946     		mov	r1, r5
+ 283 021e FFF7FEFF 		bl	__aeabi_dadd
+ 284 0222 0246     		mov	r2, r0
+ 285 0224 0B46     		mov	r3, r1
+ 286 0226 C7E91023 		strd	r2, [r7, #64]
+ 287              	.L9:
+  49:.\PIDControler.c **** 	  
+  50:.\PIDControler.c **** 		command = kp * error + (double)mc1_5Module [module].ki * integral + (double)mc1_5Module [module].
+ 288              		.loc 1 50 0
+ 289 022a D7E91001 		ldrd	r0, [r7, #64]
+ 290 022e D7E90A23 		ldrd	r2, [r7, #40]
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 7
+
+
+ 291 0232 FFF7FEFF 		bl	__aeabi_dmul
+ 292 0236 0246     		mov	r2, r0
+ 293 0238 0B46     		mov	r3, r1
+ 294 023a 1446     		mov	r4, r2
+ 295 023c 1D46     		mov	r5, r3
+ 296 023e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 297 0240 334A     		ldr	r2, .L23+8
+ 298 0242 2C21     		movs	r1, #44
+ 299 0244 01FB03F3 		mul	r3, r1, r3
+ 300 0248 1344     		add	r3, r3, r2
+ 301 024a 2033     		adds	r3, r3, #32
+ 302 024c 5B68     		ldr	r3, [r3, #4]	@ float
+ 303 024e 1846     		mov	r0, r3
+ 304 0250 FFF7FEFF 		bl	__aeabi_f2d
+ 305 0254 2F4B     		ldr	r3, .L23+12
+ 306 0256 D3E90023 		ldrd	r2, [r3]
+ 307 025a FFF7FEFF 		bl	__aeabi_dmul
+ 308 025e 0246     		mov	r2, r0
+ 309 0260 0B46     		mov	r3, r1
+ 310 0262 2046     		mov	r0, r4
+ 311 0264 2946     		mov	r1, r5
+ 312 0266 FFF7FEFF 		bl	__aeabi_dadd
+ 313 026a 0246     		mov	r2, r0
+ 314 026c 0B46     		mov	r3, r1
+ 315 026e 1446     		mov	r4, r2
+ 316 0270 1D46     		mov	r5, r3
+ 317 0272 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 318 0274 264A     		ldr	r2, .L23+8
+ 319 0276 2C21     		movs	r1, #44
+ 320 0278 01FB03F3 		mul	r3, r1, r3
+ 321 027c 1344     		add	r3, r3, r2
+ 322 027e 2833     		adds	r3, r3, #40
+ 323 0280 1B68     		ldr	r3, [r3]	@ float
+ 324 0282 1846     		mov	r0, r3
+ 325 0284 FFF7FEFF 		bl	__aeabi_f2d
+ 326 0288 0246     		mov	r2, r0
+ 327 028a 0B46     		mov	r3, r1
+ 328 028c 1046     		mov	r0, r2
+ 329 028e 1946     		mov	r1, r3
+ 330 0290 D7E90823 		ldrd	r2, [r7, #32]
+ 331 0294 FFF7FEFF 		bl	__aeabi_dmul
+ 332 0298 0246     		mov	r2, r0
+ 333 029a 0B46     		mov	r3, r1
+ 334 029c 2046     		mov	r0, r4
+ 335 029e 2946     		mov	r1, r5
+ 336 02a0 FFF7FEFF 		bl	__aeabi_dadd
+ 337 02a4 0246     		mov	r2, r0
+ 338 02a6 0B46     		mov	r3, r1
+ 339 02a8 C7E91223 		strd	r2, [r7, #72]
+  51:.\PIDControler.c **** 		
+  52:.\PIDControler.c **** 		if(command > 100)  command = 100;
+ 340              		.loc 1 52 0
+ 341 02ac D7E91201 		ldrd	r0, [r7, #72]
+ 342 02b0 4FF00002 		mov	r2, #0
+ 343 02b4 194B     		ldr	r3, .L23+20
+ 344 02b6 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 345 02ba 0346     		mov	r3, r0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 8
+
+
+ 346 02bc 002B     		cmp	r3, #0
+ 347 02be 04D0     		beq	.L10
+ 348              		.loc 1 52 0 is_stmt 0 discriminator 1
+ 349 02c0 4FF00002 		mov	r2, #0
+ 350 02c4 154B     		ldr	r3, .L23+20
+ 351 02c6 C7E91223 		strd	r2, [r7, #72]
+ 352              	.L10:
+  53:.\PIDControler.c **** 		if(command < -100) command = -100;
+ 353              		.loc 1 53 0 is_stmt 1
+ 354 02ca D7E91201 		ldrd	r0, [r7, #72]
+ 355 02ce 4FF00002 		mov	r2, #0
+ 356 02d2 144B     		ldr	r3, .L23+28
+ 357 02d4 FFF7FEFF 		bl	__aeabi_dcmplt
+ 358 02d8 0346     		mov	r3, r0
+ 359 02da 002B     		cmp	r3, #0
+ 360 02dc 04D0     		beq	.L12
+ 361              		.loc 1 53 0 is_stmt 0 discriminator 1
+ 362 02de 4FF00002 		mov	r2, #0
+ 363 02e2 104B     		ldr	r3, .L23+28
+ 364 02e4 C7E91223 		strd	r2, [r7, #72]
+ 365              	.L12:
+  54:.\PIDControler.c **** 		
+  55:.\PIDControler.c **** 		applyCommand(module, command);
+ 366              		.loc 1 55 0 is_stmt 1
+ 367 02e8 D7E91201 		ldrd	r0, [r7, #72]
+ 368 02ec FFF7FEFF 		bl	__aeabi_d2iz
+ 369 02f0 0346     		mov	r3, r0
+ 370 02f2 DBB2     		uxtb	r3, r3
+ 371 02f4 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 372 02f6 5BB2     		sxtb	r3, r3
+ 373 02f8 1046     		mov	r0, r2
+ 374 02fa 1946     		mov	r1, r3
+ 375 02fc FFF7FEFF 		bl	applyCommand
+ 376              	.LBE2:
+ 377 0300 21E0     		b	.L14
+ 378              	.L24:
+ 379 0302 00BFAFF3 		.align	3
+ 379      0080
+ 380              	.L23:
+ 381 0308 7B14AE47 		.word	1202590843
+ 382 030c E17A843F 		.word	1065646817
+ 383 0310 00000000 		.word	mc1_5Module
+ 384 0314 00000000 		.word	integral
+ 385 0318 00000000 		.word	last_error
+ 386 031c 00005940 		.word	1079574528
+ 387 0320 00003440 		.word	1077149696
+ 388 0324 000059C0 		.word	-1067909120
+ 389              	.L21:
+  56:.\PIDControler.c ****     }
+  57:.\PIDControler.c ****     else 
+  58:.\PIDControler.c ****     {
+  59:.\PIDControler.c ****         // TODO: SEND ERROR MESSAGE (TEMPERATURE LIMIT REACHED)
+  60:.\PIDControler.c ****         changeFanState(fanEnabled, module);
+ 390              		.loc 1 60 0
+ 391 0328 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 392 032a 0120     		movs	r0, #1
+ 393 032c 1946     		mov	r1, r3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 9
+
+
+ 394 032e FFF7FEFF 		bl	changeFanState
+  61:.\PIDControler.c ****         changeFanSpeed(100,module);
+ 395              		.loc 1 61 0
+ 396 0332 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 397 0334 6420     		movs	r0, #100
+ 398 0336 1946     		mov	r1, r3
+ 399 0338 FFF7FEFF 		bl	changeFanSpeed
+  62:.\PIDControler.c ****         changePeltierModuleState(peltierDisabled, module);
+ 400              		.loc 1 62 0
+ 401 033c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 402 033e 0020     		movs	r0, #0
+ 403 0340 1946     		mov	r1, r3
+ 404 0342 FFF7FEFF 		bl	changePeltierModuleState
+ 405              	.L14:
+  63:.\PIDControler.c ****     }
+  64:.\PIDControler.c ****     
+  65:.\PIDControler.c **** 	sendTemperatureToCAN(module, current, (int8)command);
+ 406              		.loc 1 65 0
+ 407 0346 D7E90C01 		ldrd	r0, [r7, #48]
+ 408 034a FFF7FEFF 		bl	__aeabi_d2uiz
+ 409 034e 0346     		mov	r3, r0
+ 410 0350 9CB2     		uxth	r4, r3
+ 411 0352 D7E91201 		ldrd	r0, [r7, #72]
+ 412 0356 FFF7FEFF 		bl	__aeabi_d2iz
+ 413 035a 0346     		mov	r3, r0
+ 414 035c DBB2     		uxtb	r3, r3
+ 415 035e FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 416 0360 5BB2     		sxtb	r3, r3
+ 417 0362 1046     		mov	r0, r2
+ 418 0364 2146     		mov	r1, r4
+ 419 0366 1A46     		mov	r2, r3
+ 420 0368 FFF7FEFF 		bl	sendTemperatureToCAN
+  66:.\PIDControler.c ****     float i = (float)integral;
+ 421              		.loc 1 66 0
+ 422 036c 0C4B     		ldr	r3, .L25
+ 423 036e D3E90023 		ldrd	r2, [r3]
+ 424 0372 1046     		mov	r0, r2
+ 425 0374 1946     		mov	r1, r3
+ 426 0376 FFF7FEFF 		bl	__aeabi_d2f
+ 427 037a 0346     		mov	r3, r0
+ 428 037c 7B61     		str	r3, [r7, #20]	@ float
+  67:.\PIDControler.c **** 	sendFloatToCAN(GET_PID_INTEGRAL, module, &i);
+ 429              		.loc 1 67 0
+ 430 037e FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 431 0380 07F11403 		add	r3, r7, #20
+ 432 0384 1720     		movs	r0, #23
+ 433 0386 1146     		mov	r1, r2
+ 434 0388 1A46     		mov	r2, r3
+ 435 038a FFF7FEFF 		bl	sendFloatToCAN
+  68:.\PIDControler.c ****     
+  69:.\PIDControler.c ****     last_error = error;
+ 436              		.loc 1 69 0
+ 437 038e 0549     		ldr	r1, .L25+4
+ 438 0390 D7E90A23 		ldrd	r2, [r7, #40]
+ 439 0394 C1E90023 		strd	r2, [r1]
+  70:.\PIDControler.c **** }
+ 440              		.loc 1 70 0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 10
+
+
+ 441 0398 5037     		adds	r7, r7, #80
+ 442              		.cfi_def_cfa_offset 16
+ 443 039a BD46     		mov	sp, r7
+ 444              		.cfi_def_cfa_register 13
+ 445              		@ sp needed
+ 446 039c B0BD     		pop	{r4, r5, r7, pc}
+ 447              	.L26:
+ 448 039e 00BF     		.align	2
+ 449              	.L25:
+ 450 03a0 00000000 		.word	integral
+ 451 03a4 00000000 		.word	last_error
+ 452              		.cfi_endproc
+ 453              	.LFE56:
+ 454              		.size	updatePeltierOutput, .-updatePeltierOutput
+ 455              		.section	.text.applyCommand,"ax",%progbits
+ 456              		.align	2
+ 457              		.global	applyCommand
+ 458              		.thumb
+ 459              		.thumb_func
+ 460              		.type	applyCommand, %function
+ 461              	applyCommand:
+ 462              	.LFB57:
+  71:.\PIDControler.c **** 
+  72:.\PIDControler.c **** 
+  73:.\PIDControler.c **** void applyCommand(uint8 module, int8 command)
+  74:.\PIDControler.c **** {
+ 463              		.loc 1 74 0
+ 464              		.cfi_startproc
+ 465              		@ args = 0, pretend = 0, frame = 16
+ 466              		@ frame_needed = 1, uses_anonymous_args = 0
+ 467 0000 80B5     		push	{r7, lr}
+ 468              		.cfi_def_cfa_offset 8
+ 469              		.cfi_offset 7, -8
+ 470              		.cfi_offset 14, -4
+ 471 0002 84B0     		sub	sp, sp, #16
+ 472              		.cfi_def_cfa_offset 24
+ 473 0004 00AF     		add	r7, sp, #0
+ 474              		.cfi_def_cfa_register 7
+ 475 0006 0346     		mov	r3, r0
+ 476 0008 0A46     		mov	r2, r1
+ 477 000a FB71     		strb	r3, [r7, #7]
+ 478 000c 1346     		mov	r3, r2
+ 479 000e BB71     		strb	r3, [r7, #6]
+  75:.\PIDControler.c ****     int8 commandABS;
+  76:.\PIDControler.c ****     commandABS = abs((int8)command);
+ 480              		.loc 1 76 0
+ 481 0010 97F90630 		ldrsb	r3, [r7, #6]
+ 482 0014 002B     		cmp	r3, #0
+ 483 0016 B8BF     		it	lt
+ 484 0018 5B42     		rsblt	r3, r3, #0
+ 485 001a FB73     		strb	r3, [r7, #15]
+  77:.\PIDControler.c ****     
+  78:.\PIDControler.c ****     if(command != commandABS) // COOLING PROCESS
+ 486              		.loc 1 78 0
+ 487 001c 97F90620 		ldrsb	r2, [r7, #6]
+ 488 0020 97F90F30 		ldrsb	r3, [r7, #15]
+ 489 0024 9A42     		cmp	r2, r3
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 11
+
+
+ 490 0026 1CD0     		beq	.L28
+  79:.\PIDControler.c ****     {
+  80:.\PIDControler.c ****         if(mc1_5Module [module].targetTemperature < 250) // TODO: change 250 to the value of the am
+ 491              		.loc 1 80 0
+ 492 0028 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 493 002a 184A     		ldr	r2, .L31
+ 494 002c 2C21     		movs	r1, #44
+ 495 002e 01FB03F3 		mul	r3, r1, r3
+ 496 0032 1344     		add	r3, r3, r2
+ 497 0034 9B88     		ldrh	r3, [r3, #4]
+ 498 0036 1BB2     		sxth	r3, r3
+ 499 0038 F92B     		cmp	r3, #249
+ 500 003a 0BDC     		bgt	.L29
+  81:.\PIDControler.c ****         {
+  82:.\PIDControler.c ****             changePeltierModuleCurrentDirection(Cooling, module);
+ 501              		.loc 1 82 0
+ 502 003c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 503 003e 0120     		movs	r0, #1
+ 504 0040 1946     		mov	r1, r3
+ 505 0042 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+  83:.\PIDControler.c ****             changePeltierPWMValue(commandABS,module);
+ 506              		.loc 1 83 0
+ 507 0046 97F90F20 		ldrsb	r2, [r7, #15]
+ 508 004a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 509 004c 1046     		mov	r0, r2
+ 510 004e 1946     		mov	r1, r3
+ 511 0050 FFF7FEFF 		bl	changePeltierPWMValue
+ 512              	.L29:
+  84:.\PIDControler.c ****         }
+  85:.\PIDControler.c ****         changeFanSpeed(commandABS,module);
+ 513              		.loc 1 85 0
+ 514 0054 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 515 0056 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 516 0058 1046     		mov	r0, r2
+ 517 005a 1946     		mov	r1, r3
+ 518 005c FFF7FEFF 		bl	changeFanSpeed
+ 519 0060 10E0     		b	.L27
+ 520              	.L28:
+  86:.\PIDControler.c ****     }
+  87:.\PIDControler.c ****     else 					// HEATING PROCESS
+  88:.\PIDControler.c ****     {
+  89:.\PIDControler.c ****         changePeltierModuleCurrentDirection(Heating, module);
+ 521              		.loc 1 89 0
+ 522 0062 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 523 0064 0020     		movs	r0, #0
+ 524 0066 1946     		mov	r1, r3
+ 525 0068 FFF7FEFF 		bl	changePeltierModuleCurrentDirection
+  90:.\PIDControler.c **** 		changeFanSpeed(0,module);
+ 526              		.loc 1 90 0
+ 527 006c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 528 006e 0020     		movs	r0, #0
+ 529 0070 1946     		mov	r1, r3
+ 530 0072 FFF7FEFF 		bl	changeFanSpeed
+  91:.\PIDControler.c **** 		
+  92:.\PIDControler.c ****         changePeltierPWMValue(commandABS,module);
+ 531              		.loc 1 92 0
+ 532 0076 97F90F20 		ldrsb	r2, [r7, #15]
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 12
+
+
+ 533 007a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 534 007c 1046     		mov	r0, r2
+ 535 007e 1946     		mov	r1, r3
+ 536 0080 FFF7FEFF 		bl	changePeltierPWMValue
+ 537              	.L27:
+  93:.\PIDControler.c ****     }
+  94:.\PIDControler.c **** }
+ 538              		.loc 1 94 0
+ 539 0084 1037     		adds	r7, r7, #16
+ 540              		.cfi_def_cfa_offset 8
+ 541 0086 BD46     		mov	sp, r7
+ 542              		.cfi_def_cfa_register 13
+ 543              		@ sp needed
+ 544 0088 80BD     		pop	{r7, pc}
+ 545              	.L32:
+ 546 008a 00BF     		.align	2
+ 547              	.L31:
+ 548 008c 00000000 		.word	mc1_5Module
+ 549              		.cfi_endproc
+ 550              	.LFE57:
+ 551              		.size	applyCommand, .-applyCommand
+ 552              		.section	.text.resetPIDSumError,"ax",%progbits
+ 553              		.align	2
+ 554              		.global	resetPIDSumError
+ 555              		.thumb
+ 556              		.thumb_func
+ 557              		.type	resetPIDSumError, %function
+ 558              	resetPIDSumError:
+ 559              	.LFB58:
+  95:.\PIDControler.c **** 
+  96:.\PIDControler.c **** 
+  97:.\PIDControler.c **** void resetPIDSumError()
+  98:.\PIDControler.c **** {
+ 560              		.loc 1 98 0
+ 561              		.cfi_startproc
+ 562              		@ args = 0, pretend = 0, frame = 0
+ 563              		@ frame_needed = 1, uses_anonymous_args = 0
+ 564              		@ link register save eliminated.
+ 565 0000 80B4     		push	{r7}
+ 566              		.cfi_def_cfa_offset 4
+ 567              		.cfi_offset 7, -4
+ 568 0002 00AF     		add	r7, sp, #0
+ 569              		.cfi_def_cfa_register 7
+  99:.\PIDControler.c ****     integral = 0;
+ 570              		.loc 1 99 0
+ 571 0004 0549     		ldr	r1, .L34
+ 572 0006 4FF00002 		mov	r2, #0
+ 573 000a 4FF00003 		mov	r3, #0
+ 574 000e C1E90023 		strd	r2, [r1]
+ 100:.\PIDControler.c **** }
+ 575              		.loc 1 100 0
+ 576 0012 BD46     		mov	sp, r7
+ 577              		.cfi_def_cfa_register 13
+ 578              		@ sp needed
+ 579 0014 5DF8047B 		ldr	r7, [sp], #4
+ 580              		.cfi_restore 7
+ 581              		.cfi_def_cfa_offset 0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 13
+
+
+ 582 0018 7047     		bx	lr
+ 583              	.L35:
+ 584 001a 00BF     		.align	2
+ 585              	.L34:
+ 586 001c 00000000 		.word	integral
+ 587              		.cfi_endproc
+ 588              	.LFE58:
+ 589              		.size	resetPIDSumError, .-resetPIDSumError
+ 590              		.text
+ 591              	.Letext0:
+ 592              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 593              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 594              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 595              		.file 5 ".\\Defines.h"
+ 596              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 597              		.section	.debug_info,"",%progbits
+ 598              	.Ldebug_info0:
+ 599 0000 C3030000 		.4byte	0x3c3
+ 600 0004 0400     		.2byte	0x4
+ 601 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 602 000a 04       		.byte	0x4
+ 603 000b 01       		.uleb128 0x1
+ 604 000c 25010000 		.4byte	.LASF69
+ 605 0010 01       		.byte	0x1
+ 606 0011 FC000000 		.4byte	.LASF70
+ 607 0015 A9000000 		.4byte	.LASF71
+ 608 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 609 001d 00000000 		.4byte	0
+ 610 0021 00000000 		.4byte	.Ldebug_line0
+ 611 0025 02       		.uleb128 0x2
+ 612 0026 01       		.byte	0x1
+ 613 0027 06       		.byte	0x6
+ 614 0028 EA000000 		.4byte	.LASF0
+ 615 002c 02       		.uleb128 0x2
+ 616 002d 01       		.byte	0x1
+ 617 002e 08       		.byte	0x8
+ 618 002f 1A020000 		.4byte	.LASF1
+ 619 0033 02       		.uleb128 0x2
+ 620 0034 02       		.byte	0x2
+ 621 0035 05       		.byte	0x5
+ 622 0036 61000000 		.4byte	.LASF2
+ 623 003a 02       		.uleb128 0x2
+ 624 003b 02       		.byte	0x2
+ 625 003c 07       		.byte	0x7
+ 626 003d 00040000 		.4byte	.LASF3
+ 627 0041 03       		.uleb128 0x3
+ 628 0042 C6030000 		.4byte	.LASF9
+ 629 0046 02       		.byte	0x2
+ 630 0047 3F       		.byte	0x3f
+ 631 0048 4C000000 		.4byte	0x4c
+ 632 004c 02       		.uleb128 0x2
+ 633 004d 04       		.byte	0x4
+ 634 004e 05       		.byte	0x5
+ 635 004f B8020000 		.4byte	.LASF4
+ 636 0053 02       		.uleb128 0x2
+ 637 0054 04       		.byte	0x4
+ 638 0055 07       		.byte	0x7
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 14
+
+
+ 639 0056 68030000 		.4byte	.LASF5
+ 640 005a 02       		.uleb128 0x2
+ 641 005b 08       		.byte	0x8
+ 642 005c 05       		.byte	0x5
+ 643 005d 0D010000 		.4byte	.LASF6
+ 644 0061 02       		.uleb128 0x2
+ 645 0062 08       		.byte	0x8
+ 646 0063 07       		.byte	0x7
+ 647 0064 3B020000 		.4byte	.LASF7
+ 648 0068 04       		.uleb128 0x4
+ 649 0069 04       		.byte	0x4
+ 650 006a 05       		.byte	0x5
+ 651 006b 696E7400 		.ascii	"int\000"
+ 652 006f 02       		.uleb128 0x2
+ 653 0070 04       		.byte	0x4
+ 654 0071 07       		.byte	0x7
+ 655 0072 63020000 		.4byte	.LASF8
+ 656 0076 03       		.uleb128 0x3
+ 657 0077 D3020000 		.4byte	.LASF10
+ 658 007b 03       		.byte	0x3
+ 659 007c 2C       		.byte	0x2c
+ 660 007d 41000000 		.4byte	0x41
+ 661 0081 03       		.uleb128 0x3
+ 662 0082 E4000000 		.4byte	.LASF11
+ 663 0086 04       		.byte	0x4
+ 664 0087 A1       		.byte	0xa1
+ 665 0088 2C000000 		.4byte	0x2c
+ 666 008c 03       		.uleb128 0x3
+ 667 008d D7000000 		.4byte	.LASF12
+ 668 0091 04       		.byte	0x4
+ 669 0092 A2       		.byte	0xa2
+ 670 0093 3A000000 		.4byte	0x3a
+ 671 0097 03       		.uleb128 0x3
+ 672 0098 1B010000 		.4byte	.LASF13
+ 673 009c 04       		.byte	0x4
+ 674 009d A4       		.byte	0xa4
+ 675 009e 25000000 		.4byte	0x25
+ 676 00a2 03       		.uleb128 0x3
+ 677 00a3 DE000000 		.4byte	.LASF14
+ 678 00a7 04       		.byte	0x4
+ 679 00a8 A5       		.byte	0xa5
+ 680 00a9 33000000 		.4byte	0x33
+ 681 00ad 02       		.uleb128 0x2
+ 682 00ae 04       		.byte	0x4
+ 683 00af 04       		.byte	0x4
+ 684 00b0 F6000000 		.4byte	.LASF15
+ 685 00b4 02       		.uleb128 0x2
+ 686 00b5 08       		.byte	0x8
+ 687 00b6 04       		.byte	0x4
+ 688 00b7 85030000 		.4byte	.LASF16
+ 689 00bb 02       		.uleb128 0x2
+ 690 00bc 01       		.byte	0x1
+ 691 00bd 08       		.byte	0x8
+ 692 00be 20010000 		.4byte	.LASF17
+ 693 00c2 02       		.uleb128 0x2
+ 694 00c3 04       		.byte	0x4
+ 695 00c4 07       		.byte	0x7
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 15
+
+
+ 696 00c5 72000000 		.4byte	.LASF18
+ 697 00c9 02       		.uleb128 0x2
+ 698 00ca 08       		.byte	0x8
+ 699 00cb 04       		.byte	0x4
+ 700 00cc 0E020000 		.4byte	.LASF19
+ 701 00d0 05       		.uleb128 0x5
+ 702 00d1 01       		.byte	0x1
+ 703 00d2 05       		.byte	0x5
+ 704 00d3 65       		.byte	0x65
+ 705 00d4 E5000000 		.4byte	0xe5
+ 706 00d8 06       		.uleb128 0x6
+ 707 00d9 36040000 		.4byte	.LASF20
+ 708 00dd 00       		.sleb128 0
+ 709 00de 06       		.uleb128 0x6
+ 710 00df 90020000 		.4byte	.LASF21
+ 711 00e3 01       		.sleb128 1
+ 712 00e4 00       		.byte	0
+ 713 00e5 03       		.uleb128 0x3
+ 714 00e6 62040000 		.4byte	.LASF22
+ 715 00ea 05       		.byte	0x5
+ 716 00eb 65       		.byte	0x65
+ 717 00ec D0000000 		.4byte	0xd0
+ 718 00f0 05       		.uleb128 0x5
+ 719 00f1 01       		.byte	0x1
+ 720 00f2 05       		.byte	0x5
+ 721 00f3 67       		.byte	0x67
+ 722 00f4 05010000 		.4byte	0x105
+ 723 00f8 06       		.uleb128 0x6
+ 724 00f9 2F020000 		.4byte	.LASF23
+ 725 00fd 00       		.sleb128 0
+ 726 00fe 06       		.uleb128 0x6
+ 727 00ff 03020000 		.4byte	.LASF24
+ 728 0103 01       		.sleb128 1
+ 729 0104 00       		.byte	0
+ 730 0105 03       		.uleb128 0x3
+ 731 0106 02030000 		.4byte	.LASF25
+ 732 010a 05       		.byte	0x5
+ 733 010b 67       		.byte	0x67
+ 734 010c F0000000 		.4byte	0xf0
+ 735 0110 05       		.uleb128 0x5
+ 736 0111 01       		.byte	0x1
+ 737 0112 05       		.byte	0x5
+ 738 0113 68       		.byte	0x68
+ 739 0114 25010000 		.4byte	0x125
+ 740 0118 06       		.uleb128 0x6
+ 741 0119 F0030000 		.4byte	.LASF26
+ 742 011d 00       		.sleb128 0
+ 743 011e 06       		.uleb128 0x6
+ 744 011f DB020000 		.4byte	.LASF27
+ 745 0123 01       		.sleb128 1
+ 746 0124 00       		.byte	0
+ 747 0125 03       		.uleb128 0x3
+ 748 0126 20000000 		.4byte	.LASF28
+ 749 012a 05       		.byte	0x5
+ 750 012b 68       		.byte	0x68
+ 751 012c 10010000 		.4byte	0x110
+ 752 0130 05       		.uleb128 0x5
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 16
+
+
+ 753 0131 01       		.byte	0x1
+ 754 0132 05       		.byte	0x5
+ 755 0133 69       		.byte	0x69
+ 756 0134 57010000 		.4byte	0x157
+ 757 0138 06       		.uleb128 0x6
+ 758 0139 52020000 		.4byte	.LASF29
+ 759 013d 00       		.sleb128 0
+ 760 013e 06       		.uleb128 0x6
+ 761 013f 29040000 		.4byte	.LASF30
+ 762 0143 01       		.sleb128 1
+ 763 0144 06       		.uleb128 0x6
+ 764 0145 9C030000 		.4byte	.LASF31
+ 765 0149 02       		.sleb128 2
+ 766 014a 06       		.uleb128 0x6
+ 767 014b C1020000 		.4byte	.LASF32
+ 768 014f 03       		.sleb128 3
+ 769 0150 06       		.uleb128 0x6
+ 770 0151 7B000000 		.4byte	.LASF33
+ 771 0155 04       		.sleb128 4
+ 772 0156 00       		.byte	0
+ 773 0157 03       		.uleb128 0x3
+ 774 0158 00000000 		.4byte	.LASF34
+ 775 015c 05       		.byte	0x5
+ 776 015d 69       		.byte	0x69
+ 777 015e 30010000 		.4byte	0x130
+ 778 0162 05       		.uleb128 0x5
+ 779 0163 01       		.byte	0x1
+ 780 0164 05       		.byte	0x5
+ 781 0165 6A       		.byte	0x6a
+ 782 0166 7D010000 		.4byte	0x17d
+ 783 016a 06       		.uleb128 0x6
+ 784 016b 28020000 		.4byte	.LASF35
+ 785 016f 02       		.sleb128 2
+ 786 0170 06       		.uleb128 0x6
+ 787 0171 83000000 		.4byte	.LASF36
+ 788 0175 01       		.sleb128 1
+ 789 0176 06       		.uleb128 0x6
+ 790 0177 88020000 		.4byte	.LASF37
+ 791 017b 00       		.sleb128 0
+ 792 017c 00       		.byte	0
+ 793 017d 03       		.uleb128 0x3
+ 794 017e DB030000 		.4byte	.LASF38
+ 795 0182 05       		.byte	0x5
+ 796 0183 6A       		.byte	0x6a
+ 797 0184 62010000 		.4byte	0x162
+ 798 0188 07       		.uleb128 0x7
+ 799 0189 2C       		.byte	0x2c
+ 800 018a 05       		.byte	0x5
+ 801 018b 6F       		.byte	0x6f
+ 802 018c 72020000 		.4byte	0x272
+ 803 0190 08       		.uleb128 0x8
+ 804 0191 EA020000 		.4byte	.LASF39
+ 805 0195 05       		.byte	0x5
+ 806 0196 71       		.byte	0x71
+ 807 0197 8C000000 		.4byte	0x8c
+ 808 019b 00       		.byte	0
+ 809 019c 08       		.uleb128 0x8
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 17
+
+
+ 810 019d B9030000 		.4byte	.LASF40
+ 811 01a1 05       		.byte	0x5
+ 812 01a2 73       		.byte	0x73
+ 813 01a3 25010000 		.4byte	0x125
+ 814 01a7 02       		.byte	0x2
+ 815 01a8 08       		.uleb128 0x8
+ 816 01a9 0F030000 		.4byte	.LASF41
+ 817 01ad 05       		.byte	0x5
+ 818 01ae 75       		.byte	0x75
+ 819 01af A2000000 		.4byte	0xa2
+ 820 01b3 04       		.byte	0x4
+ 821 01b4 08       		.uleb128 0x8
+ 822 01b5 8B000000 		.4byte	.LASF42
+ 823 01b9 05       		.byte	0x5
+ 824 01ba 76       		.byte	0x76
+ 825 01bb A2000000 		.4byte	0xa2
+ 826 01bf 06       		.byte	0x6
+ 827 01c0 08       		.uleb128 0x8
+ 828 01c1 8C030000 		.4byte	.LASF43
+ 829 01c5 05       		.byte	0x5
+ 830 01c6 77       		.byte	0x77
+ 831 01c7 57010000 		.4byte	0x157
+ 832 01cb 08       		.byte	0x8
+ 833 01cc 08       		.uleb128 0x8
+ 834 01cd DD010000 		.4byte	.LASF44
+ 835 01d1 05       		.byte	0x5
+ 836 01d2 78       		.byte	0x78
+ 837 01d3 7D010000 		.4byte	0x17d
+ 838 01d7 09       		.byte	0x9
+ 839 01d8 08       		.uleb128 0x8
+ 840 01d9 19040000 		.4byte	.LASF45
+ 841 01dd 05       		.byte	0x5
+ 842 01de 7A       		.byte	0x7a
+ 843 01df 8C000000 		.4byte	0x8c
+ 844 01e3 0A       		.byte	0xa
+ 845 01e4 08       		.uleb128 0x8
+ 846 01e5 EE010000 		.4byte	.LASF46
+ 847 01e9 05       		.byte	0x5
+ 848 01ea 7B       		.byte	0x7b
+ 849 01eb 81000000 		.4byte	0x81
+ 850 01ef 0C       		.byte	0xc
+ 851 01f0 08       		.uleb128 0x8
+ 852 01f1 C0010000 		.4byte	.LASF47
+ 853 01f5 05       		.byte	0x5
+ 854 01f6 7C       		.byte	0x7c
+ 855 01f7 81000000 		.4byte	0x81
+ 856 01fb 0D       		.byte	0xd
+ 857 01fc 08       		.uleb128 0x8
+ 858 01fd 59030000 		.4byte	.LASF48
+ 859 0201 05       		.byte	0x5
+ 860 0202 7D       		.byte	0x7d
+ 861 0203 8C000000 		.4byte	0x8c
+ 862 0207 0E       		.byte	0xe
+ 863 0208 08       		.uleb128 0x8
+ 864 0209 A5020000 		.4byte	.LASF49
+ 865 020d 05       		.byte	0x5
+ 866 020e 7F       		.byte	0x7f
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 18
+
+
+ 867 020f E5000000 		.4byte	0xe5
+ 868 0213 10       		.byte	0x10
+ 869 0214 08       		.uleb128 0x8
+ 870 0215 70020000 		.4byte	.LASF50
+ 871 0219 05       		.byte	0x5
+ 872 021a 80       		.byte	0x80
+ 873 021b 68000000 		.4byte	0x68
+ 874 021f 14       		.byte	0x14
+ 875 0220 08       		.uleb128 0x8
+ 876 0221 46030000 		.4byte	.LASF51
+ 877 0225 05       		.byte	0x5
+ 878 0226 82       		.byte	0x82
+ 879 0227 81000000 		.4byte	0x81
+ 880 022b 18       		.byte	0x18
+ 881 022c 08       		.uleb128 0x8
+ 882 022d 59040000 		.4byte	.LASF52
+ 883 0231 05       		.byte	0x5
+ 884 0232 83       		.byte	0x83
+ 885 0233 05010000 		.4byte	0x105
+ 886 0237 19       		.byte	0x19
+ 887 0238 08       		.uleb128 0x8
+ 888 0239 31000000 		.4byte	.LASF53
+ 889 023d 05       		.byte	0x5
+ 890 023e 85       		.byte	0x85
+ 891 023f 8C000000 		.4byte	0x8c
+ 892 0243 1A       		.byte	0x1a
+ 893 0244 08       		.uleb128 0x8
+ 894 0245 4D000000 		.4byte	.LASF54
+ 895 0249 05       		.byte	0x5
+ 896 024a 86       		.byte	0x86
+ 897 024b 8C000000 		.4byte	0x8c
+ 898 024f 1C       		.byte	0x1c
+ 899 0250 09       		.uleb128 0x9
+ 900 0251 6B7000   		.ascii	"kp\000"
+ 901 0254 05       		.byte	0x5
+ 902 0255 87       		.byte	0x87
+ 903 0256 AD000000 		.4byte	0xad
+ 904 025a 20       		.byte	0x20
+ 905 025b 09       		.uleb128 0x9
+ 906 025c 6B6900   		.ascii	"ki\000"
+ 907 025f 05       		.byte	0x5
+ 908 0260 87       		.byte	0x87
+ 909 0261 AD000000 		.4byte	0xad
+ 910 0265 24       		.byte	0x24
+ 911 0266 09       		.uleb128 0x9
+ 912 0267 6B6400   		.ascii	"kd\000"
+ 913 026a 05       		.byte	0x5
+ 914 026b 87       		.byte	0x87
+ 915 026c AD000000 		.4byte	0xad
+ 916 0270 28       		.byte	0x28
+ 917 0271 00       		.byte	0
+ 918 0272 03       		.uleb128 0x3
+ 919 0273 AD030000 		.4byte	.LASF55
+ 920 0277 05       		.byte	0x5
+ 921 0278 89       		.byte	0x89
+ 922 0279 88010000 		.4byte	0x188
+ 923 027d 0A       		.uleb128 0xa
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 19
+
+
+ 924 027e 21030000 		.4byte	.LASF62
+ 925 0282 01       		.byte	0x1
+ 926 0283 1A       		.byte	0x1a
+ 927 0284 00000000 		.4byte	.LFB56
+ 928 0288 A8030000 		.4byte	.LFE56-.LFB56
+ 929 028c 01       		.uleb128 0x1
+ 930 028d 9C       		.byte	0x9c
+ 931 028e 27030000 		.4byte	0x327
+ 932 0292 0B       		.uleb128 0xb
+ 933 0293 6B000000 		.4byte	.LASF56
+ 934 0297 01       		.byte	0x1
+ 935 0298 1A       		.byte	0x1a
+ 936 0299 81000000 		.4byte	0x81
+ 937 029d 03       		.uleb128 0x3
+ 938 029e 91       		.byte	0x91
+ 939 029f AF7F     		.sleb128 -81
+ 940 02a1 0C       		.uleb128 0xc
+ 941 02a2 647400   		.ascii	"dt\000"
+ 942 02a5 01       		.byte	0x1
+ 943 02a6 1A       		.byte	0x1a
+ 944 02a7 B4000000 		.4byte	0xb4
+ 945 02ab 03       		.uleb128 0x3
+ 946 02ac 91       		.byte	0x91
+ 947 02ad A07F     		.sleb128 -96
+ 948 02af 0D       		.uleb128 0xd
+ 949 02b0 79040000 		.4byte	.LASF57
+ 950 02b4 01       		.byte	0x1
+ 951 02b5 1C       		.byte	0x1c
+ 952 02b6 B4000000 		.4byte	0xb4
+ 953 02ba 02       		.uleb128 0x2
+ 954 02bb 91       		.byte	0x91
+ 955 02bc 68       		.sleb128 -24
+ 956 02bd 0D       		.uleb128 0xd
+ 957 02be 46000000 		.4byte	.LASF58
+ 958 02c2 01       		.byte	0x1
+ 959 02c3 1D       		.byte	0x1d
+ 960 02c4 8C000000 		.4byte	0x8c
+ 961 02c8 02       		.uleb128 0x2
+ 962 02c9 91       		.byte	0x91
+ 963 02ca 5E       		.sleb128 -34
+ 964 02cb 0D       		.uleb128 0xd
+ 965 02cc 80020000 		.4byte	.LASF59
+ 966 02d0 01       		.byte	0x1
+ 967 02d1 1E       		.byte	0x1e
+ 968 02d2 B4000000 		.4byte	0xb4
+ 969 02d6 02       		.uleb128 0x2
+ 970 02d7 91       		.byte	0x91
+ 971 02d8 50       		.sleb128 -48
+ 972 02d9 0D       		.uleb128 0xd
+ 973 02da 13040000 		.4byte	.LASF60
+ 974 02de 01       		.byte	0x1
+ 975 02df 1F       		.byte	0x1f
+ 976 02e0 B4000000 		.4byte	0xb4
+ 977 02e4 02       		.uleb128 0x2
+ 978 02e5 91       		.byte	0x91
+ 979 02e6 48       		.sleb128 -56
+ 980 02e7 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 20
+
+
+ 981 02e8 6B7000   		.ascii	"kp\000"
+ 982 02eb 01       		.byte	0x1
+ 983 02ec 20       		.byte	0x20
+ 984 02ed B4000000 		.4byte	0xb4
+ 985 02f1 02       		.uleb128 0x2
+ 986 02f2 91       		.byte	0x91
+ 987 02f3 60       		.sleb128 -32
+ 988 02f4 0E       		.uleb128 0xe
+ 989 02f5 7800     		.ascii	"x\000"
+ 990 02f7 01       		.byte	0x1
+ 991 02f8 21       		.byte	0x21
+ 992 02f9 B4000000 		.4byte	0xb4
+ 993 02fd 03       		.uleb128 0x3
+ 994 02fe 91       		.byte	0x91
+ 995 02ff B87F     		.sleb128 -72
+ 996 0301 0E       		.uleb128 0xe
+ 997 0302 6900     		.ascii	"i\000"
+ 998 0304 01       		.byte	0x1
+ 999 0305 42       		.byte	0x42
+ 1000 0306 AD000000 		.4byte	0xad
+ 1001 030a 03       		.uleb128 0x3
+ 1002 030b 91       		.byte	0x91
+ 1003 030c B47F     		.sleb128 -76
+ 1004 030e 0F       		.uleb128 0xf
+ 1005 030f 86000000 		.4byte	.LBB2
+ 1006 0313 7A020000 		.4byte	.LBE2-.LBB2
+ 1007 0317 0D       		.uleb128 0xd
+ 1008 0318 9E000000 		.4byte	.LASF61
+ 1009 031c 01       		.byte	0x1
+ 1010 031d 2A       		.byte	0x2a
+ 1011 031e B4000000 		.4byte	0xb4
+ 1012 0322 02       		.uleb128 0x2
+ 1013 0323 91       		.byte	0x91
+ 1014 0324 40       		.sleb128 -64
+ 1015 0325 00       		.byte	0
+ 1016 0326 00       		.byte	0
+ 1017 0327 0A       		.uleb128 0xa
+ 1018 0328 B3010000 		.4byte	.LASF63
+ 1019 032c 01       		.byte	0x1
+ 1020 032d 49       		.byte	0x49
+ 1021 032e 00000000 		.4byte	.LFB57
+ 1022 0332 90000000 		.4byte	.LFE57-.LFB57
+ 1023 0336 01       		.uleb128 0x1
+ 1024 0337 9C       		.byte	0x9c
+ 1025 0338 67030000 		.4byte	0x367
+ 1026 033c 0B       		.uleb128 0xb
+ 1027 033d 6B000000 		.4byte	.LASF56
+ 1028 0341 01       		.byte	0x1
+ 1029 0342 49       		.byte	0x49
+ 1030 0343 81000000 		.4byte	0x81
+ 1031 0347 02       		.uleb128 0x2
+ 1032 0348 91       		.byte	0x91
+ 1033 0349 6F       		.sleb128 -17
+ 1034 034a 0B       		.uleb128 0xb
+ 1035 034b 79040000 		.4byte	.LASF57
+ 1036 034f 01       		.byte	0x1
+ 1037 0350 49       		.byte	0x49
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 21
+
+
+ 1038 0351 97000000 		.4byte	0x97
+ 1039 0355 02       		.uleb128 0x2
+ 1040 0356 91       		.byte	0x91
+ 1041 0357 6E       		.sleb128 -18
+ 1042 0358 0D       		.uleb128 0xd
+ 1043 0359 D0030000 		.4byte	.LASF64
+ 1044 035d 01       		.byte	0x1
+ 1045 035e 4B       		.byte	0x4b
+ 1046 035f 97000000 		.4byte	0x97
+ 1047 0363 02       		.uleb128 0x2
+ 1048 0364 91       		.byte	0x91
+ 1049 0365 77       		.sleb128 -9
+ 1050 0366 00       		.byte	0
+ 1051 0367 10       		.uleb128 0x10
+ 1052 0368 35030000 		.4byte	.LASF72
+ 1053 036c 01       		.byte	0x1
+ 1054 036d 61       		.byte	0x61
+ 1055 036e 00000000 		.4byte	.LFB58
+ 1056 0372 20000000 		.4byte	.LFE58-.LFB58
+ 1057 0376 01       		.uleb128 0x1
+ 1058 0377 9C       		.byte	0x9c
+ 1059 0378 11       		.uleb128 0x11
+ 1060 0379 4C040000 		.4byte	.LASF65
+ 1061 037d 06       		.byte	0x6
+ 1062 037e 1606     		.2byte	0x616
+ 1063 0380 84030000 		.4byte	0x384
+ 1064 0384 12       		.uleb128 0x12
+ 1065 0385 76000000 		.4byte	0x76
+ 1066 0389 13       		.uleb128 0x13
+ 1067 038a D4010000 		.4byte	.LASF66
+ 1068 038e 01       		.byte	0x1
+ 1069 038f 12       		.byte	0x12
+ 1070 0390 B4000000 		.4byte	0xb4
+ 1071 0394 05       		.uleb128 0x5
+ 1072 0395 03       		.byte	0x3
+ 1073 0396 00000000 		.4byte	integral
+ 1074 039a 13       		.uleb128 0x13
+ 1075 039b 7A030000 		.4byte	.LASF67
+ 1076 039f 01       		.byte	0x1
+ 1077 03a0 13       		.byte	0x13
+ 1078 03a1 B4000000 		.4byte	0xb4
+ 1079 03a5 05       		.uleb128 0x5
+ 1080 03a6 03       		.byte	0x3
+ 1081 03a7 00000000 		.4byte	last_error
+ 1082 03ab 14       		.uleb128 0x14
+ 1083 03ac 72020000 		.4byte	0x272
+ 1084 03b0 BB030000 		.4byte	0x3bb
+ 1085 03b4 15       		.uleb128 0x15
+ 1086 03b5 C2000000 		.4byte	0xc2
+ 1087 03b9 01       		.byte	0x1
+ 1088 03ba 00       		.byte	0
+ 1089 03bb 16       		.uleb128 0x16
+ 1090 03bc 14000000 		.4byte	.LASF68
+ 1091 03c0 01       		.byte	0x1
+ 1092 03c1 15       		.byte	0x15
+ 1093 03c2 AB030000 		.4byte	0x3ab
+ 1094 03c6 00       		.byte	0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 22
+
+
+ 1095              		.section	.debug_abbrev,"",%progbits
+ 1096              	.Ldebug_abbrev0:
+ 1097 0000 01       		.uleb128 0x1
+ 1098 0001 11       		.uleb128 0x11
+ 1099 0002 01       		.byte	0x1
+ 1100 0003 25       		.uleb128 0x25
+ 1101 0004 0E       		.uleb128 0xe
+ 1102 0005 13       		.uleb128 0x13
+ 1103 0006 0B       		.uleb128 0xb
+ 1104 0007 03       		.uleb128 0x3
+ 1105 0008 0E       		.uleb128 0xe
+ 1106 0009 1B       		.uleb128 0x1b
+ 1107 000a 0E       		.uleb128 0xe
+ 1108 000b 55       		.uleb128 0x55
+ 1109 000c 17       		.uleb128 0x17
+ 1110 000d 11       		.uleb128 0x11
+ 1111 000e 01       		.uleb128 0x1
+ 1112 000f 10       		.uleb128 0x10
+ 1113 0010 17       		.uleb128 0x17
+ 1114 0011 00       		.byte	0
+ 1115 0012 00       		.byte	0
+ 1116 0013 02       		.uleb128 0x2
+ 1117 0014 24       		.uleb128 0x24
+ 1118 0015 00       		.byte	0
+ 1119 0016 0B       		.uleb128 0xb
+ 1120 0017 0B       		.uleb128 0xb
+ 1121 0018 3E       		.uleb128 0x3e
+ 1122 0019 0B       		.uleb128 0xb
+ 1123 001a 03       		.uleb128 0x3
+ 1124 001b 0E       		.uleb128 0xe
+ 1125 001c 00       		.byte	0
+ 1126 001d 00       		.byte	0
+ 1127 001e 03       		.uleb128 0x3
+ 1128 001f 16       		.uleb128 0x16
+ 1129 0020 00       		.byte	0
+ 1130 0021 03       		.uleb128 0x3
+ 1131 0022 0E       		.uleb128 0xe
+ 1132 0023 3A       		.uleb128 0x3a
+ 1133 0024 0B       		.uleb128 0xb
+ 1134 0025 3B       		.uleb128 0x3b
+ 1135 0026 0B       		.uleb128 0xb
+ 1136 0027 49       		.uleb128 0x49
+ 1137 0028 13       		.uleb128 0x13
+ 1138 0029 00       		.byte	0
+ 1139 002a 00       		.byte	0
+ 1140 002b 04       		.uleb128 0x4
+ 1141 002c 24       		.uleb128 0x24
+ 1142 002d 00       		.byte	0
+ 1143 002e 0B       		.uleb128 0xb
+ 1144 002f 0B       		.uleb128 0xb
+ 1145 0030 3E       		.uleb128 0x3e
+ 1146 0031 0B       		.uleb128 0xb
+ 1147 0032 03       		.uleb128 0x3
+ 1148 0033 08       		.uleb128 0x8
+ 1149 0034 00       		.byte	0
+ 1150 0035 00       		.byte	0
+ 1151 0036 05       		.uleb128 0x5
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 23
+
+
+ 1152 0037 04       		.uleb128 0x4
+ 1153 0038 01       		.byte	0x1
+ 1154 0039 0B       		.uleb128 0xb
+ 1155 003a 0B       		.uleb128 0xb
+ 1156 003b 3A       		.uleb128 0x3a
+ 1157 003c 0B       		.uleb128 0xb
+ 1158 003d 3B       		.uleb128 0x3b
+ 1159 003e 0B       		.uleb128 0xb
+ 1160 003f 01       		.uleb128 0x1
+ 1161 0040 13       		.uleb128 0x13
+ 1162 0041 00       		.byte	0
+ 1163 0042 00       		.byte	0
+ 1164 0043 06       		.uleb128 0x6
+ 1165 0044 28       		.uleb128 0x28
+ 1166 0045 00       		.byte	0
+ 1167 0046 03       		.uleb128 0x3
+ 1168 0047 0E       		.uleb128 0xe
+ 1169 0048 1C       		.uleb128 0x1c
+ 1170 0049 0D       		.uleb128 0xd
+ 1171 004a 00       		.byte	0
+ 1172 004b 00       		.byte	0
+ 1173 004c 07       		.uleb128 0x7
+ 1174 004d 13       		.uleb128 0x13
+ 1175 004e 01       		.byte	0x1
+ 1176 004f 0B       		.uleb128 0xb
+ 1177 0050 0B       		.uleb128 0xb
+ 1178 0051 3A       		.uleb128 0x3a
+ 1179 0052 0B       		.uleb128 0xb
+ 1180 0053 3B       		.uleb128 0x3b
+ 1181 0054 0B       		.uleb128 0xb
+ 1182 0055 01       		.uleb128 0x1
+ 1183 0056 13       		.uleb128 0x13
+ 1184 0057 00       		.byte	0
+ 1185 0058 00       		.byte	0
+ 1186 0059 08       		.uleb128 0x8
+ 1187 005a 0D       		.uleb128 0xd
+ 1188 005b 00       		.byte	0
+ 1189 005c 03       		.uleb128 0x3
+ 1190 005d 0E       		.uleb128 0xe
+ 1191 005e 3A       		.uleb128 0x3a
+ 1192 005f 0B       		.uleb128 0xb
+ 1193 0060 3B       		.uleb128 0x3b
+ 1194 0061 0B       		.uleb128 0xb
+ 1195 0062 49       		.uleb128 0x49
+ 1196 0063 13       		.uleb128 0x13
+ 1197 0064 38       		.uleb128 0x38
+ 1198 0065 0B       		.uleb128 0xb
+ 1199 0066 00       		.byte	0
+ 1200 0067 00       		.byte	0
+ 1201 0068 09       		.uleb128 0x9
+ 1202 0069 0D       		.uleb128 0xd
+ 1203 006a 00       		.byte	0
+ 1204 006b 03       		.uleb128 0x3
+ 1205 006c 08       		.uleb128 0x8
+ 1206 006d 3A       		.uleb128 0x3a
+ 1207 006e 0B       		.uleb128 0xb
+ 1208 006f 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 24
+
+
+ 1209 0070 0B       		.uleb128 0xb
+ 1210 0071 49       		.uleb128 0x49
+ 1211 0072 13       		.uleb128 0x13
+ 1212 0073 38       		.uleb128 0x38
+ 1213 0074 0B       		.uleb128 0xb
+ 1214 0075 00       		.byte	0
+ 1215 0076 00       		.byte	0
+ 1216 0077 0A       		.uleb128 0xa
+ 1217 0078 2E       		.uleb128 0x2e
+ 1218 0079 01       		.byte	0x1
+ 1219 007a 3F       		.uleb128 0x3f
+ 1220 007b 19       		.uleb128 0x19
+ 1221 007c 03       		.uleb128 0x3
+ 1222 007d 0E       		.uleb128 0xe
+ 1223 007e 3A       		.uleb128 0x3a
+ 1224 007f 0B       		.uleb128 0xb
+ 1225 0080 3B       		.uleb128 0x3b
+ 1226 0081 0B       		.uleb128 0xb
+ 1227 0082 27       		.uleb128 0x27
+ 1228 0083 19       		.uleb128 0x19
+ 1229 0084 11       		.uleb128 0x11
+ 1230 0085 01       		.uleb128 0x1
+ 1231 0086 12       		.uleb128 0x12
+ 1232 0087 06       		.uleb128 0x6
+ 1233 0088 40       		.uleb128 0x40
+ 1234 0089 18       		.uleb128 0x18
+ 1235 008a 9642     		.uleb128 0x2116
+ 1236 008c 19       		.uleb128 0x19
+ 1237 008d 01       		.uleb128 0x1
+ 1238 008e 13       		.uleb128 0x13
+ 1239 008f 00       		.byte	0
+ 1240 0090 00       		.byte	0
+ 1241 0091 0B       		.uleb128 0xb
+ 1242 0092 05       		.uleb128 0x5
+ 1243 0093 00       		.byte	0
+ 1244 0094 03       		.uleb128 0x3
+ 1245 0095 0E       		.uleb128 0xe
+ 1246 0096 3A       		.uleb128 0x3a
+ 1247 0097 0B       		.uleb128 0xb
+ 1248 0098 3B       		.uleb128 0x3b
+ 1249 0099 0B       		.uleb128 0xb
+ 1250 009a 49       		.uleb128 0x49
+ 1251 009b 13       		.uleb128 0x13
+ 1252 009c 02       		.uleb128 0x2
+ 1253 009d 18       		.uleb128 0x18
+ 1254 009e 00       		.byte	0
+ 1255 009f 00       		.byte	0
+ 1256 00a0 0C       		.uleb128 0xc
+ 1257 00a1 05       		.uleb128 0x5
+ 1258 00a2 00       		.byte	0
+ 1259 00a3 03       		.uleb128 0x3
+ 1260 00a4 08       		.uleb128 0x8
+ 1261 00a5 3A       		.uleb128 0x3a
+ 1262 00a6 0B       		.uleb128 0xb
+ 1263 00a7 3B       		.uleb128 0x3b
+ 1264 00a8 0B       		.uleb128 0xb
+ 1265 00a9 49       		.uleb128 0x49
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 25
+
+
+ 1266 00aa 13       		.uleb128 0x13
+ 1267 00ab 02       		.uleb128 0x2
+ 1268 00ac 18       		.uleb128 0x18
+ 1269 00ad 00       		.byte	0
+ 1270 00ae 00       		.byte	0
+ 1271 00af 0D       		.uleb128 0xd
+ 1272 00b0 34       		.uleb128 0x34
+ 1273 00b1 00       		.byte	0
+ 1274 00b2 03       		.uleb128 0x3
+ 1275 00b3 0E       		.uleb128 0xe
+ 1276 00b4 3A       		.uleb128 0x3a
+ 1277 00b5 0B       		.uleb128 0xb
+ 1278 00b6 3B       		.uleb128 0x3b
+ 1279 00b7 0B       		.uleb128 0xb
+ 1280 00b8 49       		.uleb128 0x49
+ 1281 00b9 13       		.uleb128 0x13
+ 1282 00ba 02       		.uleb128 0x2
+ 1283 00bb 18       		.uleb128 0x18
+ 1284 00bc 00       		.byte	0
+ 1285 00bd 00       		.byte	0
+ 1286 00be 0E       		.uleb128 0xe
+ 1287 00bf 34       		.uleb128 0x34
+ 1288 00c0 00       		.byte	0
+ 1289 00c1 03       		.uleb128 0x3
+ 1290 00c2 08       		.uleb128 0x8
+ 1291 00c3 3A       		.uleb128 0x3a
+ 1292 00c4 0B       		.uleb128 0xb
+ 1293 00c5 3B       		.uleb128 0x3b
+ 1294 00c6 0B       		.uleb128 0xb
+ 1295 00c7 49       		.uleb128 0x49
+ 1296 00c8 13       		.uleb128 0x13
+ 1297 00c9 02       		.uleb128 0x2
+ 1298 00ca 18       		.uleb128 0x18
+ 1299 00cb 00       		.byte	0
+ 1300 00cc 00       		.byte	0
+ 1301 00cd 0F       		.uleb128 0xf
+ 1302 00ce 0B       		.uleb128 0xb
+ 1303 00cf 01       		.byte	0x1
+ 1304 00d0 11       		.uleb128 0x11
+ 1305 00d1 01       		.uleb128 0x1
+ 1306 00d2 12       		.uleb128 0x12
+ 1307 00d3 06       		.uleb128 0x6
+ 1308 00d4 00       		.byte	0
+ 1309 00d5 00       		.byte	0
+ 1310 00d6 10       		.uleb128 0x10
+ 1311 00d7 2E       		.uleb128 0x2e
+ 1312 00d8 00       		.byte	0
+ 1313 00d9 3F       		.uleb128 0x3f
+ 1314 00da 19       		.uleb128 0x19
+ 1315 00db 03       		.uleb128 0x3
+ 1316 00dc 0E       		.uleb128 0xe
+ 1317 00dd 3A       		.uleb128 0x3a
+ 1318 00de 0B       		.uleb128 0xb
+ 1319 00df 3B       		.uleb128 0x3b
+ 1320 00e0 0B       		.uleb128 0xb
+ 1321 00e1 11       		.uleb128 0x11
+ 1322 00e2 01       		.uleb128 0x1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 26
+
+
+ 1323 00e3 12       		.uleb128 0x12
+ 1324 00e4 06       		.uleb128 0x6
+ 1325 00e5 40       		.uleb128 0x40
+ 1326 00e6 18       		.uleb128 0x18
+ 1327 00e7 9742     		.uleb128 0x2117
+ 1328 00e9 19       		.uleb128 0x19
+ 1329 00ea 00       		.byte	0
+ 1330 00eb 00       		.byte	0
+ 1331 00ec 11       		.uleb128 0x11
+ 1332 00ed 34       		.uleb128 0x34
+ 1333 00ee 00       		.byte	0
+ 1334 00ef 03       		.uleb128 0x3
+ 1335 00f0 0E       		.uleb128 0xe
+ 1336 00f1 3A       		.uleb128 0x3a
+ 1337 00f2 0B       		.uleb128 0xb
+ 1338 00f3 3B       		.uleb128 0x3b
+ 1339 00f4 05       		.uleb128 0x5
+ 1340 00f5 49       		.uleb128 0x49
+ 1341 00f6 13       		.uleb128 0x13
+ 1342 00f7 3F       		.uleb128 0x3f
+ 1343 00f8 19       		.uleb128 0x19
+ 1344 00f9 3C       		.uleb128 0x3c
+ 1345 00fa 19       		.uleb128 0x19
+ 1346 00fb 00       		.byte	0
+ 1347 00fc 00       		.byte	0
+ 1348 00fd 12       		.uleb128 0x12
+ 1349 00fe 35       		.uleb128 0x35
+ 1350 00ff 00       		.byte	0
+ 1351 0100 49       		.uleb128 0x49
+ 1352 0101 13       		.uleb128 0x13
+ 1353 0102 00       		.byte	0
+ 1354 0103 00       		.byte	0
+ 1355 0104 13       		.uleb128 0x13
+ 1356 0105 34       		.uleb128 0x34
+ 1357 0106 00       		.byte	0
+ 1358 0107 03       		.uleb128 0x3
+ 1359 0108 0E       		.uleb128 0xe
+ 1360 0109 3A       		.uleb128 0x3a
+ 1361 010a 0B       		.uleb128 0xb
+ 1362 010b 3B       		.uleb128 0x3b
+ 1363 010c 0B       		.uleb128 0xb
+ 1364 010d 49       		.uleb128 0x49
+ 1365 010e 13       		.uleb128 0x13
+ 1366 010f 3F       		.uleb128 0x3f
+ 1367 0110 19       		.uleb128 0x19
+ 1368 0111 02       		.uleb128 0x2
+ 1369 0112 18       		.uleb128 0x18
+ 1370 0113 00       		.byte	0
+ 1371 0114 00       		.byte	0
+ 1372 0115 14       		.uleb128 0x14
+ 1373 0116 01       		.uleb128 0x1
+ 1374 0117 01       		.byte	0x1
+ 1375 0118 49       		.uleb128 0x49
+ 1376 0119 13       		.uleb128 0x13
+ 1377 011a 01       		.uleb128 0x1
+ 1378 011b 13       		.uleb128 0x13
+ 1379 011c 00       		.byte	0
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 27
+
+
+ 1380 011d 00       		.byte	0
+ 1381 011e 15       		.uleb128 0x15
+ 1382 011f 21       		.uleb128 0x21
+ 1383 0120 00       		.byte	0
+ 1384 0121 49       		.uleb128 0x49
+ 1385 0122 13       		.uleb128 0x13
+ 1386 0123 2F       		.uleb128 0x2f
+ 1387 0124 0B       		.uleb128 0xb
+ 1388 0125 00       		.byte	0
+ 1389 0126 00       		.byte	0
+ 1390 0127 16       		.uleb128 0x16
+ 1391 0128 34       		.uleb128 0x34
+ 1392 0129 00       		.byte	0
+ 1393 012a 03       		.uleb128 0x3
+ 1394 012b 0E       		.uleb128 0xe
+ 1395 012c 3A       		.uleb128 0x3a
+ 1396 012d 0B       		.uleb128 0xb
+ 1397 012e 3B       		.uleb128 0x3b
+ 1398 012f 0B       		.uleb128 0xb
+ 1399 0130 49       		.uleb128 0x49
+ 1400 0131 13       		.uleb128 0x13
+ 1401 0132 3F       		.uleb128 0x3f
+ 1402 0133 19       		.uleb128 0x19
+ 1403 0134 3C       		.uleb128 0x3c
+ 1404 0135 19       		.uleb128 0x19
+ 1405 0136 00       		.byte	0
+ 1406 0137 00       		.byte	0
+ 1407 0138 00       		.byte	0
+ 1408              		.section	.debug_aranges,"",%progbits
+ 1409 0000 2C000000 		.4byte	0x2c
+ 1410 0004 0200     		.2byte	0x2
+ 1411 0006 00000000 		.4byte	.Ldebug_info0
+ 1412 000a 04       		.byte	0x4
+ 1413 000b 00       		.byte	0
+ 1414 000c 0000     		.2byte	0
+ 1415 000e 0000     		.2byte	0
+ 1416 0010 00000000 		.4byte	.LFB56
+ 1417 0014 A8030000 		.4byte	.LFE56-.LFB56
+ 1418 0018 00000000 		.4byte	.LFB57
+ 1419 001c 90000000 		.4byte	.LFE57-.LFB57
+ 1420 0020 00000000 		.4byte	.LFB58
+ 1421 0024 20000000 		.4byte	.LFE58-.LFB58
+ 1422 0028 00000000 		.4byte	0
+ 1423 002c 00000000 		.4byte	0
+ 1424              		.section	.debug_ranges,"",%progbits
+ 1425              	.Ldebug_ranges0:
+ 1426 0000 00000000 		.4byte	.LFB56
+ 1427 0004 A8030000 		.4byte	.LFE56
+ 1428 0008 00000000 		.4byte	.LFB57
+ 1429 000c 90000000 		.4byte	.LFE57
+ 1430 0010 00000000 		.4byte	.LFB58
+ 1431 0014 20000000 		.4byte	.LFE58
+ 1432 0018 00000000 		.4byte	0
+ 1433 001c 00000000 		.4byte	0
+ 1434              		.section	.debug_line,"",%progbits
+ 1435              	.Ldebug_line0:
+ 1436 0000 D8010000 		.section	.debug_str,"MS",%progbits,1
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 28
+
+
+ 1436      02006001 
+ 1436      00000201 
+ 1436      FB0E0D00 
+ 1436      01010101 
+ 1437              	.LASF34:
+ 1438 0000 54656D70 		.ascii	"TemperatureModeType\000"
+ 1438      65726174 
+ 1438      7572654D 
+ 1438      6F646554 
+ 1438      79706500 
+ 1439              	.LASF68:
+ 1440 0014 6D63315F 		.ascii	"mc1_5Module\000"
+ 1440      354D6F64 
+ 1440      756C6500 
+ 1441              	.LASF28:
+ 1442 0020 50656C74 		.ascii	"PeltierStateType\000"
+ 1442      69657253 
+ 1442      74617465 
+ 1442      54797065 
+ 1442      00
+ 1443              	.LASF53:
+ 1444 0031 74656D70 		.ascii	"temperatureLimitHigh\000"
+ 1444      65726174 
+ 1444      7572654C 
+ 1444      696D6974 
+ 1444      48696768 
+ 1445              	.LASF58:
+ 1446 0046 74617267 		.ascii	"target\000"
+ 1446      657400
+ 1447              	.LASF54:
+ 1448 004d 74656D70 		.ascii	"temperatureLimitLow\000"
+ 1448      65726174 
+ 1448      7572654C 
+ 1448      696D6974 
+ 1448      4C6F7700 
+ 1449              	.LASF2:
+ 1450 0061 73686F72 		.ascii	"short int\000"
+ 1450      7420696E 
+ 1450      7400
+ 1451              	.LASF56:
+ 1452 006b 6D6F6475 		.ascii	"module\000"
+ 1452      6C6500
+ 1453              	.LASF18:
+ 1454 0072 73697A65 		.ascii	"sizetype\000"
+ 1454      74797065 
+ 1454      00
+ 1455              	.LASF33:
+ 1456 007b 57616974 		.ascii	"Waiting\000"
+ 1456      696E6700 
+ 1457              	.LASF36:
+ 1458 0083 436F6F6C 		.ascii	"Cooling\000"
+ 1458      696E6700 
+ 1459              	.LASF42:
+ 1460 008b 63757272 		.ascii	"currentTemperature\000"
+ 1460      656E7454 
+ 1460      656D7065 
+ 1460      72617475 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 29
+
+
+ 1460      726500
+ 1461              	.LASF61:
+ 1462 009e 64657269 		.ascii	"derivative\000"
+ 1462      76617469 
+ 1462      766500
+ 1463              	.LASF71:
+ 1464 00a9 433A5C55 		.ascii	"C:\\Users\\Lois\\Desktop\\MC1_5\\MC1_5_PSOC5.cydsn\000"
+ 1464      73657273 
+ 1464      5C4C6F69 
+ 1464      735C4465 
+ 1464      736B746F 
+ 1465              	.LASF12:
+ 1466 00d7 75696E74 		.ascii	"uint16\000"
+ 1466      313600
+ 1467              	.LASF14:
+ 1468 00de 696E7431 		.ascii	"int16\000"
+ 1468      3600
+ 1469              	.LASF11:
+ 1470 00e4 75696E74 		.ascii	"uint8\000"
+ 1470      3800
+ 1471              	.LASF0:
+ 1472 00ea 7369676E 		.ascii	"signed char\000"
+ 1472      65642063 
+ 1472      68617200 
+ 1473              	.LASF15:
+ 1474 00f6 666C6F61 		.ascii	"float\000"
+ 1474      7400
+ 1475              	.LASF70:
+ 1476 00fc 2E5C5049 		.ascii	".\\PIDControler.c\000"
+ 1476      44436F6E 
+ 1476      74726F6C 
+ 1476      65722E63 
+ 1476      00
+ 1477              	.LASF6:
+ 1478 010d 6C6F6E67 		.ascii	"long long int\000"
+ 1478      206C6F6E 
+ 1478      6720696E 
+ 1478      7400
+ 1479              	.LASF13:
+ 1480 011b 696E7438 		.ascii	"int8\000"
+ 1480      00
+ 1481              	.LASF17:
+ 1482 0120 63686172 		.ascii	"char\000"
+ 1482      00
+ 1483              	.LASF69:
+ 1484 0125 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1484      4320342E 
+ 1484      392E3320 
+ 1484      32303135 
+ 1484      30333033 
+ 1485 0158 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1485      20726576 
+ 1485      6973696F 
+ 1485      6E203232 
+ 1485      31323230 
+ 1486 018b 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1486      66756E63 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 30
+
+
+ 1486      74696F6E 
+ 1486      2D736563 
+ 1486      74696F6E 
+ 1487              	.LASF63:
+ 1488 01b3 6170706C 		.ascii	"applyCommand\000"
+ 1488      79436F6D 
+ 1488      6D616E64 
+ 1488      00
+ 1489              	.LASF47:
+ 1490 01c0 61637475 		.ascii	"actualPwmPercentage\000"
+ 1490      616C5077 
+ 1490      6D506572 
+ 1490      63656E74 
+ 1490      61676500 
+ 1491              	.LASF66:
+ 1492 01d4 696E7465 		.ascii	"integral\000"
+ 1492      6772616C 
+ 1492      00
+ 1493              	.LASF44:
+ 1494 01dd 63757272 		.ascii	"currentDirection\000"
+ 1494      656E7444 
+ 1494      69726563 
+ 1494      74696F6E 
+ 1494      00
+ 1495              	.LASF46:
+ 1496 01ee 64657369 		.ascii	"desiredPwmPercentage\000"
+ 1496      72656450 
+ 1496      776D5065 
+ 1496      7263656E 
+ 1496      74616765 
+ 1497              	.LASF24:
+ 1498 0203 66616E45 		.ascii	"fanEnabled\000"
+ 1498      6E61626C 
+ 1498      656400
+ 1499              	.LASF19:
+ 1500 020e 6C6F6E67 		.ascii	"long double\000"
+ 1500      20646F75 
+ 1500      626C6500 
+ 1501              	.LASF1:
+ 1502 021a 756E7369 		.ascii	"unsigned char\000"
+ 1502      676E6564 
+ 1502      20636861 
+ 1502      7200
+ 1503              	.LASF35:
+ 1504 0228 4E6F7453 		.ascii	"NotSet\000"
+ 1504      657400
+ 1505              	.LASF23:
+ 1506 022f 66616E44 		.ascii	"fanDisabled\000"
+ 1506      69736162 
+ 1506      6C656400 
+ 1507              	.LASF7:
+ 1508 023b 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1508      206C6F6E 
+ 1508      6720756E 
+ 1508      7369676E 
+ 1508      65642069 
+ 1509              	.LASF29:
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 31
+
+
+ 1510 0252 4D61696E 		.ascii	"Maintaining_heat\000"
+ 1510      7461696E 
+ 1510      696E675F 
+ 1510      68656174 
+ 1510      00
+ 1511              	.LASF8:
+ 1512 0263 756E7369 		.ascii	"unsigned int\000"
+ 1512      676E6564 
+ 1512      20696E74 
+ 1512      00
+ 1513              	.LASF50:
+ 1514 0270 73746570 		.ascii	"stepperPosition\000"
+ 1514      70657250 
+ 1514      6F736974 
+ 1514      696F6E00 
+ 1515              	.LASF59:
+ 1516 0280 63757272 		.ascii	"current\000"
+ 1516      656E7400 
+ 1517              	.LASF37:
+ 1518 0288 48656174 		.ascii	"Heating\000"
+ 1518      696E6700 
+ 1519              	.LASF21:
+ 1520 0290 6D61676E 		.ascii	"magnetisationEnabled\000"
+ 1520      65746973 
+ 1520      6174696F 
+ 1520      6E456E61 
+ 1520      626C6564 
+ 1521              	.LASF49:
+ 1522 02a5 6D61676E 		.ascii	"magnetisationState\000"
+ 1522      65746973 
+ 1522      6174696F 
+ 1522      6E537461 
+ 1522      746500
+ 1523              	.LASF4:
+ 1524 02b8 6C6F6E67 		.ascii	"long int\000"
+ 1524      20696E74 
+ 1524      00
+ 1525              	.LASF32:
+ 1526 02c1 57616974 		.ascii	"Waiting_overshoot\000"
+ 1526      696E675F 
+ 1526      6F766572 
+ 1526      73686F6F 
+ 1526      7400
+ 1527              	.LASF10:
+ 1528 02d3 696E7433 		.ascii	"int32_t\000"
+ 1528      325F7400 
+ 1529              	.LASF27:
+ 1530 02db 70656C74 		.ascii	"peltierEnabled\000"
+ 1530      69657245 
+ 1530      6E61626C 
+ 1530      656400
+ 1531              	.LASF39:
+ 1532 02ea 6D617854 		.ascii	"maxTemperatureDeviation\000"
+ 1532      656D7065 
+ 1532      72617475 
+ 1532      72654465 
+ 1532      76696174 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 32
+
+
+ 1533              	.LASF25:
+ 1534 0302 46616E53 		.ascii	"FanStateType\000"
+ 1534      74617465 
+ 1534      54797065 
+ 1534      00
+ 1535              	.LASF41:
+ 1536 030f 74617267 		.ascii	"targetTemperature\000"
+ 1536      65745465 
+ 1536      6D706572 
+ 1536      61747572 
+ 1536      6500
+ 1537              	.LASF62:
+ 1538 0321 75706461 		.ascii	"updatePeltierOutput\000"
+ 1538      74655065 
+ 1538      6C746965 
+ 1538      724F7574 
+ 1538      70757400 
+ 1539              	.LASF72:
+ 1540 0335 72657365 		.ascii	"resetPIDSumError\000"
+ 1540      74504944 
+ 1540      53756D45 
+ 1540      72726F72 
+ 1540      00
+ 1541              	.LASF51:
+ 1542 0346 66616E53 		.ascii	"fanSpeedPercentage\000"
+ 1542      70656564 
+ 1542      50657263 
+ 1542      656E7461 
+ 1542      676500
+ 1543              	.LASF48:
+ 1544 0359 70776D50 		.ascii	"pwmPeriodValue\000"
+ 1544      6572696F 
+ 1544      6456616C 
+ 1544      756500
+ 1545              	.LASF5:
+ 1546 0368 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1546      20756E73 
+ 1546      69676E65 
+ 1546      6420696E 
+ 1546      7400
+ 1547              	.LASF67:
+ 1548 037a 6C617374 		.ascii	"last_error\000"
+ 1548      5F657272 
+ 1548      6F7200
+ 1549              	.LASF16:
+ 1550 0385 646F7562 		.ascii	"double\000"
+ 1550      6C6500
+ 1551              	.LASF43:
+ 1552 038c 74656D70 		.ascii	"temperatureMode\000"
+ 1552      65726174 
+ 1552      7572654D 
+ 1552      6F646500 
+ 1553              	.LASF31:
+ 1554 039c 4D61696E 		.ascii	"Maintaining_cool\000"
+ 1554      7461696E 
+ 1554      696E675F 
+ 1554      636F6F6C 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 33
+
+
+ 1554      00
+ 1555              	.LASF55:
+ 1556 03ad 4D43315F 		.ascii	"MC1_5Module\000"
+ 1556      354D6F64 
+ 1556      756C6500 
+ 1557              	.LASF40:
+ 1558 03b9 70656C74 		.ascii	"peltierState\000"
+ 1558      69657253 
+ 1558      74617465 
+ 1558      00
+ 1559              	.LASF9:
+ 1560 03c6 5F5F696E 		.ascii	"__int32_t\000"
+ 1560      7433325F 
+ 1560      7400
+ 1561              	.LASF64:
+ 1562 03d0 636F6D6D 		.ascii	"commandABS\000"
+ 1562      616E6441 
+ 1562      425300
+ 1563              	.LASF38:
+ 1564 03db 43757272 		.ascii	"CurrentDirectionType\000"
+ 1564      656E7444 
+ 1564      69726563 
+ 1564      74696F6E 
+ 1564      54797065 
+ 1565              	.LASF26:
+ 1566 03f0 70656C74 		.ascii	"peltierDisabled\000"
+ 1566      69657244 
+ 1566      69736162 
+ 1566      6C656400 
+ 1567              	.LASF3:
+ 1568 0400 73686F72 		.ascii	"short unsigned int\000"
+ 1568      7420756E 
+ 1568      7369676E 
+ 1568      65642069 
+ 1568      6E7400
+ 1569              	.LASF60:
+ 1570 0413 6572726F 		.ascii	"error\000"
+ 1570      7200
+ 1571              	.LASF45:
+ 1572 0419 70776D43 		.ascii	"pwmCompareValue\000"
+ 1572      6F6D7061 
+ 1572      72655661 
+ 1572      6C756500 
+ 1573              	.LASF30:
+ 1574 0429 57616974 		.ascii	"Waiting_drop\000"
+ 1574      696E675F 
+ 1574      64726F70 
+ 1574      00
+ 1575              	.LASF20:
+ 1576 0436 6D61676E 		.ascii	"magnetisationDisabled\000"
+ 1576      65746973 
+ 1576      6174696F 
+ 1576      6E446973 
+ 1576      61626C65 
+ 1577              	.LASF65:
+ 1578 044c 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1578      52784275 
+ARM GAS  C:\Users\Lois\AppData\Local\Temp\ccOyAePj.s 			page 34
+
+
+ 1578      66666572 
+ 1578      00
+ 1579              	.LASF52:
+ 1580 0459 66616E53 		.ascii	"fanState\000"
+ 1580      74617465 
+ 1580      00
+ 1581              	.LASF22:
+ 1582 0462 4D61676E 		.ascii	"MagnetisationStateType\000"
+ 1582      65746973 
+ 1582      6174696F 
+ 1582      6E537461 
+ 1582      74655479 
+ 1583              	.LASF57:
+ 1584 0479 636F6D6D 		.ascii	"command\000"
+ 1584      616E6400 
+ 1585              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

@@ -1,0 +1,831 @@
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"ADC_TURBIDO_PM.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.bss
+  19              		.align	2
+  20              	ADC_TURBIDO_backup:
+  21 0000 00       		.space	1
+  22 0001 000000   		.section	.text.ADC_TURBIDO_SaveConfig,"ax",%progbits
+  23              		.align	2
+  24              		.global	ADC_TURBIDO_SaveConfig
+  25              		.thumb
+  26              		.thumb_func
+  27              		.type	ADC_TURBIDO_SaveConfig, %function
+  28              	ADC_TURBIDO_SaveConfig:
+  29              	.LFB0:
+  30              		.file 1 ".\\Generated_Source\\PSoC5\\ADC_TURBIDO_PM.c"
+   1:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * File Name: ADC_TURBIDO_PM.c
+   3:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Version 2.10
+   4:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+   5:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Description:
+   6:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  This file provides Sleep/WakeUp APIs functionality.
+   7:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+   8:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Note:
+   9:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  10:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** ********************************************************************************
+  11:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
+  12:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * You may use this file only in accordance with the license, terms, conditions,
+  13:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  14:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * the software package with which this file was provided.
+  15:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *******************************************************************************/
+  16:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  17:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** #include "ADC_TURBIDO.h"
+  18:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  19:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  20:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** /***************************************
+  21:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Local data allocation
+  22:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** ***************************************/
+  23:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  24:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** static ADC_TURBIDO_BACKUP_STRUCT  ADC_TURBIDO_backup =
+  25:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** {
+  26:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     ADC_TURBIDO_DISABLED
+  27:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** };
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 2
+
+
+  28:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  29:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  30:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** /*******************************************************************************
+  31:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Function Name: ADC_TURBIDO_SaveConfig
+  32:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** ********************************************************************************
+  33:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  34:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Summary:
+  35:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  Saves the current user configuration.
+  36:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  37:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Parameters:
+  38:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+  39:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  40:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Return:
+  41:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+  42:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  43:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *******************************************************************************/
+  44:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** void ADC_TURBIDO_SaveConfig(void)
+  45:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** {
+  31              		.loc 1 45 0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 1, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  36 0000 80B4     		push	{r7}
+  37              		.cfi_def_cfa_offset 4
+  38              		.cfi_offset 7, -4
+  39 0002 00AF     		add	r7, sp, #0
+  40              		.cfi_def_cfa_register 7
+  46:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     /* All configuration registers are marked as [reset_all_retention] */
+  47:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** }
+  41              		.loc 1 47 0
+  42 0004 BD46     		mov	sp, r7
+  43              		@ sp needed
+  44 0006 5DF8047B 		ldr	r7, [sp], #4
+  45 000a 7047     		bx	lr
+  46              		.cfi_endproc
+  47              	.LFE0:
+  48              		.size	ADC_TURBIDO_SaveConfig, .-ADC_TURBIDO_SaveConfig
+  49              		.section	.text.ADC_TURBIDO_RestoreConfig,"ax",%progbits
+  50              		.align	2
+  51              		.global	ADC_TURBIDO_RestoreConfig
+  52              		.thumb
+  53              		.thumb_func
+  54              		.type	ADC_TURBIDO_RestoreConfig, %function
+  55              	ADC_TURBIDO_RestoreConfig:
+  56              	.LFB1:
+  48:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  49:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  50:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** /*******************************************************************************
+  51:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Function Name: ADC_TURBIDO_RestoreConfig
+  52:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** ********************************************************************************
+  53:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  54:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Summary:
+  55:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  Restores the current user configuration.
+  56:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  57:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Parameters:
+  58:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 3
+
+
+  59:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  60:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Return:
+  61:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+  62:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  63:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *******************************************************************************/
+  64:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** void ADC_TURBIDO_RestoreConfig(void)
+  65:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** {
+  57              		.loc 1 65 0
+  58              		.cfi_startproc
+  59              		@ args = 0, pretend = 0, frame = 0
+  60              		@ frame_needed = 1, uses_anonymous_args = 0
+  61              		@ link register save eliminated.
+  62 0000 80B4     		push	{r7}
+  63              		.cfi_def_cfa_offset 4
+  64              		.cfi_offset 7, -4
+  65 0002 00AF     		add	r7, sp, #0
+  66              		.cfi_def_cfa_register 7
+  66:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     /* All congiguration registers are marked as [reset_all_retention] */
+  67:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** }
+  67              		.loc 1 67 0
+  68 0004 BD46     		mov	sp, r7
+  69              		@ sp needed
+  70 0006 5DF8047B 		ldr	r7, [sp], #4
+  71 000a 7047     		bx	lr
+  72              		.cfi_endproc
+  73              	.LFE1:
+  74              		.size	ADC_TURBIDO_RestoreConfig, .-ADC_TURBIDO_RestoreConfig
+  75              		.section	.text.ADC_TURBIDO_Sleep,"ax",%progbits
+  76              		.align	2
+  77              		.global	ADC_TURBIDO_Sleep
+  78              		.thumb
+  79              		.thumb_func
+  80              		.type	ADC_TURBIDO_Sleep, %function
+  81              	ADC_TURBIDO_Sleep:
+  82              	.LFB2:
+  68:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  69:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+  70:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** /*******************************************************************************
+  71:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Function Name: ADC_TURBIDO_Sleep
+  72:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** ********************************************************************************
+  73:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  74:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Summary:
+  75:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  This is the preferred routine to prepare the component for sleep.
+  76:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  The ADC_TURBIDO_Sleep() routine saves the current component state,
+  77:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  then it calls the ADC_Stop() function.
+  78:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  79:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Parameters:
+  80:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+  81:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  82:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Return:
+  83:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+  84:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  85:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Global Variables:
+  86:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  ADC_TURBIDO_backup - modified.
+  87:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+  88:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *******************************************************************************/
+  89:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** void ADC_TURBIDO_Sleep(void)
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 4
+
+
+  90:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** {
+  83              		.loc 1 90 0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 1, uses_anonymous_args = 0
+  87 0000 80B5     		push	{r7, lr}
+  88              		.cfi_def_cfa_offset 8
+  89              		.cfi_offset 7, -8
+  90              		.cfi_offset 14, -4
+  91 0002 00AF     		add	r7, sp, #0
+  92              		.cfi_def_cfa_register 7
+  91:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     if((ADC_TURBIDO_PWRMGR_SAR_REG  & ADC_TURBIDO_ACT_PWR_SAR_EN) != 0u)
+  93              		.loc 1 91 0
+  94 0004 0D4B     		ldr	r3, .L8
+  95 0006 1B78     		ldrb	r3, [r3]
+  96 0008 DBB2     		uxtb	r3, r3
+  97 000a 03F00103 		and	r3, r3, #1
+  98 000e 002B     		cmp	r3, #0
+  99 0010 10D0     		beq	.L4
+  92:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     {
+  93:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         if((ADC_TURBIDO_SAR_CSR0_REG & ADC_TURBIDO_SAR_SOF_START_CONV) != 0u)
+ 100              		.loc 1 93 0
+ 101 0012 0B4B     		ldr	r3, .L8+4
+ 102 0014 1B78     		ldrb	r3, [r3]
+ 103 0016 DBB2     		uxtb	r3, r3
+ 104 0018 03F00103 		and	r3, r3, #1
+ 105 001c 002B     		cmp	r3, #0
+ 106 001e 03D0     		beq	.L5
+  94:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         {
+  95:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****             ADC_TURBIDO_backup.enableState = ADC_TURBIDO_ENABLED | ADC_TURBIDO_STARTED;
+ 107              		.loc 1 95 0
+ 108 0020 084B     		ldr	r3, .L8+8
+ 109 0022 0322     		movs	r2, #3
+ 110 0024 1A70     		strb	r2, [r3]
+ 111 0026 02E0     		b	.L6
+ 112              	.L5:
+  96:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         }
+  97:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         else
+  98:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         {
+  99:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****             ADC_TURBIDO_backup.enableState = ADC_TURBIDO_ENABLED;
+ 113              		.loc 1 99 0
+ 114 0028 064B     		ldr	r3, .L8+8
+ 115 002a 0122     		movs	r2, #1
+ 116 002c 1A70     		strb	r2, [r3]
+ 117              	.L6:
+ 100:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         }
+ 101:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         ADC_TURBIDO_Stop();
+ 118              		.loc 1 101 0 discriminator 1
+ 119 002e FFF7FEFF 		bl	ADC_TURBIDO_Stop
+ 120 0032 02E0     		b	.L3
+ 121              	.L4:
+ 102:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     }
+ 103:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     else
+ 104:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     {
+ 105:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         ADC_TURBIDO_backup.enableState = ADC_TURBIDO_DISABLED;
+ 122              		.loc 1 105 0
+ 123 0034 034B     		ldr	r3, .L8+8
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 5
+
+
+ 124 0036 0022     		movs	r2, #0
+ 125 0038 1A70     		strb	r2, [r3]
+ 126              	.L3:
+ 106:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     }
+ 107:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** }
+ 127              		.loc 1 107 0
+ 128 003a 80BD     		pop	{r7, pc}
+ 129              	.L9:
+ 130              		.align	2
+ 131              	.L8:
+ 132 003c AB430040 		.word	1073759147
+ 133 0040 00590040 		.word	1073764608
+ 134 0044 00000000 		.word	ADC_TURBIDO_backup
+ 135              		.cfi_endproc
+ 136              	.LFE2:
+ 137              		.size	ADC_TURBIDO_Sleep, .-ADC_TURBIDO_Sleep
+ 138              		.section	.text.ADC_TURBIDO_Wakeup,"ax",%progbits
+ 139              		.align	2
+ 140              		.global	ADC_TURBIDO_Wakeup
+ 141              		.thumb
+ 142              		.thumb_func
+ 143              		.type	ADC_TURBIDO_Wakeup, %function
+ 144              	ADC_TURBIDO_Wakeup:
+ 145              	.LFB3:
+ 108:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+ 109:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** 
+ 110:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** /*******************************************************************************
+ 111:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Function Name: ADC_TURBIDO_Wakeup
+ 112:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** ********************************************************************************
+ 113:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+ 114:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Summary:
+ 115:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  This is the preferred routine to restore the component to the state when
+ 116:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  ADC_TURBIDO_Sleep() was called. If the component was enabled before the
+ 117:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  ADC_TURBIDO_Sleep() function was called, the
+ 118:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  ADC_TURBIDO_Wakeup() function also re-enables the component.
+ 119:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+ 120:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Parameters:
+ 121:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+ 122:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+ 123:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Return:
+ 124:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  None.
+ 125:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+ 126:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** * Global Variables:
+ 127:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *  ADC_TURBIDO_backup - used to check enabable state.
+ 128:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *
+ 129:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** *******************************************************************************/
+ 130:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** void ADC_TURBIDO_Wakeup(void)
+ 131:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** {
+ 146              		.loc 1 131 0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 1, uses_anonymous_args = 0
+ 150 0000 80B5     		push	{r7, lr}
+ 151              		.cfi_def_cfa_offset 8
+ 152              		.cfi_offset 7, -8
+ 153              		.cfi_offset 14, -4
+ 154 0002 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 6
+
+
+ 155              		.cfi_def_cfa_register 7
+ 132:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     if(ADC_TURBIDO_backup.enableState != ADC_TURBIDO_DISABLED)
+ 156              		.loc 1 132 0
+ 157 0004 034B     		ldr	r3, .L12
+ 158 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 159 0008 002B     		cmp	r3, #0
+ 160 000a 01D0     		beq	.L10
+ 133:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     {
+ 134:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         ADC_TURBIDO_Enable();
+ 161              		.loc 1 134 0
+ 162 000c FFF7FEFF 		bl	ADC_TURBIDO_Enable
+ 163              	.L10:
+ 135:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         #if(ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__HARDWARE_TRIGGER)
+ 136:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****             if((ADC_TURBIDO_backup.enableState & ADC_TURBIDO_STARTED) != 0u)
+ 137:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****             {
+ 138:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****                 ADC_TURBIDO_StartConvert();
+ 139:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****             }
+ 140:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****         #endif /* End ADC_TURBIDO_DEFAULT_CONV_MODE != ADC_TURBIDO__HARDWARE_TRIGGER */
+ 141:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c ****     }
+ 142:.\Generated_Source\PSoC5/ADC_TURBIDO_PM.c **** }
+ 164              		.loc 1 142 0
+ 165 0010 80BD     		pop	{r7, pc}
+ 166              	.L13:
+ 167 0012 00BF     		.align	2
+ 168              	.L12:
+ 169 0014 00000000 		.word	ADC_TURBIDO_backup
+ 170              		.cfi_endproc
+ 171              	.LFE3:
+ 172              		.size	ADC_TURBIDO_Wakeup, .-ADC_TURBIDO_Wakeup
+ 173              		.text
+ 174              	.Letext0:
+ 175              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 176              		.file 3 ".\\Generated_Source\\PSoC5\\ADC_TURBIDO.h"
+ 177              		.section	.debug_info,"",%progbits
+ 178              	.Ldebug_info0:
+ 179 0000 0E010000 		.4byte	0x10e
+ 180 0004 0400     		.2byte	0x4
+ 181 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 182 000a 04       		.byte	0x4
+ 183 000b 01       		.uleb128 0x1
+ 184 000c FD000000 		.4byte	.LASF19
+ 185 0010 01       		.byte	0x1
+ 186 0011 D3000000 		.4byte	.LASF20
+ 187 0015 B8010000 		.4byte	.LASF21
+ 188 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 189 001d 00000000 		.4byte	0
+ 190 0021 00000000 		.4byte	.Ldebug_line0
+ 191 0025 02       		.uleb128 0x2
+ 192 0026 01       		.byte	0x1
+ 193 0027 06       		.byte	0x6
+ 194 0028 03020000 		.4byte	.LASF0
+ 195 002c 02       		.uleb128 0x2
+ 196 002d 01       		.byte	0x1
+ 197 002e 08       		.byte	0x8
+ 198 002f 30000000 		.4byte	.LASF1
+ 199 0033 02       		.uleb128 0x2
+ 200 0034 02       		.byte	0x2
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 7
+
+
+ 201 0035 05       		.byte	0x5
+ 202 0036 9F010000 		.4byte	.LASF2
+ 203 003a 02       		.uleb128 0x2
+ 204 003b 02       		.byte	0x2
+ 205 003c 07       		.byte	0x7
+ 206 003d 6F000000 		.4byte	.LASF3
+ 207 0041 02       		.uleb128 0x2
+ 208 0042 04       		.byte	0x4
+ 209 0043 05       		.byte	0x5
+ 210 0044 AF010000 		.4byte	.LASF4
+ 211 0048 02       		.uleb128 0x2
+ 212 0049 04       		.byte	0x4
+ 213 004a 07       		.byte	0x7
+ 214 004b 5D000000 		.4byte	.LASF5
+ 215 004f 02       		.uleb128 0x2
+ 216 0050 08       		.byte	0x8
+ 217 0051 05       		.byte	0x5
+ 218 0052 79010000 		.4byte	.LASF6
+ 219 0056 02       		.uleb128 0x2
+ 220 0057 08       		.byte	0x8
+ 221 0058 07       		.byte	0x7
+ 222 0059 BC000000 		.4byte	.LASF7
+ 223 005d 03       		.uleb128 0x3
+ 224 005e 04       		.byte	0x4
+ 225 005f 05       		.byte	0x5
+ 226 0060 696E7400 		.ascii	"int\000"
+ 227 0064 02       		.uleb128 0x2
+ 228 0065 04       		.byte	0x4
+ 229 0066 07       		.byte	0x7
+ 230 0067 AF000000 		.4byte	.LASF8
+ 231 006b 04       		.uleb128 0x4
+ 232 006c A9010000 		.4byte	.LASF12
+ 233 0070 02       		.byte	0x2
+ 234 0071 A1       		.byte	0xa1
+ 235 0072 2C000000 		.4byte	0x2c
+ 236 0076 02       		.uleb128 0x2
+ 237 0077 04       		.byte	0x4
+ 238 0078 04       		.byte	0x4
+ 239 0079 2A000000 		.4byte	.LASF9
+ 240 007d 02       		.uleb128 0x2
+ 241 007e 08       		.byte	0x8
+ 242 007f 04       		.byte	0x4
+ 243 0080 82000000 		.4byte	.LASF10
+ 244 0084 02       		.uleb128 0x2
+ 245 0085 01       		.byte	0x1
+ 246 0086 08       		.byte	0x8
+ 247 0087 87010000 		.4byte	.LASF11
+ 248 008b 05       		.uleb128 0x5
+ 249 008c 3E000000 		.4byte	.LASF13
+ 250 0090 02       		.byte	0x2
+ 251 0091 4B01     		.2byte	0x14b
+ 252 0093 97000000 		.4byte	0x97
+ 253 0097 06       		.uleb128 0x6
+ 254 0098 6B000000 		.4byte	0x6b
+ 255 009c 07       		.uleb128 0x7
+ 256 009d 01       		.byte	0x1
+ 257 009e 03       		.byte	0x3
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 8
+
+
+ 258 009f 2A       		.byte	0x2a
+ 259 00a0 B1000000 		.4byte	0xb1
+ 260 00a4 08       		.uleb128 0x8
+ 261 00a5 A3000000 		.4byte	.LASF22
+ 262 00a9 03       		.byte	0x3
+ 263 00aa 2C       		.byte	0x2c
+ 264 00ab 6B000000 		.4byte	0x6b
+ 265 00af 00       		.byte	0
+ 266 00b0 00       		.byte	0
+ 267 00b1 04       		.uleb128 0x4
+ 268 00b2 43000000 		.4byte	.LASF14
+ 269 00b6 03       		.byte	0x3
+ 270 00b7 2D       		.byte	0x2d
+ 271 00b8 9C000000 		.4byte	0x9c
+ 272 00bc 09       		.uleb128 0x9
+ 273 00bd 13000000 		.4byte	.LASF15
+ 274 00c1 01       		.byte	0x1
+ 275 00c2 2C       		.byte	0x2c
+ 276 00c3 00000000 		.4byte	.LFB0
+ 277 00c7 0C000000 		.4byte	.LFE0-.LFB0
+ 278 00cb 01       		.uleb128 0x1
+ 279 00cc 9C       		.byte	0x9c
+ 280 00cd 09       		.uleb128 0x9
+ 281 00ce 89000000 		.4byte	.LASF16
+ 282 00d2 01       		.byte	0x1
+ 283 00d3 40       		.byte	0x40
+ 284 00d4 00000000 		.4byte	.LFB1
+ 285 00d8 0C000000 		.4byte	.LFE1-.LFB1
+ 286 00dc 01       		.uleb128 0x1
+ 287 00dd 9C       		.byte	0x9c
+ 288 00de 0A       		.uleb128 0xa
+ 289 00df F1010000 		.4byte	.LASF17
+ 290 00e3 01       		.byte	0x1
+ 291 00e4 59       		.byte	0x59
+ 292 00e5 00000000 		.4byte	.LFB2
+ 293 00e9 48000000 		.4byte	.LFE2-.LFB2
+ 294 00ed 01       		.uleb128 0x1
+ 295 00ee 9C       		.byte	0x9c
+ 296 00ef 0A       		.uleb128 0xa
+ 297 00f0 00000000 		.4byte	.LASF18
+ 298 00f4 01       		.byte	0x1
+ 299 00f5 82       		.byte	0x82
+ 300 00f6 00000000 		.4byte	.LFB3
+ 301 00fa 18000000 		.4byte	.LFE3-.LFB3
+ 302 00fe 01       		.uleb128 0x1
+ 303 00ff 9C       		.byte	0x9c
+ 304 0100 0B       		.uleb128 0xb
+ 305 0101 8C010000 		.4byte	.LASF23
+ 306 0105 01       		.byte	0x1
+ 307 0106 18       		.byte	0x18
+ 308 0107 B1000000 		.4byte	0xb1
+ 309 010b 05       		.uleb128 0x5
+ 310 010c 03       		.byte	0x3
+ 311 010d 00000000 		.4byte	ADC_TURBIDO_backup
+ 312 0111 00       		.byte	0
+ 313              		.section	.debug_abbrev,"",%progbits
+ 314              	.Ldebug_abbrev0:
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 9
+
+
+ 315 0000 01       		.uleb128 0x1
+ 316 0001 11       		.uleb128 0x11
+ 317 0002 01       		.byte	0x1
+ 318 0003 25       		.uleb128 0x25
+ 319 0004 0E       		.uleb128 0xe
+ 320 0005 13       		.uleb128 0x13
+ 321 0006 0B       		.uleb128 0xb
+ 322 0007 03       		.uleb128 0x3
+ 323 0008 0E       		.uleb128 0xe
+ 324 0009 1B       		.uleb128 0x1b
+ 325 000a 0E       		.uleb128 0xe
+ 326 000b 55       		.uleb128 0x55
+ 327 000c 17       		.uleb128 0x17
+ 328 000d 11       		.uleb128 0x11
+ 329 000e 01       		.uleb128 0x1
+ 330 000f 10       		.uleb128 0x10
+ 331 0010 17       		.uleb128 0x17
+ 332 0011 00       		.byte	0
+ 333 0012 00       		.byte	0
+ 334 0013 02       		.uleb128 0x2
+ 335 0014 24       		.uleb128 0x24
+ 336 0015 00       		.byte	0
+ 337 0016 0B       		.uleb128 0xb
+ 338 0017 0B       		.uleb128 0xb
+ 339 0018 3E       		.uleb128 0x3e
+ 340 0019 0B       		.uleb128 0xb
+ 341 001a 03       		.uleb128 0x3
+ 342 001b 0E       		.uleb128 0xe
+ 343 001c 00       		.byte	0
+ 344 001d 00       		.byte	0
+ 345 001e 03       		.uleb128 0x3
+ 346 001f 24       		.uleb128 0x24
+ 347 0020 00       		.byte	0
+ 348 0021 0B       		.uleb128 0xb
+ 349 0022 0B       		.uleb128 0xb
+ 350 0023 3E       		.uleb128 0x3e
+ 351 0024 0B       		.uleb128 0xb
+ 352 0025 03       		.uleb128 0x3
+ 353 0026 08       		.uleb128 0x8
+ 354 0027 00       		.byte	0
+ 355 0028 00       		.byte	0
+ 356 0029 04       		.uleb128 0x4
+ 357 002a 16       		.uleb128 0x16
+ 358 002b 00       		.byte	0
+ 359 002c 03       		.uleb128 0x3
+ 360 002d 0E       		.uleb128 0xe
+ 361 002e 3A       		.uleb128 0x3a
+ 362 002f 0B       		.uleb128 0xb
+ 363 0030 3B       		.uleb128 0x3b
+ 364 0031 0B       		.uleb128 0xb
+ 365 0032 49       		.uleb128 0x49
+ 366 0033 13       		.uleb128 0x13
+ 367 0034 00       		.byte	0
+ 368 0035 00       		.byte	0
+ 369 0036 05       		.uleb128 0x5
+ 370 0037 16       		.uleb128 0x16
+ 371 0038 00       		.byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 10
+
+
+ 372 0039 03       		.uleb128 0x3
+ 373 003a 0E       		.uleb128 0xe
+ 374 003b 3A       		.uleb128 0x3a
+ 375 003c 0B       		.uleb128 0xb
+ 376 003d 3B       		.uleb128 0x3b
+ 377 003e 05       		.uleb128 0x5
+ 378 003f 49       		.uleb128 0x49
+ 379 0040 13       		.uleb128 0x13
+ 380 0041 00       		.byte	0
+ 381 0042 00       		.byte	0
+ 382 0043 06       		.uleb128 0x6
+ 383 0044 35       		.uleb128 0x35
+ 384 0045 00       		.byte	0
+ 385 0046 49       		.uleb128 0x49
+ 386 0047 13       		.uleb128 0x13
+ 387 0048 00       		.byte	0
+ 388 0049 00       		.byte	0
+ 389 004a 07       		.uleb128 0x7
+ 390 004b 13       		.uleb128 0x13
+ 391 004c 01       		.byte	0x1
+ 392 004d 0B       		.uleb128 0xb
+ 393 004e 0B       		.uleb128 0xb
+ 394 004f 3A       		.uleb128 0x3a
+ 395 0050 0B       		.uleb128 0xb
+ 396 0051 3B       		.uleb128 0x3b
+ 397 0052 0B       		.uleb128 0xb
+ 398 0053 01       		.uleb128 0x1
+ 399 0054 13       		.uleb128 0x13
+ 400 0055 00       		.byte	0
+ 401 0056 00       		.byte	0
+ 402 0057 08       		.uleb128 0x8
+ 403 0058 0D       		.uleb128 0xd
+ 404 0059 00       		.byte	0
+ 405 005a 03       		.uleb128 0x3
+ 406 005b 0E       		.uleb128 0xe
+ 407 005c 3A       		.uleb128 0x3a
+ 408 005d 0B       		.uleb128 0xb
+ 409 005e 3B       		.uleb128 0x3b
+ 410 005f 0B       		.uleb128 0xb
+ 411 0060 49       		.uleb128 0x49
+ 412 0061 13       		.uleb128 0x13
+ 413 0062 38       		.uleb128 0x38
+ 414 0063 0B       		.uleb128 0xb
+ 415 0064 00       		.byte	0
+ 416 0065 00       		.byte	0
+ 417 0066 09       		.uleb128 0x9
+ 418 0067 2E       		.uleb128 0x2e
+ 419 0068 00       		.byte	0
+ 420 0069 3F       		.uleb128 0x3f
+ 421 006a 19       		.uleb128 0x19
+ 422 006b 03       		.uleb128 0x3
+ 423 006c 0E       		.uleb128 0xe
+ 424 006d 3A       		.uleb128 0x3a
+ 425 006e 0B       		.uleb128 0xb
+ 426 006f 3B       		.uleb128 0x3b
+ 427 0070 0B       		.uleb128 0xb
+ 428 0071 27       		.uleb128 0x27
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 11
+
+
+ 429 0072 19       		.uleb128 0x19
+ 430 0073 11       		.uleb128 0x11
+ 431 0074 01       		.uleb128 0x1
+ 432 0075 12       		.uleb128 0x12
+ 433 0076 06       		.uleb128 0x6
+ 434 0077 40       		.uleb128 0x40
+ 435 0078 18       		.uleb128 0x18
+ 436 0079 9742     		.uleb128 0x2117
+ 437 007b 19       		.uleb128 0x19
+ 438 007c 00       		.byte	0
+ 439 007d 00       		.byte	0
+ 440 007e 0A       		.uleb128 0xa
+ 441 007f 2E       		.uleb128 0x2e
+ 442 0080 00       		.byte	0
+ 443 0081 3F       		.uleb128 0x3f
+ 444 0082 19       		.uleb128 0x19
+ 445 0083 03       		.uleb128 0x3
+ 446 0084 0E       		.uleb128 0xe
+ 447 0085 3A       		.uleb128 0x3a
+ 448 0086 0B       		.uleb128 0xb
+ 449 0087 3B       		.uleb128 0x3b
+ 450 0088 0B       		.uleb128 0xb
+ 451 0089 27       		.uleb128 0x27
+ 452 008a 19       		.uleb128 0x19
+ 453 008b 11       		.uleb128 0x11
+ 454 008c 01       		.uleb128 0x1
+ 455 008d 12       		.uleb128 0x12
+ 456 008e 06       		.uleb128 0x6
+ 457 008f 40       		.uleb128 0x40
+ 458 0090 18       		.uleb128 0x18
+ 459 0091 9642     		.uleb128 0x2116
+ 460 0093 19       		.uleb128 0x19
+ 461 0094 00       		.byte	0
+ 462 0095 00       		.byte	0
+ 463 0096 0B       		.uleb128 0xb
+ 464 0097 34       		.uleb128 0x34
+ 465 0098 00       		.byte	0
+ 466 0099 03       		.uleb128 0x3
+ 467 009a 0E       		.uleb128 0xe
+ 468 009b 3A       		.uleb128 0x3a
+ 469 009c 0B       		.uleb128 0xb
+ 470 009d 3B       		.uleb128 0x3b
+ 471 009e 0B       		.uleb128 0xb
+ 472 009f 49       		.uleb128 0x49
+ 473 00a0 13       		.uleb128 0x13
+ 474 00a1 02       		.uleb128 0x2
+ 475 00a2 18       		.uleb128 0x18
+ 476 00a3 00       		.byte	0
+ 477 00a4 00       		.byte	0
+ 478 00a5 00       		.byte	0
+ 479              		.section	.debug_aranges,"",%progbits
+ 480 0000 34000000 		.4byte	0x34
+ 481 0004 0200     		.2byte	0x2
+ 482 0006 00000000 		.4byte	.Ldebug_info0
+ 483 000a 04       		.byte	0x4
+ 484 000b 00       		.byte	0
+ 485 000c 0000     		.2byte	0
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 12
+
+
+ 486 000e 0000     		.2byte	0
+ 487 0010 00000000 		.4byte	.LFB0
+ 488 0014 0C000000 		.4byte	.LFE0-.LFB0
+ 489 0018 00000000 		.4byte	.LFB1
+ 490 001c 0C000000 		.4byte	.LFE1-.LFB1
+ 491 0020 00000000 		.4byte	.LFB2
+ 492 0024 48000000 		.4byte	.LFE2-.LFB2
+ 493 0028 00000000 		.4byte	.LFB3
+ 494 002c 18000000 		.4byte	.LFE3-.LFB3
+ 495 0030 00000000 		.4byte	0
+ 496 0034 00000000 		.4byte	0
+ 497              		.section	.debug_ranges,"",%progbits
+ 498              	.Ldebug_ranges0:
+ 499 0000 00000000 		.4byte	.LFB0
+ 500 0004 0C000000 		.4byte	.LFE0
+ 501 0008 00000000 		.4byte	.LFB1
+ 502 000c 0C000000 		.4byte	.LFE1
+ 503 0010 00000000 		.4byte	.LFB2
+ 504 0014 48000000 		.4byte	.LFE2
+ 505 0018 00000000 		.4byte	.LFB3
+ 506 001c 18000000 		.4byte	.LFE3
+ 507 0020 00000000 		.4byte	0
+ 508 0024 00000000 		.4byte	0
+ 509              		.section	.debug_line,"",%progbits
+ 510              	.Ldebug_line0:
+ 511 0000 B3000000 		.section	.debug_str,"MS",%progbits,1
+ 511      02005E00 
+ 511      00000201 
+ 511      FB0E0D00 
+ 511      01010101 
+ 512              	.LASF18:
+ 513 0000 4144435F 		.ascii	"ADC_TURBIDO_Wakeup\000"
+ 513      54555242 
+ 513      49444F5F 
+ 513      57616B65 
+ 513      757000
+ 514              	.LASF15:
+ 515 0013 4144435F 		.ascii	"ADC_TURBIDO_SaveConfig\000"
+ 515      54555242 
+ 515      49444F5F 
+ 515      53617665 
+ 515      436F6E66 
+ 516              	.LASF9:
+ 517 002a 666C6F61 		.ascii	"float\000"
+ 517      7400
+ 518              	.LASF1:
+ 519 0030 756E7369 		.ascii	"unsigned char\000"
+ 519      676E6564 
+ 519      20636861 
+ 519      7200
+ 520              	.LASF13:
+ 521 003e 72656738 		.ascii	"reg8\000"
+ 521      00
+ 522              	.LASF14:
+ 523 0043 4144435F 		.ascii	"ADC_TURBIDO_BACKUP_STRUCT\000"
+ 523      54555242 
+ 523      49444F5F 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 13
+
+
+ 523      4241434B 
+ 523      55505F53 
+ 524              	.LASF5:
+ 525 005d 6C6F6E67 		.ascii	"long unsigned int\000"
+ 525      20756E73 
+ 525      69676E65 
+ 525      6420696E 
+ 525      7400
+ 526              	.LASF3:
+ 527 006f 73686F72 		.ascii	"short unsigned int\000"
+ 527      7420756E 
+ 527      7369676E 
+ 527      65642069 
+ 527      6E7400
+ 528              	.LASF10:
+ 529 0082 646F7562 		.ascii	"double\000"
+ 529      6C6500
+ 530              	.LASF16:
+ 531 0089 4144435F 		.ascii	"ADC_TURBIDO_RestoreConfig\000"
+ 531      54555242 
+ 531      49444F5F 
+ 531      52657374 
+ 531      6F726543 
+ 532              	.LASF22:
+ 533 00a3 656E6162 		.ascii	"enableState\000"
+ 533      6C655374 
+ 533      61746500 
+ 534              	.LASF8:
+ 535 00af 756E7369 		.ascii	"unsigned int\000"
+ 535      676E6564 
+ 535      20696E74 
+ 535      00
+ 536              	.LASF7:
+ 537 00bc 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 537      206C6F6E 
+ 537      6720756E 
+ 537      7369676E 
+ 537      65642069 
+ 538              	.LASF20:
+ 539 00d3 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\ADC_TURBIDO_PM.c\000"
+ 539      6E657261 
+ 539      7465645F 
+ 539      536F7572 
+ 539      63655C50 
+ 540              	.LASF19:
+ 541 00fd 474E5520 		.ascii	"GNU C 4.8.4 20140526 (release) [ARM/embedded-4_8-br"
+ 541      4320342E 
+ 541      382E3420 
+ 541      32303134 
+ 541      30353236 
+ 542 0130 616E6368 		.ascii	"anch revision 211358] -mcpu=cortex-m3 -mthumb -g -O"
+ 542      20726576 
+ 542      6973696F 
+ 542      6E203231 
+ 542      31333538 
+ 543 0163 30202D66 		.ascii	"0 -ffunction-sections\000"
+ 543      66756E63 
+ARM GAS  C:\Users\plod1602\AppData\Local\Temp\ccSguqPF.s 			page 14
+
+
+ 543      74696F6E 
+ 543      2D736563 
+ 543      74696F6E 
+ 544              	.LASF6:
+ 545 0179 6C6F6E67 		.ascii	"long long int\000"
+ 545      206C6F6E 
+ 545      6720696E 
+ 545      7400
+ 546              	.LASF11:
+ 547 0187 63686172 		.ascii	"char\000"
+ 547      00
+ 548              	.LASF23:
+ 549 018c 4144435F 		.ascii	"ADC_TURBIDO_backup\000"
+ 549      54555242 
+ 549      49444F5F 
+ 549      6261636B 
+ 549      757000
+ 550              	.LASF2:
+ 551 019f 73686F72 		.ascii	"short int\000"
+ 551      7420696E 
+ 551      7400
+ 552              	.LASF12:
+ 553 01a9 75696E74 		.ascii	"uint8\000"
+ 553      3800
+ 554              	.LASF4:
+ 555 01af 6C6F6E67 		.ascii	"long int\000"
+ 555      20696E74 
+ 555      00
+ 556              	.LASF21:
+ 557 01b8 433A5C55 		.ascii	"C:\\Users\\plod1602\\Desktop\\TAC_2015-09-18\\TAC_P"
+ 557      73657273 
+ 557      5C706C6F 
+ 557      64313630 
+ 557      325C4465 
+ 558 01e6 534F4335 		.ascii	"SOC5.cydsn\000"
+ 558      2E637964 
+ 558      736E00
+ 559              	.LASF17:
+ 560 01f1 4144435F 		.ascii	"ADC_TURBIDO_Sleep\000"
+ 560      54555242 
+ 560      49444F5F 
+ 560      536C6565 
+ 560      7000
+ 561              	.LASF0:
+ 562 0203 7369676E 		.ascii	"signed char\000"
+ 562      65642063 
+ 562      68617200 
+ 563              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.8.4 20140526 (release) [ARM/embedded-4_8-br

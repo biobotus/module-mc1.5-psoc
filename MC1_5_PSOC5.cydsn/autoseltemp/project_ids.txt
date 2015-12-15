@@ -1,0 +1,5 @@
+C:\Users\majl1801\Desktop\TAC_ThermalControl_lv\TAC_PSOC5.cydsn\TAC_PSOC5.cyprj|1a8117ac-ae2e-40a5-b36a-77a3ff0d5207
+C:\Program Files (x86)\Cypress\PSoC Creator\3.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|cf7e5a1b-7ade-4063-a115-1cc6ed182d17
+C:\Program Files (x86)\Cypress\PSoC Creator\3.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|b32d7ec5-0934-4b68-a965-0a99dc63b6bf
+C:\Program Files (x86)\Cypress\PSoC Creator\3.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|4d4bf298-785f-4ada-b1e0-7a9629c7995b
+C:\Program Files (x86)\Cypress\PSoC Creator\3.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|ee3bcf39-653f-49f9-badb-c02a20f8a2fe

@@ -1,0 +1,123 @@
+# MC1_5_PSOC5
+# 2015-12-12 18:50:13Z
+
+# IO_0@[IOP=(1)][IoId=(0)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 0
+# IO_1@[IOP=(1)][IoId=(1)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 1
+set_location "ClockBlock" clockblockcell -1 -1 0
+set_io "\UART:Dm(0)\" iocell 15 7
+set_location "\UART:Dp\" logicalport -1 -1 15
+set_io "\UART:Dp(0)\" iocell 15 6
+set_io "PELTIER1_Heat(0)" iocell 0 7
+set_io "PELTIER1_Cool(0)" iocell 0 5
+set_io "Stepper1_Output(0)" iocell 0 2
+set_io "fanPeltier1(0)" iocell 6 1
+set_io "CAN_Standby(0)" iocell 6 4
+set_io "Can_Enable(0)" iocell 1 2
+set_io "TX_1(0)" iocell 12 5
+set_io "fanPeltier2(0)" iocell 4 6
+set_io "Stepper2_Output(0)" iocell 12 2
+set_io "Stepper2_Enable(0)" iocell 12 3
+set_io "Stepper1_Enable(0)" iocell 0 3
+set_io "fanPeltier2_Enable(0)" iocell 4 7
+set_io "fanPeltier1_Enable(0)" iocell 6 0
+set_io "Peltier1_Enable_1(0)" iocell 0 4
+set_io "Peltier1_Enable_2(0)" iocell 0 6
+set_io "Peltier2_Enable_1(0)" iocell 4 2
+set_io "Peltier2_Enable_2(0)" iocell 4 4
+set_io "PELTIER2_Heat(0)" iocell 4 5
+set_io "PELTIER2_Cool(0)" iocell 4 3
+set_io "RX_1(0)" iocell 12 4
+set_io "Stepper2_Step_SizeB2(0)" iocell 12 0
+set_io "Stepper2_Step_SizeA2(0)" iocell 12 1
+set_io "Stepper1_Dir(0)" iocell 0 0
+set_io "Stepper1_Step_SizeA1(0)" iocell 4 1
+set_io "Stepper1_Step_SizeB1(0)" iocell 4 0
+set_io "VTherm(0)" iocell 3 5
+set_io "Stepper2_Dir(0)" iocell 15 2
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:status_2\" 3 2 0 1
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:status_2\" 3 3 0 1
+set_location "\pwmFan_1:PWMUDB:status_2\" 2 5 0 2
+set_location "Net_10209" 3 2 0 3
+set_location "\pwmStepper_1:PWMUDB:status_2\" 2 1 0 2
+set_location "\pwmStepper_2:PWMUDB:status_2\" 0 2 0 1
+set_location "\pwmFan_2:PWMUDB:status_2\" 3 5 0 2
+set_location "Net_9885" 3 2 1 0
+set_location "Net_10392" 3 3 1 0
+set_location "Net_10391" 3 3 0 3
+set_location "\TimerPID:TimerUDB:status_tc\" 3 1 0 1
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:genblk1:ctrlreg\" 2 2 6
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:genblk8:stsreg\" 3 2 4
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:sP16:pwmdp:u0\" 3 2 2
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:sP16:pwmdp:u1\" 2 2 2
+set_location "\UART:ep_0\" interrupt -1 -1 24
+set_location "\UART:bus_reset\" interrupt -1 -1 23
+set_location "\UART:arb_int\" interrupt -1 -1 22
+set_location "\UART:ep_2\" interrupt -1 -1 1
+set_location "\UART:ep_1\" interrupt -1 -1 0
+set_location "\UART:dp_int\" interrupt -1 -1 12
+set_location "\UART:USB\" usbcell -1 -1 0
+set_location "\UART:ep_3\" interrupt -1 -1 2
+set_location "\UART:sof_int\" interrupt -1 -1 21
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:genblk1:ctrlreg\" 2 3 6
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:genblk8:stsreg\" 3 3 4
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:sP16:pwmdp:u0\" 2 3 2
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:sP16:pwmdp:u1\" 3 3 2
+set_location "\pwmFan_1:PWMUDB:genblk1:ctrlreg\" 2 5 6
+set_location "\pwmFan_1:PWMUDB:genblk8:stsreg\" 2 5 4
+set_location "\pwmFan_1:PWMUDB:sP8:pwmdp:u0\" 2 5 2
+set_location "\Peltier1_Ctrl:Sync:ctrl_reg\" 3 2 6
+set_location "\pwmStepper_1:PWMUDB:genblk1:ctrlreg\" 2 1 6
+set_location "\pwmStepper_1:PWMUDB:genblk8:stsreg\" 2 1 4
+set_location "\pwmStepper_1:PWMUDB:sP8:pwmdp:u0\" 2 1 2
+set_location "\CAN_1:CanIP\" cancell -1 -1 0
+set_location "\CAN_1:isr\" interrupt -1 -1 16
+set_location "\pwmStepper_2:PWMUDB:genblk1:ctrlreg\" 0 2 6
+set_location "\pwmStepper_2:PWMUDB:genblk8:stsreg\" 0 2 4
+set_location "\pwmStepper_2:PWMUDB:sP16:pwmdp:u0\" 1 2 2
+set_location "\pwmStepper_2:PWMUDB:sP16:pwmdp:u1\" 0 2 2
+set_location "\pwmFan_2:PWMUDB:genblk1:ctrlreg\" 3 5 6
+set_location "\pwmFan_2:PWMUDB:genblk8:stsreg\" 3 5 4
+set_location "\pwmFan_2:PWMUDB:sP8:pwmdp:u0\" 3 5 2
+set_location "\Peltier_Enable:Sync:ctrl_reg\" 3 3 6
+set_location "\Peltier2_Ctrl:Sync:ctrl_reg\" 3 1 6
+set_location "isr_Stepper2" interrupt -1 -1 4
+set_location "\ADC:DSM\" dsmodcell -1 -1 0
+set_location "\ADC:IRQ\" interrupt -1 -1 29
+set_location "\ADC:DEC\" decimatorcell -1 -1 0
+set_location "__ONE__" 2 0 1 2
+set_location "\TimerPID:TimerUDB:sCTRLReg:SyncCtl:ctrlreg\" 2 0 6
+set_location "\TimerPID:TimerUDB:rstSts:stsreg\" 3 1 4
+set_location "\TimerPID:TimerUDB:sT24:timerdp:u0\" 2 0 2
+set_location "\TimerPID:TimerUDB:sT24:timerdp:u1\" 3 0 2
+set_location "\TimerPID:TimerUDB:sT24:timerdp:u2\" 3 1 2
+set_location "isr_Stepper1" interrupt -1 -1 3
+set_location "isr_pid" interrupt -1 -1 5
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:runmode_enable\" 2 2 1 1
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:prevCompare1\" 3 2 1 1
+set_location "\Peltier1_PWM_Ctrl:PWMUDB:status_0\" 3 2 1 2
+set_location "Net_1702" 3 2 0 2
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:runmode_enable\" 2 3 1 3
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:prevCompare1\" 3 3 1 1
+set_location "\Peltier2_PWM_Ctrl:PWMUDB:status_0\" 3 3 1 2
+set_location "Net_10388" 3 3 1 3
+set_location "\pwmFan_1:PWMUDB:runmode_enable\" 2 5 0 1
+set_location "\pwmFan_1:PWMUDB:prevCompare1\" 2 5 0 3
+set_location "\pwmFan_1:PWMUDB:status_0\" 2 5 1 0
+set_location "Net_3597" 2 5 0 0
+set_location "\pwmStepper_1:PWMUDB:runmode_enable\" 2 1 0 1
+set_location "\pwmStepper_1:PWMUDB:prevCompare1\" 2 1 1 0
+set_location "\pwmStepper_1:PWMUDB:status_0\" 2 1 1 1
+set_location "Net_1600" 2 1 0 3
+set_location "Net_12646" 2 1 0 0
+set_location "\pwmStepper_2:PWMUDB:runmode_enable\" 0 2 0 0
+set_location "\pwmStepper_2:PWMUDB:prevCompare1\" 0 2 1 0
+set_location "\pwmStepper_2:PWMUDB:status_0\" 0 2 1 1
+set_location "Net_6293" 1 2 0 1
+set_location "Net_12647" 1 2 1 3
+set_location "\pwmFan_2:PWMUDB:runmode_enable\" 3 5 0 1
+set_location "\pwmFan_2:PWMUDB:prevCompare1\" 3 5 0 3
+set_location "\pwmFan_2:PWMUDB:status_0\" 3 5 1 0
+set_location "Net_6281" 3 5 0 0
+set_location "Net_11183" 3 1 0 0
